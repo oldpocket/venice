@@ -1,0 +1,52 @@
+<div id="wrapper">
+<div id="header">
+<center>
+<img width="64" height="64" src="winged_lion.png"/>
+</center>
+<div>
+<h1 class="title">
+<a name="N10001"/>Merchant of Venice</h1>
+</div>
+</div>
+<div id="sidebar">
+<h3>User</h3>
+<ul>
+<li>
+<a href="index.html">Main</a>
+</li>
+<li>
+<a href="contact.html">Contact Us/Mailing List</a>
+</li>
+<li>
+<a href="Contribute.html">Contribute</a>
+</li>
+<li>
+<a href="credits.html">Credits</a>
+</li>
+<li>
+<a href="https://sourceforge.net/projects/mov/files/">Download</a>
+</li>
+<li>
+<a href="features.html">Features</a>
+</li>
+<li>
+<a href="links.html">Links</a>
+</li>
+<li>
+<a href="manual.html">Manual</a>
+</li>
+<li>
+<a href="screenshots.html">Screenshots</a>
+</li>
+</ul>
+<h3>Developer</h3>
+<ul>
+<li>
+<a href="api/index.html">API</a>
+</li>
+<li>
+<a href="future.html">Future Features</a>
+</li>
+</ul>
+</div>
+</div>

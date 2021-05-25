@@ -1,0 +1,78 @@
+<!-- Run with 1.4.2 on Mac os X -->
+<project name='layout' default='layout'>
+ 
+  <!-- These properties defined for building from venice root --> 
+  <property name="webdest" value="web/generated/html"/>
+  <property name="websrc" value="web/generated/src"/>
+  <property name="webbin" value="web/generated/bin"/>
+  <property name="doc" value="doc"/>
+
+  <!-- These properties defined for building from web/generated -->
+  <property name="thisdest" value="html"/>
+  <property name="thissrc" value="src"/>
+  <property name="thisbin" value="bin"/>
+  
+  <target name='layout' depends='content'>
+    <xslt basedir='${websrc}'
+	  destdir='${webdest}'
+	  includes='index.xml'
+	  extension='.html'
+	  style='${webbin}/main.xsl'>
+    </xslt>    
+  </target>
+
+  <target name='content' depends='common'>
+    <xslt basedir='${websrc}'
+	  destdir='${webdest}'
+	  includes='*.xml'
+	  excludes='news.xml index.xml common.xml manual-venice.xml api.xml'
+	  extension='.html'
+	  style='${webbin}/main.xsl'>
+    </xslt>
+
+    <!-- Copy images and stylesheets-->
+    <copy todir='${webdest}'> 
+      <fileset dir='${websrc}' includes='*.png' />
+    </copy>
+    <copy todir='${webdest}'> 
+      <fileset dir='${websrc}' includes='*.css'/>
+    </copy>
+
+  </target>
+
+  <target name='common' depends='manual-db'>
+    <xslt in='${websrc}/index.xml'
+	  out='${webdest}/common.xml'
+	  style='${webbin}/common.xsl'>
+    </xslt>
+  </target>
+
+  <target name='manual-db'>
+    <copy file='${doc}/manual.xml' tofile='${websrc}/manual-venice.xml'/>
+
+    <xslt in='${websrc}/manual-venice.xml'
+	  out='${webdest}/manual.xml'
+	  style='${webbin}/venice2db.xsl'>
+    </xslt>
+  </target>
+
+  <target name='thisclean'>
+    <delete dir='${thisdest}/api'/>
+    <delete>
+      <fileset dir='${thisdest}' includes='*.html'/>
+    </delete>
+    <delete>
+      <fileset dir='${thisdest}/' includes='*.png'/>
+    </delete>
+    <delete>
+      <fileset dir='${thisdest}' includes='*.css'/>
+    </delete>
+    <delete file='${thisdest}/common.xml'/>
+    <delete file='${thisdest}/manual.xml'/>
+  </target>
+
+  <target name='webclean'>
+    <delete dir='${webdest}'/>
+  </target>
+
+</project>

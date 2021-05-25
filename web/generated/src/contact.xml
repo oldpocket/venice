@@ -1,0 +1,97 @@
+<chapter id='contact' fileref='contact.xml' role='user'>
+  <chapterinfo>
+    <title>Contact Us/Mailing List</title>    
+  </chapterinfo>
+
+  <section>
+    <sectioninfo>
+      <title>Contact Us</title>
+    </sectioninfo>
+
+    <para>Andrew Leppard</para>
+    <sbr/>
+    <para><link xlink:href='http://mhummel.users.sourceforge.net' xmlns:xlink='http://www.w3.org/xlink'>Mark Hummel</link>
+    </para>
+  </section>
+
+  <section>
+    <sectioninfo>
+      <title>Email</title>
+    </sectioninfo>
+
+    <para>[aleppard <emphasis>at</emphasis> venice <emphasis>dot</emphasis> org <emphasis>dot</emphasis> nz</para>
+  </section>
+  
+  <section>
+    <sectioninfo>
+      <title>Mailing List</title>
+    </sectioninfo>
+
+    <para>You can access the Venice mailing list <link xlink:href='https://sourceforge.net/mail/?group_id=53631' xmlns:xlink='http://www.w3.org/xlink'>here.</link></para>
+  </section>
+
+  <section>
+    <sectioninfo>
+      <title>Personal Home Page</title>
+    </sectioninfo>
+
+    <para>You can access my personal home page <link xlink:href='leppard.id.au' xmlns:xlink='http://www.w3.org/xlink'>here.</link></para>
+  </section>
+
+  <section>
+    <sectioninfo>
+      <title>Post</title>
+    </sectioninfo>
+
+    <para>
+      <address>
+	<street>GPO Box 507</street>
+	<city>Greenacres</city>
+	<postcode>5087</postcode>
+	<country>Australia</country>
+      </address>
+    </para>
+  </section>
+
+  <section>
+    <sectioninfo>
+      <title>PGP Public Key</title>
+    </sectioninfo>
+
+    <para>
+      <literallayout>
+	-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.2.1 (GNU/Linux)
+
+mQGiBDq1SPsRBADIOYX4zzBeehcPB1yEl4sL+Qualy8+iyp6R1X+fhtIay5x1LI+
+eKCoKIiOSbERy44pbkYDB/EDEIGU6aMoWKrbwrk2y5VmfPIXaRM2K/WLz8KEqNiU
+fv2+nCeux14asdig+em+gDpmBaRPMTo+tAQJfzHyEjFekR3ACQW5pueSYQCg/xN6
+inmzdSPo61DI0h2r7jKxvjUD/iBaytbSlo3e6l9T2U2kNXrx2Tc7rtdb6IYTki6k
+9yimSf0770EcQHDWq1qxExyO7TysQPowx4CfTDpMi8elAttHnGMqA1Po9QY1B0Zg
+Y17Y028q7Q/CEWHGrPJyusM0ZXnDDuHx1rTRXS4NOo0AYUHHKMJDzGZnqALfxr1q
+tCo3A/9cswHvfLQgLenKDW+o3clmk8g0uE703OPwIH1m5fTbq6gwFDt5BSaS5z08
+X0ZCdoqJ6es3OqsZ1YsPN872cVIYEXmHCWJ879EHcYzc2XN9KigBdnoH6G8sQZos
+Xm7E79mNH7cKoIypvxnJ5y+jNKtXjjjVMqwXw97xRrx7MTUWcrQpQW5kcmV3IExl
+cHBhcmQgPGFsZXBwYXJkQHBpY2tub3dsLmNvbS5hdT6IWAQQEQIAGAUCOrVI+wgL
+AwkIBwIBCgIZAQUbAwAAAAAKCRB/pjyUXaFpwO7QAKCIHd6drAq9XBeQpF8d6Jo4
+aMTRDwCePHqLkd2QQFGvZNBCczcEe1Pz4NG5Ag0EOrVI+xAIAPZCV7cIfwgXcqK6
+1qlC8wXo+VMROU+28W65Szgg2gGnVqMU6Y9AVfPQB8bLQ6mUrfdMZIZJ+AyDvWXp
+F9Sh01D49Vlf3HZSTz09jdvOmeFXklnN/biudE/F/Ha8g8VHMGHOfMlm/xX5u/2R
+XscBqtNbno2gpXI61Brwv0YAWCvl9Ij9WE5J280gtJ3kkQc2azNsOA1FHQ98iLMc
+fFstjvbzySPAQ/ClWxiNjrtVjLhdONM0/XwXV0OjHRhs3jMhLLUq/zzhsSlAGBGN
+fISnCnLWhsQDGcgHKXrKlQzZlp+r0ApQmwJG0wg9ZqRdQZ+cfL2JSyIZJrqrol7D
+VekyCzsAAgIIAJrmOH71K+KDQCvyU0KmtCgJIIpX3X9j2S6YMOOXmSmcWLgUIman
+9Qbc7sNr5RaHtAICy/Q4zebVQJg615IOwuAp7ffDsGezseabLkpAcgYKFaHoJUVh
+WghN2n8NRu+lFSQ/wAxkS79x8ctJONvH7vv2a/s/dWxtRM96oMglNRyiMmIQSBxe
+Mns3P19aJ/AgsYGkNTh23Zxym6kw+fWj6iJX44gdPLH8ZL2KNxquVOfekvULHBbX
+GMoR7G4l3C3mH9F2OENZacObGpfbd3tRUU2c5C0il2pzlAymGz/Wby7Qasnrm4hC
+/akDsQ6dkvs6iyaZeHujBRAJ40HXnTvWwMyITAQYEQIADAUCOrVI+wUbDAAAAAAK
+CRB/pjyUXaFpwGsmAJ912PHnjcx8pudxtkKI5Qh2RnuO9ACfXhbbCjQ/YXSz09Uj
+jNfOTwWSjts=
+=/t5U
+-----END PGP PUBLIC KEY BLOCK-----
+      </literallayout>
+    </para>
+  </section>
+  
+</chapter>

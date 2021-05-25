@@ -1,0 +1,61 @@
+<chapter id='screenshots' fileref='screenshots.xml' role='user'>
+  <chapterinfo>
+    <title>Screenshots</title>    
+  </chapterinfo>
+  
+  <section>
+    <sectioninfo>
+      <title>Screenshots</title>
+    </sectioninfo>
+
+    <para>
+      <link xlink:href='screenshot_graph.png' xmlns:xlink='http://www.w3.org/xlink'>
+    <mediaobject role='graph-mini'>
+      <imageobject>
+	<imagedata align='center' width='384' height='64' format='png'
+		   fileref='screenshot_graph_mini.png'/>
+      </imageobject>      
+      <alt>Graph Screenshot</alt>
+    </mediaobject>
+    </link>
+    </para>
+    
+    <para>
+      <link xlink:href='screenshot_table.png' xmlns:xlink='http://www.w3.org/xlink'>
+	<mediaobject role='table-mini'>
+	  <imageobject>
+	    <imagedata align='center' width='384' height='64' format='png'
+		       fileref='screenshot_table_mini.png'/>
+	  </imageobject>      
+	  <alt>Table Screenshot</alt>
+	</mediaobject>
+      </link>
+    </para>
+
+    <para>
+      <link xlink:href='screenshot_portfolio.png' xmlns:xlink='http://www.w3.org/xlink'>
+	<mediaobject role='portfolio-mini'>
+	  <imageobject>
+	    <imagedata align='center' width='384' height='64' format='png'
+		       fileref='screenshot_portfolio_mini.png'/>
+	  </imageobject>      
+	  <alt>Portfolio Screenshot</alt>
+	</mediaobject>
+      </link>
+    </para>
+
+    <para>
+      <link xlink:href='screenshot_paper.png' xmlns:xlink='http://www.w3.org/xlink'>
+	<mediaobject role='paper-mini'>
+	  <imageobject>
+	    <imagedata align='center' width='384' height='64' format='png'
+		       fileref='screenshot_paper_mini.png'/>
+	  </imageobject>      
+	  <alt>Screenshot for Paper Trade</alt>
+	</mediaobject>
+      </link>
+    </para>
+
+  </section>
+
+</chapter>

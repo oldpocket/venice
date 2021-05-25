@@ -1,0 +1,596 @@
+<!-- Venice Build File -->
+<project name="Venice" default="run" basedir=".">
+
+  <!-- Current version we are working towards -->
+  <property name="VERSION" value="0.751beta"/>
+
+  <!-- Paths -->
+  <property name="api" value="${basedir}/api"/>
+  <property name="backup" value="${basedir}/backup"/>
+  <property name="doc" value="${basedir}/doc"/>
+  <property name="release" value="${basedir}/release"/>
+  <property name="report" value="${basedir}/report"/>
+  <property name="src" value="${basedir}/src"/>
+  <property name="classes" value="${basedir}/classes"/>
+  <property name="lib" value="${basedir}/lib"/>
+  <property name="opt" value="${basedir}/opt"/>
+  <property name="opt_lib" value="${opt}/lib"/>
+  <property name="temp" value="${basedir}/temp"/>
+  <property name="test" value="${basedir}/test"/>
+  <property name="web" value="${basedir}/web"/>  
+
+  <!-- Static webpage replaced with generated html to make releases 
+    easier. (Easier to modify credits, news, changes etc. ) 
+    Replace generated/html with static to use the old static pages.    
+    -->
+  <property name="webstyle" value="generated/html"/>
+
+  <!-- Libraries -->
+  <property name="lib.hsql" value="${lib}/hsqldb.jar"/>
+  <property name="lib.joone" value="${lib}/joone-engine.jar"/>
+  <property name="lib.jython" value="${lib}/jython.jar"/>
+  <property name="lib.mysql" value="${lib}/mysql-connector-java-3.1.12-bin.jar"/>
+  <property name="lib.postgresql" value="${opt_lib}/postgresql.jar"/>
+  <property name="lib.xml" value="${lib}/xstream-1.3.jar"/>
+  <property name="lib.junit" value="${lib}/junit.jar"/>
+  <property name="lib.uuid" value="${lib}/jug-lgpl-2.0.0.jar"/>
+
+
+
+  <!-- Online help -->
+  <property name="help" value="${classes}/nz/org/venice/help/doc"/>
+  
+  <import file="${web}/${webstyle}/../build.xml"/>
+
+  <!-- Generate API documentation -->
+  <target name="api">
+    <javadoc packagenames="nz.org.venice.*"
+             sourcepath="${src}"
+	     source="1.4"
+             destdir="${api}"
+             additionalparam="-breakiterator"
+	     windowtitle="Venice ${VERSION}">
+      <header><![CDATA[<b>Venice ${VERSION}</b>]]></header>
+      <footer><![CDATA[<b>Venice ${VERSION}</b>]]></footer>
+      <doctitle>Venice ${VERSION}</doctitle>
+      <classpath>
+        <pathelement path="${java.class.path}"/>
+        <pathelement path="${src}"/>
+        <pathelement path="${lib.hsql}"/>
+        <pathelement path="${lib.mysql}"/>
+	<pathelement path="${lib.postgresql}"/>
+        <pathelement path="${lib.joone}"/>
+        <pathelement path="${lib.jython}"/>
+        <pathelement path="${lib.xml}"/>
+	<pathelement path="${lib.uuid}"/>
+      </classpath>
+  </javadoc>
+  </target>
+
+  <!-- Get a backup of the SVN tree from sourceforge -->
+  <target name="backup">
+    <mkdir dir="${backup}"/>
+    <exec executable="rsync">
+      <arg value="-av"/>
+      <arg value="mov.svn.sourceforge.net::svn/mov/*"/>
+      <arg value="${backup}/"/>
+    </exec>
+  </target>
+
+  <!-- Build venice -->
+  <target name="build">
+    <mkdir dir="${classes}"/>
+    <javac srcdir="${src}"
+	   destdir="${classes}"
+	   debug="on"
+  	   optimize="on"
+	   source="1.6"
+	   includes="**/*.java"
+           excludes="nz/org/venice/tools/*">
+      <classpath>
+        <pathelement path="${java.class.path}"/>
+        <pathelement path="${classes}"/>
+        <pathelement path="${lib.hsql}"/>
+        <pathelement path="${lib.mysql}"/>
+	<pathelement path="${lib.postgresql}"/>
+        <pathelement path="${lib.joone}"/>
+        <pathelement path="${lib.jython}"/>
+        <pathelement path="${lib.xml}"/>
+	<pathelement path="${lib.uuid}"/>
+      </classpath>
+    </javac>
+
+    <copy todir="${classes}" overwrite="y">
+      <fileset dir="${src}"
+               includes="**/*.gif, **/*.png, **/*.sql.xml,
+                         **/*.properties,
+                         nz/org/venice/quote/samples/*.txt"/>
+    </copy>
+  </target>
+
+  <!-- Remove all built files and generated documentation. -->
+  <target name="clean" depends="docclean, testclean">
+    <delete file="venice.jar"/>
+    <delete dir="Venice.app"/>
+    <delete dir="${api}"/>    
+    <delete file="${web}/venice.jar"/>
+    <delete dir="${classes}"/>
+    <delete dir="${release}"/>
+    <delete dir="${temp}"/>        
+  </target>
+
+  <!-- Remove unittest files. -->
+  <target name="testclean">
+    <delete>
+      <fileset dir="${test}" includes="**/*.class"/>
+    </delete>
+    <delete dir="${report}"/>
+    <delete file=".database.data"/>
+    <delete file=".database.backup"/>
+    <delete file=".database.lck"/>
+    <delete file=".database.properties"/>
+    <delete file=".database.log"/>
+  </target>
+
+  <target name="docclean" depends="webclean">
+    <delete file="${doc}/manual.html"/>
+    <delete file="${doc}/manual.txt"/>
+    <delete file="${help}/index.xml"/>
+    <delete file="${web}/web.tar"/>
+    <delete file="${web}/web.tar.gz"/>
+    <delete file="${web}/manual.html"/>
+    <delete dir="${web}/api"/>
+  </target>
+
+  <target name="doc">
+    <condition property="do-doc-generate">
+      <contains string="${java.version}" substring="1.4" casesensitive="false" />
+    </condition>
+    <antcall target="doc-warning"/>
+    <antcall target="doc-generate"/>
+  </target>
+  
+  <target name="doc-warning" unless="do-doc-generate">
+    <echo message="WARNING: To be able to build in-program documentation, you need to use JDK 1.4." />
+    <echo message="WARNING: See: https://sourceforge.net/tracker/?func=detail&amp;aid=3499268&amp;group_id=53631&amp;atid=471027" />
+  </target>
+  
+  <!-- Generate docs -->
+  <target name="doc-generate">
+    <xmlcatalog id="document">
+      <dtd publicID="-//Venice//DTD XML Document V1.0//EN"
+           location="${doc}/document.dtd"/>
+    </xmlcatalog>
+                
+    <!-- This will say it's generating manual.html but we override this. -->
+    <!-- and write out files for individual chapters.                    -->    
+        
+    <xslt basedir="${doc}"
+          destdir="${help}"
+          includes="manual.xml"
+          extension=".html"	  
+          style="${doc}/manual-help.xsl">
+	  <xmlcatalog refid="document"/>
+    </xslt>
+    
+        
+    <!-- Generate online help index.                                     -->
+    <xslt in="${doc}/manual.xml"
+          out="${help}/index.xml"
+          style="${doc}/manual-index.xsl">
+      <xmlcatalog refid="document"/>
+    </xslt>
+
+    <!-- Generate online HTML version of manual.                         -->
+    <xslt in="${doc}/manual.xml"
+          out="${web}/manual.html"
+          style="${doc}/manual-web.xsl">
+      <!--<xmlcatalog reid="document"/>-->
+    </xslt>
+
+    <!-- Generate text version of manual.                                -->
+    <xslt in="${doc}/manual.xml"
+          out="${doc}/manual.txt"
+          style="${doc}/manual-text.xsl">
+      <xmlcatalog refid="document"/>
+    </xslt>
+
+    <!-- Generate local HTML version of manual.                          -->
+    <xslt in="${doc}/manual.xml"
+          out="${doc}/manual.html"
+          style="${doc}/manual-html.xsl">
+      <xmlcatalog refid="document"/>
+    </xslt>
+
+
+    <!-- Copy any images in the manual -->
+    <copy todir="${help}/images" overwrite="y">
+      <fileset dir="${doc}/images"
+               includes="**/*.gif, **/*.png"/>
+    </copy>
+
+    <!-- Fixme: 'ant doc' does not copy images to ${web} for the
+	 online and local HTML versions of the manual. 
+         Fixme: There are absolute paths in online and local HTML
+         version of the manual, see comment in HelpModule.java,
+	 createEditorPane() for details.
+    <copy todir="${web}/images" overwrite="y">
+      <fileset dir="${doc}/images"
+               includes="**/*.gif, **/*.png"/>
+    </copy> -->
+  </target>
+
+  <!-- Generate a jar -->
+  <target name="jar" depends="build, doc">
+
+    <mkdir dir="${temp}"/>
+
+    <!-- First expand libraries so we can place them in the jar -->
+    <unjar src="${lib.hsql}" dest="${temp}">
+      <patternset>
+        <include name="org/**"/>
+      </patternset>
+    </unjar>
+
+    <unjar src="${lib.joone}" dest="${temp}">
+      <patternset>
+        <include name="org/**"/>
+      </patternset>
+    </unjar>
+
+    <unjar src="${lib.jython}" dest="${temp}">
+      <patternset>
+        <include name="org/**"/>
+        <include name="com/**"/>
+        <include name="jxxload_help/**"/>
+      </patternset>
+    </unjar>
+
+    <unjar src="${lib.mysql}" dest="${temp}">
+      <patternset>
+        <include name="com/**"/>
+      </patternset>
+    </unjar>
+
+    <unjar src="${lib.xml}" dest="${temp}">
+      <patternset>
+        <include name="com/**"/>
+      </patternset>
+    </unjar>
+       
+    <unjar src="${lib.uuid}" dest="${temp}">
+      <patternset>
+	<include name="org/**"/>
+      </patternset>
+    </unjar>
+
+    <copy todir="${temp}">
+      <fileset dir="${classes}"
+               includes="**/*.class, **/*.gif, **/*.png,
+			 **/*.sql.xml,
+                         nz/org/venice/help/doc/*.html,
+                         **/*.properties,
+                         nz/org/venice/help/doc/index.xml,
+                         nz/org/venice/quote/samples/*.txt"
+               excludes="nz/org/venice/tools/*"/>
+    </copy>
+
+    <jar jarfile="venice.jar"
+         basedir="${temp}"
+	 manifest="${src}/MANIFEST.MF"/>
+
+    <delete dir="${temp}"/>
+  </target>
+
+  <target name="app" depends="jar">
+    <mkdir dir="${basedir}/Venice.app"/>
+    <mkdir dir="${basedir}/Venice.app/Contents/"/>
+    <mkdir dir="${basedir}/Venice.app/Contents/MacOS"/>
+    <mkdir dir="${basedir}/Venice.app/Contents/Resources"/>
+    <mkdir dir="${basedir}/Venice.app/Contents/Resources/Java"/>
+    <copy file="/System/Library/Frameworks/JavaVM.framework/Versions/Current/Resources/MacOS/JavaApplicationStub/"
+          todir="${basedir}/Venice.app/Contents/MacOS"/>
+    <exec command="chmod 755 ${basedir}/Venice.app/Contents/MacOS/JavaApplicationStub"/>
+    <copy file="Info.plist" todir="${basedir}/Venice.app/Contents/"/>
+    <copy file="venice.jar" todir="${basedir}/Venice.app/Contents/Resources/Java"/>
+    <copy file="icons/winged_lion.icns" todir="${basedir}/Venice.app/Contents/Resources"/>
+    <exec command="/Developer/Tools/SetFile -a B ${basedir}/Venice.app"/>
+  </target>
+  
+  <!-- Check the locale files for consistency -->
+  <target name="locale">
+    
+    <mkdir dir="${classes}"/>
+    <copy todir="${classes}" overwrite="y">
+      <fileset dir="${src}"
+               includes="**/*.properties"/>
+    </copy>
+
+    
+    <!-- Make sure locale tool is compiled -->
+    <javac srcdir="${src}"
+	   destdir="${classes}"
+           debug="on"
+           source="1.4"
+           includes="nz/org/venice/tools/Locale.java"/>
+    
+    <!-- Compare each locale file to the english locale -->
+
+    <echo>Comparing Chinese locale against English reference locale...</echo> 
+    <java classname="nz.org.venice.tools.Locale"
+          dir="${classes}"
+          fork="yes">
+      <arg value="nz/org/venice/util/locale/venice_en.properties"/>
+      <arg value="nz/org/venice/util/locale/venice_zh.properties"/>
+      <jvmarg value="-ea"/>
+      <classpath>
+        <pathelement path="${java.class.path}"/>
+        <pathelement path="${classes}"/>
+      </classpath>
+    </java>
+
+    <echo>Comparing French locale against English reference locale...</echo> 
+    <java classname="nz.org.venice.tools.Locale"
+          dir="${src}"
+          fork="yes">
+      <arg value="nz/org/venice/util/locale/venice_en.properties"/>
+      <arg value="nz/org/venice/util/locale/venice_fr.properties"/>
+      <jvmarg value="-ea"/>
+      <classpath>
+        <pathelement path="${java.class.path}"/>
+        <pathelement path="${classes}"/>
+      </classpath>
+    </java>
+
+    <echo>Comparing Italian locale against English reference locale...</echo> 
+    <java classname="nz.org.venice.tools.Locale"
+          dir="${src}"
+          fork="yes">
+      <arg value="nz/org/venice/util/locale/venice_en.properties"/>
+      <arg value="nz/org/venice/util/locale/venice_it.properties"/>
+      <jvmarg value="-ea"/>
+      <classpath>
+        <pathelement path="${java.class.path}"/>
+        <pathelement path="${classes}"/>
+      </classpath>
+    </java>
+
+    <echo>Comparing Swedish locale against English reference locale...</echo> 
+    <java classname="nz.org.venice.tools.Locale"
+          dir="${src}"
+          fork="yes">
+      <arg value="nz/org/venice/util/locale/venice_en.properties"/>
+      <arg value="nz/org/venice/util/locale/venice_sv.properties"/>
+      <jvmarg value="-ea"/>
+      <classpath>
+        <pathelement path="${java.class.path}"/>
+        <pathelement path="${classes}"/>
+      </classpath>
+    </java>
+
+    <echo>Comparing Polish locale against English reference locale...</echo> 
+    <java classname="nz.org.venice.tools.Locale"
+          dir="${src}"
+          fork="yes">
+      <arg value="nz/org/venice/util/locale/venice_en.properties"/>
+      <arg value="nz/org/venice/util/locale/venice_pl.properties"/>
+      <jvmarg value="-ea"/>
+      <classpath>
+        <pathelement path="${java.class.path}"/>
+        <pathelement path="${classes}"/>
+      </classpath>
+    </java>
+
+    <echo>Comparing Catalan locale against English reference locale...</echo> 
+    <java classname="nz.org.venice.tools.Locale"
+          dir="${src}"
+          fork="yes">
+      <arg value="nz/org/venice/util/locale/venice_en.properties"/>
+      <arg value="nz/org/venice/util/locale/venice_ca.properties"/>
+      <jvmarg value="-ea"/>
+      <classpath>
+        <pathelement path="${java.class.path}"/>
+        <pathelement path="${classes}"/>
+      </classpath>
+    </java>
+
+    <echo>Comparing German locale against English reference locale...</echo> 
+    <java classname="nz.org.venice.tools.Locale"
+          dir="${src}"
+          fork="yes">
+      <arg value="nz/org/venice/util/locale/venice_en.properties"/>
+      <arg value="nz/org/venice/util/locale/venice_de.properties"/>
+      <jvmarg value="-ea"/>
+      <classpath>
+        <pathelement path="${java.class.path}"/>
+        <pathelement path="${classes}"/>
+      </classpath>
+    </java>
+
+  </target>
+
+  <!-- Package venice up ready for release -->
+  <target name="release" depends="doc, jar, test">
+
+    <!-- Binary Release -->
+
+    <!-- Layout files ready for release -->
+    <mkdir dir="${release}"/>
+    <mkdir dir="${release}/venice-${VERSION}"/>
+    <mkdir dir="${release}/venice-${VERSION}/doc/"/>
+    <copy file="${doc}/manual.txt" todir="${release}/venice-${VERSION}/doc"/>
+    <copy file="${doc}/manual.html" todir="${release}/venice-${VERSION}/doc"/>
+    <copy file="COPYING.txt" todir="${release}/venice-${VERSION}/"/>
+    <copy file="changelog.txt" todir="${release}/venice-${VERSION}/"/>
+    <copy file="readme.txt" todir="${release}/venice-${VERSION}/"/>
+    <copy file="venice" todir="${release}/venice-${VERSION}/"/>
+    <copy file="venice.jar" todir="${release}/venice-${VERSION}/"/>
+
+    <!-- Create release files for unix -->
+    <tar tarfile="${release}/venice-${VERSION}.tar">
+      <tarfileset dir="${release}/" includes="venice-${VERSION}/**"/>
+    </tar>
+    <gzip zipfile="${release}/venice-${VERSION}.tar.gz"
+      src="${release}/venice-${VERSION}.tar"/>
+    <bzip2 zipfile="${release}/venice-${VERSION}.tar.bz2"
+      src="${release}/venice-${VERSION}.tar"/>
+    <delete file="${release}/venice-${VERSION}.tar"/>
+
+    <!-- Fix CRLF issues on text files for windows -->
+    <fixcrlf srcdir="${release}/venice-${VERSION}/"
+             eol="crlf"
+             includes="*.txt"/>
+    <fixcrlf srcdir="${release}/venice-${VERSION}/doc"
+             eol="crlf"
+             includes="*.txt"/>
+
+    <!-- The Windows version doesn't need the venice shell script -->
+    <delete file="${release}/venice-${VERSION}/venice"/>
+
+    <!-- Create release files for windows -->
+    <zip zipfile="${release}/venice-${VERSION}.zip">
+      <fileset dir="${release}/" includes="venice-${VERSION}/**"/>
+    </zip>
+
+    <!-- Source Release -->
+    <mkdir dir="${release}/venice-${VERSION}-src"/>
+    <mkdir dir="${release}/venice-${VERSION}-src/doc/"/>
+    <mkdir dir="${release}/venice-${VERSION}-src/lib/"/>
+    <mkdir dir="${release}/venice-${VERSION}-src/src/"/>
+    <mkdir dir="${release}/venice-${VERSION}-src/test/"/>
+
+    <copy todir="${release}/venice-${VERSION}-src/doc/">
+      <fileset dir="${doc}"
+                includes="document.dtd,
+                          manual.xml,
+                          manual*xsl"/>
+    </copy>
+    <copy file="build.xml" todir="${release}/venice-${VERSION}-src/"/>
+    <copy file="Info.plist" todir="${release}/venice-${VERSION}-src/"/>
+    <copy file="${lib.hsql}" todir="${release}/venice-${VERSION}-src/lib/"/>
+    <copy file="${lib.joone}" todir="${release}/venice-${VERSION}-src/lib/"/>
+    <copy file="${lib.jython}" todir="${release}/venice-${VERSION}-src/lib/"/>
+    <copy file="${lib.mysql}" todir="${release}/venice-${VERSION}-src/lib/"/>
+    <copy file="${lib.xml}" todir="${release}/venice-${VERSION}-src/lib/"/>
+    <copy todir="${release}/venice-${VERSION}-src/src/">
+      <fileset dir="${src}"
+               includes="**/*.java, **/*.gif, **/*.png,
+                         nz/org/venice/help/doc/*.html,
+                         **/*.properties,
+                         nz/org/venice/help/doc/index.xml,
+                         nz/org/venice/quote/samples/*.txt,
+                         MANIFEST.MF"/>
+    </copy>
+    <copy todir="${release}/venice-${VERSION}-src/test/">
+      <fileset dir="${test}"
+               includes="**/*.java"/>
+    </copy>
+    <copy file="COPYING.txt" todir="${release}/venice-${VERSION}-src/"/>
+    <copy file="changelog.txt" todir="${release}/venice-${VERSION}-src/"/>
+    <copy file="readme.txt" todir="${release}/venice-${VERSION}-src/"/>
+    <copy file="venice" todir="${release}/venice-${VERSION}-src/"/>
+    <tar tarfile="${release}/venice-${VERSION}-src.tar">
+      <tarfileset dir="${release}/" includes="venice-${VERSION}-src/**"/>
+    </tar>
+    <gzip zipfile="${release}/venice-${VERSION}-src.tar.gz"
+	  src="${release}/venice-${VERSION}-src.tar"/>
+    <delete file="${release}/venice-${VERSION}-src.tar"/>
+
+  </target>
+
+  <!-- Run Venice -->
+  <target name="run" depends="build, doc">
+    <java classname="nz.org.venice.main.Main"
+          dir="${classes}"
+          fork="yes">
+      <jvmarg value="-ea"/>
+      <classpath>
+        <pathelement path="${java.class.path}"/>
+        <pathelement path="${classes}"/>
+        <pathelement path="${lib.hsql}"/>
+        <pathelement path="${lib.joone}"/>
+        <pathelement path="${lib.mysql}"/>
+	<pathelement path="${lib.postgresql}"/>
+        <pathelement path="${lib.jython}"/>
+        <pathelement path="${lib.xml}"/>	
+	<pathelement path="${lib.uuid}"/>
+      </classpath>
+    </java>
+  </target>
+
+  <!-- Run Tests -->
+  <target name="test" depends="build">
+    <mkdir dir="${report}"/>
+
+    <!-- Build Tests -->
+    <javac srcdir="${test}"
+	   debug="on"
+  	   optimize="on"
+	   source="1.4"
+	   includes="**/*.java">
+      <classpath>
+        <pathelement path="${java.class.path}"/>
+        <pathelement path="${classes}"/>
+        <pathelement path="${test}"/>
+	<pathelement path="${lib.junit}"/>
+        <pathelement path="${lib.hsql}"/>
+        <pathelement path="${lib.joone}"/>
+        <pathelement path="${lib.mysql}"/>
+	<pathelement path="${lib.postgresql}"/>
+        <pathelement path="${lib.jython}"/>
+        <pathelement path="${lib.xml}"/>	
+	<pathelement path="${lib.uuid}"/>
+      </classpath>
+    </javac>
+
+    <!-- Run Tests -->
+    <junit printsummary="on"
+           fork="no"
+           haltonfailure="no">
+      <classpath>
+        <pathelement path="${java.class.path}"/>
+        <pathelement path="${classes}"/>
+        <pathelement path="${test}"/>
+	<pathelement path="${lib.junit}"/>
+        <pathelement path="${lib.hsql}"/>
+        <pathelement path="${lib.joone}"/>
+        <pathelement path="${lib.mysql}"/>
+	<pathelement path="${lib.postgresql}"/>
+        <pathelement path="${lib.jython}"/>
+        <pathelement path="${lib.xml}"/>
+	<pathelement path="${lib.uuid}"/>
+      </classpath>
+      <formatter type="plain"/>
+      <batchtest todir="${report}">
+        <fileset dir="${test}">
+          <include name="**/*.java" />
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+  <!-- Package up the web page ready for deployment -->
+  <target name="web" depends="api, doc, jar, layout">
+
+    <!-- Copy venice.jar to web page for WebStart -->
+    <copy file="venice.jar" todir="${web}"/>
+
+    <!-- Copy API files to web page -->
+    <copy todir="${web}/${webstyle}/api">
+      <fileset dir="${api}"/>
+    </copy>
+
+    <!-- Make sure permissions are OK -->
+    <chmod perm="u=rw,go=r">
+      <fileset dir="${web}/${webstyle}"/>
+    </chmod>
+
+    <!-- Package it up ready for deployment -->
+    <tar tarfile="${web}/web.tar">
+      <tarfileset dir="${web}/${webstyle}" excludes="web.tar*"/>
+    </tar>
+    <gzip zipfile="${web}/web.tar.gz"
+      src="${web}/web.tar"/>
+  </target>
+
+</project>

@@ -1,0 +1,19 @@
+<!-- manifest.dtd -
+ - 
+ - Define external general entities for various compoents of
+ - the Venice webpage.
+ -
+-->
+
+<!ENTITY news SYSTEM "news.xml">
+<!ENTITY contactus SYSTEM "contact.xml">
+<!ENTITY contribute SYSTEM "contribute.xml">
+<!ENTITY credits SYSTEM "credits.xml">
+<!ENTITY download SYSTEM "download.xml">
+<!ENTITY features SYSTEM "features.xml">
+<!ENTITY links SYSTEM "links.xml">
+<!ENTITY screenshots SYSTEM "screenshots.xml">
+<!ENTITY manual SYSTEM "manual.xml">
+
+<!ENTITY future SYSTEM "future.xml">
+<!ENTITY api SYSTEM "api.xml">

@@ -1,0 +1,516 @@
+Changes for Venice, 0.753 beta ??/??/??
+=========================================
+* Change table state save/restore to avoid saving the entire table contents 
+* Improve alert triggered reporting dialog, allowing the user to go back and 
+forward 
+* Genetic Programming Overfit avoidance:
+  - Complexity penalty
+  - Noise reduction (e.g. average)
+  - Randomly change source data points 
+* Intraday charts
+
+% Preload data for most used symbols on cache refresh.
+
+Changes for Venice, 0.752 beta 26/December/2018
+===============================================
+* Added smooth option for RSI
+* Fixed SQL error on checking for triggered alerts when there no alerts
+* Minor interface improvements
+* Added quote access guards to avoid MissingQuoteException
+
+Changes for Venice, 0.751 beta 20/07/2012
+=========================================
+* JBuilder 2005 Support added
+* Replaced old cast expressions with ceil() and floor()
+* Added logging keyword to Gondola
+
+
+* Fixed bug in bestfit() (trend expression)
+* Fixed bug in Papertrade - stockcapital incorrect when date falls on weekend/missing
+* Fixed bug #3519400 ('Show End of Chart' option not honoured when zooming out).
+* Fixed bug #3523813 (Restoring Chart removes timeline bar)
+* Fixed for bug #3522881 (NPE when editing alerts)
+* Fixed bugs in GP dialog handling.
+
+Changes for Venice, 0.75 beta 01/05/2012
+* Appearance and usability improved with icons from Libreoffice (instead of the mash up of jlfgr and hand drawn icons) 
+* Can now show previous/later data in charts when zoomed in.
+* Splits and Dividends can be factored into charts display
+* Exported Portfolio Transactions now use the same format for import and export
+* PNG and JPG formats now available for exporting charts
+* Added support for Metastock Binary format
+* Users can now provide metadata for a stock, such as which stocks are actually
+indeces 
+* Added Stochastic Oscillator indicator graph 
+* Tooltips added for every field and list
+* Can now select the background colour of a chart
+* Screenshots in the manual and be displayed in the online help
+
+
+* Fixed bug #3519380 (Dialogs (ie Paper Trade) hangs when pressing Run)
+* Fixed bug #1328497 (Point Change lacks decimal point)
+* Fixed bug #1328217 (Chart display currency, should be points)
+* Fixed bug #3519731 (Adding new symbol to existing chart doesnt follow default)
+* Fixed bug in For expression evaluation 
+
+
+
+
+
+Changes for Venice, 0.74 beta 16/02/2012
+=========================================
+* Added first class functions, includes, comments and alerts to the Gondola language
+* Added ability for Gondola rules to reference symbols explicitly
+* Graph settings now persist when editing settings instead of always showing
+  defaults.  
+* Always use database when database settings are changed
+* Add option to enter database password instead of storing on disk
+* Mask database password when it is stored on disk
+* Added accelerator key for help
+* Prompt user to confirm before deleting Gondola rules.
+* Added functions ceil and floor to Gondola
+* Added messages to evaluation exception
+* Fixed bug #(3437002) Gondola evaluation of boolean expressions.
+ 
+
+
+
+Changes for Venice, 0.731 beta 16/10/2011
+=========================================
+* Fixed bug "Find highlights wrong region in help text" - (Bug #3302556)
+* Fixed bug in Saving and restoring windows (Bug #3315179)
+* Added missing library for alerts and fixed bug.
+* Fixed bug "Add Macro overwrites previous one" (Bug #1328208) 
+
+Changes for Venice, 0.73 beta 10/05/2011
+=========================================
+* Changed symbol column from CHAR to VARCHAR (Patch #3228829)
+* Added expiry and flush functionality for Quote Cache. (Makes imported data visible without restarting Venice), 
+* Fixed Alert bugs and German translations.
+* Updated table checks to be case insensitive (Patch #3226995)
+* Bug fix for Bug #3191299 
+
+
+Changes for Venice, 0.723 beta 22/02/2011
+=========================================
+
+* Fixed bug #3137455 February 31st is accepted as a date
+* Added alert functionality
+* Added cursor tracking
+* Keyboard shortcut to close windows.
+* Improved internationalisation for console (Christian Brom) 
+
+Changes for Venice, 0.722 beta 01/11/2010
+-----------------------------------------
+
+* Fixed Artificial Neural Network functionality
+  (Updated manual, added input check)
+* Fixed Bug #1617089 Average Cost not included in average cost of share
+* Fixed bug #3062208 Keyboard shortcuts
+* Now have the option for charts to display the newest data first. 
+
+Changes for Venice, 0.721 beta 3/07/2010
+=========================================
+* Internationalisation:
+  - German translation added (Christian Brom).
+
+* Allow Settings for graphs to be changed without "toggling" the graph
+* Ability to search Online Help 
+* Gondola Language expression types are now determined by all the subexpressions not just the first operator.
+
+Bug Fixes:
+
+* Fix Quote Import/Export for locales which use commas as decimal points. (e.g. Germany)
+
+
+Changes for Venice, 0.72 beta 21/03/2010
+=========================================
+
+* Added the ability to save and restore the state and position of windows.
+* Added support for downloading quotes from finance.google.com.
+* Added the ability to provide a suffix when importing from
+  Yahoo quotes. This allows you to download, say, "CBA.AX" as
+  "CBA".
+* Added Fibonacci indicator
+* Improved performance of AdvanceDecline from Database (Reduced number of database queries)
+
+
+* Bug Fixes:
+  - Fixed an off-by-one month error when downloading from float.com.au.
+  - Fixed a bug where an exception would be thrown if the user
+    clicked in the background.
+  - Fixed an off-by-one day error in PointAndFigure chart (bug # 1880869)
+  - Fixed bug in GeneticProgramming wher date offsets of 2147483647 did not  
+    throw the expected exception. (bug #2929664)
+  - Fixed bugs in expression simplify 
+
+Changes for Venice, 0.71 beta 25/Feb/2007
+=========================================
+
+* Added support for downloading ASX quotes from float.com.au.
+
+* Updates to Usability:
+  - Now warns if you try to import wekeend stock quotes.
+    Stock quotes on weekends are not yet supported.
+
+* Watch screens are now saved as XML files in the user's home directory.
+  This should make them easier to manage (e.g. backup).
+
+* Bug Fixes:
+  - Can now work with volumes greater than 2147483647.
+  - Graphing from context menu in watch screen now works (bug #1328197).
+  - Importing quotes from Yahoo now works again. They changed the
+    date format to one Venice couldn't parse.
+
+Changes for Venice, 0.7 beta 17/Apr/2006
+========================================
+
+* Added multi-currency portfolio support (Andrew Leppard, Quentin Bossard)
+
+* Added support for currencies with greater than 100 subdivisions, e.g.
+  Kuwaiti dinar which has 1,000 fils per dinar.
+
+* Portfolios are now saved as XML files in the user's home directory.
+  This should improve performance when loading and saving portfolios
+  and make them easier to manage (e.g. backup).
+
+* Internationalisation:
+  - Catalan translation added (Jordi Pujol).
+
+* Tuning:
+  - HSQLDB databases are now stored in binary format and are no
+    longer fully cached in memory. This should improve performance
+    and reduce memory usage.
+  - Charting indicators, such as Bollinger Bands, is now much faster.
+
+* Library updates:
+  - HSQLDB V1.8.0.4 from 1.8.0.2
+  - MySQL Connector/J V3.1.12 from 3.1.11.
+
+* Bug Fixes:
+   - User drawn lines now scale properly when graph is resized (Mark Hummel).
+
+Changes for Venice, 0.6 beta 23/Oct/2005
+========================================
+
+* Added basic intra-day quote support.
+
+* Updates to Gondola Language:
+  - Performance improvements due to stronger internal typing
+    (Alberto Nacher).
+  - Added sin() (Alberto Nacher).
+  - Added cos() (Alberto Nacher).
+  - Added log() (Alberto Nacher).
+  - Added exp() (Alberto Nacher).
+
+* Updates to Paper Trade:
+  - The current capital, number of transactions and start of paper trade
+    now available to paper trade (Alberto Nacher).
+
+* Internationalisation:
+  - Polish translation added (Benedict P. Barszcz).
+
+* Tuning:
+  - Portfolio and Watch Screens now only load the quotes they use,
+    previously they'd load the entire day's quotes.
+
+* Bug Fixes;
+  - Can now import more than 200 days of quote data from Yahoo in one
+    transaction (Dennis van den Berg).
+  - Fixed a bug where the quote sub-system, when expanding the date
+    range of a bundle of quotes, would attempt to re-load some quotes
+    that were already loaded.
+  - Venice no longer runs out of memory when importing very large
+    quote files (>10MB).
+  - Fixed a user interface bug where adding new equations to a
+    table resulted in any present equation columns being removed and
+    then re-added.
+  - Fixed an introduced bug in 0.5 where you needed to reload Venice
+    after importing new quotes.
+  - Fixed a bug where the portfolio's percent change could be widly
+    inaccurate.
+  - Fixed a bug where sometimes an exception was thrown when removing
+    a module frame.
+
+* Library updates:
+  - HSQLDB V1.8.0.2 from 1.7.3.3.
+  - MySQL Connector/J V3.1.11 from 3.1.7.
+
+Changes for Venice, 0.51 alpha 13/Apr/2005
+==========================================
+
+* Bug Fixes;
+  - Fixed a major bug where if the locale was not set in the
+    preferences, the application crashed at startup with a
+    NullPointerException.
+
+Changes for Venice, 0.5 alpha 13/Mar/2005
+==========================================
+
+* Added Jython macro support (Dan Makovec).
+  
+* Chart Update:
+  - Added the custom graph to allow users to graph arbitrary indicators
+    using the Gondola language.
+  - Improved look of Candle Stick, Bar & Volume Charts (Bryan Lin).
+
+* Internationalisation:
+  - Can now specify the language to use in preferences (Alberto Nacher).
+  - Swedish translation added (Pontus Strömdahl).
+
+* Added Genetic Algorithms (Alberto Nacher).
+
+* Updates to Genetic Programming:
+  - Can now specify window size in days.
+  - Can now specify the buy/sell stock price (Alberto Nacher).
+
+* Updates to the Gondola Language:
+  - Added ema() quote function (Alberto Nacher).
+  - Added sd() quote function (Andrew Leppard, Alberto Nacher).
+  - Added bol_upper() quote function (Alberto Nacher).
+  - Added bol_lower() quote function (Alberto Nacher).
+  - Added obv() quote function (Alberto Nacher).
+  - Added momentum() quote function (Alberto Nacher).
+  - Added implicit casting in the following cases:
+
+    float x integer = float
+    integer x float = integer
+
+    for +, -, / and * (Alberto Nacher).
+
+* Updates to Stock Quote Support:
+  - Added proxy authentication support (Bryan Lin).
+  - Added HSQLDB (Hypersonic) support.
+  - Maximum symbol length increased to 12.
+  - Replaced file quote source with internal database. This makes Venice
+    easier to use and removes the problem where the file quote source
+    would not work if a file contained quotes from different dates.
+  - Separated import and export dialogs to simplify interface.
+  - Improved speed of internet import.
+  - Venice now cleans up any dubious stock quotes, e.g. quotes where
+    the day low is greater than the day high etc.
+  - Venice now displays an import report with any warnings and errors
+    encountered.
+  - Added support for other databases through the JDBC driver field
+    (Dan Makovec).
+
+* Updates to Usability:
+  - Added Venice icon.
+  - Mac OS X specific release.
+
+* Can now import/export preference settings (Alberto Nacher).
+
+* Licensing addtions:
+  - User now asked to accept license at startup.
+  - License viewable from Help menu.
+
+* Bug Fixes:
+  - Paper trade and GP no longer sell, then buy back, the same stock on the
+    same day (Alberto Nacher).
+  - Fixed bugs preventing PostgreSQL support from working.
+  - Venice no longer complains about not being able to find database tables
+    if you try to load quotes before you have imported any.
+  - Gondola. Venice now properly displays an error if the user specifies
+    something other than a string when a string type is expected.
+  - Gondola. Venice now properly displays an error if the user specifies
+    a positive date offset in any function that accepts a date offset,
+    e.g. lag(), avg(), min() etc.
+  - No longer crashes if you input certain punctuation symbols in
+    inappropriate places (e.g. "$" in symbol, date or number fields).
+  - Fixed user interface display bugs under Mac OS X. Also under Mac OS X
+    it now uses the standard, and better looking, progress bar.
+  - Fixed portfolio import/export bug. Exported portfolio format has now
+    changed and is not backwards compatible.
+  - Fixed a bug where portfolios, watch screens and saved equations could
+    unintentionally be deleted.
+  - Fixed bugs in point & figure chart (Mark Hummel).
+  - Removed numerous compilation warnings (Dan Makovec).
+
+Changes for Venice, 0.4 alpha 14/Aug/2004
+==========================================
+
+* Chart Update:
+  - Graphs' parameters are now user configurable.
+  - Separated graph views from indicators. Selecting a view
+    now replaces the current view, instead of appending.
+  - Added Bar Chart (Quentin Bossard).
+  - Added Candle Stick (Quentin Bossard).
+  - Added Exponentially Weighted Moving Average (Mark Hummel).
+  - Added Point & Figure (Mark Hummel).
+  - Added RSI.
+
+* Internationalisation:
+  - The text is now fully internationalised.
+  - Chinese translation added (Bryan Lin).
+  - French translation added (Quentin Bossard).
+  - Italian translation added (Alberto Nacher).
+
+* Portfolio Update:
+  - Addeed percent change column to Portfolio account table.
+  - Added portfolio table.
+  - Can now chart the value of just the cash in a portfolio.
+  - Can now chart the value of just the shares in a portfolio.
+  - Can now chart the value of any single account in a portfolio.
+  - Can now chart the number of stocks held in a portfolio.
+
+* Updates to the Gondola Language:
+  - You can now specify just "close" instead of typing "lag(close, 0)".
+    Simillarly for open, high, low & volume. So instead of typing
+    "lag(close, 0) > lag(open, 0)" you now only need to type  "close > open".
+  - The offset argument is now optional in the lag(), min(), max(), avg() and
+    sum() functions. So instead of typing "avg(close, 30, 0)" you now only
+    need to type "avg(close, 30)".
+  - Added rsi() quote function.
+  - Added corr() quote function for finding the correlation between
+    two stock quotes.
+
+* Updates to Genetic Programming:
+  - Can now specify the probability of each symbol being created
+    by the GP (Alberto Nacher).
+
+* Updates to Usability:
+  - Multiple copies of the Importer Module will no longer be displayed.
+  - Multiple copies of the Preferences Module will no longer be displayed.
+
+* Updates to Stock Quote Support:
+  - Added experimental PostgreSQL support.
+
+* Updates to Watch Screen:
+  - Can now graph an index of a group of any stocks (Mark Hummel).
+
+* Bug Fixes:
+  - Fixed a bug preventing Portfolio deletion under Windows (Bryan Lin).
+  - Fixed a bug when viewing a Portfolio created from a GP.
+  - Fixed various graphing bugs (Bryan Lin, Andrew Leppard).
+  - Fixed a bug when the paper trade could never afford to buy any stock.
+  - The standard deviation calculation is now correct.
+  - Percent change of stock value still wasn't quite right. Fixed.
+  - When sorting by account name in the account table, the "total row"
+    now always appears at the bottom.
+  - Fixed a bug where downloading quotes from Yahoo would stop if
+    there were no quotes for that day (e.g. the exchange was closed).
+  - The application now handles importing empty quote files.
+  - Limited precision of generated MetaStock quote files to prevent
+    stock quotes like "24.00020014".
+  - Words in the online help no longer run together likethis.
+
+Changes for Venice, 0.3 alpha 14/Mar/2004
+==========================================
+
+* Added internet quote download.
+
+* Added end-of-day Watch Screens.
+
+* Stored Equation Updates:
+  - Redesigned stored equations preferences page.
+  - The stored equations preferences page is now accessible from all
+    equation combo boxes (by right mouse click).
+  - Fixed stored equation list in equation combo boxes.
+  - Can now add/edit/delete stored equations from equation combo boxes.
+
+* Table Updates:
+  - Added "Find" feature to locate symbols in tables.
+  - Equation column results are now displayed according to their type,
+    e.g. 12, 12.0 & true.
+  - Can now rename portfolios.
+
+* Updates to the Gondola Language:
+  - Full support for variables.
+  - Added constants.
+  - Multiple statement programmes are now supported.
+  - Added for() and while() flow control functions.
+  - Calculations are now made using "doubles" instead of "floats" for
+    greater precision.
+
+* Updates to Genetic Programming:
+  - GP no longer progresses past generation 1 until breeding population size
+    is large enough.
+  - Higher performing individuals in breeding population now have a
+    greater chance of breeding over lower performing indvidiausl
+
+* Updates to Usability:
+  - Many minor GUI enhancements.
+  - Symbols can now contain full stops, carets and numbers. Also the
+    maximum symbol length has been increased to 9.
+  - Preferences now remembers last preference page visited.
+
+* Tuning:
+  - Massive speed improvements in GP and Paper Trade.
+  - Reduced memory required to store quotes by about 25%.
+
+* Technical Updates:
+  - Venice can now run on Java 1.5 beta.
+  - Implemented new Money type to store cash values to fix precision problems.
+
+* Bug Fixes;
+  - Fixed a bug where you couldn't import quote files on Windows.
+  - Fixed a bug where if you displayed the equation results in a table
+    with quotes over multiple dates, it would only display the
+    correct result for a single date.
+  - Fixed a bug where importing quotes into MySQL using MySQL's own
+    driver failed [mm.mysql driver OK].
+  - Fixed a memory retention issue when importing a large number of
+    quotes.
+  - Fixed a bug where adding new symbols to the chart failed.
+  - Fixed a bug where the preferences manager would only save the
+    preferences on the visible page.
+  - Fixed a bug where the preferencs page you selected would not always
+    appear.
+  - Fixed a bug where the GP wasn't mutating open/close/high/low types
+    properly.
+
+Changes for Venice, 0.2 alpha 24/Aug/2003
+=========================================
+
+* Added Genetic Programming.
+
+* Updates to the Gondola Language:
+  - Strong type checking between integer, boolean, float & quote types.
+  - Creation of "true" and "false" keywords for boolean type.
+  - Added date functions: day(), month(), year(), dayofweek() and
+    dayofyear().
+  - Added maths functions: sqrt() and abs().
+  - Added sum() quote function.
+  - Renamed day_open, day_close, day_low, day_high, day_volume to
+    open, close, low, high & volume respectively.
+  - Partial support for variables.
+  - Now handles some run-time errors such as "divide by zero".
+
+* Table Updates:
+  - Can now display each day's stock quotes for given stocks in a table.
+  - Can now display any given day's stock quotes in a table.
+  - Now displays correct percent change in stocks. Previously it calculated it
+    as day_close/day_open instead of day_close/yesterday day_close.
+  - Quote tables and Stock holding tables can now display point change.
+  - Stock holding table can now display percent return and average cost.
+
+* Updates to Usability:
+  - Windows Installer.
+  - When importing quotes it now remembers the last directory specified.
+  - Improved paper trade interface.
+  - Sample quotes included.
+  - Removed skinlf support and moved to Java native look & feel support.
+    Under Java 1.4.2 or higher on Windows XP, Venice will now look like a
+    native Windows XP application.
+  - Equation viewer / editor dialog.
+
+* Updates to Paper Trade:
+  - Can now paper trade multiple stock portfolios.
+  - Number of days held available to paper trade.
+  - Can now order stocks before trading.
+
+* Updates to Stock Quote Support:
+  - Improved parsing of stock symbols.
+  - Importing quotes can now handle quote files with headers and comments.
+
+* Tuning Support:
+  - Reduced memory footprint of stock quotes by 30%.
+  - Tuning Preferences Page lets you specify number of quotes cached.
+
+* Technical Updates:
+  - Cancelling an operation now also cancels the underlying database
+    transaction.
+  - UNIX shell script now uses full path of Java to run Venice.
+
+Initial Venice, 0.1 alpha 13/Apr/2003
+=====================================

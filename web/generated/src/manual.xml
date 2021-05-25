@@ -1,0 +1,1188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns:xlink="http://www.w3.org/xlink" role="user" fileref="manual-db.xml" id="manual">
+<chapterinfo>
+<title>Manual</title>
+</chapterinfo>
+<section id="Introduction">
+<sectioninfo>
+<title>1 Introduction</title>
+</sectioninfo>
+<para>Thank you for trying Merchant of Venice (Venice).</para>
+<para>Venice is a stock market trading programme that supports portfolio
+management, charting, technical analysis, paper trading and
+experimental methods like Genetic Programming. Venice runs in a
+graphical user interface with online help and has full documentation.
+Venice runs on UNIX (including Mac OS X), and Windows.</para>
+</section>
+<section id="Preferences">
+<sectioninfo>
+<title>2 Preferences</title>
+</sectioninfo>
+</section>
+<section id="Importing and Exporting Preferences">
+<sectioninfo>
+<title>3 Importing and Exporting Preferences</title>
+</sectioninfo>
+<para>You can load from or save to an XML file the whole Venice preferences.</para>
+<para>You can reach the import preferences dialog by:</para>
+<para>You can reach the export preferences dialog by:</para>
+<para>This feature can be used in several ways:</para>
+</section>
+<section id="Importing and Exporting Quotes">
+<sectioninfo>
+<title>4 Importing and Exporting Quotes</title>
+</sectioninfo>
+</section>
+<section id="Tables">
+<sectioninfo>
+<title>5 Tables</title>
+</sectioninfo>
+<para>Venice has the ability to list quote prices for a single day's trading in a
+table, and the ability to list all quote prices for a list of given stocks.
+When listing you need to decide which stocks you are interested in. Currently
+you can select from <emphasis>All Ordinaries</emphasis>, <emphasis>Market Indices</emphasis> and <emphasis>All Symbols</emphasis>.
+These categories are based on the ASX (Australian Stock Exchange) so might not
+be very relevant for other exchanges. Currently Venice is very ASX-centric. At
+the moment Venice does not have access to any data relating to the symbols it
+is given, so it has to guess which category the symbol falls in. All
+Ordinaries lists all 3 letter symbols except those starting with an <emphasis>X</emphasis>.
+Market Indices lists all symbols starting with an <emphasis>X</emphasis>, on
+the ASX almost all of these are market indices. All Symbols lists all the
+symbols.</para>
+<para>You can display a table by doing the following:</para>
+<para>The <emphasis>List All</emphasis> option allows you to list all the stock quotes
+on the given date.</para>
+<para>The <emphasis>List By Date</emphasis> option allows you to specify the date of the stock
+quotes to list.</para>
+<para>The <emphasis>List By Rule</emphasis> option allows you to specify the initial
+filter. The filter is an equation which specifies which stocks should be
+listed and which hidden, see below for more details about this, also see the
+<xref linkend="Gondola Language">Gondola Language</xref> for details about the format of
+the equations.</para>
+<para>The <emphasis>List By Symbols</emphasis> option allows you to specify the stock symbols
+to list. Then all the quotes for those stock symbols will be listed.</para>
+<section id="Apply Equations">
+<sectioninfo>
+<title>5.1 Apply Equations</title>
+</sectioninfo>
+<para>You can run multiple equations against every stock listed in the table and
+list the result of the equation. Click on the <emphasis>Table</emphasis> menu, then
+click on the <emphasis>Apply Equations</emphasis> menu item. This will bring up a dialog
+where you can enter up to 5 equations that can be run against each stock. For
+each you can enter the name of the column and the equation to be run. See
+<xref linkend="Gondola Language">Gondola Language</xref> for details about the format of these equations.
+Also see <xref linkend="Preferences">Preferences</xref> for how to get Venice to remember equations
+so you don't have to keep typing them in all the time. To get you started, an
+example equation is <literallayout>avg(close, 30, 0)</literallayout> which will calculate the average
+day close value over the last 30 days, including today.</para>
+</section>
+<section id="Apply Filter">
+<sectioninfo>
+<title>5.2 Apply Filter</title>
+</sectioninfo>
+<para>You can restrict which stocks are listed in the table by setting up an equation
+filter. This equation is run against each stock listed in the table, if the
+equation equates to true for a stock, then that stock is listed. Otherwise it
+is hidden. You can reach this by clicking on the <emphasis>Apply Filter</emphasis> menu item.
+Again, see <xref linkend="Gondola Language">Gondola Language</xref> for details about the format of these equations.
+Also see <xref linkend="Preferences">Preferences</xref> for how to get Venice to remember equations so
+you don't have to keep typing them in all the time. To get you started, an
+example equation filter is <literallayout>lag(close, 0) &gt; lag(close, -1)</literallayout> which will
+list all quotes where the day close of today is higher than the day close of
+the last trading day.</para>
+</section>
+<section id="General Table Features">
+<sectioninfo>
+<title>5.3 General Table Features</title>
+</sectioninfo>
+<para>Every table in Venice supports the following:</para>
+
+<para>By clicking on a column header you can sort by that column, click again and
+you reverse the sort. You can change the order of the columns by dragging a
+column and dropping it into a new position.</para>
+
+<para>Some tables in Venice support the following:</para>
+<para>By right clicking on a row you can raise a context sensitive menu. If you
+double click on a row the most common operation is invoked, typically
+Graphing. Some tables also have a menu item <emphasis>Show Columns</emphasis> which lets
+you specify which columns are shown.</para>
+</section>
+</section>
+<section id="Watch Screens">
+<sectioninfo>
+<title>6 Watch Screens</title>
+</sectioninfo>
+<para>Watch screens provide a way to monitor the value of a group of stocks. Watch
+screens can be created using any stocks, and any indicator can be applied to the
+stocks. Venice supports both intra-day and end of day watch screens. If Venice
+is currently downloading intra-day quotes, it will display the latest quotes,
+otherwise it will display the latest end of day quotes. You can create a new
+watch screen by doing the following:</para>
+<para>This will create a new watch screen which you will need to name. You
+can then add symbols that should be displayed in this watch screen.</para>
+</section>
+<section id="Graphs">
+<sectioninfo>
+<title>7 Graphs</title>
+</sectioninfo>
+<section id="Portfolio Graphs">
+<sectioninfo>
+<title>7.1 Portfolio Graphs</title>
+</sectioninfo>
+<para>You can graph the value of any portfolio over time by doing the following:</para>
+<itemizedlist>
+<listitem>Clicking on the <emphasis>Graph</emphasis> menu item.
+</listitem>
+<listitem>Then clicking on the <emphasis>Portfolio</emphasis> menu item.
+</listitem>
+<listitem>Then clicking on the name of the portfolio you wish to graph.
+</listitem>
+</itemizedlist>
+
+<para>Depending on the size of your portfolio and the time it has existed, this
+might take a while as Venice has to load in stock quotes for every stock
+traded for every day of the portfolio.</para>
+
+<para>Apart from graphing the value of the portfolio over time, you can also graph
+the profit/loss of the portfolio. To do this, graph the portfolio as above,
+then click on the menu item with the same name as your portfolio, then select
+the <emphasis>Graph</emphasis> menu item and then click on <emphasis>Profit/Loss</emphasis>. The profit and loss
+graph is calculated by ignoring any deposits and withdrawals made to the
+portfolio, the balance of that portfolio over time will reflect the profit and
+loss made.</para>
+</section>
+<section id="Market Indicator Charts">
+<sectioninfo>
+<title>7.2 Market Indicator Charts</title>
+</sectioninfo>
+<para>A market indicator is an indicator that can be used to help determine the
+state of the market. They are calculated using multiple stocks on the market,
+for example <emphasis>Advance/Decline</emphasis> uses all ordinary stocks in its calculations.</para>
+
+<section id="Advance/Decline">
+<sectioninfo>
+<title>7.2.1 Advance/Decline</title>
+</sectioninfo>
+<para>Currently the only market indicator that Venice can graph is the
+advance/decline indicator. You can graph this indicator by:</para>
+
+<itemizedlist>
+<listitem>Clicking on <emphasis>Graph</emphasis> menu item.
+</listitem>
+<listitem>Then clicking on the <emphasis>Market Indicator</emphasis> menu item.
+</listitem>
+<listitem>Then clicking on the <emphasis>Advance/Decline</emphasis> menu item.
+</listitem>
+</itemizedlist>
+<para>This operation reads in almost all of the available stock quotes, so it may take a while.</para>
+
+<para>The advance/decline indicator is calculated by taking an arbitrary start value
+(currently 0). Each day's value is calculated by taking the number of stocks
+that advanced (i.e. have a higher day close than day open) minus the number of
+stocks that declined and adding that to the previous day's value. This creates
+a cumulative graph whose trend may be used to give an indication of possible
+future direction of the market.</para>
+</section>
+</section>
+<section id="Stock Charts">
+<sectioninfo>
+<title>7.3 Stock Charts</title>
+</sectioninfo>
+
+ <para>Venice supports a variety of technical charts. Some of these charts are
+described below, for the others, please consult the literature for their
+meaning and interpretation.</para>
+
+<section id="Custom">
+<sectioninfo>
+<title>7.3.1 Custom</title>
+</sectioninfo>
+<para>Venice supports the charting of user-defined custom indicators. Using the
+<xref linkend="Gondola Language">Gondola Language</xref> you can write custom indicators which can
+then be charted. The custom chart user interface allows you to enter a Gondola
+equation to chart and to specify the chart as either primary or secondary.
+A primary chart is one that appears in the top graph. A secondary chart will
+appear in its own smaller graph below.</para>
+</section>
+
+<section id="Point And Figure">
+<sectioninfo>
+<title>7.3.2 Point And Figure</title>
+</sectioninfo>
+  <para>The Point and Figure graph attempts to highligh only significant price movement, independant of time. This means it differs from most of the other charts in that there is not necessarily any data shown for a particular date range. </para>
+
+<para>
+If you switch to the Point and Figure graph while zoomed in on an area which does not have any Point and Figure data or you attempt to zoom in on such an area, a warning dialogue is displayed and the operation will be cancelled.
+</para>
+
+</section>
+
+ <section id="Fibonacci Charts">
+<sectioninfo>
+<title>7.3.3 Fibonacci Charts</title>
+</sectioninfo>
+   <para>The Fibonacci Retracement Chart is used to estimate possible support and resistence levels between two price levels. This indicator draws horizontal lines at levels corresponding to the following Fibonacci Ratios: 0%, 23.6%, 38.2% , 50.0%, 61.8%, 78.6%, 100%</para>   
+
+   <para>The Fibonacci Chart takes two parameters:
+     <itemizedlist>
+       <listitem>0% Level: Minimum price point for the indicator</listitem>
+       <listitem>100% Level: Maximum price point for the indicator</listitem>
+     </itemizedlist>     
+   </para>   
+ </section>
+
+<section id="Chart Functions">
+<sectioninfo>
+<title>7.3.4 Chart Functions</title>
+</sectioninfo>
+  <para>The graph functions are accessed via the toolbar which is created on the left of the chart by default. The functions are:  </para>
+  <itemizedlist>
+    <listitem>Zoom in</listitem>    
+    <listitem>Zoom out</listitem>
+    <listitem>Clone</listitem>
+    <listitem>Draw straight line</listitem>
+    <listitem>Move line</listitem>
+    <listitem>Draw freehand line</listitem>
+    <listitem>Write text on chart</listitem>
+    <listitem>Erase</listitem>
+    <listitem>Flip chart</listitem>    
+  </itemizedlist>
+
+  <section id="Zoom">
+<sectioninfo>
+<title>7.3.4.1 Zoom</title>
+</sectioninfo>
+    <para>The "Zoom in" function will zoom in on a selected area, where as "Zoom out" always returns to the intial setting, regardless of how many times the user zooms in.</para>
+  </section>
+
+  <section id="Chart Drawing">
+<sectioninfo>
+<title>7.3.4.2 Chart Drawing</title>
+</sectioninfo>
+    <para>The chart drawing functions allow the user to draw lines and add text to a chart in a fairly basic manner. Any lines drawn on a chart scale with the zoom level. </para>
+  </section>
+  
+  <section id="Others">
+<sectioninfo>
+<title>7.3.4.3 Others</title>
+</sectioninfo>
+    <para>The "Clone" button opens a window with the same chart type.</para>
+    <para>The "Flip chart" button toggles the orientation of the chart. The initial orientation is for the origin of the chart to be in the top left hand corner. Therefore, pressing the button twice returns the chart to it's original position. </para>
+  </section>
+
+</section>
+
+</section>
+</section>
+<section id="Portfolios">
+<sectioninfo>
+<title>8 Portfolios</title>
+</sectioninfo>
+<para>Venice allows you to keep track of multiple portfolios. One portfolio
+might be for your actual portfolio and others could be used for paper
+trading. You can create a new portfolio by:</para>
+<para>A portfolio is made up of several <emphasis>Cash Accounts</emphasis> and several
+<emphasis>Share Accounts</emphasis>. A <emphasis>Cash Account</emphasis> can be a bank account, a term deposit,
+a Cash Management Account or any account which stores money. A <emphasis>Share Account</emphasis>
+is any account where you can trade shares. To create a trading account you
+will need at least one of each.</para>
+<para>A portfolio is made up of several accounts and also transactions. A
+transaction is any financial transaction that involves one or more of the
+accounts. See transactions for more details.</para>
+<section id="Graph">
+<sectioninfo>
+<title>8.1 Graph</title>
+</sectioninfo>
+<para>You can graph the value of a portfolio over time. See <xref linkend="Graphs">Graphs</xref>
+for more details.</para>
+</section>
+<section id="Transaction History">
+<sectioninfo>
+<title>8.2 Transaction History</title>
+</sectioninfo>
+<para>You can view a list of all the transactions that have occurred in the
+portfolio. You can reach this by clicking on the <emphasis>Transaction</emphasis> menu
+item and then clicking on the <emphasis>Show History</emphasis> menu item.</para>
+</section>
+<section id="Transactions">
+<sectioninfo>
+<title>8.3 Transactions</title>
+</sectioninfo>
+<para>Venice currently supports several common transactions:
+<emphasis>Accumulate Transaction</emphasis>, <emphasis>Deposit Transaction</emphasis>, <emphasis>Dividend Transaction</emphasis>,
+<emphasis>Dividend DRP Transaction</emphasis>, <emphasis>Fee Transaction</emphasis>, <emphasis>Interest Transaction</emphasis>,
+<emphasis>Reduce Transaction</emphasis>, <emphasis>Transfer Transaction</emphasis> and <emphasis>Withdrawal Transaction</emphasis>.</para>
+
+<para>Once a portfolio is open, you can add a transaction by clicking on the
+<emphasis>Transaction</emphasis> menu item, then clicking on the <emphasis>New</emphasis> menu item.
+You will see in a drop down box a list of the transactions available. Some of
+these might not be available yet, e.g. you cannot enter a Reduce Transaction
+(sell shares) without having bought any.</para>
+
+<section id="Accumulate Transaction">
+<sectioninfo>
+<title>8.3.1 Accumulate Transaction</title>
+</sectioninfo>
+<para>The accumulate transaction is the "buy shares" transaction. To enter this
+transaction you will need the date the transaction took place, the cash
+account where you withdrew the money from, the share account that accumulated
+the shares, the symbol of the stock you accumulated (e.g. CBA), the number of
+shares you accumulated, the total value of the shares at the time of purchase
+and finally the cost of the trade. This information should all be available
+from your broker.</para>
+</section>
+
+<section id="Deposit Transaction">
+<sectioninfo>
+<title>8.3.2 Deposit Transaction</title>
+</sectioninfo>
+<para>The deposit transaction is the transaction where you
+deposit money into a cash account such as a bank account. To enter this
+transaction you will need the date the transaction took place, the cash
+account you deposited the money to and the amount you deposited.</para>
+</section>
+
+<section id="Dividend Transaction">
+<sectioninfo>
+<title>8.3.3 Dividend Transaction</title>
+</sectioninfo>
+<para>The dividend transaction is the transaction when you receive a share
+dividend. To enter this transaction you will need the date the transaction
+took place, the cash account that received the money, the share account
+containing the stock, the symbol of the stock and the dividend amount paid to
+you.</para>
+</section>
+
+<section id="Dividend DRP Transaction">
+<sectioninfo>
+<title>8.3.4 Dividend DRP Transaction</title>
+</sectioninfo>
+<para>The dividend DRP (dividend re-investment programme) transaction is the
+transaction when you receive a share dividend that is automatically
+re-invested back into the company by buying more shares. To enter this
+transaction you will need the date the transaction took place, the
+share account containing the stock, the symbol of the stock and the amount
+of shares acquired.</para>
+</section>
+
+<section id="Fee Transaction">
+<sectioninfo>
+<title>8.3.5 Fee Transaction</title>
+</sectioninfo>
+<para>The fee transaction is the transaction when you receive any kind of
+fee such as account keeping fees, Tax etc. To enter this transaction you
+will need the date the transaction took place, the cash account that
+received the fee and the amount that you were charged.</para>
+</section>
+
+<section id="Interest Transaction">
+<sectioninfo>
+<title>8.3.6 Interest Transaction</title>
+</sectioninfo>
+<para>The interest transaction is the transaction when you receive any
+interest in one of your cash accounts. To enter this transaction you will
+need the date the transaction took place, the cash account that received
+the interest and the amount that you were credited. If your account is in
+the negative and this was the interest that was debited from your account,
+then put a minus sign in front of the value.</para>
+</section>
+
+<section id="Reduce Transaction">
+<sectioninfo>
+<title>8.3.7 Reduce Transaction</title>
+</sectioninfo>
+<para>The reduce transaction is the "sell shares" transaction. To enter this
+transaction you will need the date the transaction took place, the cash
+account where the money from the sale will go, the share account that
+reduced the shares, the symbol of the stock you reduced (e.g. CBA), the
+number of shares you reduced, the total value of the shares at the time of
+sale and finally the cost of the trade. This information should all be
+available from your broker.</para>
+</section>
+
+<section id="Transfer Transaction">
+<sectioninfo>
+<title>8.3.8 Transfer Transaction</title>
+</sectioninfo>
+<para>The transfer transaction is the transaction where you transfer money from
+one cash account to another. To enter this transaction you will need the
+cash account where you withdrew the money, the destination cash account and
+the amount you transferred. If there was a fee for the transfer, you need
+to enter this as a separate transaction.</para>
+</section>
+
+<section id="Withdrawal Transaction">
+<sectioninfo>
+<title>8.3.9 Withdrawal Transaction</title>
+</sectioninfo>
+<para>The withdrawal transaction is the transaction where you
+withdraw money from a cash account such as a bank account. To enter this
+transaction you will need the date the transaction took place, the cash
+account you withdrew the money from and the amount you withdrew.</para>
+</section>
+</section>
+</section>
+<section id="Gondola Language">
+<sectioninfo>
+<title>9 Gondola Language</title>
+</sectioninfo>
+<para>The <emphasis>Gondola Language</emphasis> is a language for analysing stock market data.
+The language allows you to do a variety of tasks from listing stocks in tables
+that only match your criteria to creating automated buy/sell paper trade rules.
+The language is closely modelled after the C programming language, so if you
+know that language, then you should find Gondola easy and familliar to
+work with.
+</para>
+<para>Whenever you enter a Gondola expression there are two implicit variables that
+are always set: the current date and the current stock. For example if
+you are displaying a <xref linkend="Tables">Table</xref> of stock quotes, you can execute an
+equation for each stock. If you entered this line:</para>
+<para>
+<literallayout>avg(close, 30)</literallayout>
+</para>
+<para>It would display, for each stock, the average day close value over the last
+30 days starting from today. Here the current date would be set to the most
+recent day you have a quote for and the current stock would be set to the
+current stock.</para>
+<para>You can also enter equations when performing <xref linkend="Analysis">Paper Trading</xref>. If you
+entered the following as a buy rule:</para>
+<para>
+<literallayout>avg(close, 15) &gt; avg(close, 30, -1)</literallayout>
+</para>
+<para>It would only buy the stock when the average day close over the last 15 days
+was higher than the average day close of over the last 30 days, where the
+30 day average would be calculated starting from the previous day and working
+backwards. So here the current date would be set to whatever date the trade
+was to be analysed for.</para>
+<para>The Gondola language is very type strict. What this means is that each value
+has a given type, whether it is an <emphasis>integer</emphasis>, <emphasis>real</emphasis> or <emphasis>boolean</emphasis>. This means
+that the numbers <literallayout>12</literallayout> and <literallayout>12.0</literallayout> are different, and <literallayout>1</literallayout> and <literallayout>true</literallayout>
+are different. If you get a type mismatch error, you've probably entered an
+<emphasis>integer</emphasis> number (e.g. <literallayout>12</literallayout>) instead of a <emphasis>real</emphasis> number (e.g. <literallayout>12.0</literallayout>).</para>
+<section id="Gondola Operators">
+<sectioninfo>
+<title>9.1 Gondola Operators</title>
+</sectioninfo>
+<para>The Gondola language supports the following boolean operators: <emphasis>and</emphasis>, <emphasis>or</emphasis>
+and <emphasis>not</emphasis>. For example:</para>
+
+<itemizedlist>
+<listitem>
+<literallayout>close &gt; 12.0 or open &gt; 12.0
+</literallayout>
+</listitem>
+<listitem>
+<literallayout>close &gt; 12.0 and open &gt; 12.0
+</literallayout>
+</listitem>
+<listitem>
+<literallayout>not(avg(open, 15) &gt; 12.0)
+</literallayout>
+</listitem>
+</itemizedlist>
+
+<para>It also supports basic arithmetic: +, -, * and /. For example:</para>
+<itemizedlist>
+<listitem>
+<literallayout>close + lag(close, -1)
+</literallayout>
+</listitem>
+<listitem>
+<literallayout>close - lag(close, -1)
+</literallayout>
+</listitem>
+<listitem>
+<literallayout>close / lag(close, -1)
+</literallayout>
+</listitem>
+<listitem>
+<literallayout>close * lag(close, -1)
+</literallayout>
+</listitem>
+</itemizedlist>
+
+<para>The type of returned value of arithmetic operators is the same of the first operand.
+The following examples explain the behaviour:</para>
+<itemizedlist>
+<listitem>INTEGER_TYPE + INTEGER_TYPE returns an INTEGER_TYPE</listitem>
+<listitem>INTEGER_TYPE - FLOAT_TYPE returns an INTEGER_TYPE</listitem>
+<listitem>FLOAT_TYPE - INTEGER_TYPE returns a FLOAT_TYPE</listitem>
+<listitem>FLOAT_TYPE / INTEGER_TYPE returns a FLOAT_TYPE</listitem>
+<listitem>FLOAT_TYPE * FLOAT_TYPE returns a FLOAT_TYPE</listitem>
+</itemizedlist>
+
+<para>And finally it also supports the relational operators: <emphasis>==</emphasis>, <emphasis>&gt;</emphasis>, <emphasis>&gt;=</emphasis>, <emphasis>&lt;</emphasis>,
+<emphasis>&lt;=</emphasis> and <emphasis>!=</emphasis>. For example:</para>
+<itemizedlist>
+<listitem>
+<literallayout>volume == lag(volume, -1)
+</literallayout>
+</listitem>
+<listitem>
+<literallayout>close &gt; lag(close, -1)
+</literallayout>
+</listitem>
+<listitem>
+<literallayout>close &gt;= lag(close, -1)
+</literallayout>
+</listitem>
+<listitem>
+<literallayout>close &lt; lag(close, -1)
+</literallayout>
+</listitem>
+<listitem>
+<literallayout>close &lt;= lag(close, -1)
+</literallayout>
+</listitem>
+<listitem>
+<literallayout>volume != lag(volume, -1)
+</literallayout>
+</listitem>
+</itemizedlist>
+</section>
+<section id="Gondola Variables">
+<sectioninfo>
+<title>9.2 Gondola Variables</title>
+</sectioninfo>
+<para>The Gondola language has full support for variables, which allow you to
+store, retrieve and manipulate values. When defining a new variable you
+need to specify whether the variable can change or is constant, the variable
+type, the name of the variable and optionally the initial value of the
+variable.</para>
+<para>Examples:</para>
+<itemizedlist>
+<listitem>
+<literallayout>int averageValue
+</literallayout>
+</listitem>
+<listitem>
+<literallayout>const boolean myValue = true
+</literallayout>
+</listitem>
+<listitem>
+<literallayout>float averageValue = 10.0*12.0
+</literallayout>
+</listitem>
+</itemizedlist>
+</section>
+<section id="Gondola Functions">
+<sectioninfo>
+<title>9.3 Gondola Functions</title>
+</sectioninfo>
+<section id="Absolute Value">
+<sectioninfo>
+<title>9.3.1 Absolute Value</title>
+</sectioninfo>
+<para>The absoluate value function returns the absolute value of the given value.
+The absolute value is the positive value of a number. For example the absolute
+value of -12 is 12, and the absolute value of 12 is 12.</para>
+<para>
+<literallayout>abs(VALUE)</literallayout>
+</para>
+<para>Where VALUE is the initial value.</para>
+<para>Example:</para>
+<para>
+<literallayout>abs(-28.0)</literallayout>
+</para>
+<para>Returns the absolute value of -28.0 which is 28.0.</para>
+</section>
+
+<section id="Average">
+<sectioninfo>
+<title>9.3.2 Average</title>
+</sectioninfo>
+<para>The average function averages a series of stock quotes.</para>
+<para>
+<literallayout>avg(QUOTE, DAYS[, START_OFFSET])</literallayout>
+</para>
+<para>Where QUOTE is <emphasis>open</emphasis>, <emphasis>close</emphasis>, <emphasis>low</emphasis>, <emphasis>high</emphasis> or <emphasis>volume</emphasis>.
+Where DAYS is the number of days to average.
+Where START_OFFSET is the most recent date to average, 0 means the current
+trading date, -1 means the previous trading date, etc.</para>
+<para>Example:</para>
+<para>
+<literallayout>avg(open, 15, -1)</literallayout>
+</para>
+<para>Returns the average of the day open value for the current stock for the last
+15 days, ending with yesterday.</para>
+</section>
+
+<section id="Bollinger Bands">
+<sectioninfo>
+<title>9.3.3 Bollinger Bands</title>
+</sectioninfo>
+<para>The bollinger bands are: bol_upper=avg+2sd, bol_lower=avg-2sd .</para>
+<para>
+<literallayout>bol_lower(QUOTE, DAYS[, START_OFFSET])</literallayout>
+</para>
+<para>
+<literallayout>bol_upper(QUOTE, DAYS[, START_OFFSET])</literallayout>
+</para>
+<para>Where QUOTE is <emphasis>open</emphasis>, <emphasis>close</emphasis>, <emphasis>low</emphasis>, <emphasis>high</emphasis> or <emphasis>volume</emphasis>.
+Where DAYS is the number of days to average.
+Where START_OFFSET is the most recent date to average, 0 means the current
+trading date, -1 means the previous trading date, etc.</para>
+<para>Example:</para>
+<para>
+<literallayout>bol_upper(close, 26, -1)</literallayout>
+</para>
+<para>Returns the bollinger band value of the day close value for the current stock for the last
+26 days, ending with yesterday.</para>
+<para>The expression <literallayout>bol_lower(close, 26, 0)</literallayout> is the same as <literallayout>bol_lower(close, 26)</literallayout>
+similarly for <literallayout>open</literallayout>, <literallayout>high</literallayout> and <literallayout>low</literallayout>.</para>
+<para>The expression <literallayout>bol_upper(close, 26, 0)</literallayout> is the same as <literallayout>bol_upper(close, 26)</literallayout>
+similarly for <literallayout>open</literallayout>, <literallayout>high</literallayout> and <literallayout>low</literallayout>.</para>
+</section>
+
+<section id="Correlation">
+<sectioninfo>
+<title>9.3.4 Correlation</title>
+</sectioninfo>
+<para>The correlation function returns the correlation between two stock
+quotes.</para>
+<para>
+<literallayout>corr(SYMBOL, QUOTE, DAYS[, START_OFFSET])</literallayout>
+</para>
+<para>Where SYMBOL is the stock symbol. Where QUOTE is <emphasis>open</emphasis>, <emphasis>close</emphasis>,
+<emphasis>low</emphasis>, <emphasis>high</emphasis> or <emphasis>volume</emphasis>.
+Where DAYS is the number of days to correlate.
+Where START_OFFSET is the most recent date to correlate, 0 means the current
+trading date, -1 means the previous trading date, etc.</para>
+<para>Example:</para>
+<para>
+<literallayout>corr("CBA", close, 30, -1)</literallayout>
+</para>
+<para>Returns the correlation of the day close values of this stock and
+CBA over 30 days ending in yesterday.</para>
+</section>
+
+<section id="Cosine">
+<sectioninfo>
+<title>9.3.5 Cosine</title>
+</sectioninfo>
+<para>The cosine function returns the cosine of the given value.</para>
+<para>
+<literallayout>cos(VALUE)</literallayout>
+</para>
+<para>Where VALUE can be any float or integer.</para>
+<para>Example:</para>
+<para>
+<literallayout>cos(0)</literallayout>
+</para>
+<para>Returns 1.0</para>
+<para>
+<literallayout>cos(3.141592653589793/2)</literallayout>
+</para>
+<para>Returns 0.0</para>
+<para>
+<literallayout>cos(3.141592653589793)</literallayout>
+</para>
+<para>Returns -1.0</para>
+<para>
+<literallayout>cos((3*3.141592653589793)/2)</literallayout>
+</para>
+<para>Returns 0.0</para>
+<para>
+<literallayout>cos(2*3.141592653589793)</literallayout>
+</para>
+<para>Returns 1.0</para>
+</section>
+
+<section id="Day">
+<sectioninfo>
+<title>9.3.6 Day</title>
+</sectioninfo>
+<para>The day function returns the current day of the month.</para>
+<para>
+<literallayout>day()</literallayout>
+</para>
+<para>Example:</para>
+<para>
+<literallayout>day()</literallayout>
+</para>
+<para>Returns the current day, which will be 31, if it is the 31st.</para>
+</section>
+
+<section id="Day of Week">
+<sectioninfo>
+<title>9.3.7 Day of Week</title>
+</sectioninfo>
+<para>The day of week function returns the current day of the week.</para>
+<para>
+<literallayout>dayofweek()</literallayout>
+</para>
+<para>Example:</para>
+<para>
+<literallayout>dayofweek()</literallayout>
+</para>
+<para>Returns the current day of the week, which will be 1, if it is a Sunday.</para>
+</section>
+
+<section id="Day of Year">
+<sectioninfo>
+<title>9.3.8 Day of Year</title>
+</sectioninfo>
+<para>The day of year function returns the current day of the year.</para>
+<para>
+<literallayout>dayofyear()</literallayout>
+</para>
+<para>Example:</para>
+<para>
+<literallayout>dayofyear()</literallayout>
+</para>
+<para>Returns the current day of the year, which might be 365, if it is New Years Eve.</para>
+</section>
+
+<section id="Exponential">
+<sectioninfo>
+<title>9.3.9 Exponential</title>
+</sectioninfo>
+<para>The exp function returns the exponential of the given value.</para>
+<para>
+<literallayout>exp(VALUE)</literallayout>
+</para>
+<para>Where VALUE is any float or integer.</para>
+<para>Example:</para>
+<para>
+<literallayout>exp(0)</literallayout>
+</para>
+<para>Returns 1.0</para>
+</section>
+
+<section id="Exponential Moving Average">
+<sectioninfo>
+<title>9.3.10 Exponential Moving Average</title>
+</sectioninfo>
+<para>The exponential moving average function averages a series of stock quotes according to
+the following equation: EMA(current) = EMA(previous) + SMOOTHING_CONSTANT * (QUOTE - EMA(previous).</para>
+<para>
+<literallayout>ema(QUOTE, DAYS[, START_OFFSET][, SMOOTHING_CONSTANT])</literallayout>
+</para>
+<para>Where QUOTE is <emphasis>open</emphasis>, <emphasis>close</emphasis>, <emphasis>low</emphasis>, <emphasis>high</emphasis> or <emphasis>volume</emphasis>.
+Where DAYS is the number of days to average.
+Where START_OFFSET is the most recent date to average, 0 means the current
+trading date, -1 means the previous trading date, etc.
+Where SMOOTHING_CONSTANT is the smoothing constant.</para>
+<para>Example:</para>
+<para>
+<literallayout>ema(close, 26, 0.1, -1)</literallayout>
+</para>
+<para>Returns the average of the day close value for the current stock for the last
+26 days, ending with yesterday.</para>
+<para>The expression <literallayout>ema(close, 26, 0, 0.1)</literallayout> is the same as <literallayout>ema(close, 26)</literallayout>
+similarly for <literallayout>open</literallayout>, <literallayout>high</literallayout> and <literallayout>low</literallayout>.</para>
+<para>The expression <literallayout>ema(close, 26, 0, 0.2)</literallayout> is the same as <literallayout>ema(close, 26, 0.2)</literallayout>
+similarly for <literallayout>open</literallayout>, <literallayout>high</literallayout> and <literallayout>low</literallayout>.</para>
+<para>The expression <literallayout>ema(close, 26, -1, 0.1)</literallayout> is the same as <literallayout>ema(close, 26, -1)</literallayout>
+similarly for <literallayout>open</literallayout>, <literallayout>high</literallayout> and <literallayout>low</literallayout>.</para>
+</section>
+
+<section id="For">
+<sectioninfo>
+<title>9.3.11 For</title>
+</sectioninfo>
+<para>The for function is a looping function that allows you to loop over
+an expression of code. Typically the loop is tied to a variable, so you
+need to set the initial value of the variable, a condition where the loop
+will terminate, and how the variable should change after each loop.</para>
+<para>
+<literallayout>for(INITIAL; CONDITION; LOOP) { COMMAND }</literallayout>
+</para>
+<para>The function will execute the INITIAL expression, then execute
+the COMMAND expression, and then execute the LOOP expression. It will
+then execute the CONDITION expression. If the CONDITION expression
+was FALSE then the function will return. Otherwise it will run the
+COMMAND expression, then the LOOP expression, then check the CONDITION
+expression, etc.</para>
+<para>Example:</para>
+<para>
+<literallayout>int b = 0
+
+for(int i = 0; i &lt; 10; i = i + 1) {
+  b = b + i
+}
+</literallayout>
+</para>
+<para>The above code will sum the numbers 0, 1, 2, ... 9 and store the result
+in the b variable.</para>
+</section>
+
+<section id="If">
+<sectioninfo>
+<title>9.3.12 If</title>
+</sectioninfo>
+<para>The if function allows a selection of which code to be executed.</para>
+<para>
+<literallayout>if(VALUE) { TRUE } else { FALSE }</literallayout>
+</para>
+<para>If the value of the VALUE expression is true, then the TRUE expression
+will be executed, otherwise the FALSE expression will be.</para>
+<para>Example:</para>
+<para>
+<literallayout>if(lag(open, 0) &gt; lag(open, -1)) {
+   lag(open, 0)
+}
+else {
+   lag(open, -1)
+}</literallayout>
+</para>
+<para>Returns the greater of today and yesterday's day open values.</para>
+</section>
+
+<section id="Lag">
+<sectioninfo>
+<title>9.3.13 Lag</title>
+</sectioninfo>
+<para>The lag function returns a stock quote.</para>
+<para>
+<literallayout>lag(QUOTE[, OFFSET])</literallayout>
+</para>
+<para>Where QUOTE is <emphasis>open</emphasis>, <emphasis>close</emphasis>, <emphasis>low</emphasis>, <emphasis>high</emphasis> or <emphasis>volume</emphasis>.
+Where OFFSET is the date to retrieve the stock quote, 0 means the current
+trading date, -1 means the previous trading date, etc.</para>
+<para>Example:</para>
+<para>
+<literallayout>lag(high, -5)</literallayout>
+</para>
+<para>Returns the day high value of the current stock, 5 days previous.</para>
+<para>The expression <literallayout>lag(close, 0)</literallayout> is the same as <literallayout>lag(close)</literallayout> and they can both be
+abbreviated to <literallayout>close</literallayout>; similarly for <literallayout>open</literallayout>, <literallayout>high</literallayout> and <literallayout>low</literallayout>.</para>
+</section>
+
+<section id="Logarithm">
+<sectioninfo>
+<title>9.3.14 Logarithm</title>
+</sectioninfo>
+<para>The log function returns the natural logarithm of the given value.</para>
+<para>
+<literallayout>log(VALUE)</literallayout>
+</para>
+<para>Where VALUE is any positive float or integer.</para>
+<para>Example:</para>
+<para>
+<literallayout>log(1)</literallayout>
+</para>
+<para>Returns 0.0</para>
+<para>
+<literallayout>log(exp(1)))</literallayout>
+</para>
+<para>Returns 1.0</para>
+</section>
+
+<section id="Minimum">
+<sectioninfo>
+<title>9.3.15 Minimum</title>
+</sectioninfo>
+<para>The minimum function finds the minimum of a series of stock quotes.</para>
+<para>
+<literallayout>min(QUOTE, DAYS[, START_OFFSET])</literallayout>
+</para>
+<para>Where QUOTE is <emphasis>open</emphasis>, <emphasis>close</emphasis>, <emphasis>low</emphasis>, <emphasis>high</emphasis> or <emphasis>volume</emphasis>.
+Where DAYS is the number of days to search.
+Where START_OFFSET is the most recent date to search, 0 means the current
+trading date, -1 means the previous trading date, etc.</para>
+<para>Example:</para>
+<para>
+<literallayout>min(volume, 15, -1)</literallayout>
+</para>
+<para>Returns the minimum volume of trade for the current stock for the last
+15 days, ending with yesterday.</para>
+</section>
+
+<section id="Maximum">
+<sectioninfo>
+<title>9.3.16 Maximum</title>
+</sectioninfo>
+<para>The maximum function finds the maximum of a series of stock quotes.</para>
+<para>
+<literallayout>max(QUOTE, DAYS[, START_OFFSET])</literallayout>
+</para>
+<para>Where QUOTE is <emphasis>open</emphasis>, <emphasis>close</emphasis>, <emphasis>low</emphasis>, <emphasis>high</emphasis> or <emphasis>volume</emphasis>.
+Where DAYS is the number of days to search.
+Where START_OFFSET is the most recent date to search, 0 means the current
+trading date, -1 means the previous trading date, etc.</para>
+<para>Example:</para>
+<para>
+<literallayout>max(volume, 15, -1)</literallayout>
+</para>
+<para>Returns the maximum volume of trade for the current stock for the last
+15 days, ending with yesterday.</para>
+</section>
+
+<section id="Moving Average Convergence Divergence">
+<sectioninfo>
+<title>9.3.17 Moving Average Convergence Divergence</title>
+</sectioninfo>
+<para>The MACD is: MACD = 26 days EMA - 12 days EMA.</para>
+<para>
+<literallayout>macd(QUOTE[, START_OFFSET])</literallayout>
+</para>
+<para>Where QUOTE is <emphasis>open</emphasis>, <emphasis>close</emphasis>, <emphasis>low</emphasis>, <emphasis>high</emphasis> or <emphasis>volume</emphasis>.
+Where START_OFFSET is the most recent date to average, 0 means the current
+trading date, -1 means the previous trading date, etc.</para>
+<para>Example:</para>
+<para>
+<literallayout>macd(close, -1)</literallayout>
+</para>
+<para>Returns the macd value of the day close value for the current stock ending with yesterday.</para>
+<para>The expression <literallayout>macd(close, 0)</literallayout> is the same as <literallayout>macd(close)</literallayout>
+similarly for <literallayout>open</literallayout>, <literallayout>high</literallayout> and <literallayout>low</literallayout>.</para>
+<para>The expression <literallayout>macd(close, 0)</literallayout> is the same as <literallayout>ema(close,26,0,0.1)-ema(close,12,0,0.1)</literallayout>
+similarly for <literallayout>open</literallayout>, <literallayout>high</literallayout> and <literallayout>low</literallayout>.</para>
+</section>
+
+<section id="Momentum">
+<sectioninfo>
+<title>9.3.18 Momentum</title>
+</sectioninfo>
+<para>The momentum is: momentum(now)=quote(now)-quote(period deleyed).</para>
+<para>
+<literallayout>momentum(QUOTE, DAYS[, START_OFFSET])</literallayout>
+</para>
+<para>Where QUOTE is <emphasis>open</emphasis>, <emphasis>close</emphasis>, <emphasis>low</emphasis>, <emphasis>high</emphasis> or <emphasis>volume</emphasis>.
+Where DAYS is the number of days to delay.
+Where START_OFFSET is the most recent date to average, 0 means the current
+trading date, -1 means the previous trading date, etc.</para>
+<para>Example:</para>
+<para>
+<literallayout>momentum(close, 26, -1)</literallayout>
+</para>
+<para>Returns the momentum value of the day close value for the current stock for the last
+26 days, ending with yesterday.</para>
+<para>The expression <literallayout>momentum(close, 26, 0)</literallayout> is the same as <literallayout>momentum(close, 26)</literallayout>
+similarly for <literallayout>open</literallayout>, <literallayout>high</literallayout> and <literallayout>low</literallayout>.</para>
+</section>
+
+<section id="Month">
+<sectioninfo>
+<title>9.3.19 Month</title>
+</sectioninfo>
+<para>The month function returns the current month.</para>
+<para>
+<literallayout>month()</literallayout>
+</para>
+<para>Example:</para>
+<para>
+<literallayout>month()</literallayout>
+</para>
+<para>Returns the current month, which will be 8, if it is August.</para>
+</section>
+
+<section id="On Balance Volume">
+<sectioninfo>
+<title>9.3.20 On Balance Volume</title>
+</sectioninfo>
+<para>The OBV is the sum of volumes in the period, counted as positive if close is greater than open or
+as negative if open is greater then close.</para>
+<para>
+<literallayout>obv(DAYS[, START_OFFSET[, INITIAL_VALUE]])</literallayout>
+</para>
+<para>Where DAYS is the number of days to count over.
+Where START_OFFSET is the most recent date to average, 0 means the current
+trading date, -1 means the previous trading date, etc.
+Where INITIAL_VALUE is the initial value which counting from</para>
+<para>Example:</para>
+<para>
+<literallayout>obv(200, -1, 50000)</literallayout>
+</para>
+<para>Returns the obv value counted over the last
+200 days, ending with yesterday, starting with value 50000.</para>
+<para>The expression <literallayout>obv(200)</literallayout> is the same as <literallayout>obv(200, 0, 50000)</literallayout>.</para>
+</section>
+
+<section id="Percent">
+<sectioninfo>
+<title>9.3.21 Percent</title>
+</sectioninfo>
+<para>The percent function returns the given percent of the given value.</para>
+<para>
+<literallayout>percent(VALUE, PERCENT)</literallayout>
+</para>
+<para>Where VALUE is the initial value and PERCENT is the ratio to return.</para>
+<para>Example:</para>
+<para>
+<literallayout>percent(200, 10)</literallayout>
+</para>
+<para>Returns 10% of 200 which is 20.</para>
+</section>
+
+<section id="Relative Strength Index">
+<sectioninfo>
+<title>9.3.22 Relative Strength Index</title>
+</sectioninfo>
+<para>This function calculates the Relative Strength Index (RSI) of the current stock.</para>
+<para>
+<literallayout>rsi([PERIOD[, START_OFFSET]])</literallayout>
+</para>
+<para>Where PERIOD is the period to apply the RSI.
+Where START_OFFSET is the most recent date to calculate, 0 means the current
+trading date, -1 means the previous trading date, etc.</para>
+<para>Example:</para>
+<para>
+<literallayout>rsi()</literallayout>
+</para>
+<para>Returns the RSI of the current stock.</para>
+</section>
+
+<section id="Sine">
+<sectioninfo>
+<title>9.3.23 Sine</title>
+</sectioninfo>
+<para>The sine function returns the sine of the given value.</para>
+<para>
+<literallayout>sin(VALUE)</literallayout>
+</para>
+<para>Where VALUE can be any float or integer.</para>
+<para>Example:</para>
+<para>
+<literallayout>sin(0)</literallayout>
+</para>
+<para>Returns 0.0</para>
+<para>
+<literallayout>sin(3.141592653589793/2)</literallayout>
+</para>
+<para>Returns 1.0</para>
+<para>
+<literallayout>sin(3.141592653589793)</literallayout>
+</para>
+<para>Returns 0.0</para>
+<para>
+<literallayout>sin((3*3.141592653589793)/2)</literallayout>
+</para>
+<para>Returns -1.0</para>
+<para>
+<literallayout>sin(2*3.141592653589793)</literallayout>
+</para>
+<para>Returns 0.0</para>
+</section>
+
+<section id="Square Root">
+<sectioninfo>
+<title>9.3.24 Square Root</title>
+</sectioninfo>
+<para>The square root function returns the square root of the given value.</para>
+<para>
+<literallayout>sqrt(VALUE)</literallayout>
+</para>
+<para>Where VALUE is the initial value.</para>
+<para>Example:</para>
+<para>
+<literallayout>sqrt(144)</literallayout>
+</para>
+<para>Returns the square root of 144 which is 12.</para>
+</section>
+
+<section id="Standard Deviation">
+<sectioninfo>
+<title>9.3.25 Standard Deviation</title>
+</sectioninfo>
+<para>
+<literallayout>sd(QUOTE, DAYS[, START_OFFSET])</literallayout>
+</para>
+<para>Where QUOTE is <emphasis>open</emphasis>, <emphasis>close</emphasis>, <emphasis>low</emphasis>, <emphasis>high</emphasis> or <emphasis>volume</emphasis>.
+Where DAYS is the number of days to average.
+Where START_OFFSET is the most recent date to average, 0 means the current
+trading date, -1 means the previous trading date, etc.</para>
+<para>Example:</para>
+<para>
+<literallayout>sd(close, 26, -1)</literallayout>
+</para>
+<para>Returns the standard deviation value of the day close value for the current stock for the last
+26 days, ending with yesterday.</para>
+<para>The expression <literallayout>sd(close, 26, 0)</literallayout> is the same as <literallayout>sd(close, 26)</literallayout>
+similarly for <literallayout>open</literallayout>, <literallayout>high</literallayout> and <literallayout>low</literallayout>.</para>
+</section>
+
+<section id="Sum">
+<sectioninfo>
+<title>9.3.26 Sum</title>
+</sectioninfo>
+<para>The sum function sums a series of stock quotes.</para>
+<para>
+<literallayout>sum(QUOTE, DAYS[, START_OFFSET])</literallayout>
+</para>
+<para>Where QUOTE is <emphasis>open</emphasis>, <emphasis>close</emphasis>, <emphasis>low</emphasis>, <emphasis>high</emphasis> or <emphasis>volume</emphasis>.
+Where DAYS is the number of days to sum.
+Where START_OFFSET is the most recent date to sum, 0 means the current
+trading date, -1 means the previous trading date, etc.</para>
+<para>Example:</para>
+<para>
+<literallayout>sum(open, 15, -1)</literallayout>
+</para>
+<para>Returns the sum of the day open value for the current stock for the last
+15 days, ending with yesterday.</para>
+</section>
+
+<section id="While">
+<sectioninfo>
+<title>9.3.27 While</title>
+</sectioninfo>
+<para>The while function is a looping function that allows you to loop over an
+expression of code. The loop contains an expression that will be executed until
+a specific condition is not met.</para>
+<para>
+<literallayout>while(CONDITION) { COMMAND }</literallayout>
+</para>
+<para>The function will execute the COMMAND expression until the CONDITION
+is not met. If the CONDITION is never met, the loop will not be entered.</para>
+<para>Example:</para>
+<para>
+<literallayout>int sum = 1
+
+while(sum &lt; 100) {
+  sum = sum + 1
+}
+</literallayout>
+</para>
+<para>The above code will keep increment the value of sum until it is equal to 100.</para>
+</section>
+
+<section id="Year">
+<sectioninfo>
+<title>9.3.28 Year</title>
+</sectioninfo>
+<para>The year function returns the current year.</para>
+<para>
+<literallayout>year()</literallayout>
+</para>
+<para>Example:</para>
+<para>
+<literallayout>year()</literallayout>
+</para>
+<para>Returns the current year, which will be 2004, if it is 2004.</para>
+</section>
+</section>
+</section>
+<section id="Jython Macros">
+<sectioninfo>
+<title>10 Jython Macros</title>
+</sectioninfo>
+<para>Since version 0.5, Venice supports the use of the Jython (http://www.jython.org)
+scripts to automate the operation of the program.  More information and example scripts
+will be available soon.  For the moment, suffice to say that any Java object that can be
+accessed by Venice source code is fair game for macrofication.</para>
+<para>Here's a trivial example of a simple script that displays a progress dialog:</para>
+<para>
+<literallayout>
+import nz.org.venice.ui.ProgressDialogManager as PM
+import java.lang.Thread as T
+p = PM.getProgressDialog()
+p.setMaximum(10)
+p.setProgress(0)
+p.show("performing task");
+p.setProgress(6)
+T.sleep(500);
+p.setProgress(4)
+T.sleep(500);
+p.setProgress(3)
+T.sleep(500);
+p.setProgress(9)
+</literallayout>
+</para>
+</section>
+<section id="Analysis">
+<sectioninfo>
+<title>11 Analysis</title>
+</sectioninfo>
+</section>
+</chapter>

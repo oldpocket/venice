@@ -1,0 +1,68 @@
+<chapter id='links' fileref='links.xml' role='user'
+	 xmlns:xlink='http://www.w3.org/xlink'
+>
+  <chapterinfo>
+    <title>Links</title>    
+  </chapterinfo>
+    
+  
+  <section>
+    <sectioninfo>
+      <title>Links</title>
+    </sectioninfo>
+       
+    <bridgehead>Dependencies &amp; Tools</bridgehead>
+
+    <para>
+      <itemizedlist>
+	<listitem>
+	  <para><link xlink:href='http://ant.apache.org'>Ant Build Tool</link></para>
+	</listitem>
+	<listitem>
+	  <para><link xlink:href='http:java.sun.com/j2se/1.4.2/download.html' >J2SE</link></para>
+	</listitem>
+	<listitem>
+	  <para><link xlink:href='http://developer.java.sun.com/developer/techDocs/hi/repository/' >Java Look &amp; Feel Graphics Repository</link></para>
+	</listitem>
+	<listitem>
+	  <para><link xlink:href='http://www.junit.org' >JUnit Testing Framework</link></para>
+	</listitem>
+	<listitem>
+	  <para><link xlink:href='http://www.mysql.com' >MySQL Database</link></para>
+	</listitem>
+	<listitem>
+	  <para><link xlink:href='http://sourceforge.net/projects/mmmysql' >MySQL Driver for Java</link></para>
+	</listitem>
+	<listitem>
+	  <para><link xlink:href='http://hsqldb.sourceforge.net'>HSQLDB v1.8.0.4</link></para>
+	</listitem>
+	<listitem>
+	  <para><link xlink:href='http://www.jython.org'>Jython v2.1</link></para>
+	</listitem>
+	<listitem>
+	  <para><link xlink:href='http://wwww.jooneworld.com'>Joone V1.2.1</link></para>
+	</listitem>
+	<listitem>
+	  <para><link xlink:href='http://xstream.codehaus.org'>XStream v1.1.2</link></para>
+	</listitem>
+      </itemizedlist>
+    </para>
+    
+    
+    <bridgehead>Financial</bridgehead>
+    <para>
+      <itemizedlist>
+	<listitem>
+	  <para><link xlink:href='http://www.asx.com.au' >Australian Stock Exchange (ASX)</link></para>
+	</listitem>
+	<listitem>
+	  <para><link xlink:href='http://www.interactivebrokers.com' >Interactive Brokers</link></para>
+	</listitem>
+      </itemizedlist>
+    </para>
+    
+    
+</section>
+  
+
+</chapter>

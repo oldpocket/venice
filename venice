@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ ! -n "$JAVA_HOME" ]; then
+    echo "Error: JAVA_HOME environment variable is not set. This should be"
+    echo "set to the installation directory of java."
+    exit 1
+fi
+
+$JAVA_HOME/bin/java -jar venice.jar
