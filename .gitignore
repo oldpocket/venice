@@ -2,6 +2,7 @@ api
 backup
 release
 report
+classes
 venice.jar
 .classpath
 .externalToolBuilders

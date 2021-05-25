@@ -84,7 +84,7 @@
 	   destdir="${classes}"
 	   debug="on"
   	   optimize="on"
-	   source="1.6"
+	   source="1.7"
 	   includes="**/*.java"
            excludes="nz/org/venice/tools/*">
       <classpath>

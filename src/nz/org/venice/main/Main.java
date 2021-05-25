@@ -31,6 +31,7 @@ import java.io.*;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+import javax.swing.UIManager.*;
 
 import nz.org.venice.macro.MacroManager;
 import nz.org.venice.prefs.PreferencesManager;
@@ -67,13 +68,13 @@ public class Main extends JFrame {
     private static Main venice;
 
     /** Short version string, e.g. "0.1a" */
-    public static String SHORT_VERSION = "0.752b";
+    public static String SHORT_VERSION = "0.752";
 
     /** Longer version string, e.g. "0.1 alpha" */
-    public static String LONG_VERSION = "0.752 beta";
+    public static String LONG_VERSION = "0.752 fabio";
 
     /** Release date, e.g. 13/Jan/2003 */
-    public static String RELEASE_DATE = "26/" + Locale.getString("DEC") + "/2018";
+    public static String RELEASE_DATE = "24/" + Locale.getString("MAY") + "/2021";
 
     /** Copyright date range, e.g. "2003-5" */
     public static String COPYRIGHT_DATE_RANGE = "2003-19";
@@ -217,7 +218,14 @@ public class Main extends JFrame {
     public static void main(String[] args) {
 	// Set the look and feel to be the default for the current platform
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        	// Nimbus, Metal, Motif
+            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Metal".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
         catch(Exception e) {
             // Shouldn't happen, but if it does just keep going
