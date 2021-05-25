@@ -41,11 +41,11 @@ import nz.org.venice.util.TradingDate;
 /**
  * Import end-of-day quotes from finance.yahoo.com into Venice.
  *
- * @author Andrew Leppard
+ * @author Fabio Godoy
  * @see FileEODQuoteImport
  * @see ImportQuoteModule
  */
-public class YahooEODQuoteImport {
+public class RapidYahooEODQuoteImport {
 
 	// The following symbols will be replaced by the quote, date range we are after:
 	private final static String SYMBOL      = "_SYM_";
@@ -70,7 +70,7 @@ public class YahooEODQuoteImport {
 			("http://ichart.finance.yahoo.com/table.csv" + YAHOO_PATTERN);
 
 	// This class is not instantiated.
-	private YahooEODQuoteImport() {
+	private RapidYahooEODQuoteImport() {
 		assert false;
 	}
 

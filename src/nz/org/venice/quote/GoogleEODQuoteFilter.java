@@ -14,7 +14,7 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package nz.org.venice.quote;
 
@@ -41,78 +41,78 @@ import nz.org.venice.util.TradingDateFormatException;
 
 public class GoogleEODQuoteFilter implements EODQuoteFilter {
 
-    private Symbol symbol;
+	private Symbol symbol;
 
-    /**
-     * Creates an instance of the filter.
-     */
-    public GoogleEODQuoteFilter(Symbol symbol) {
-        this.symbol = symbol;
-    }
+	/**
+	 * Creates an instance of the filter.
+	 */
+	public GoogleEODQuoteFilter(Symbol symbol) {
+		this.symbol = symbol;
+	}
 
-    /**
-     * Return the name of the filter.
-     *
-     * @return	the name of the filter.
-     */
-    public String getName() {
-	return "Google";
-    }
+	/**
+	 * Return the name of the filter.
+	 *
+	 * @return	the name of the filter.
+	 */
+	public String getName() {
+		return "Google";
+	}
 
-    /**
-     * Parse the given text string and returns the stock quote or null
-     * if it did not contain a valid quote.
-     *
-     * @param	quoteLine	a single line of text containing a quote
-     * @exception QuoteFormatException if the quote could not be parsed
-     * @return	the stock quote
-     */
-    public EODQuote toEODQuote(String quoteLine) throws QuoteFormatException {
-	EODQuote quote = null;
+	/**
+	 * Parse the given text string and returns the stock quote or null
+	 * if it did not contain a valid quote.
+	 *
+	 * @param	quoteLine	a single line of text containing a quote
+	 * @exception QuoteFormatException if the quote could not be parsed
+	 * @return	the stock quote
+	 */
+	public EODQuote toEODQuote(String quoteLine) throws QuoteFormatException {
+		EODQuote quote = null;
 
-        // Ignore blank lines and the header line ("Date,Open,High,Low,Close,Volume").
-	if(quoteLine != null && !quoteLine.startsWith("Date,Open")) {
-	    String[] quoteParts = quoteLine.split(",");
-	    int i = 0;
+		// Ignore blank lines and the header line ("Date,Open,High,Low,Close,Volume").
+		if(quoteLine != null && !quoteLine.startsWith("Date,Open")) {
+			String[] quoteParts = quoteLine.split(",");
+			int i = 0;
 
-	    if(quoteParts.length == 6) {
-		TradingDate date = null;
+			if(quoteParts.length == 6) {
+				TradingDate date = null;
 
-                try {
-                    date = new TradingDate(quoteParts[i++], TradingDate.US);
-                }
-                catch(TradingDateFormatException e) {
-                    throw new QuoteFormatException(e.getMessage());
-                }
+				try {
+					date = new TradingDate(quoteParts[i++], TradingDate.US);
+				}
+				catch(TradingDateFormatException e) {
+					throw new QuoteFormatException(e.getMessage());
+				}
 
-                try {
-                    double day_open = Double.parseDouble(quoteParts[i++]);
-                    double day_high = Double.parseDouble(quoteParts[i++]);
-                    double day_low = Double.parseDouble(quoteParts[i++]);
-                    double day_close = Double.parseDouble(quoteParts[i++]);
-                    long day_volume = Long.parseLong(quoteParts[i++]);
+				try {
+					double day_open = Double.parseDouble(quoteParts[i++]);
+					double day_high = Double.parseDouble(quoteParts[i++]);
+					double day_low = Double.parseDouble(quoteParts[i++]);
+					double day_close = Double.parseDouble(quoteParts[i++]);
+					long day_volume = Long.parseLong(quoteParts[i++]);
 
-                    quote = new EODQuote(symbol, date, day_volume, day_low, day_high,
-                                         day_open, day_close);
-                }
-                catch(NumberFormatException e) {
-                    throw new QuoteFormatException(Locale.getString("ERROR_PARSING_NUMBER",
-                                                                    quoteParts[i - 1]));
-                }
-            }
-            else
-                throw new QuoteFormatException(Locale.getString("WRONG_FIELD_COUNT"));
-        }
-        return quote;
-    }
+					quote = new EODQuote(symbol, date, day_volume, day_low, day_high,
+							day_open, day_close);
+				}
+				catch(NumberFormatException e) {
+					throw new QuoteFormatException(Locale.getString("ERROR_PARSING_NUMBER",
+							quoteParts[i - 1]));
+				}
+			}
+			else
+				throw new QuoteFormatException(Locale.getString("WRONG_FIELD_COUNT"));
+		}
+		return quote;
+	}
 
-    /**
-     * Convert the given stock quote to a string line.
-     *
-     * @param	quote	a stock quote
-     * @return	string version of the quote
-     */
-    public String toString(EODQuote quote) {
-        throw new UnsupportedOperationException();
-    }
+	/**
+	 * Convert the given stock quote to a string line.
+	 *
+	 * @param	quote	a stock quote
+	 * @return	string version of the quote
+	 */
+	public String toString(EODQuote quote) {
+		throw new UnsupportedOperationException();
+	}
 }

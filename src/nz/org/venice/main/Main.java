@@ -14,7 +14,7 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package nz.org.venice.main;
 
@@ -52,7 +52,7 @@ import nz.org.venice.util.ExchangeRateCache;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.VeniceLog;
 import nz.org.venice.alert.AlertManager;
-    
+
 /**
  * The top level class which contains the main() function. This class builds
  * the outer frame and creates the desktop.
@@ -61,283 +61,288 @@ import nz.org.venice.alert.AlertManager;
  */
 public class Main extends JFrame {
 
-    private JDesktopPane desktop;
-    private DesktopManager desktopManager;
-    private PreferencesManager.DisplayPreferences displayPreferences;
+	private JDesktopPane desktop;
+	private DesktopManager desktopManager;
+	private PreferencesManager.DisplayPreferences displayPreferences;
 
-    private static Main venice;
+	private static Main venice;
 
-    /** Short version string, e.g. "0.1a" */
-    public static String SHORT_VERSION = "0.752";
+	/** Short version string, e.g. "0.1a" */
+	public static String SHORT_VERSION = "0.8";
 
-    /** Longer version string, e.g. "0.1 alpha" */
-    public static String LONG_VERSION = "0.752 fabio";
+	/** Longer version string, e.g. "0.1 alpha" */
+	public static String LONG_VERSION = "0.8 beta";
 
-    /** Release date, e.g. 13/Jan/2003 */
-    public static String RELEASE_DATE = "24/" + Locale.getString("MAY") + "/2021";
+	/** Release date, e.g. 13/Jan/2003 */
+	public static String RELEASE_DATE = "24/" + Locale.getString("MAY") + "/2021";
 
-    /** Copyright date range, e.g. "2003-5" */
-    public static String COPYRIGHT_DATE_RANGE = "2003-19";
+	/** Copyright date range, e.g. "2003-5" */
+	public static String COPYRIGHT_DATE_RANGE = "2003-19";
+	
+	/** Copyright date range, e.g. "2003-5" */
+	public static String COPYRIGHT_DATE_NEW_RANGE = "2021-21";
 
-    /**
-     * Get the main frame for the current application
-     * @return The frame
-     */
-    public static JFrame getApplicationFrame() {
-	return Main.venice;
-    }
-
-    // Set the codepage to get correct console output
-    private void setConsoleCodePage() {
-	String osName = System.getProperty("os.name");
-	String codePage = "";
-	if(osName.startsWith("Windows")) codePage = "CP850";  
-	else if(osName.startsWith("Mac")) codePage = "UTF-8";
-	if(codePage != "") {
-	    try {
-		System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out),
-					      false, codePage));
-		System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err), 
-					      true, codePage));
-	    } catch (Exception e) {
-		e.printStackTrace();
-	    } 
+	/**
+	 * Get the main frame for the current application
+	 * @return The frame
+	 */
+	public static JFrame getApplicationFrame() {
+		return Main.venice;
 	}
-    }
 
-    // Go!
-    private Main() {
-        // Set the preferred language if any is defined as preferred,
-        // otherwise setLocale gets the current language from the system.
-        Locale.setLocale();
-	// Set the console code page depending on your operating system.
-	setConsoleCodePage();
-	// Display a brief copyright message
-        String title = (Locale.getString("VENICE_LONG") + ", " + LONG_VERSION + " / " +
-			RELEASE_DATE);
-        System.out.println(title);
-        for(int i = 0; i < title.length(); i++)
-            System.out.print("-");
-        System.out.println("");
-        System.out.println(Locale.getString("COPYRIGHT", COPYRIGHT_DATE_RANGE) + ", " +
-			   "Andrew Leppard (andrew venice org nz)");
-        System.out.println(Locale.getString("SEE_LICENSE"));
-
-	displayPreferences = PreferencesManager.getDisplaySettings();
-	setSize(displayPreferences.width, displayPreferences.height);
-	setLocation(displayPreferences.x, displayPreferences.y);
-
-	setTitle(Locale.getString("VENICE_SHORT") + " " + SHORT_VERSION);
-
-	desktop = new JDesktopPane();
-	desktopManager = new nz.org.venice.ui.DesktopManager(desktop);
-	desktop.setDesktopManager(desktopManager);
-        ExchangeRateCache.getInstance().setDesktopPane(desktop);
-
-        // I didn't mind the blue colour background on the desktop pane
-        // under the default steel l&f, but the Windows XP uses a very
-        // strong blue colour that looks horrible. So this light green
-        // which is the Venice theme will be the default.
-        desktop.setBackground(new Color(238, 241, 238));
-	CommandManager.getInstance().setDesktopManager(desktopManager);
-
-	// Instantiate main menu singleton
-        MainMenu.getInstance(this, desktopManager);
-
-	setContentPane(desktop);
-
-	addWindowListener(new WindowAdapter() {
-		public void windowClosing(WindowEvent e) {
-		    // User closed window by hitting "X" button
-		    saveSettingsAndExit();
+	// Set the codepage to get correct console output
+	private void setConsoleCodePage() {
+		String osName = System.getProperty("os.name");
+		String codePage = "";
+		if(osName.startsWith("Windows")) codePage = "CP850";  
+		else if(osName.startsWith("Mac")) codePage = "UTF-8";
+		if(codePage != "") {
+			try {
+				System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out),
+						false, codePage));
+				System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err), 
+						true, codePage));
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
 		}
-		public void windowClosed(WindowEvent e) {
-		    // User closed window by selecting exit from the menu
-		    saveSettingsAndExit();
-		}
-	    });
+	}
+
+	// Go!
+	private Main() {
+		// Set the preferred language if any is defined as preferred,
+		// otherwise setLocale gets the current language from the system.
+		Locale.setLocale();
+		// Set the console code page depending on your operating system.
+		setConsoleCodePage();
+		// Display a brief copyright message
+		String title = (Locale.getString("VENICE_LONG") + ", " + LONG_VERSION + " | " +
+				RELEASE_DATE);
+		System.out.println(title);
+		for(int i = 0; i < title.length(); i++)
+			System.out.print("-");
+		System.out.println("");
+		System.out.println(Locale.getString("COPYRIGHT", COPYRIGHT_DATE_RANGE) + ", " +
+				"Andrew Leppard (andrew venice org nz)");
+		System.out.println(Locale.getString("COPYRIGHT", COPYRIGHT_DATE_NEW_RANGE) + ", " +
+				"Fabio Godoy (fabio.godoy at oldpocket com)");
+		System.out.println(Locale.getString("SEE_LICENSE"));
+
+		displayPreferences = PreferencesManager.getDisplaySettings();
+		setSize(displayPreferences.width, displayPreferences.height);
+		setLocation(displayPreferences.x, displayPreferences.y);
+
+		setTitle(Locale.getString("VENICE_SHORT") + " " + SHORT_VERSION);
+
+		desktop = new JDesktopPane();
+		desktopManager = new nz.org.venice.ui.DesktopManager(desktop);
+		desktop.setDesktopManager(desktopManager);
+		ExchangeRateCache.getInstance().setDesktopPane(desktop);
+
+		// I didn't mind the blue colour background on the desktop pane
+		// under the default steel l&f, but the Windows XP uses a very
+		// strong blue colour that looks horrible. So this light green
+		// which is the Venice theme will be the default.
+		desktop.setBackground(new Color(238, 241, 238));
+		CommandManager.getInstance().setDesktopManager(desktopManager);
+
+		// Instantiate main menu singleton
+		MainMenu.getInstance(this, desktopManager);
+
+		setContentPane(desktop);
+
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				// User closed window by hitting "X" button
+				saveSettingsAndExit();
+			}
+			public void windowClosed(WindowEvent e) {
+				// User closed window by selecting exit from the menu
+				saveSettingsAndExit();
+			}
+		});
 
 		// Temporarily disable functionality if the user has not accepted the license.
-        if(PreferencesManager.getHasGPLAcceptance())
-            MainMenu.getInstance().disableMenus();
+		if(PreferencesManager.getHasGPLAcceptance())
+			MainMenu.getInstance().disableMenus();
 
-        setVisible(true);
+		setVisible(true);
 
-        // First make sure user has agreed to GPL. If they do not agree to
-        // the license, then quit the application immediately.
-        if (PreferencesManager.getHasGPLAcceptance()) {
-            if(!GPLViewDialog.showGPLAcceptanceDialog()) {
-                dispose();
-                System.exit(0);
-            }
+		// First make sure user has agreed to GPL. If they do not agree to
+		// the license, then quit the application immediately.
+		if (PreferencesManager.getHasGPLAcceptance()) {
+			if(!GPLViewDialog.showGPLAcceptanceDialog()) {
+				dispose();
+				System.exit(0);
+			}
 
-            // Record user's acceptance and re-enable functionality.
-            else {
-                PreferencesManager.putHasGPLAcceptance();
-                MainMenu.getInstance().enableMenus();
-            }
-        }
-	
-	//Restore saved windows + state
-	//Need to make the frame visible before adding new frames
-	setVisible(true);
-	restoreSavedFrames();
+			// Record user's acceptance and re-enable functionality.
+			else {
+				PreferencesManager.putHasGPLAcceptance();
+				MainMenu.getInstance().enableMenus();
+			}
+		}
 
-	CommandManager.getInstance().triggeredAlerts();
-	
+		//Restore saved windows + state
+		//Need to make the frame visible before adding new frames
+		setVisible(true);
+		restoreSavedFrames();
 
-    }
-
-    // Save settings and exit!
-    private void saveSettingsAndExit() {
-	// Save window dimensions in prefs file
-	displayPreferences.x = getX();
-	displayPreferences.y = getY();
-	displayPreferences.width = getWidth();
-	displayPreferences.height = getHeight();
-	PreferencesManager.putDisplaySettings(displayPreferences);
-
-	// Call save() on each module so they can save their
-	// preferences data
-	desktopManager.save();
-
-        // Shutdown the database if necessary
-        QuoteSourceManager.shutdown();
-
-	//Close the log if necessary
-	VeniceLog.getInstance().close();
-
-	dispose();
-	System.exit(0);
-    }
-
-    /**
-     * Start the application. Currently the application ignores all
-     * command line arguments.
-     */
-    public static void main(String[] args) {
-	// Set the look and feel to be the default for the current platform
-        try {
-        	// Nimbus, Metal, Motif
-            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Metal".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch(Exception e) {
-            // Shouldn't happen, but if it does just keep going
-        }	
-        venice = new Main();
-	
-        // Now run Jython start up macros
-        try {
-            MacroManager.executeStartupMacros();
-        } catch (java.lang.NoClassDefFoundError err) {
-            System.out.println(Locale.getString("NO_JYTHON_ERROR"));
-        }
-
-        // Start up intra-day quote sync
-        PreferencesManager.IDQuoteSyncPreferences idQuoteSyncPreferences =
-            PreferencesManager.getIDQuoteSyncPreferences();
-        IDQuoteSync.getInstance().setPeriod(idQuoteSyncPreferences.period);
-
-        try {
-            List symbols = new ArrayList(Symbol.toSortedSet(idQuoteSyncPreferences.symbols,
-                                                            false));
-
-            IDQuoteSync.getInstance().addSymbols(symbols);
-        } catch(SymbolFormatException e) {
-            // Ignore error in preferences
-        }
-
-        IDQuoteSync.getInstance().setTimeRange(idQuoteSyncPreferences.openTime,
-                                               idQuoteSyncPreferences.closeTime);
-        IDQuoteSync.getInstance().setEnabled(idQuoteSyncPreferences.isEnabled);
-
-    }
+		CommandManager.getInstance().triggeredAlerts();
 
 
-    /**
-     * Restore saved internal frames and their modules, reconstructing their
-     position and geometry.
-
-    **/
-
-    private void restoreSavedFrames() {
-
-	Vector savedFrameFiles, dataList;
-	Iterator iterator;
-	int savedFrames;
-	ProgressDialog progress = ProgressDialogManager.getProgressDialog();
-	int progressValue = 0;
-
-	if (!PreferencesManager.getRestoreSavedWindowsSetting()) {
-	    ProgressDialogManager.closeProgressDialog(progress);
-	    return;
-	}
-	
-	savedFrameFiles = PreferencesManager.getSavedFrames();
-	iterator = savedFrameFiles.iterator();
-	savedFrames  = savedFrameFiles.size();
-
-	if (savedFrames <= 0) {
-	    ProgressDialogManager.closeProgressDialog(progress);
-	    return;
 	}
 
-	Thread thread = Thread.currentThread();
+	// Save settings and exit!
+	private void saveSettingsAndExit() {
+		// Save window dimensions in prefs file
+		displayPreferences.x = getX();
+		displayPreferences.y = getY();
+		displayPreferences.width = getWidth();
+		displayPreferences.height = getHeight();
+		PreferencesManager.putDisplaySettings(displayPreferences);
 
-	progress.show(Locale.getString("RESTORE_SAVED_WINDOWS_PROGRESS"));
-	progress.setIndeterminate(false);
-	progress.setMaximum(savedFrames);
-	progress.setMaster(true);
+		// Call save() on each module so they can save their
+		// preferences data
+		desktopManager.save();
 
+		// Shutdown the database if necessary
+		QuoteSourceManager.shutdown();
 
-	/* Make sure the initial desktop has displayed first */
-	while (iterator.hasNext()) {
-	    if (thread.isInterrupted()) {
-		break;
-	    }
-	    progress.increment();
-	    try {
+		//Close the log if necessary
+		VeniceLog.getInstance().close();
 
-		File savedFrameFile = (File)iterator.next();
-		FileInputStream inputStream = new FileInputStream(savedFrameFile);
+		dispose();
+		System.exit(0);
+	}
+
+	/**
+	 * Start the application. Currently the application ignores all
+	 * command line arguments.
+	 */
+	public static void main(String[] args) {
+		// Set the look and feel to be the default for the current platform
+		try {
+			// Nimbus, Metal, Motif
+			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				if ("Metal".equals(info.getName())) {
+					UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
+			//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch(Exception e) {
+			// Shouldn't happen, but if it does just keep going
+		}	
+		venice = new Main();
+
+		// Now run Jython start up macros
+		try {
+			MacroManager.executeStartupMacros();
+		} catch (java.lang.NoClassDefFoundError err) {
+			System.out.println(Locale.getString("NO_JYTHON_ERROR"));
+		}
+
+		// Start up intra-day quote sync
+		PreferencesManager.IDQuoteSyncPreferences idQuoteSyncPreferences =
+				PreferencesManager.getIDQuoteSyncPreferences();
+		IDQuoteSync.getInstance().setPeriod(idQuoteSyncPreferences.period);
 
 		try {
-		    ModuleFrameSettings newFrameSettings = ModuleFrameSettingsReader.read(inputStream);
-		    Settings moduleSettings = newFrameSettings.getModuleSettings();
-		    //Recreate the module from settings.
-		    Module newModule = moduleSettings.getModule(desktop);
+			List symbols = new ArrayList(Symbol.toSortedSet(idQuoteSyncPreferences.symbols,
+					false));
 
-		    //Place it initially at 0,0
-		    ModuleFrame newFrame = desktopManager.newFrame(newModule);
-
-		    newFrame.setSizeAndLocation(newFrame, desktop, false, true);
-		    newFrame.setBounds(newFrameSettings.getBounds());
-		    newFrame.setPreferredSize(newFrameSettings.getBounds().getSize());
-
-		    if (newFrame.getModule().encloseInScrollPane()) {
-			newFrameSettings.updateScrollPane(newFrame.getScrollPane());
-		    }
-		    
-		} catch (ModuleSettingsParserException wpe) {
-		    continue;
+			IDQuoteSync.getInstance().addSymbols(symbols);
+		} catch(SymbolFormatException e) {
+			// Ignore error in preferences
 		}
-	    } catch (FileNotFoundException fnf) {
-		continue;
-	    } catch (IOException ioe) {
-		continue;
-	    }
+
+		IDQuoteSync.getInstance().setTimeRange(idQuoteSyncPreferences.openTime,
+				idQuoteSyncPreferences.closeTime);
+		IDQuoteSync.getInstance().setEnabled(idQuoteSyncPreferences.isEnabled);
+
 	}
-	ProgressDialogManager.closeProgressDialog(progress);
-	if (!thread.isInterrupted()) {
-	    PreferencesManager.removeSavedFrames();
-	}	
-    }
+
+
+	/**
+	 * Restore saved internal frames and their modules, reconstructing their
+     position and geometry.
+
+	 **/
+
+	private void restoreSavedFrames() {
+
+		Vector savedFrameFiles, dataList;
+		Iterator iterator;
+		int savedFrames;
+		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		int progressValue = 0;
+
+		if (!PreferencesManager.getRestoreSavedWindowsSetting()) {
+			ProgressDialogManager.closeProgressDialog(progress);
+			return;
+		}
+
+		savedFrameFiles = PreferencesManager.getSavedFrames();
+		iterator = savedFrameFiles.iterator();
+		savedFrames  = savedFrameFiles.size();
+
+		if (savedFrames <= 0) {
+			ProgressDialogManager.closeProgressDialog(progress);
+			return;
+		}
+
+		Thread thread = Thread.currentThread();
+
+		progress.show(Locale.getString("RESTORE_SAVED_WINDOWS_PROGRESS"));
+		progress.setIndeterminate(false);
+		progress.setMaximum(savedFrames);
+		progress.setMaster(true);
+
+
+		/* Make sure the initial desktop has displayed first */
+		while (iterator.hasNext()) {
+			if (thread.isInterrupted()) {
+				break;
+			}
+			progress.increment();
+			try {
+
+				File savedFrameFile = (File)iterator.next();
+				FileInputStream inputStream = new FileInputStream(savedFrameFile);
+
+				try {
+					ModuleFrameSettings newFrameSettings = ModuleFrameSettingsReader.read(inputStream);
+					Settings moduleSettings = newFrameSettings.getModuleSettings();
+					//Recreate the module from settings.
+					Module newModule = moduleSettings.getModule(desktop);
+
+					//Place it initially at 0,0
+					ModuleFrame newFrame = desktopManager.newFrame(newModule);
+
+					newFrame.setSizeAndLocation(newFrame, desktop, false, true);
+					newFrame.setBounds(newFrameSettings.getBounds());
+					newFrame.setPreferredSize(newFrameSettings.getBounds().getSize());
+
+					if (newFrame.getModule().encloseInScrollPane()) {
+						newFrameSettings.updateScrollPane(newFrame.getScrollPane());
+					}
+
+				} catch (ModuleSettingsParserException wpe) {
+					continue;
+				}
+			} catch (FileNotFoundException fnf) {
+				continue;
+			} catch (IOException ioe) {
+				continue;
+			}
+		}
+		ProgressDialogManager.closeProgressDialog(progress);
+		if (!thread.isInterrupted()) {
+			PreferencesManager.removeSavedFrames();
+		}	
+	}
 }
 
 
