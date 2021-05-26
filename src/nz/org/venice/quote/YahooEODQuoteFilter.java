@@ -90,8 +90,8 @@ public class YahooEODQuoteFilter implements EODQuoteFilter {
                     double day_high = Double.parseDouble(quoteParts[i++]);
                     double day_low = Double.parseDouble(quoteParts[i++]);
                     double day_close = Double.parseDouble(quoteParts[i++]);
+                    i++; // adjusted day close
                     long day_volume = Long.parseLong(quoteParts[i++]);
-                    // the remaining one is adjusted day close
 
                     quote = new EODQuote(symbol, date, day_volume, day_low, day_high,
                                          day_open, day_close);

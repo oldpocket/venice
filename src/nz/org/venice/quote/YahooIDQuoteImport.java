@@ -47,10 +47,10 @@ public class YahooIDQuoteImport {
     private final static String SYMBOLS = "_SYM_";
 
     // Each Yahoo site uses the same URL formatting. So we define it once here.
-    private final static String YAHOO_PATTERN = ("?s=" + SYMBOLS + "&f=sl1d1t1c1ohgv&e=.csv");
+    private final static String YAHOO_PATTERN = ("&s=" + SYMBOLS + "&f=sl1d1t1c1ohgv&e=.csv");
 
     private final static String YAHOO_URL_PATTERN =
-        ("http://finance.yahoo.com/d/quotes.csv" + YAHOO_PATTERN);
+        ("http://yfinance.localhost/?op=quotes.csv" + YAHOO_PATTERN);
 
     // This class is not instantiated.
     private YahooIDQuoteImport() {

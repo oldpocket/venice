@@ -75,8 +75,7 @@ import nz.org.venice.util.TradingDateFormatException;
  * @see DatabaseQuoteSource
  * @see ExportQuoteModule
  * @see FileEODQuoteImport
- * @see YahooEODQuoteImport
- * @see RapidYahooEODQuoteImport
+ * @see YahooEODQuoteImport 
  */
 public class ImportQuoteModule extends JPanel implements Module {
 
@@ -109,7 +108,6 @@ public class ImportQuoteModule extends JPanel implements Module {
 	private final static int GOOGLE_SITE = 0; // finance.google.com
 	private final static int YAHOO_SITE  = 1; // finance.yahoo.com
 	private final static int FLOAT_SITE  = 2; // float.com.au
-	private final static int RAPID_YAHOO_SITE = 3; // https://rapidapi.com/apidojo/api/yahoo-finance1
 
 	/**
 	 * Create a new import quote module.
@@ -188,7 +186,6 @@ public class ImportQuoteModule extends JPanel implements Module {
 			webSiteComboBox.addItem(Locale.getString("GOOGLE_DISPLAY_URL"));
 			webSiteComboBox.addItem(Locale.getString("YAHOO_DISPLAY_URL"));
 			webSiteComboBox.addItem(Locale.getString("FLOAT_DISPLAY_URL"));
-			webSiteComboBox.addItem(Locale.getString("RAPID_DISPLAY_URL"));
 
 			if(webSite.equals("google"))
 				webSiteComboBox.setSelectedIndex(GOOGLE_SITE);
@@ -196,8 +193,6 @@ public class ImportQuoteModule extends JPanel implements Module {
 				webSiteComboBox.setSelectedIndex(YAHOO_SITE);
 			else if(webSite.equals("float"))
 				webSiteComboBox.setSelectedIndex(FLOAT_SITE);
-			else
-				webSiteComboBox.setSelectedIndex(RAPID_YAHOO_SITE);
 
 			webSiteComboBox.setToolTipText(Locale.getString("INTERNET_IMPORT_QUOTE_TOOLTIP"));
 
@@ -319,23 +314,21 @@ public class ImportQuoteModule extends JPanel implements Module {
 		startDateTextField.setEnabled(fromInternet.isSelected());
 		endDateTextField.setEnabled(fromInternet.isSelected());
 
-		// Symbols are only applicable if importing from Yahoo or Google or Rapid.
+		// Symbols are only applicable if importing from Yahoo or Google.
 		symbolList.setEnabled(fromInternet.isSelected() &&
 				(webSiteComboBox.getSelectedIndex() == GOOGLE_SITE ||
-				webSiteComboBox.getSelectedIndex() == YAHOO_SITE  ||
-				webSiteComboBox.getSelectedIndex() == RAPID_YAHOO_SITE));
+				webSiteComboBox.getSelectedIndex() == YAHOO_SITE));
 
-		// Prefix or suffix is only applicable if importing from Yahoo or Google or Rapid.
+		// Prefix or suffix is only applicable if importing from Yahoo or Google.
 		boolean prefixOrSuffixEnabled =
 				(fromInternet.isSelected() &&
 						(webSiteComboBox.getSelectedIndex() == GOOGLE_SITE ||
-						webSiteComboBox.getSelectedIndex() == YAHOO_SITE  ||
-						webSiteComboBox.getSelectedIndex() == RAPID_YAHOO_SITE));
+						webSiteComboBox.getSelectedIndex() == YAHOO_SITE));
 
 		prefixOrSuffixTextField.setEnabled(prefixOrSuffixEnabled);
 		if (prefixOrSuffixEnabled) {
 			// If we are downloading from Google it's a prefix, e.g. "ASX:".
-			// If we are downloading from Yahoo or Rapid, then it's a suffix, e.g. ".AX".
+			// If we are downloading from Yahoo then it's a suffix, e.g. ".AX".
 			if(webSiteComboBox.getSelectedIndex() == GOOGLE_SITE)
 				prefixOrSuffixLabel.setText(Locale.getString("ADD_PREFIX"));
 			else
@@ -392,8 +385,6 @@ public class ImportQuoteModule extends JPanel implements Module {
 			p.put("webSite", "yahoo");
 		else if(webSiteComboBox.getSelectedIndex() == FLOAT_SITE)
 			p.put("webSite", "float");
-		else
-			p.put("webSite", "rapid");
 		p.put("prefixOrSuffix", prefixOrSuffixTextField.getText());
 	}
 
