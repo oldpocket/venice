@@ -61,13 +61,13 @@ public class YahooEODQuoteImport {
 	private final static int MAX_NUMBER_OF_RETRIEVAL_DAYS = 100;
 
 	// Each Yahoo site uses the same URL formatting. So we define it once here.
-	private final static String YAHOO_PATTERN = ("&s=" + SYMBOL + "&a=" + START_MONTH +
+	private final static String YAHOO_PATTERN = ("s=" + SYMBOL + "&a=" + START_MONTH +
 			"&b=" + START_DAY + "&c=" + START_YEAR +
 			"&d=" + END_MONTH + "&e=" + END_DAY +
 			"&f=" + END_YEAR + "&g=d&ignore=.csv");
 
 	private final static String YAHOO_URL_PATTERN =
-			("http://yfinance.localhost/?op=table.csv" + YAHOO_PATTERN);
+			("http://yfinance.localhost/eod_quotes?" + YAHOO_PATTERN);
 
 	// This class is not instantiated.
 	private YahooEODQuoteImport() {
