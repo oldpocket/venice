@@ -15,7 +15,7 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 /**
  * Data definition of symbol metadata, including if the symbol is an index.
@@ -33,73 +33,73 @@
 package nz.org.venice.quote;
 
 public class SymbolMetadata {
-    
-    private final Symbol symbol;
-    private final String name;
-    private final boolean index;
 
-    /**
-     * Construct a new index definition.
-     * 
-     * @param symbol The symbol (e.g. 'ASX', or 'DAX')
-     * @param name   The name of the index (e.g. Australian Stock Exchange)
-     * @param index The optional location or top level index (ie NASDAQ, the ASX)
-     */
+	private final Symbol symbol;
+	private final String name;
+	private final boolean index;
 
-    public SymbolMetadata(Symbol symbol, String name, boolean index) {
-	this.symbol = symbol;
-	this.name = name;
-	this.index = index;
-    }
+	/**
+	 * Construct a new index definition.
+	 * 
+	 * @param symbol The symbol (e.g. 'ASX', or 'DAX')
+	 * @param name   The name of the index (e.g. Australian Stock Exchange)
+	 * @param index The optional location or top level index (ie NASDAQ, the ASX)
+	 */
 
-    public SymbolMetadata(String symbolString, String name, boolean index) {	
-	Symbol newSymbol = null;
-	try {
-	    newSymbol = Symbol.find(symbolString);	    
-	} catch (SymbolFormatException sfe) {
-	    
-	} finally {
-	    
+	public SymbolMetadata(Symbol symbol, String name, boolean index) {
+		this.symbol = symbol;
+		this.name = name;
+		this.index = index;
 	}
-	this.symbol = newSymbol;
-	this.name = name;
-	this.index = index;
-    }
-    
-    /**
-     * Return the symbol.
-     * 
-     * @return the symbol
-     */
 
-    public Symbol getSymbol() {
-	return symbol;
-    }
+	public SymbolMetadata(String symbolString, String name, boolean index) {	
+		Symbol newSymbol = null;
+		try {
+			newSymbol = Symbol.find(symbolString);	    
+		} catch (SymbolFormatException sfe) {
 
-    /**
-     * Return the name of the index.
-     * 
-     * @return name
-     */
+		} finally {
 
-    public String getName() {
-	return name;
-    }
+		}
+		this.symbol = newSymbol;
+		this.name = name;
+		this.index = index;
+	}
 
-    /**
-     * Return isIndex.
-     * 
-     * @return true if the symbol is an index.
-     */
+	/**
+	 * Return the symbol.
+	 * 
+	 * @return the symbol
+	 */
 
-    public boolean isIndex() {
-	return index;
-    }
+	public Symbol getSymbol() {
+		return symbol;
+	}
 
-    public String toString() {
-	return symbol.toString() + "," + name + "," + index;
-    }
+	/**
+	 * Return the name of the index.
+	 * 
+	 * @return name
+	 */
 
-    
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Return isIndex.
+	 * 
+	 * @return true if the symbol is an index.
+	 */
+
+	public boolean isIndex() {
+		return index;
+	}
+
+	public String toString() {
+		return symbol.toString() + "," + name + "," + index;
+	}
+
+
 
 }

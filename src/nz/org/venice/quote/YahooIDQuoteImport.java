@@ -50,7 +50,7 @@ public class YahooIDQuoteImport {
     private final static String YAHOO_PATTERN = ("s=" + SYMBOLS + "&f=sl1d1t1c1ohgv&e=.csv");
 
     private final static String YAHOO_URL_PATTERN =
-        ("http://yfinance.localhost/id_quotes?" + YAHOO_PATTERN);
+        ("http://yfinance.lealis.com.br/id_quotes?" + YAHOO_PATTERN);
 
     // This class is not instantiated.
     private YahooIDQuoteImport() {

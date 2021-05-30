@@ -67,7 +67,7 @@ public class YahooEODQuoteImport {
 			"&f=" + END_YEAR + "&g=d&ignore=.csv");
 
 	private final static String YAHOO_URL_PATTERN =
-			("http://yfinance.localhost/eod_quotes?" + YAHOO_PATTERN);
+			("http://yfinance.lealis.com.br/eod_quotes?" + YAHOO_PATTERN);
 
 	// This class is not instantiated.
 	private YahooEODQuoteImport() {
