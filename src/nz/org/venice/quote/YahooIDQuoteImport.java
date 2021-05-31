@@ -171,7 +171,7 @@ public class YahooIDQuoteImport {
             symbolStringList += symbolString;
 
             if(iterator.hasNext())
-                symbolStringList += "+";
+                symbolStringList += "%2B"; // character '+' url encoded
         }
 
         URLString = Find.replace(URLString, SYMBOLS, symbolStringList);
