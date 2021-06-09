@@ -287,7 +287,8 @@ public class DatabaseManager
                                            "/"+ database);
                 if (username != null)
                     connectionURL += new String("?user=" + username +
-                                                "&password=" + password);
+                                                "&password=" + password +
+                                                "&useSSL=false");
             }
 
             connection = DriverManager.getConnection(connectionURL);
