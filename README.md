@@ -1,7 +1,8 @@
-Merchant of Venice, 0.752 beta 26/December/2018
+Merchant of Venice, 0.8 jun / 2021
 =========================================
 
 Copyright (C) 2003-19, Andrew Leppard (andrew venice org nz)
+Copyright (C) 2021-21, Fabio Godoy (fabio.godoy at oldpocket com)
 See COPYING.txt for license terms.
 
 1 Introduction
@@ -16,10 +17,10 @@ Venice runs on UNIX, including Mac OS X and Windows.
 
 2 Running
 
-To run Venice you will need Java J2SE JRE 1.4 (recommended 1.4.2_19) 
+To run Venice you will need Java J2SE JRE 8
 or higher, available from the following location:
 
-        http://java.sun.com/j2se/1.4.2/download.html
+        https://www.oracle.com/java/technologies/javase-jre8-downloads.html
 
 If you want to connect to a MySQL database you will need the database
 software which is available here:
@@ -28,15 +29,6 @@ software which is available here:
         http://www.mysql.com
 
 Venice includes a copy of a MySQL JDBC driver for your convenience.
-
-If you want to connect to a PostgreSQL databse you will need the
-database software and driver which are available here:
-
-   PostgreSQL
-        http://www.postgresql.org/
-
-   PostgreSQL Java Driver
-        http://jdbc.postgresql.org/
 
 Venice allows you to access stock quotes through an internal
 database (hsqldb) which should require no configuration on your part.
@@ -54,35 +46,34 @@ Venice contains the following technologies
 
    HSQLDB V1.8.0.4           from http://hsqldb.sourceforge.net
    Jython V2.1               from http://www.jython.org
-   MySQL Connector/J V3.1.12 from http://www.mysql.com
+   MySQL Connector/J V5.1.49 from http://www.mysql.com
    Joone V1.2.1              from http://www.jooneworld.com
    XStream V1.1.2            from http://xstream.codehaus.org
    Java Uuid Generator (JUG) from http://wiki.fasterxml.com/JugHome
 
 4 Bug Reports and Enhancements
 
-Please report any bugs that you encounter via the Sourceforge bug
+Please report any bugs that you encounter via the GitHub issues
 tracking system at:
 
-   https://sourceforge.net/tracker/?func=add&group_id=53631&atid=471025
+   https://github.com/oldpocket/venice/issues
 
-If you have any ideas for enhancements, please document them via the
-Sourceforge enhancement tracking system at:
+If you have any ideas for enhancements, please document them also via
+the GitHub issues tracking system at:
 
-   https://sourceforge.net/tracker/?func=add&group_id=53631&atid=471028
+   https://github.com/oldpocket/venice/issues
 
 Or if you have any comments, please don't hesitate to email me,
-Andrew Leppard (andrew venice org nz).
+Fabio Godoy (fabio.godoy at oldpocket com).
 
 5 Building
 
-To build Venice you will need to download a copy of the source. The
-source is no longer included in the binary distribution. You can
+To build Venice you will need to download a copy of the source. You can
 download the source release which contains the source from the latest
 release. Alternatively, you can download the current development
-version from Subversion by running the following command:
+version from GitHub by running the following command:
 
-svn co https://mov.svn.sourceforge.net/svnroot/mov/trunk/ venice
+git clone https://github.com/oldpocket/venice.git
 
 To build Venice you will need the programmes listed in the "Running"
 section and the following:
@@ -132,26 +123,9 @@ The project file is in ide/borland.
 6 Licenses
 
 Venice is Copyright (C) 2003-2012, Andrew Leppard.
+Venice fork is Copyright (C) 2021-2021, Fabio Godoy.
 HSQLDB is Copyright (C) 1995-2000, The Hypersonic SQL Group.
 Joone is Copyright (C) 2004, Paolo Marrone and the Joone team.
 Jython is Copyright (C) 2000, Jython Developers.
 XStream is Copyright (C) 2003-2005, Joe Walnes.
 JUG is Copyright (C) 2010, Tatu Saloranta.
-
-7 Thanks
-
-Thanks to the following people for providing additional code, patches or
-bugfixes:
-
-Daniel Makovec, Quentin Bossard, Peter Fradley, Mark Hummel, Bryan Lin,
-Alberto Nacher, Matthias Stöckel, Dennis van den Berg, Andrew Goh, Christian Brom, Guillermo Bonhevi.
-
-And the following for providing translations:
-
-Benedict P. Barszcz (Polish), Quentin Bossard (French), Bryan Lin (Chinese),
-Alberto Nacher (Italian), Jordi Pujol (Catalan), Pontus Strömdahl (Swedish)
-& Christian Brom (German)
-
-The winged lion image is:
-
-Copyright (C) Nicholas Aodhagan Webb (naw1 cec wustl edu)
