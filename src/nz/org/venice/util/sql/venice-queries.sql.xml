@@ -116,7 +116,7 @@
 	  );
 	</query>
 	<query>
-	  INSERT INTO alert_OHLCV_TARGETS values (
+	  INSERT INTO alert_OHLCV_targets values (
 	  '<parameter name='id'/>',
 	  '<parameter name='target'/>',
 	  '<parameter name='boundType'/>',
@@ -182,7 +182,7 @@
 	  );
 	</query>
 	<query>
-	INSERT INTO alert_OHLCV_TARGETS values (
+	INSERT INTO alert_OHLCV_targets values (
 	'<parameter name='id'/>',
 	'<parameter name='target'/>',
 	'<parameter name='boundType'/>',

@@ -80,8 +80,9 @@ public class Graphable {
         if(startX == null) {
             // Get first value
             Iterator iterator = map.keySet().iterator();
-            assert iterator.hasNext();
-            startX = (Comparable)iterator.next();
+            if (iterator.hasNext()) {
+            	startX = (Comparable)iterator.next();
+            }
         }
 
 	return startX;

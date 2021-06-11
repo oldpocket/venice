@@ -99,9 +99,10 @@ public class HorizontalAxis {
         // There should be at least one point in our graph 
         assert dates.size() > 0;
         assert points.size() > 0;
+    if (pointIterator.hasNext())
+    	lastValue = ((Integer)pointIterator.next()).intValue();
 
-	lastValue = ((Integer)pointIterator.next()).intValue();
-	lastDate = (TradingDate)dateIterator.next();
+   	lastDate = (TradingDate)dateIterator.next();
 
 	while(pointIterator.hasNext()) {
 
