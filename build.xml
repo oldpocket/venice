@@ -13,8 +13,6 @@
   <property name="src" value="${basedir}/src"/>
   <property name="classes" value="${basedir}/classes"/>
   <property name="lib" value="${basedir}/lib"/>
-  <property name="opt" value="${basedir}/opt"/>
-  <property name="opt_lib" value="${opt}/lib"/>
   <property name="temp" value="${basedir}/temp"/>
   <property name="test" value="${basedir}/test"/>
   <property name="web" value="${basedir}/web"/>  
@@ -29,8 +27,7 @@
   <property name="lib.hsql" value="${lib}/hsqldb.jar"/>
   <property name="lib.joone" value="${lib}/joone-engine.jar"/>
   <property name="lib.jython" value="${lib}/jython.jar"/>
-  <property name="lib.mysql" value="${lib}/mysql-connector-java-3.1.12-bin.jar"/>
-  <property name="lib.postgresql" value="${opt_lib}/postgresql.jar"/>
+  <property name="lib.mysql" value="${lib}/mysql-connector-java-5.1.49-bin.jar"/>
   <property name="lib.xml" value="${lib}/xstream-1.3.jar"/>
   <property name="lib.junit" value="${lib}/junit.jar"/>
   <property name="lib.uuid" value="${lib}/jug-lgpl-2.0.0.jar"/>
@@ -46,7 +43,6 @@
   <target name="api">
     <javadoc packagenames="nz.org.venice.*"
              sourcepath="${src}"
-	     source="1.4"
              destdir="${api}"
              additionalparam="-breakiterator"
 	     windowtitle="Venice ${VERSION}">
@@ -58,7 +54,6 @@
         <pathelement path="${src}"/>
         <pathelement path="${lib.hsql}"/>
         <pathelement path="${lib.mysql}"/>
-	<pathelement path="${lib.postgresql}"/>
         <pathelement path="${lib.joone}"/>
         <pathelement path="${lib.jython}"/>
         <pathelement path="${lib.xml}"/>
@@ -84,7 +79,6 @@
 	   destdir="${classes}"
 	   debug="on"
   	   optimize="on"
-	   source="1.7"
 	   includes="**/*.java"
            excludes="nz/org/venice/tools/*">
       <classpath>
@@ -92,7 +86,6 @@
         <pathelement path="${classes}"/>
         <pathelement path="${lib.hsql}"/>
         <pathelement path="${lib.mysql}"/>
-	<pathelement path="${lib.postgresql}"/>
         <pathelement path="${lib.joone}"/>
         <pathelement path="${lib.jython}"/>
         <pathelement path="${lib.xml}"/>
@@ -156,7 +149,7 @@
   </target>
   
   <!-- Generate docs -->
-  <target name="doc-generate">
+  <target name="doc-generate" if="do-doc-generate">
     <xmlcatalog id="document">
       <dtd publicID="-//Venice//DTD XML Document V1.0//EN"
            location="${doc}/document.dtd"/>
@@ -164,15 +157,16 @@
                 
     <!-- This will say it's generating manual.html but we override this. -->
     <!-- and write out files for individual chapters.                    -->    
-        
+	
     <xslt basedir="${doc}"
           destdir="${help}"
           includes="manual.xml"
-          extension=".html"	  
+          extension=".html"
           style="${doc}/manual-help.xsl">
 	  <xmlcatalog refid="document"/>
+	  <param name="outdir" expression="${help}/"/>
     </xslt>
-    
+	<delete file="${help}/manual.html"/>
         
     <!-- Generate online help index.                                     -->
     <xslt in="${doc}/manual.xml"
@@ -311,7 +305,6 @@
     <javac srcdir="${src}"
 	   destdir="${classes}"
            debug="on"
-           source="1.4"
            includes="nz/org/venice/tools/Locale.java"/>
     
     <!-- Compare each locale file to the english locale -->
@@ -510,7 +503,6 @@
         <pathelement path="${lib.hsql}"/>
         <pathelement path="${lib.joone}"/>
         <pathelement path="${lib.mysql}"/>
-	<pathelement path="${lib.postgresql}"/>
         <pathelement path="${lib.jython}"/>
         <pathelement path="${lib.xml}"/>	
 	<pathelement path="${lib.uuid}"/>
@@ -526,7 +518,6 @@
     <javac srcdir="${test}"
 	   debug="on"
   	   optimize="on"
-	   source="1.4"
 	   includes="**/*.java">
       <classpath>
         <pathelement path="${java.class.path}"/>
@@ -536,7 +527,6 @@
         <pathelement path="${lib.hsql}"/>
         <pathelement path="${lib.joone}"/>
         <pathelement path="${lib.mysql}"/>
-	<pathelement path="${lib.postgresql}"/>
         <pathelement path="${lib.jython}"/>
         <pathelement path="${lib.xml}"/>	
 	<pathelement path="${lib.uuid}"/>
@@ -555,7 +545,6 @@
         <pathelement path="${lib.hsql}"/>
         <pathelement path="${lib.joone}"/>
         <pathelement path="${lib.mysql}"/>
-	<pathelement path="${lib.postgresql}"/>
         <pathelement path="${lib.jython}"/>
         <pathelement path="${lib.xml}"/>
 	<pathelement path="${lib.uuid}"/>

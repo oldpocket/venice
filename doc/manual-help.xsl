@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:lxslt="http://xml.apache.org/xslt"
-                xmlns:redirect="org.apache.xalan.xslt.extensions.Redirect"
-                extension-element-prefixes="redirect"
+                xmlns:xsltc="http://xml.apache.org/xalan/xsltc"
+                extension-element-prefixes="xsltc"
                 version="1.0">  
 
   <xsl:import href='utils.xsl'/>
   
   <xsl:output method="html" indent="yes"/>
-
+  <xsl:param name="outdir"/>
+  
   <xsl:template match="/">
     <xsl:call-template name='writeWarningMessage'/>
     <html>
@@ -19,13 +19,12 @@
   </xsl:template>
 
   <xsl:template match="document">
-    <redirect:open file="{@name}.html"/>
-    <redirect:write file="{@name}.html">      
+	<xsltc:output file="{$outdir}{@name}.html">
       <h2><xsl:value-of select="@name"/></h2>
       <xsl:apply-templates/>
     </redirect:write>
     <redirect:close file="{@name}.html"/>
-      
+	</xsltc:output>
   </xsl:template>
 
   <xsl:template match="emphasis">
@@ -68,8 +67,7 @@
   </xsl:template>
 
   <xsl:template match="chapter">
-    <redirect:open file="{@name}.html"/>
-    <redirect:write file="{@name}.html">
+	<xsltc:output file="{$outdir}{@name}.html">
       <xsl:call-template name='writeWarningMessage'/>
       <html><body>
       <h2><xsl:value-of select="@name"/></h2>
@@ -77,7 +75,7 @@
       </body></html>
     </redirect:write>
     <redirect:close file="{@name}.html"/>
-    
+   </xsltc:output> 
   </xsl:template>
 
   <xsl:template match="section">

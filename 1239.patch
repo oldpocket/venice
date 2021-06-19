@@ -1,0 +1,122 @@
+# HG changeset patch
+# User gbonvehi <gbonvehi@gmail.com>
+# Date 1331181449 10800
+# Node ID b84a02ef97a081e83df619f55d9dc76e91977ed9
+# Parent  22f2a3a8f6fb889ba72457aa5cd9581f8ee23688
+Important: JDK >= 1.5 is needed after this in order to compile documentation
+Source code's limitation is removed but nothing was added to make it not compile.
+- Changed build to remove 1.4 limitation and pass outdir parameter to manual-help.xsl
+that will be used to output files generated inside it.
+- Upgraded references to XLST in manual-help.xsl to match change from Xalan-J to
+XLSTC in JDK >= 1.5
+
+diff -r 22f2a3a8f6fb -r b84a02ef97a0 venice/build.xml
+--- a/venice/build.xml	Wed Mar 07 18:05:14 2012 +0000
++++ b/venice/build.xml	Thu Mar 08 01:37:29 2012 -0300
+@@ -43,7 +43,6 @@
+   <target name="api">
+     <javadoc packagenames="nz.org.venice.*"
+              sourcepath="${src}"
+-	     source="1.4"
+              destdir="${api}"
+              additionalparam="-breakiterator"
+ 	     windowtitle="Venice ${VERSION}">
+@@ -80,7 +79,6 @@
+ 	   destdir="${classes}"
+ 	   debug="on"
+   	   optimize="on"
+-	   source="1.4"
+ 	   includes="**/*.java"
+            excludes="nz/org/venice/tools/*">
+       <classpath>
+@@ -143,15 +141,16 @@
+                 
+     <!-- This will say it's generating manual.html but we override this. -->
+     <!-- and write out files for individual chapters.                    -->    
+-        
++	
+     <xslt basedir="${doc}"
+           destdir="${help}"
+           includes="manual.xml"
+-          extension=".html"	  
++          extension=".html"
+           style="${doc}/manual-help.xsl">
+ 	  <xmlcatalog refid="document"/>
++	  <param name="outdir" expression="${help}/"/>
+     </xslt>
+-    
++	<delete file="${help}/manual.html"/>
+         
+     <!-- Generate online help index.                                     -->
+     <xslt in="${doc}/manual.xml"
+@@ -273,7 +272,6 @@
+     <javac srcdir="${src}"
+ 	   destdir="${classes}"
+            debug="on"
+-           source="1.4"
+            includes="nz/org/venice/tools/Locale.java"/>
+     
+     <!-- Compare each locale file to the english locale -->
+@@ -487,7 +485,6 @@
+     <javac srcdir="${test}"
+ 	   debug="on"
+   	   optimize="on"
+-	   source="1.4"
+ 	   includes="**/*.java">
+       <classpath>
+         <pathelement path="${java.class.path}"/>
+diff -r 22f2a3a8f6fb -r b84a02ef97a0 venice/doc/manual-help.xsl
+--- a/venice/doc/manual-help.xsl	Wed Mar 07 18:05:14 2012 +0000
++++ b/venice/doc/manual-help.xsl	Thu Mar 08 01:37:29 2012 -0300
+@@ -1,13 +1,13 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+-                xmlns:lxslt="http://xml.apache.org/xslt"
+-                xmlns:redirect="org.apache.xalan.xslt.extensions.Redirect"
+-                extension-element-prefixes="redirect"
++                xmlns:xsltc="http://xml.apache.org/xalan/xsltc"
++                extension-element-prefixes="xsltc"
+                 version="1.0">  
+ 
+   <xsl:import href='utils.xsl'/>
+   
+   <xsl:output method="html" indent="yes"/>
++  <xsl:param name="outdir"/>
+ 
+   <xsl:template match="/">
+     <xsl:call-template name='writeWarningMessage'/>
+@@ -19,13 +19,10 @@
+   </xsl:template>
+ 
+   <xsl:template match="document">
+-    <redirect:open file="{@name}.html"/>
+-    <redirect:write file="{@name}.html">      
++    <xsltc:output file="{$outdir}{@name}.html">
+       <h2><xsl:value-of select="@name"/></h2>
+       <xsl:apply-templates/>
+-    </redirect:write>
+-    <redirect:close file="{@name}.html"/>
+-      
++    </xsltc:output>
+   </xsl:template>
+ 
+   <xsl:template match="emphasis">
+@@ -68,16 +65,13 @@
+   </xsl:template>
+ 
+   <xsl:template match="chapter">
+-    <redirect:open file="{@name}.html"/>
+-    <redirect:write file="{@name}.html">
++    <xsltc:output file="{$outdir}{@name}.html">
+       <xsl:call-template name='writeWarningMessage'/>
+       <html><body>
+       <h2><xsl:value-of select="@name"/></h2>
+       <xsl:apply-templates/>
+       </body></html>
+-    </redirect:write>
+-    <redirect:close file="{@name}.html"/>
+-    
++    </xsltc:output>
+   </xsl:template>
+ 
+   <xsl:template match="section">
