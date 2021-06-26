@@ -330,8 +330,7 @@ public class EODQuoteRange implements Cloneable {
 			return symbols.contains(symbol);
 
 		else if(type == ALL_ORDINARIES)
-			if(!QuoteSourceManager.getSource().isMarketIndex(symbol) &&
-					symbol.length() <= 3)
+			if(!QuoteSourceManager.getSource().isMarketIndex(symbol))
 				return true;
 			else
 				return false;
@@ -379,8 +378,7 @@ public class EODQuoteRange implements Cloneable {
 			while(iterator.hasNext()) {
 				Symbol symbol = (Symbol)iterator.next();
 
-				if(QuoteSourceManager.getSource().isMarketIndex(symbol) ||
-						symbol.length() > 3)
+				if(QuoteSourceManager.getSource().isMarketIndex(symbol))
 					return false;
 			}
 
