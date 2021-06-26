@@ -87,8 +87,7 @@ public class EODQuote implements Quote {
         if(date.after(new TradingDate()))
             messages.add(Locale.getString("FUTURE_DATE"));
 
-        if(date.isWeekend())
-           messages.add(Locale.getString("WEEKEND_QUOTE"));
+        // if(date.isWeekend()) messages.add(Locale.getString("WEEKEND_QUOTE"));
 
         if(day_low > day_open || day_low > day_close || day_low > day_high) {
             messages.add(Locale.getString("DAY_LOW_NOT_LOWEST"));
