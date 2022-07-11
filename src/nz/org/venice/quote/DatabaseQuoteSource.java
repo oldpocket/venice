@@ -511,7 +511,7 @@ public class DatabaseQuoteSource implements QuoteSource
 					DatabaseManager.SYMBOL_FIELD + 
 					") = 3 AND " +
 					manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " != 'X' ");
-			*/
+			 */
 		}
 		else {
 			assert quoteRange.getType() == EODQuoteRange.MARKET_INDICES;
@@ -521,7 +521,7 @@ public class DatabaseQuoteSource implements QuoteSource
 					DatabaseManager.SYMBOL_FIELD + 
 					") = 3 AND " +
 					manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " = 'X' ");
-			*/
+			 */
 		}
 
 		//
@@ -811,8 +811,7 @@ public class DatabaseQuoteSource implements QuoteSource
 	 * @param date the date
 	 * @exception throws MissingQuoteException if the date wasn't in the source
 	 */
-	public int getAdvanceDecline(TradingDate date)
-			throws MissingQuoteException {
+	public int getAdvanceDecline(TradingDate date) throws MissingQuoteException {
 		if(!manager.getConnection())
 			return 0;
 
@@ -830,10 +829,8 @@ public class DatabaseQuoteSource implements QuoteSource
 							manager.toSQLDateString(date) + "' AND " +
 							DatabaseManager.DAY_CLOSE_FIELD + " > " + 
 							DatabaseManager.DAY_OPEN_FIELD + " AND " +
-							"LENGTH(" + DatabaseManager.SYMBOL_FIELD + 
-							") = 3 AND " +
 							manager.left(DatabaseManager.SYMBOL_FIELD ,1)  + 
-							" != 'X' ");
+							" != '^' ");
 
 			ResultSet RS = statement.executeQuery(query);
 			boolean isDatePresent = RS.next();
@@ -866,10 +863,8 @@ public class DatabaseQuoteSource implements QuoteSource
 							manager.toSQLDateString(date) + "' AND " +
 							DatabaseManager.DAY_CLOSE_FIELD + " < " + 
 							DatabaseManager.DAY_OPEN_FIELD + " AND " +
-							"LENGTH(" + DatabaseManager.SYMBOL_FIELD + 
-							") = 3 AND " +
 							manager.left(DatabaseManager.SYMBOL_FIELD, 1) + 
-							" != 'X' ");
+							" != '^' ");
 			RS = statement.executeQuery(query);
 			isDatePresent = RS.next();
 
@@ -1032,10 +1027,8 @@ public class DatabaseQuoteSource implements QuoteSource
 							manager.toSQLDateString(lastDate) + "' AND " + 
 							DatabaseManager.DAY_CLOSE_FIELD + " > " + 
 							DatabaseManager.DAY_OPEN_FIELD + " AND " +
-							"LENGTH(" + DatabaseManager.SYMBOL_FIELD + 
-							") = 3 AND " +
 							manager.left(DatabaseManager.SYMBOL_FIELD ,1)  + 
-							" != 'X' GROUP BY " + DatabaseManager.DATE_FIELD + 
+							" != '^' GROUP BY " + DatabaseManager.DATE_FIELD + 
 							" ORDER BY " + DatabaseManager.DATE_FIELD + " ASC ");
 
 			ResultSet RS = statement.executeQuery(query);
@@ -1080,10 +1073,8 @@ public class DatabaseQuoteSource implements QuoteSource
 							manager.toSQLDateString(lastDate) + "' AND " + 
 							DatabaseManager.DAY_CLOSE_FIELD + " < " + 
 							DatabaseManager.DAY_OPEN_FIELD + " AND " +
-							"LENGTH(" + DatabaseManager.SYMBOL_FIELD + 
-							") = 3 AND " +
 							manager.left(DatabaseManager.SYMBOL_FIELD, 1) + 
-							" != 'X' GROUP BY " + DatabaseManager.DATE_FIELD + 
+							" != '^' GROUP BY " + DatabaseManager.DATE_FIELD + 
 							" ORDER BY " + DatabaseManager.DATE_FIELD + " ASC ");
 
 			RS = statement.executeQuery(query);

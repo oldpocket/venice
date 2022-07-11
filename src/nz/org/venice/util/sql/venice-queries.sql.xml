@@ -274,8 +274,8 @@
 	  SELECT COUNT(*), date FROM <parameter name='share_table'/> WHERE
 	  date &gt;= '<parameter name='firstDate'/>' AND 
 	  date &lt;= '<parameter name='lastDate'/>' AND
-          close &gt; open AND length(symbol) = 3 AND 
-	  <parameter name='symbol_first_char'/> != 'X' 
+          close &gt; open AND  
+	  <parameter name='symbol_first_char'/> != '^' 
 	  GROUP BY date 
 	  ORDER BY date ASC;
 	</query>
@@ -283,8 +283,8 @@
 	  SELECT COUNT(*), date FROM <parameter name='share_table'/> WHERE
 	  date &gt;= '<parameter name='firstDate'/>' AND 
 	  date &lt;= '<parameter name='lastDate'/>' AND
-          close &lt; open AND length(symbol) = 3 AND 
-	  <parameter name='symbol_first_char'/> != 'X' 
+          close &lt; open AND  
+	  <parameter name='symbol_first_char'/> != '^' 
 	  GROUP BY date 
 	  ORDER BY date ASC;
 	</query>	  
