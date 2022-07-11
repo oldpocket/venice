@@ -239,10 +239,10 @@ public class YahooEODQuoteImport {
 		URLString = Find.replace(URLString, SYMBOL, symbolString);
 
 		URLString = Find.replace(URLString, START_DAY, Integer.toString(start.getDay()));
-		URLString = Find.replace(URLString, START_MONTH, Integer.toString(start.getMonth() - 1));
+		URLString = Find.replace(URLString, START_MONTH, Integer.toString(start.getMonth()));
 		URLString = Find.replace(URLString, START_YEAR, Integer.toString(start.getYear()));
 		URLString = Find.replace(URLString, END_DAY, Integer.toString(end.getDay()));
-		URLString = Find.replace(URLString, END_MONTH, Integer.toString(end.getMonth() - 1));
+		URLString = Find.replace(URLString, END_MONTH, Integer.toString(end.getMonth()));
 		URLString = Find.replace(URLString, END_YEAR, Integer.toString(end.getYear()));
 		return URLString;
 	}
