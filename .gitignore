@@ -9,3 +9,4 @@ venice.jar
 .project
 Venice.app
 .DS_Store
+lib/cachedir

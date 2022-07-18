@@ -147,8 +147,8 @@ public class StoredMacro {
     public boolean load() {
         if (getFilename() != null && getFilename().length() > 0) {
             try {
-                File file = new File(PreferencesManager.getDirectoryLocation("macros") +
-                                     File.separator+ getFilename());
+                File file = new File(PreferencesManager.getMacroHome() +
+                                     File.separator + getFilename());
                 URL url = file.toURL();
                 InputStreamReader isr = new InputStreamReader(url.openStream());
                 BufferedReader br = new BufferedReader(isr);

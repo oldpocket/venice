@@ -34,6 +34,11 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import org.python.core.PyCode;
+import org.python.core.PyException;
+import org.python.core.PySystemState;
+import org.python.util.PythonInterpreter;
+
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.util.Locale;
@@ -100,19 +105,35 @@ public class MacroManager {
     public static void execute(final StoredMacro m) {
         String name = m.getName();
 
+        
+        try
+        {
+            PythonInterpreter.initialize(System.getProperties(), System.getProperties(), new String[0]);
+            PythonInterpreter interp = new PythonInterpreter();
+            interp.execfile("/home/vicent/foo.py");
+        }
+        catch (Exception e)
+        {
+            //e.printStackTrace();
+        	
+        }
+        
+        
         try {
-		    org.python.core.PySystemState.initialize();
+		    PySystemState.initialize();
 		
 		    /* Try to pull a pre-compiled macro out of the hashtable.
 		     * This is faster than having to re-compile the macro every
 		     * time we want to execute it.
 		     */
 		    boolean compiled_available = true;
-		    org.python.core.PyCode tmp_compiled = (org.python.core.PyCode)compiled_macros.get(name);
+		    PyCode tmp_compiled = (PyCode)compiled_macros.get(name);
 		    if (tmp_compiled == null) {
 		        // compile the macro and save it
 		        try {
-		            tmp_compiled = org.python.core.__builtin__.compile(m.getCode(), m.getFilename(), "exec");
+		            PythonInterpreter.initialize(System.getProperties(), System.getProperties(), new String[0]);
+		            PythonInterpreter interp = new PythonInterpreter();
+		            tmp_compiled = interp.compile(m.getCode());
 		            compiled_macros.put(name, tmp_compiled);
 		        } catch (org.python.core.PyException e) {
 		            JOptionPane.showInternalMessageDialog(
@@ -172,12 +193,12 @@ public class MacroManager {
 		    }
 		
 		    // Execute the macro
-		    org.python.util.PythonInterpreter interp = new org.python.util.PythonInterpreter();
+		    PythonInterpreter interp = new PythonInterpreter();
 		    try { 
 		        interp.setErr(err_os);
 		        interp.setOut(out_os);
 		        interp.exec(compiled);
-		    } catch (org.python.core.PyException e) {
+		    } catch (PyException e) {
 		        JOptionPane.showInternalMessageDialog(
 		                DesktopManager.getDesktop(), 
 		                Locale.getString("MACRO_JYTHON_EXCEPTION", m.getName(), e.toString()), 

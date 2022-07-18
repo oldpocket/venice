@@ -153,7 +153,6 @@ public class PreferencesManager {
 		public boolean passwordPrompt;
 	}
 
-
 	/** Display preferences fields. */
 	public class DisplayPreferences {
 		/** X location of main window. */
@@ -314,9 +313,9 @@ public class PreferencesManager {
 	 */
 	public static synchronized List getStoredMacros() {
 		List stored_macros = new ArrayList();
-		Preferences prefs = getUserNode("/macros/info");
+		//Preferences prefs = getUserNode("/macros/info");
 
-		String dirname = PreferencesManager.getDirectoryLocation("macros");
+		String dirname = PreferencesManager.getMacroHome().getAbsolutePath();
 		if (dirname == null) return stored_macros;
 		File directory = new File(dirname);
 		if (!directory.isDirectory())
@@ -324,14 +323,14 @@ public class PreferencesManager {
 
 		String[] list = directory.list(new FilenameFilter() {
 			public boolean accept(File dir, String filename) {
-				return (dir.getAbsolutePath().equals(PreferencesManager.getDirectoryLocation("macros")) &&
+				return (dir.getAbsolutePath().equals(dirname) &&
 						filename.indexOf(".py") == filename.length()-3);
 			}
 		});
 
 		for(int i = 0; i < list.length; i++) {
 			String name = list[i].substring(0,list[i].length()-3);
-			Preferences macro_node = getUserNode("/macros/info/"+list[i]);
+			Preferences macro_node = getUserNode("/macros_info/"+list[i]);
 			stored_macros.add(new StoredMacro(macro_node.get("name", name),
 					list[i],
 					macro_node.getBoolean("on_startup",false),
@@ -356,7 +355,7 @@ public class PreferencesManager {
 
 			for(Iterator iterator = stored_macros.iterator(); iterator.hasNext();) {
 				StoredMacro stored_macro = (StoredMacro)iterator.next();
-				Preferences macro_node = getUserNode("/macros/info/"+stored_macro.getFilename());
+				Preferences macro_node = getUserNode("/macros_info/"+stored_macro.getFilename());
 				macro_node.put("name", stored_macro.getName());
 				macro_node.putBoolean("on_startup", stored_macro.isOn_startup());
 				macro_node.putInt("start_sequence", stored_macro.getStart_sequence());
