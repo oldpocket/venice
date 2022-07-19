@@ -18,6 +18,8 @@
 
 package nz.org.venice.parser.expression;
 
+import java.util.UUID;
+
 import nz.org.venice.parser.Expression;
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.parser.TypeMismatchException;
@@ -26,8 +28,6 @@ import nz.org.venice.parser.Variables;
 import nz.org.venice.quote.QuoteBundle;
 import nz.org.venice.quote.Symbol;
 
-import org.safehaus.uuid.UUID;
-import org.safehaus.uuid.UUIDGenerator;
 
 /**
  * An expression which represents the <code>while</code> command.
@@ -54,7 +54,7 @@ public class WhileExpression extends BinaryExpression {
      */
     public WhileExpression(Expression condition, Expression command) {
 	super(condition, command);
-	id = UUIDGenerator.getInstance().generateRandomBasedUUID();
+	id = UUID.randomUUID();
     }
 
     public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
@@ -62,7 +62,7 @@ public class WhileExpression extends BinaryExpression {
 
 	double value = 0.0D;
 
-	UUID loopId = UUIDGenerator.getInstance().generateRandomBasedUUID();
+	UUID loopId = UUID.randomUUID();
 	AnalyserGuard.getInstance().startLoop(this, loopId, symbol, day);
 
 	// Now loop running the command until the condition is no longer true

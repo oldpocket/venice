@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.List;
+import java.util.UUID;
 import java.io.InputStream;
 
 import java.text.DecimalFormat;
@@ -37,9 +38,6 @@ import java.util.regex.*;
 import javax.xml.parsers.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
-import org.safehaus.uuid.UUID;
-import org.safehaus.uuid.UUIDGenerator;
-
 
 import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.util.Locale;
@@ -1075,7 +1073,7 @@ public class DatabaseManager
     }
     
     public String getUUID() {
-	UUID id = UUIDGenerator.getInstance().generateRandomBasedUUID();
+	UUID id = UUID.randomUUID();
 	return id.toString();
     }
 }

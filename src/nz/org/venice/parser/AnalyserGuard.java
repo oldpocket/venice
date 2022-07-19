@@ -19,13 +19,11 @@
 package nz.org.venice.parser;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.parser.Token;
 import nz.org.venice.parser.Expression;
-
-import org.safehaus.uuid.UUID;
-import org.safehaus.uuid.UUIDGenerator;
 
 /** 
  * This class keeps track of the running time of expressions which can forever 

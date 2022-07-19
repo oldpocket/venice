@@ -27,6 +27,7 @@ import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
 
 import java.util.Base64;
+import java.util.UUID;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -34,9 +35,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-
-import org.safehaus.uuid.UUID;
-import org.safehaus.uuid.UUIDGenerator;
 
 /**
  * Manages database settings where the data is session based (ie not stored
