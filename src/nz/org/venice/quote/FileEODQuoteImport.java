@@ -35,7 +35,7 @@ import nz.org.venice.util.Report;
  *
  * @author Andrew Leppard
  * @see ImportQuoteModule
- * @see YahooEODQuoteImport
+ * @see GenericWSEODQuoteImport
  */
 public class FileEODQuoteImport implements IFileEODQuoteImport {
 

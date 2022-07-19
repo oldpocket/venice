@@ -72,7 +72,7 @@ public class IDQuoteSync {
          */
         public void run() {
             try {
-                List quotes = YahooIDQuoteImport.importSymbols(symbols, suffix);
+                List quotes = GenericWSIDQuoteImport.importSymbols(symbols, suffix);
 
                 quoteCache.load(quotes);
 

@@ -75,7 +75,7 @@ import nz.org.venice.util.TradingDateFormatException;
  * @see DatabaseQuoteSource
  * @see ExportQuoteModule
  * @see FileEODQuoteImport
- * @see YahooEODQuoteImport 
+ * @see GenericWSEODQuoteImport 
  */
 public class ImportQuoteModule extends JPanel implements Module {
 
@@ -554,7 +554,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 
 				// Load quotes from internet
 				List quotes =
-						YahooEODQuoteImport.importSymbol(report, symbol, suffix, startDate, endDate);
+						GenericWSEODQuoteImport.importSymbol(report, symbol, suffix, startDate, endDate);
 
 				// Import into database
 				if(quotes.size() > 0) {

@@ -37,32 +37,32 @@ import nz.org.venice.util.Find;
 import nz.org.venice.util.Locale;
 
 /**
- * Import intra-day quotes from Yahoo into Venice.
+ * Import intra-day quotes from Web Service into Venice.
  *
  * @author Andrew Leppard
  */
-public class YahooIDQuoteImport {
+public class GenericWSIDQuoteImport {
 
 	// The following symbols will be replaced by the quote, date range we are after:
 	private final static String SYMBOLS = "_SYM_";
 
-	// Each Yahoo site uses the same URL formatting. So we define it once here.
-	private final static String YAHOO_PATTERN = ("s=" + SYMBOLS);
+	// Let's define the URL pattern that must be followed by the Generic Web Service.
+	private final static String URL_PATTERN = ("s=" + SYMBOLS);
 
-	private final static String YAHOO_URL_PATTERN =
-			("http://yfinance.lealis.com.br/id_quotes?" + YAHOO_PATTERN);
+	private final static String GENERIC_WS_URL_PATTERN =
+			("http://yfinance.lealis.com.br/id_quotes?" + URL_PATTERN);
 
 	// This class is not instantiated.
-	private YahooIDQuoteImport() {
+	private GenericWSIDQuoteImport() {
 		assert false;
 	}
 
 	/**
-	 * Retrieve intra-day quotes from Yahoo.
+	 * Retrieve intra-day quotes from Web Service.
 	 *
 	 * @param symbols the symbols to import.
 	 * @param suffix optional suffix to append (e.g. ".AX"). This suffix tells
-	 *               Yahoo which exchange the symbol belongs to.
+	 *    which exchange the symbol belongs to and need to be supported by the Generic Web Service.
 	 * @exception ImportExportException if there was an error retrieving the quotes
 	 */
 	public static List importSymbols(List symbols, String suffix)
@@ -70,7 +70,7 @@ public class YahooIDQuoteImport {
 
 		List quotes = new ArrayList();
 		String URLString = constructURL(symbols, suffix);
-		IDQuoteFilter filter = new YahooIDQuoteFilter();
+		IDQuoteFilter filter = new GenericWSIDQuoteFilter();
 
 		PreferencesManager.ProxyPreferences proxyPreferences =
 				PreferencesManager.getProxySettings();
@@ -140,15 +140,15 @@ public class YahooIDQuoteImport {
 
 	/**
 	 * Construct the URL necessary to retrieve all the quotes for the given symbol between
-	 * the given dates from Yahoo.
+	 * the given dates from Web Service.
 	 *
 	 * @param symbols the symbos to import.
 	 * @param suffix optional suffix to append (e.g. ".AX"). This suffix tells
-	 *               Yahoo which exchange the symbol belongs to.
+	 *    which exchange the symbol belongs to and need to be supported by the Generic Web Service.
 	 * @return URL string
 	 */
 	private static String constructURL(List symbols, String suffix) {
-		String URLString = YAHOO_URL_PATTERN;
+		String URLString = GENERIC_WS_URL_PATTERN;
 		String symbolStringList = "";
 
 		if (suffix == null) suffix = "";

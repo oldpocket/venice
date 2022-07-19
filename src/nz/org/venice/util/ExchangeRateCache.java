@@ -32,7 +32,7 @@ import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.quote.DatabaseQuoteSource;
 import nz.org.venice.quote.ImportExportException;
 import nz.org.venice.quote.QuoteSourceManager;
-import nz.org.venice.quote.YahooExchangeRateImport;
+import nz.org.venice.quote.GenericWSExchangeRateImport;
 import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.ui.NumberDialog;
 import nz.org.venice.ui.ProgressDialog;
@@ -231,7 +231,7 @@ public class ExchangeRateCache {
 
         try {
             ExchangeRate exchangeRate =
-                YahooExchangeRateImport.importExchangeRate(sourceCurrency, destinationCurrency);
+                GenericWSExchangeRateImport.importExchangeRate(sourceCurrency, destinationCurrency);
 
             addToDatabase(exchangeRate);
             addToCache(exchangeRate);

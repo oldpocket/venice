@@ -26,7 +26,7 @@ import nz.org.venice.util.Locale;
 import nz.org.venice.util.UnknownCurrencyCodeException;
 
 /**
- * Provides a filter to parse currency exchange rates supplied from Yahoo.
+ * Provides a filter to parse currency exchange rates supplied from Generic Web Service.
  * The currency exchange rate format contains the two currencies being exchanged,
  * the current price, the date of the quote, the time of the quote, and
  * the bid and ask rates.
@@ -38,12 +38,12 @@ import nz.org.venice.util.UnknownCurrencyCodeException;
  *
  * @author Andrew Leppard
  */
-public class YahooExchangeRateFilter {
+public class GenericWSExchangeRateFilter {
 
     /**
      * Create an instance of this filter.
      */
-    public YahooExchangeRateFilter() {
+    public GenericWSExchangeRateFilter() {
         // Nothing to do
     }
 

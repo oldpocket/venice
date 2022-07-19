@@ -39,28 +39,28 @@ import nz.org.venice.util.Find;
 import nz.org.venice.util.Locale;
 
 /**
- * Import exchange rate quotes from Yahoo into Venice.
+ * Import exchange rate quotes from Generic Web Services into Venice.
  *
  * @author Andrew Leppard
- * @see YahooExchangeRateFilter
+ * @see GenericWSExchangeRateFilter
  */
-public class YahooExchangeRateImport {
+public class GenericWSExchangeRateImport {
 
     // The following symbols will be replaced by the exchange rate details we are after:
     private final static String SOURCE_CURRENCY = "_SRC_";
     private final static String DESTINATION_CURRENCY = "_DEST_";
 
     // Yahoo site to download exchange rate
-    private final static String YAHOO_URL_PATTERN =
+    private final static String GENERIC_WS_URL_PATTERN =
         "http://finance.yahoo.com/d/quotes.csv?s=_SRC__DEST_=X&f=sl1d1ba&e=.csv";
 
     // This class is not instantiated.
-    private YahooExchangeRateImport() {
+    private GenericWSExchangeRateImport() {
         assert false;
     }
 
     /**
-     * Retrieve a sinlge exchange rate from Yahoo.
+     * Retrieve a single exchange rate from the server.
      *
      * @param sourceCurrency      the currency to convert from
      * @param destinationCurrency the currency to convert to
@@ -72,7 +72,7 @@ public class YahooExchangeRateImport {
         throws ImportExportException {
 
         ExchangeRate rate = null;
-        YahooExchangeRateFilter filter = new YahooExchangeRateFilter();
+        GenericWSExchangeRateFilter filter = new GenericWSExchangeRateFilter();
         String URLString = constructURL(sourceCurrency, destinationCurrency);
         PreferencesManager.ProxyPreferences proxyPreferences =
             PreferencesManager.getProxySettings();
@@ -134,7 +134,7 @@ public class YahooExchangeRateImport {
 
     private static String constructURL(Currency sourceCurrency,
                                        Currency destinationCurrency) {
-        String URLString = YAHOO_URL_PATTERN;
+        String URLString = GENERIC_WS_URL_PATTERN;
         URLString = Find.replace(URLString, SOURCE_CURRENCY,
                                  sourceCurrency.getCurrencyCode());
         URLString = Find.replace(URLString, DESTINATION_CURRENCY,
