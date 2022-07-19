@@ -1,4 +1,0 @@
-<!ELEMENT document (document+)>
-<!ELEMENT document (chapter*)>
-<!ATTLIST chapter
-    name  CDATA #REQUIRED>

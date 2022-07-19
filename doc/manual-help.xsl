@@ -8,7 +8,7 @@
   
   <xsl:output method="html" indent="yes"/>
   <xsl:param name="outdir"/>
-  
+
   <xsl:template match="/">
     <xsl:call-template name='writeWarningMessage'/>
     <html>
@@ -19,12 +19,11 @@
   </xsl:template>
 
   <xsl:template match="document">
-	<xsltc:output file="{$outdir}{@name}.html">
+    <xsltc:output file="{$outdir}{@name}.html">
       <h2><xsl:value-of select="@name"/></h2>
       <xsl:apply-templates/>
-    </redirect:write>
-    <redirect:close file="{@name}.html"/>
-	</xsltc:output>
+    </xsltc:output>
+      
   </xsl:template>
 
   <xsl:template match="emphasis">
@@ -67,15 +66,14 @@
   </xsl:template>
 
   <xsl:template match="chapter">
-	<xsltc:output file="{$outdir}{@name}.html">
+    <xsltc:output file="{$outdir}{@name}.html">
       <xsl:call-template name='writeWarningMessage'/>
       <html><body>
       <h2><xsl:value-of select="@name"/></h2>
       <xsl:apply-templates/>
       </body></html>
-    </redirect:write>
-    <redirect:close file="{@name}.html"/>
-   </xsltc:output> 
+    </xsltc:output>
+    
   </xsl:template>
 
   <xsl:template match="section">
