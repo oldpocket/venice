@@ -254,6 +254,7 @@ public class Main extends JFrame {
 					false));
 
 			IDQuoteSync.getInstance().addSymbols(symbols);
+			IDQuoteSync.getInstance().setSuffix(idQuoteSyncPreferences.suffix);
 		} catch(SymbolFormatException e) {
 			// Ignore error in preferences
 		}
