@@ -35,11 +35,11 @@ import nz.org.venice.parser.ParseMetadata;
 import nz.org.venice.util.VeniceLog;
 
 /**
- * The abstract base class for all expressions in the <i>Gondola</i> language. This
- * class implements the {@link Expression} interface and provides functions for
- * managing an expression's child nodes. E.g. the expression <code>4+5</code> would
- * consist of three nodes. The plus being the root node, which would have two
- * child nodes of <code>4</code> and <code>5</code>.
+ * The abstract base class for all expressions in the <i>Gondola</i> language.
+ * This class implements the {@link Expression} interface and provides functions
+ * for managing an expression's child nodes. E.g. the expression
+ * <code>4+5</code> would consist of three nodes. The plus being the root node,
+ * which would have two child nodes of <code>4</code> and <code>5</code>.
  *
  * @see Expression
  */
@@ -48,7 +48,8 @@ public abstract class AbstractExpression implements Expression {
 	// Constants that manage the USA/Australian/UK localization
 	// the goal is forcing that localization also for others languages
 	private final static String format = "0.000000#";
-	private final static DecimalFormat decimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.ENGLISH));
+	private final static DecimalFormat decimalFormat = new DecimalFormat(format,
+			new DecimalFormatSymbols(Locale.ENGLISH));
 
 	// Pointer to parent node (if any)
 	private Expression parent;
@@ -66,8 +67,8 @@ public abstract class AbstractExpression implements Expression {
 	/**
 	 * Create a new expression with no children.
 	 *
-	 */                
-	//Terminal Expression    
+	 */
+	// Terminal Expression
 	public AbstractExpression() {
 		children = null;
 		this.parent = getParent();
@@ -78,8 +79,8 @@ public abstract class AbstractExpression implements Expression {
 	 * Create a new expression with the given number of children.
 	 *
 	 * @param children An array of the children of the expression.
-	 */                
-	public AbstractExpression(Expression[] children) {	
+	 */
+	public AbstractExpression(Expression[] children) {
 		for (int i = 0; i < children.length; i++) {
 			assert children[i] != null;
 			children[i].setParent(this);
@@ -89,16 +90,15 @@ public abstract class AbstractExpression implements Expression {
 		id = setId();
 	}
 
-
 	/**
 	 * Create a new expression with the given number of children.
 	 *
 	 * @param children A List of the children of the expression.
 	 */
-	public AbstractExpression(List children) {	
+	public AbstractExpression(List children) {
 		this.children = new Expression[children.size()];
 		for (int i = 0; i < children.size(); i++) {
-			Expression child = (Expression)children.get(i);
+			Expression child = (Expression) children.get(i);
 			child.setParent(this);
 			this.children[i] = child;
 		}
@@ -132,15 +132,14 @@ public abstract class AbstractExpression implements Expression {
 	 *
 	 * @return child at given index.
 	 */
-	public Expression getChild(int index) {	
+	public Expression getChild(int index) {
 		assert index <= getChildCount();
 
 		return children[index];
 	}
 
 	/**
-	 * Return whether this node is the root node. The root node has no
-	 * parent.
+	 * Return whether this node is the root node. The root node has no parent.
 	 * 
 	 * @return <code>TRUE</code> iff this node is the root node.
 	 */
@@ -156,8 +155,8 @@ public abstract class AbstractExpression implements Expression {
 	}
 
 	/**
-	 * Set this expression's child to the given child. The new child
-	 * will be removed from its parent.
+	 * Set this expression's child to the given child. The new child will be removed
+	 * from its parent.
 	 *
 	 * @param child the new child.
 	 * @param index the index of the new child.
@@ -172,18 +171,18 @@ public abstract class AbstractExpression implements Expression {
 
 		// Remove reference to new child from its old parent
 
-		//But the old parent can be this expression!
-		//What does that mean?
-		if (child != null && child.getParent() != null) {	    
+		// But the old parent can be this expression!
+		// What does that mean?
+		if (child != null && child.getParent() != null) {
 			oldParent = child.getParent();
 
 			if (oldParent != this) {
-				//Calling the oldet child for oldparent causes null to end up in tree
-				//Which is ok as long as it's replaceimmediately.
-				//However, there's a bug somewhere which means this isn't 
-				//happening.
-				//oldParent.setChildMutableVersion(null, oldParent.getIndex(child));	    
-				oldParent.setChild(null, oldParent.getIndex(child));	    
+				// Calling the oldet child for oldparent causes null to end up in tree
+				// Which is ok as long as it's replaceimmediately.
+				// However, there's a bug somewhere which means this isn't
+				// happening.
+				// oldParent.setChildMutableVersion(null, oldParent.getIndex(child));
+				oldParent.setChild(null, oldParent.getIndex(child));
 			}
 		}
 
@@ -197,17 +196,16 @@ public abstract class AbstractExpression implements Expression {
 
 		// Set reference to new child in this class
 
-		//When oldParent = this, this method is run recursively, so
-		//children[index] is null.
+		// When oldParent = this, this method is run recursively, so
+		// children[index] is null.
 		children[index] = child;
 
 		VeniceLog.getInstance().log("SetChild Exit");
 	}
 
-
 	/**
-	 * Return true if none of the children of this expression are null.
-	 * This means the expression can be simplified safely.
+	 * Return true if none of the children of this expression are null. This means
+	 * the expression can be simplified safely.
 	 *
 	 * @return true if all children are not null
 	 */
@@ -227,14 +225,14 @@ public abstract class AbstractExpression implements Expression {
 	}
 
 	/**
-	 * Perform simplifications and optimisations on the expression tree.
-	 * For example, if the expression tree was <code>a and true</code> then the
+	 * Perform simplifications and optimisations on the expression tree. For
+	 * example, if the expression tree was <code>a and true</code> then the
 	 * expression tree would be simplified to <code>a</code>.
 	 */
 
-	//This version replaces the expression with new children
-	//instead of setting child to null/replacing and avoiding the problem 
-	//of nulls in the expression tree.  
+	// This version replaces the expression with new children
+	// instead of setting child to null/replacing and avoiding the problem
+	// of nulls in the expression tree.
 	public Expression simplify() {
 
 		Expression[] newChildren = new Expression[getChildCount()];
@@ -245,49 +243,48 @@ public abstract class AbstractExpression implements Expression {
 				assert false;
 			}
 			newChildren[i] = newChild;
-		}		
+		}
 
-		Expression rv =  ExpressionFactory.newExpression(this, newChildren);
+		Expression rv = ExpressionFactory.newExpression(this, newChildren);
 
 		return rv;
 	}
 
 	/**
-	 * Perform simplifications and optimisations on the expression tree.
-	 * For example, if the expression tree was <code>a and true</code> then the
+	 * Perform simplifications and optimisations on the expression tree. For
+	 * example, if the expression tree was <code>a and true</code> then the
 	 * expression tree would be simplified to <code>a</code>.
 	 */
-	//Deprecated
+	// Deprecated
 	public Expression simplifyMutableVersion() {
 		assert validTree() == true;
 
-		VeniceLog.getInstance().log("Simplify: Type = " + getClass().getName() + " val = " + toString());	    
+		VeniceLog.getInstance().log("Simplify: Type = " + getClass().getName() + " val = " + toString());
 
 		// Simplify child arguments
-		if(getChildCount() > 0) {
-			for(int i = 0; i < getChildCount(); i++)  {		
+		if (getChildCount() > 0) {
+			for (int i = 0; i < getChildCount(); i++) {
 				Expression childi = getChild(i);
 				Expression simplified = childi.simplify();
-				setChildMutableVersion(simplified, i);    
-			}	
+				setChildMutableVersion(simplified, i);
+			}
 		}
 
-		VeniceLog.getInstance().log("Exit Simplify");	    
+		VeniceLog.getInstance().log("Exit Simplify");
 		return this;
 	}
 
 	/**
-	 * Return the index of the given argument in the expression. This
-	 * method uses reference equality rather than using the equals
-	 * method.
+	 * Return the index of the given argument in the expression. This method uses
+	 * reference equality rather than using the equals method.
 	 *
 	 * @param child the child expression to locate
-	 * @return index of the child expression or <code>-1</code> if it could
-	 *              not be found
+	 * @return index of the child expression or <code>-1</code> if it could not be
+	 *         found
 	 */
 	public int getIndex(Expression child) {
-		for(int index = 0; index < getChildCount(); index++) {
-			if(getChild(index) == child)
+		for (int index = 0; index < getChildCount(); index++) {
+			if (getChild(index) == child)
 				return index;
 		}
 
@@ -388,62 +385,57 @@ public abstract class AbstractExpression implements Expression {
 
 	}
 
-
-
 	/**
-	 * Returns whether this expression tree and the given expression tree
-	 * are equivalent.
+	 * Returns whether this expression tree and the given expression tree are
+	 * equivalent.
 	 *
 	 * @param object the other expression
-	 */    
+	 */
 	public boolean equals(Object object) {
 
 		// Top level nodes the sames?
-		if(!(object instanceof Expression))
+		if (!(object instanceof Expression))
 			return false;
-		Expression expression = (Expression)object;
+		Expression expression = (Expression) object;
 
-		if(getClass() != expression.getClass())
+		if (getClass() != expression.getClass())
 			return false;
 
-		if (getChildCount() != expression.getChildCount()) 
+		if (getChildCount() != expression.getChildCount())
 			return false;
 
 		// Check all children are the same - only check the children
 		// we currently have - we might not have them all yet!
 
-		//Not sure if the "we might not have them all yet
-		//-as of 7.3, children are immutable and not allowed to be null 
-		for(int i = 0; i < getChildCount(); i++) {
-			if(!getChild(i).equals(expression.getChild(i)))
+		// Not sure if the "we might not have them all yet
+		// -as of 7.3, children are immutable and not allowed to be null
+		for (int i = 0; i < getChildCount(); i++) {
+			if (!getChild(i).equals(expression.getChild(i)))
 				return false;
 		}
 
 		return true;
 	}
 
-
 	/**
-	 * If you override the {@link #equals} method then you should override
-	 * this method. It provides a very basic hash code function.
+	 * If you override the {@link #equals} method then you should override this
+	 * method. It provides a very basic hash code function.
 	 *
 	 * @return a poor hash code of the tree
 	 */
 
 	public int hashCode() {
 		/*
-	  Equals now implemented and expressions being stored in HashMaps.
-        // If you implement equals you should implement hashCode().
-        // Since I don't need it I haven't bothered to implement a very
-        // good hash.
-        return super.hashCode();
+		 * Equals now implemented and expressions being stored in HashMaps. // If you
+		 * implement equals you should implement hashCode(). // Since I don't need it I
+		 * haven't bothered to implement a very // good hash. return super.hashCode();
 		 */
 
-		//For Terminal Expressions, hash value will use class hashcode 
-		//unless they implement hashcode (which implies they implement equals)
+		// For Terminal Expressions, hash value will use class hashcode
+		// unless they implement hashcode (which implies they implement equals)
 
-		//+i here adds an order so expression(child1, child2) has a different
-		//hash to expression(child2, child1)
+		// +i here adds an order so expression(child1, child2) has a different
+		// hash to expression(child2, child1)
 		int hc = getClass().hashCode();
 		for (int i = 0; i < getChildCount(); i++) {
 			hc ^= (getChild(i).hashCode() + i);
@@ -452,8 +444,7 @@ public abstract class AbstractExpression implements Expression {
 		return hc;
 	}
 
-
-	/** 
+	/**
 	 * Count the number of nodes in the tree.
 	 *
 	 * @return number of nodes or 1 if this is a terminal node
@@ -461,7 +452,7 @@ public abstract class AbstractExpression implements Expression {
 	public int size() {
 		int count = 1;
 
-		for(int i = 0; i < getChildCount(); i++) {
+		for (int i = 0; i < getChildCount(); i++) {
 			Expression child = getChild(i);
 
 			count += child.size();
@@ -478,13 +469,13 @@ public abstract class AbstractExpression implements Expression {
 	public int size(int type) {
 		int count = 0;
 
-		assert(type == BOOLEAN_TYPE || type == FLOAT_TYPE || type == INTEGER_TYPE ||
-				type == FLOAT_QUOTE_TYPE || type == INTEGER_QUOTE_TYPE || type == STRING_TYPE);
+		assert (type == BOOLEAN_TYPE || type == FLOAT_TYPE || type == INTEGER_TYPE || type == FLOAT_QUOTE_TYPE
+				|| type == INTEGER_QUOTE_TYPE || type == STRING_TYPE);
 
-		if(getType() == type)
+		if (getType() == type)
 			count = 1;
 
-		for(int i = 0; i < getChildCount(); i++) {
+		for (int i = 0; i < getChildCount(); i++) {
 			Expression child = getChild(i);
 
 			count += child.size(type);
@@ -507,7 +498,7 @@ public abstract class AbstractExpression implements Expression {
 	private void buildIterationList(List list, Expression expression) {
 		list.add(expression);
 
-		for(int i = 0; i < expression.getChildCount(); i++)
+		for (int i = 0; i < expression.getChildCount(); i++)
 			buildIterationList(list, expression.getChild(i));
 	}
 
@@ -527,7 +518,7 @@ public abstract class AbstractExpression implements Expression {
 		String rv = "";
 		Expression parent = getParent();
 		while (parent != null) {
-			//nz.org.venice.parser.expression = 32 chars
+			// nz.org.venice.parser.expression = 32 chars
 			rv += parent.getClass().getName().substring(32) + ".";
 			parent = parent.getParent();
 		}
@@ -538,7 +529,7 @@ public abstract class AbstractExpression implements Expression {
 		parseMetadata = new ParseMetadata(parseTree, tokenLineMap);
 	}
 
-	public ParseMetadata getParseMetadata() {	
+	public ParseMetadata getParseMetadata() {
 		if (parent != null) {
 			return parent.getParseMetadata();
 		} else {

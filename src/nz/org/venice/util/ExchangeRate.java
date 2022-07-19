@@ -19,87 +19,85 @@
 package nz.org.venice.util;
 
 /**
- * An immutable representation of an Exchange Rate. An exchange rate is the conversion rate
- * when converting one currency into another.
+ * An immutable representation of an Exchange Rate. An exchange rate is the
+ * conversion rate when converting one currency into another.
  *
  * @author Andrew Leppard
  */
 public class ExchangeRate {
 
-    // The date of the exchange rate
-    private TradingDate date;
+	// The date of the exchange rate
+	private TradingDate date;
 
-    // The currency we are converting from
-    private Currency source;
+	// The currency we are converting from
+	private Currency source;
 
-    // The currency we are converting to
-    private Currency destination;
+	// The currency we are converting to
+	private Currency destination;
 
-    // The exchange rate
-    private double rate;
+	// The exchange rate
+	private double rate;
 
-    /**
-     * Create a new exchange rate that converts the source currency into the
-     * destination currency.
-     *
-     * @param date the date of the exchange rate
-     * @param source the currency we are converting from
-     * @param destination the currency we are converting to
-     * @param rate the exchange rate
-     */
-    public ExchangeRate(TradingDate date, Currency source, Currency destination, double rate) {
-        this.date = date;
-        this.source = source;
-        this.destination = destination;
-        this.rate = rate;
-    }
+	/**
+	 * Create a new exchange rate that converts the source currency into the
+	 * destination currency.
+	 *
+	 * @param date        the date of the exchange rate
+	 * @param source      the currency we are converting from
+	 * @param destination the currency we are converting to
+	 * @param rate        the exchange rate
+	 */
+	public ExchangeRate(TradingDate date, Currency source, Currency destination, double rate) {
+		this.date = date;
+		this.source = source;
+		this.destination = destination;
+		this.rate = rate;
+	}
 
-    /**
-     * Return the date of the exchange rate.
-     *
-     * @return	the date
-     */
-    public TradingDate getDate() {
-	return date;
-    }
+	/**
+	 * Return the date of the exchange rate.
+	 *
+	 * @return the date
+	 */
+	public TradingDate getDate() {
+		return date;
+	}
 
-    /**
-     * Return the currency that this exchange rate is converting from.
-     *
-     * @return the source currency
-     */
-    public Currency getSourceCurrency() {
-        return source;
-    }
+	/**
+	 * Return the currency that this exchange rate is converting from.
+	 *
+	 * @return the source currency
+	 */
+	public Currency getSourceCurrency() {
+		return source;
+	}
 
-    /**
-     * Return the currency that this exchange rate is converting into.
-     *
-     * @return the destination currency
-     */
-    public Currency getDestinationCurrency() {
-        return destination;
-    }
+	/**
+	 * Return the currency that this exchange rate is converting into.
+	 *
+	 * @return the destination currency
+	 */
+	public Currency getDestinationCurrency() {
+		return destination;
+	}
 
-    /**
-     * Return the exchange rate when converting between the two currencies.
-     * If you were converting from USD to AUD, and the exchange rate was
-     * 1.33, you would get AUD $1.33 for every USD $1.00.
-     *
-     * @return the exchange rate
-     */
-    public double getRate() {
-        return rate;
-    }
+	/**
+	 * Return the exchange rate when converting between the two currencies. If you
+	 * were converting from USD to AUD, and the exchange rate was 1.33, you would
+	 * get AUD $1.33 for every USD $1.00.
+	 *
+	 * @return the exchange rate
+	 */
+	public double getRate() {
+		return rate;
+	}
 
-    /**
-     * Return a string representation of this exchange rate.
-     *
-     * @return string representation
-     */
-    public String toString() {
-        return (getSourceCurrency().toString() + ", " +
-                getDestinationCurrency().toString() + ", " +
-                getRate());
-    }
+	/**
+	 * Return a string representation of this exchange rate.
+	 *
+	 * @return string representation
+	 */
+	public String toString() {
+		return (getSourceCurrency().toString() + ", " + getDestinationCurrency().toString() + ", " + getRate());
+	}
 }

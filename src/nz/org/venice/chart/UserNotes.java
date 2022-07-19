@@ -37,102 +37,102 @@ import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.util.Locale;
 
 /**
- * Provides a text area for which a user can make notes regarding thie stock symbol being graphed.
+ * Provides a text area for which a user can make notes regarding thie stock
+ * symbol being graphed.
  *
  * @author Mark Hummel
  */
 public class UserNotes extends JInternalFrame {
 
-    private JTextArea notes;
-    private String symbol;    
+	private JTextArea notes;
+	private String symbol;
 
-    public UserNotes(String name) {	
-	super();
+	public UserNotes(String name) {
+		super();
 
-	// Make sure we can't be hidden behind other windows
-	setLayer(JLayeredPane.MODAL_LAYER);
+		// Make sure we can't be hidden behind other windows
+		setLayer(JLayeredPane.MODAL_LAYER);
 
-	String prevText = "";
-	
-	symbol = name;
+		String prevText = "";
 
-	String frameTitle = "Notes for " + name;
-	setTitle(frameTitle);		    
-	setSize(250,250);	
-	setResizable(true);
-	setClosable(true);
-	setIconifiable(true);
-	setMaximizable(true);
-	DesktopManager.getDesktop().add(this);
+		symbol = name;
 
-	JPanel notePane = new JPanel();
-	JPanel buttonPane = new JPanel();
-	
-	notePane.setLayout(new BorderLayout());
+		String frameTitle = "Notes for " + name;
+		setTitle(frameTitle);
+		setSize(250, 250);
+		setResizable(true);
+		setClosable(true);
+		setIconifiable(true);
+		setMaximizable(true);
+		DesktopManager.getDesktop().add(this);
 
-	notes = new JTextArea(10,15);
+		JPanel notePane = new JPanel();
+		JPanel buttonPane = new JPanel();
 
-	prevText = PreferencesManager.getUserNotes(symbol);
-	if (prevText != "") {
-	    notes.setText(prevText);
+		notePane.setLayout(new BorderLayout());
+
+		notes = new JTextArea(10, 15);
+
+		prevText = PreferencesManager.getUserNotes(symbol);
+		if (prevText != "") {
+			notes.setText(prevText);
+		}
+
+		JScrollPane noteContainer = new JScrollPane(notes);
+
+		JButton save = new JButton(Locale.getString("SAVE"));
+		JButton close = new JButton(Locale.getString("CLOSE"));
+		JButton revert = new JButton(Locale.getString("REVERT"));
+
+		save.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+
+					String text = notes.getText();
+					Date now = new Date();
+					DateFormat df = DateFormat.getDateInstance();
+
+					text += "\n --- " + df.format(now) + " ---\n ";
+
+					PreferencesManager.putUserNotes(symbol, text);
+					setClosed(true);
+				} catch (PropertyVetoException pve) {
+
+				}
+			}
+		});
+
+		close.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					setClosed(true);
+				} catch (PropertyVetoException pve) {
+
+				}
+			}
+		});
+
+		revert.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String userNotes = PreferencesManager.getUserNotes(symbol);
+				notes.setText(userNotes);
+			}
+		});
+
+		notePane.add(noteContainer, BorderLayout.CENTER);
+		buttonPane.add(save, BorderLayout.WEST);
+		buttonPane.add(close, BorderLayout.CENTER);
+		buttonPane.add(revert, BorderLayout.EAST);
+		getContentPane().add(notePane, BorderLayout.CENTER);
+		getContentPane().add(buttonPane, BorderLayout.SOUTH);
+
+		// Set everything up first, otherwise you get a blank window
+		// until you activate it.
+		setVisible(true);
+
 	}
 
-	JScrollPane noteContainer = new JScrollPane(notes);
-		
-	JButton save = new JButton(Locale.getString("SAVE"));
-	JButton close = new JButton(Locale.getString("CLOSE"));
-	JButton revert = new JButton(Locale.getString("REVERT"));
-	
-	save.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-		    try {
-			
-			String text = notes.getText();
-			Date now = new Date();
-			DateFormat df = DateFormat.getDateInstance();
-			
-			text += "\n --- " + df.format(now) + " ---\n ";
+	public void setText(String text) {
 
-			PreferencesManager.putUserNotes(symbol, text);
-			setClosed(true);
-		    } 
-		    catch (PropertyVetoException pve) {
-
-		    }
-		}});
-	
-	close.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-		    try {
-			setClosed(true);
-		    }
-		    catch (PropertyVetoException pve) {
-			
-		    }		    
-		}});
-
-	revert.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-		    String userNotes = PreferencesManager.getUserNotes(symbol);
-		    notes.setText(userNotes);
-		}
-	    });
-	
-	
-	notePane.add(noteContainer, BorderLayout.CENTER);
-	buttonPane.add(save, BorderLayout.WEST);
-	buttonPane.add(close, BorderLayout.CENTER);
-	buttonPane.add(revert, BorderLayout.EAST);
-	getContentPane().add(notePane, BorderLayout.CENTER);		 
-	getContentPane().add(buttonPane,BorderLayout.SOUTH);
-
-	//Set everything up first, otherwise you get a blank window
-	//until you activate it.	
-	setVisible(true);
-
-    }
-
-    public void setText(String text) {
-
-    }
+	}
 }

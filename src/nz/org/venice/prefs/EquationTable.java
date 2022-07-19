@@ -33,132 +33,125 @@ import nz.org.venice.util.Locale;
  * The table in the Expression Preferences page that lists stored expressions.
  */
 public class EquationTable extends AbstractTable {
-    private static final int NAME_COLUMN = 0;
-    private static final int EXPRESSION_COLUMN = 1;
+	private static final int NAME_COLUMN = 0;
+	private static final int EXPRESSION_COLUMN = 1;
 
-    private Model model;
+	private Model model;
 
-    // Current list of stored expressions in the table
-    private List storedExpressions;
-
-    private class Model extends AbstractTableModel {
-
+	// Current list of stored expressions in the table
 	private List storedExpressions;
 
-	public Model(List columns, List storedExpressions) {
-	    super(columns);
-	    this.storedExpressions = storedExpressions;
-	}
-	
-	public int getRowCount() {
-	    return storedExpressions.size();
-	}
+	private class Model extends AbstractTableModel {
 
-	public Object getValueAt(int row, int column) {
-	    assert row < storedExpressions.size();
-	    StoredExpression storedExpression = 
-		(StoredExpression)storedExpressions.get(row);
+		private List storedExpressions;
 
-	    if(column == NAME_COLUMN) 
-		return storedExpression.name;
-	    else
-		return storedExpression.expression;
-	}
-        
-    }
-
-    /**
-     * Create a new expression table. The expression table will be initially populated from
-     * the current stored expressions.
-     */
-    public EquationTable() {
-	List columns = new ArrayList();
-	columns.add(new Column(NAME_COLUMN, 
-			       Locale.getString("NAME"), 
-			       Locale.getString("NAME_COLUMN_HEADER"), 
-			       String.class, Column.VISIBLE));
-	columns.add(new Column(EXPRESSION_COLUMN, 
-			       Locale.getString("EQUATION"), 
-			       Locale.getString("FULL_EQUATION_COLUMN_HEADER"), 
-			       String.class, Column.VISIBLE));
-
-	storedExpressions = PreferencesManager.getStoredExpressions();
-
-	model = new Model(columns, storedExpressions);
-	setModel(model);
-	showColumns(model);
-    }
-
-    /** 
-     * Display a dialog asking the user to enter a new stored expression.
-     */
-    public void add() {
-        Thread thread = new Thread(new Runnable() {
-                public void run() {
-		    StoredExpression storedExpression = 
-			ExpressionEditorDialog.showAddDialog(storedExpressions, 
-							     Locale.getString("ADD_EQUATION"));
-
-		    if(storedExpression != null) {
-                        storedExpressions.add(storedExpression);
-                        setModel(model);
-                        model.fireTableDataChanged();
-			repaint();
-		    }
+		public Model(List columns, List storedExpressions) {
+			super(columns);
+			this.storedExpressions = storedExpressions;
 		}
-	    });
-    
-	thread.start();
-    }
 
-    /** 
-     * Display a dialog allowing the user to edit the stored expression.
-     *
-     * @param row the row of the stored expression to edit.
-     */
-    public void edit(int row) {
-	if(row >= 0 && row < storedExpressions.size()) {
-	    final StoredExpression storedExpression = (StoredExpression)storedExpressions.get(row);
+		public int getRowCount() {
+			return storedExpressions.size();
+		}
 
-	    Thread thread = new Thread(new Runnable() {
-		    public void run() {
-			ExpressionEditorDialog.showEditDialog(storedExpressions,
-							      Locale.getString("EDIT_EQUATION"), 
-							      storedExpression);
-                        model.fireTableDataChanged();
-			repaint();
-		    }
+		public Object getValueAt(int row, int column) {
+			assert row < storedExpressions.size();
+			StoredExpression storedExpression = (StoredExpression) storedExpressions.get(row);
+
+			if (column == NAME_COLUMN)
+				return storedExpression.name;
+			else
+				return storedExpression.expression;
+		}
+
+	}
+
+	/**
+	 * Create a new expression table. The expression table will be initially
+	 * populated from the current stored expressions.
+	 */
+	public EquationTable() {
+		List columns = new ArrayList();
+		columns.add(new Column(NAME_COLUMN, Locale.getString("NAME"), Locale.getString("NAME_COLUMN_HEADER"),
+				String.class, Column.VISIBLE));
+		columns.add(new Column(EXPRESSION_COLUMN, Locale.getString("EQUATION"),
+				Locale.getString("FULL_EQUATION_COLUMN_HEADER"), String.class, Column.VISIBLE));
+
+		storedExpressions = PreferencesManager.getStoredExpressions();
+
+		model = new Model(columns, storedExpressions);
+		setModel(model);
+		showColumns(model);
+	}
+
+	/**
+	 * Display a dialog asking the user to enter a new stored expression.
+	 */
+	public void add() {
+		Thread thread = new Thread(new Runnable() {
+			public void run() {
+				StoredExpression storedExpression = ExpressionEditorDialog.showAddDialog(storedExpressions,
+						Locale.getString("ADD_EQUATION"));
+
+				if (storedExpression != null) {
+					storedExpressions.add(storedExpression);
+					setModel(model);
+					model.fireTableDataChanged();
+					repaint();
+				}
+			}
 		});
-    
-	    thread.start();
-	}
-    }
 
-    /**
-     * Delete the stored expressions in the given rows.
-     */
-    public void delete(int[] rows) {
-	// Remove the last row first, then the second to last, etc...
-	Arrays.sort(rows);
-
-	for(int i = rows.length - 1; i >= 0; i--) {
-	    int row = rows[i];
-	    if(row >= 0 && row < storedExpressions.size())
-		storedExpressions.remove(row);
+		thread.start();
 	}
 
-	// For some reason we need to do an explicit repaint call
-	// here to get the table to redraw itself.
-        model.fireTableDataChanged();
-	repaint();
-    }
-    
-    /**
-     * Replace the stored expressions in preferences with the stored expressions in
-     * this table. Make sure everything is in-sync with the new expressions.
-     */
-    public void save() {
-	PreferencesManager.putStoredExpressions(storedExpressions);
-	ExpressionComboBox.updateExpressions();
-    }
+	/**
+	 * Display a dialog allowing the user to edit the stored expression.
+	 *
+	 * @param row the row of the stored expression to edit.
+	 */
+	public void edit(int row) {
+		if (row >= 0 && row < storedExpressions.size()) {
+			final StoredExpression storedExpression = (StoredExpression) storedExpressions.get(row);
+
+			Thread thread = new Thread(new Runnable() {
+				public void run() {
+					ExpressionEditorDialog.showEditDialog(storedExpressions, Locale.getString("EDIT_EQUATION"),
+							storedExpression);
+					model.fireTableDataChanged();
+					repaint();
+				}
+			});
+
+			thread.start();
+		}
+	}
+
+	/**
+	 * Delete the stored expressions in the given rows.
+	 */
+	public void delete(int[] rows) {
+		// Remove the last row first, then the second to last, etc...
+		Arrays.sort(rows);
+
+		for (int i = rows.length - 1; i >= 0; i--) {
+			int row = rows[i];
+			if (row >= 0 && row < storedExpressions.size())
+				storedExpressions.remove(row);
+		}
+
+		// For some reason we need to do an explicit repaint call
+		// here to get the table to redraw itself.
+		model.fireTableDataChanged();
+		repaint();
+	}
+
+	/**
+	 * Replace the stored expressions in preferences with the stored expressions in
+	 * this table. Make sure everything is in-sync with the new expressions.
+	 */
+	public void save() {
+		PreferencesManager.putStoredExpressions(storedExpressions);
+		ExpressionComboBox.updateExpressions();
+	}
 }

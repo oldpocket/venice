@@ -32,7 +32,6 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.util.ExchangeRateCache;
 
-
 /**
  * This class writes settings in XML format.
  *
@@ -40,57 +39,56 @@ import nz.org.venice.util.ExchangeRateCache;
  * @see nz.org.venice.prefs.PreferencesManager
  * @see SettingsWriter
  */
-public class ModuleFrameSettingsWriter  {
+public class ModuleFrameSettingsWriter {
 
-    public ModuleFrameSettingsWriter() {
-        // Nothing to do
-    }
-
-
-    /**
-     * Write the module settings to the output stream in XML format.
-     *
-     * @param frame the module frame data to write
-     * @param stream      the output stream to write the window settings.
-     */
-    public  void write(ModuleFrame frame, OutputStream stream) throws IOException, ModuleSettingsParserException {
-
-	DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-	
-	ModuleFrameSettings settings = new ModuleFrameSettings();
-	Settings moduleSettings = frame.getModule().getSettings();
-
-	if (moduleSettings != null) {
-
-	    settings.setModuleSettings(moduleSettings);
-	    settings.setBounds(frame.getBounds());
-
-	    /* ModuleFrames which are not enclosed have components which 
-	       manage their own scrollPane. That is why the scroll bar settings
-	       appears twice. 
-	    */
-	    if (frame.getModule().encloseInScrollPane()) {	    
-		JScrollPane scrollPane;		
-		scrollPane = frame.getScrollPane();	    
-		settings.setScrollBarValues(scrollPane);
-		moduleSettings.setScrollBarValues(scrollPane);
-	    } 
-	
-	    BufferedOutputStream buffStream = new BufferedOutputStream(stream);	
-
-	    XStream xStream = new XStream(new DomDriver());
-	    xStream.omitField(ExchangeRateCache.class, "desktopPane");
-	    
-	    try {
-		String xml = xStream.toXML(settings);
-		stream.write(xml.getBytes());
-		stream.close();
-	    } catch (XStreamException e) {
-		throw new ModuleSettingsParserException(e.getMessage());
-	    }
-	} else {
-	    throw new ModuleSettingsParserException("No Settings to save");
+	public ModuleFrameSettingsWriter() {
+		// Nothing to do
 	}
-    }
+
+	/**
+	 * Write the module settings to the output stream in XML format.
+	 *
+	 * @param frame  the module frame data to write
+	 * @param stream the output stream to write the window settings.
+	 */
+	public void write(ModuleFrame frame, OutputStream stream) throws IOException, ModuleSettingsParserException {
+
+		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+
+		ModuleFrameSettings settings = new ModuleFrameSettings();
+		Settings moduleSettings = frame.getModule().getSettings();
+
+		if (moduleSettings != null) {
+
+			settings.setModuleSettings(moduleSettings);
+			settings.setBounds(frame.getBounds());
+
+			/*
+			 * ModuleFrames which are not enclosed have components which manage their own
+			 * scrollPane. That is why the scroll bar settings appears twice.
+			 */
+			if (frame.getModule().encloseInScrollPane()) {
+				JScrollPane scrollPane;
+				scrollPane = frame.getScrollPane();
+				settings.setScrollBarValues(scrollPane);
+				moduleSettings.setScrollBarValues(scrollPane);
+			}
+
+			BufferedOutputStream buffStream = new BufferedOutputStream(stream);
+
+			XStream xStream = new XStream(new DomDriver());
+			xStream.omitField(ExchangeRateCache.class, "desktopPane");
+
+			try {
+				String xml = xStream.toXML(settings);
+				stream.write(xml.getBytes());
+				stream.close();
+			} catch (XStreamException e) {
+				throw new ModuleSettingsParserException(e.getMessage());
+			}
+		} else {
+			throw new ModuleSettingsParserException("No Settings to save");
+		}
+	}
 
 }

@@ -18,114 +18,101 @@
 
 package nz.org.venice.alert;
 
-
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.TradingDate;
 
 /**
- * An alert whose trigger conditions are a quote value (Open, High, Low, Close, 
- * Volume) and a bound (Upper, Lower, Exact). 
+ * An alert whose trigger conditions are a quote value (Open, High, Low, Close,
+ * Volume) and a bound (Upper, Lower, Exact).
  * 
  * @author Mark Hummel
  * @see Alert
  */
 
 public class OHLCVAlert extends Alert {
-    
-    private double targetValue;
-    private int boundType;
-    private String field;
-	   
-    public OHLCVAlert() {
-	super();
-    }
 
-    public OHLCVAlert(Symbol symbol, 
-		      TradingDate startDate,
-		      TradingDate endDate,
-		      double targetValue,
-		      int boundType,
-		      String field, 
-		      boolean enabled) {
-	
-	super(symbol, startDate, endDate, enabled);
-	this.targetValue = targetValue;
-	this.boundType = boundType;
-	this.field = field;
-	super.setType(Alert.OHLCV);
-    }
-    
-    public Double getTargetValue() {
-	return new Double(targetValue);
-    }
+	private double targetValue;
+	private int boundType;
+	private String field;
 
-    public void setTargetValue(Double target) {
-	this.targetValue = target.doubleValue();
-    }
-
-    public void setTargetExpression(String expression) {
-    }
-
-    public String getTargetExpression() {
-	return null;
-    }
-
-    public int getType() {
-	return OHLCV;
-    }
-
-    public int getBoundType() {
-	return boundType;
-    }
-
-    public void setBoundType(int boundType) {
-	this.boundType = boundType;
-    }
-
-    public String getField() {
-	return field;
-    }
-
-    public void setField(String field) {
-	this.field = field;
-    }
-
-    public Object clone() {
-	OHLCVAlert clone = new OHLCVAlert(getSymbol(), 
-					  getStartDate(), 
-					  getEndDate(),
-					  targetValue,			 
-					  boundType,
-					  field,
-					  getEnabled());
-	clone.setDateSet(getDateSet());
-
-	return clone;
-    }
-
-    public boolean isEqualTo(Alert alert) {
-	if (!super.isEqualTo(alert)) {
-	    return false;
+	public OHLCVAlert() {
+		super();
 	}
 
-	if (alert.getTargetValue().doubleValue() != this.getTargetValue().doubleValue()) {
-	    return false;
+	public OHLCVAlert(Symbol symbol, TradingDate startDate, TradingDate endDate, double targetValue, int boundType,
+			String field, boolean enabled) {
+
+		super(symbol, startDate, endDate, enabled);
+		this.targetValue = targetValue;
+		this.boundType = boundType;
+		this.field = field;
+		super.setType(Alert.OHLCV);
 	}
 
-	if (alert.getBoundType() != this.getBoundType()) {
-	    return false;
+	public Double getTargetValue() {
+		return new Double(targetValue);
 	}
 
-	if (!alert.getField().equals(this.getField())) {
-	    return false;
+	public void setTargetValue(Double target) {
+		this.targetValue = target.doubleValue();
 	}
-	return true;
-    } 
 
-    public String toString() {
-	String rv = super.toString() + "," + getTargetValue() + "," + 
-	    boundTypeToString(getBoundType()) + "," + 
-	    field;
-	return rv;
-    }
+	public void setTargetExpression(String expression) {
+	}
+
+	public String getTargetExpression() {
+		return null;
+	}
+
+	public int getType() {
+		return OHLCV;
+	}
+
+	public int getBoundType() {
+		return boundType;
+	}
+
+	public void setBoundType(int boundType) {
+		this.boundType = boundType;
+	}
+
+	public String getField() {
+		return field;
+	}
+
+	public void setField(String field) {
+		this.field = field;
+	}
+
+	public Object clone() {
+		OHLCVAlert clone = new OHLCVAlert(getSymbol(), getStartDate(), getEndDate(), targetValue, boundType, field,
+				getEnabled());
+		clone.setDateSet(getDateSet());
+
+		return clone;
+	}
+
+	public boolean isEqualTo(Alert alert) {
+		if (!super.isEqualTo(alert)) {
+			return false;
+		}
+
+		if (alert.getTargetValue().doubleValue() != this.getTargetValue().doubleValue()) {
+			return false;
+		}
+
+		if (alert.getBoundType() != this.getBoundType()) {
+			return false;
+		}
+
+		if (!alert.getField().equals(this.getField())) {
+			return false;
+		}
+		return true;
+	}
+
+	public String toString() {
+		String rv = super.toString() + "," + getTargetValue() + "," + boundTypeToString(getBoundType()) + "," + field;
+		return rv;
+	}
 }

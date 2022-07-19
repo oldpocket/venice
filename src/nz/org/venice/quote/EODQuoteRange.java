@@ -27,20 +27,20 @@ import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
 
 /**
- * This class represents a way of describing a range or a set of end-of-day quotes. A range of
- * quotes will consist of a set of symbols that we are interested in. This can be
- * described by either explicitly giving a set of symbols, e.g. ANZ, CBA, NBA, WBC. Or by
- * specifying the type of symbols we are interested in, e.g. all ordinaries, all symbols,
- * market indices etc.
+ * This class represents a way of describing a range or a set of end-of-day
+ * quotes. A range of quotes will consist of a set of symbols that we are
+ * interested in. This can be described by either explicitly giving a set of
+ * symbols, e.g. ANZ, CBA, NBA, WBC. Or by specifying the type of symbols we are
+ * interested in, e.g. all ordinaries, all symbols, market indices etc.
  * <p>
  * The quote range is also limited by a date range.
  * <p>
- * For example this class could represent all CBA quotes from 1/12/2000 to 12/12/2000, or
- * all market indices.
+ * For example this class could represent all CBA quotes from 1/12/2000 to
+ * 12/12/2000, or all market indices.
  * <p>
- * A quote range represents a range or set of quotes. It does not represent the actual
- * quotes themselves. The class that represents the quotes in a quote range is
- * {@link QuoteBundle}.
+ * A quote range represents a range or set of quotes. It does not represent the
+ * actual quotes themselves. The class that represents the quotes in a quote
+ * range is {@link QuoteBundle}.
  */
 public class EODQuoteRange implements Cloneable {
 
@@ -73,7 +73,7 @@ public class EODQuoteRange implements Cloneable {
 	// The first and last dates in the quote range. If the first date is null
 	// it indicates that we represent all dates available to us
 	private TradingDate firstDate;
-	private TradingDate lastDate;	
+	private TradingDate lastDate;
 
 	// Only one of these two should be set
 	private List symbols = null;
@@ -82,10 +82,10 @@ public class EODQuoteRange implements Cloneable {
 	private int type = 0;
 
 	/**
-	 * Create a quote range that represents all the given symbols for all the
-	 * dates we have quotes.
+	 * Create a quote range that represents all the given symbols for all the dates
+	 * we have quotes.
 	 *
-	 * @param symbols   list of symbols
+	 * @param symbols list of symbols
 	 */
 	public EODQuoteRange(List symbols) {
 		this.symbols = new ArrayList(symbols);
@@ -95,10 +95,10 @@ public class EODQuoteRange implements Cloneable {
 	}
 
 	/**
-	 * Create a quote range that represents all the given symbols for all the
-	 * dates we have quotes.
+	 * Create a quote range that represents all the given symbols for all the dates
+	 * we have quotes.
 	 *
-	 * @param symbols   list of symbols
+	 * @param symbols list of symbols
 	 */
 	public EODQuoteRange(SortedSet symbols) {
 		this.symbols = new ArrayList(symbols);
@@ -108,15 +108,14 @@ public class EODQuoteRange implements Cloneable {
 	}
 
 	/**
-	 * Create a quote range that represents all the given symbols between
-	 * the first and the last dates given (inclusive).
+	 * Create a quote range that represents all the given symbols between the first
+	 * and the last dates given (inclusive).
 	 *
 	 * @param symbols   list of symbols
 	 * @param firstDate earliest date
 	 * @param lastDate  latest date
 	 */
-	public EODQuoteRange(List symbols, TradingDate firstDate,
-			TradingDate lastDate) {
+	public EODQuoteRange(List symbols, TradingDate firstDate, TradingDate lastDate) {
 		this.symbols = new ArrayList(symbols);
 		this.type = GIVEN_SYMBOLS;
 		this.firstDate = firstDate;
@@ -126,8 +125,8 @@ public class EODQuoteRange implements Cloneable {
 	/**
 	 * Create a quote range that represents all the given symbols on the given date.
 	 *
-	 * @param symbols   list of symbols
-	 * @param date      the date
+	 * @param symbols list of symbols
+	 * @param date    the date
 	 */
 	public EODQuoteRange(List symbols, TradingDate date) {
 		this.symbols = new ArrayList(symbols);
@@ -137,10 +136,10 @@ public class EODQuoteRange implements Cloneable {
 	}
 
 	/**
-	 * Create a quote range that represents the given symbol for all the
-	 * dates we have quotes.
+	 * Create a quote range that represents the given symbol for all the dates we
+	 * have quotes.
 	 *
-	 * @param   symbol  the symbol
+	 * @param symbol the symbol
 	 */
 	public EODQuoteRange(Symbol symbol) {
 		this.symbols = new ArrayList();
@@ -152,15 +151,14 @@ public class EODQuoteRange implements Cloneable {
 	}
 
 	/**
-	 * Create a quote range that represents the given symbol between
-	 * the first and the last dates given (inclusive).
+	 * Create a quote range that represents the given symbol between the first and
+	 * the last dates given (inclusive).
 	 *
-	 * @param symbol  the symbol
+	 * @param symbol    the symbol
 	 * @param firstDate earliest date
 	 * @param lastDate  latest date
 	 */
-	public EODQuoteRange(Symbol symbol, TradingDate firstDate,
-			TradingDate lastDate) {
+	public EODQuoteRange(Symbol symbol, TradingDate firstDate, TradingDate lastDate) {
 		this.symbols = new ArrayList();
 		symbols.add(symbol);
 
@@ -170,12 +168,12 @@ public class EODQuoteRange implements Cloneable {
 	}
 
 	/**
-	 * Create a quote range that represents all the symbols of the given
-	 * type on the given date.
+	 * Create a quote range that represents all the symbols of the given type on the
+	 * given date.
 	 *
-	 * @param type      the type, one of {@link #ALL_ORDINARIES}, {@link #ALL_SYMBOLS},
-	 *                  {@link #MARKET_INDICES}
-	 * @param date      the date
+	 * @param type the type, one of {@link #ALL_ORDINARIES}, {@link #ALL_SYMBOLS},
+	 *             {@link #MARKET_INDICES}
+	 * @param date the date
 	 */
 	public EODQuoteRange(int type, TradingDate date) {
 
@@ -188,11 +186,11 @@ public class EODQuoteRange implements Cloneable {
 	}
 
 	/**
-	 * Create a quote range that represents all the symbols of the given
-	 * type between the first and the last dates given (inclusive).
+	 * Create a quote range that represents all the symbols of the given type
+	 * between the first and the last dates given (inclusive).
 	 *
-	 * @param type      the type, one of {@link #ALL_ORDINARIES}, {@link #ALL_SYMBOLS},
-	 *                  {@link #MARKET_INDICES}
+	 * @param type      the type, one of {@link #ALL_ORDINARIES},
+	 *                  {@link #ALL_SYMBOLS}, {@link #MARKET_INDICES}
 	 * @param firstDate earliest date
 	 * @param lastDate  latest date
 	 */
@@ -207,12 +205,11 @@ public class EODQuoteRange implements Cloneable {
 	}
 
 	/**
-	 * Create a quote range that represents all the symbols of the given
-	 * type for all the dates we have quotes.
-	 * This might use up a lot of memory!
+	 * Create a quote range that represents all the symbols of the given type for
+	 * all the dates we have quotes. This might use up a lot of memory!
 	 *
-	 * @param type      the type, one of {@link #ALL_ORDINARIES}, {@link #ALL_SYMBOLS},
-	 *                  {@link #MARKET_INDICES}
+	 * @param type the type, one of {@link #ALL_ORDINARIES}, {@link #ALL_SYMBOLS},
+	 *             {@link #MARKET_INDICES}
 	 */
 	public EODQuoteRange(int type) {
 
@@ -232,12 +229,12 @@ public class EODQuoteRange implements Cloneable {
 	public Object clone() {
 		EODQuoteRange cloned;
 
-		if(type == GIVEN_SYMBOLS)
+		if (type == GIVEN_SYMBOLS)
 			cloned = new EODQuoteRange(symbols, firstDate, lastDate);
 		else
 			cloned = new EODQuoteRange(type, firstDate, lastDate);
 
-		return (Object)cloned;
+		return (Object) cloned;
 	}
 
 	/**
@@ -273,8 +270,8 @@ public class EODQuoteRange implements Cloneable {
 	/**
 	 * Get the first date of the quote range.
 	 *
-	 * @return  the earliest date of the quote range, <code>null</code> indicates
-	 *          that the quote range encompasses all available dates
+	 * @return the earliest date of the quote range, <code>null</code> indicates
+	 *         that the quote range encompasses all available dates
 	 */
 	public TradingDate getFirstDate() {
 		return firstDate;
@@ -283,16 +280,16 @@ public class EODQuoteRange implements Cloneable {
 	/**
 	 * Get the last date of the quote range.
 	 *
-	 * @return  the latest date of the quote range, <code>null</code> indicates
-	 *          that the quote range encompasses all available dates
+	 * @return the latest date of the quote range, <code>null</code> indicates that
+	 *         the quote range encompasses all available dates
 	 */
 	public TradingDate getLastDate() {
 		return lastDate;
 	}
 
 	/**
-	 * Return whether this quote range includes any quotes. This function checks
-	 * for a null quote range, not an empty quote cache.
+	 * Return whether this quote range includes any quotes. This function checks for
+	 * a null quote range, not an empty quote cache.
 	 *
 	 * @return <code>true</code> if this quote range covers an empty range,
 	 *         <code>false</code> otherwise.
@@ -305,7 +302,7 @@ public class EODQuoteRange implements Cloneable {
 	 * Get the type of the quote range.
 	 *
 	 * @return one of {@link #ALL_ORDINARIES}, {@link #ALL_SYMBOLS},
-	 *                {@link #MARKET_INDICES}, {@link #GIVEN_SYMBOLS}
+	 *         {@link #MARKET_INDICES}, {@link #GIVEN_SYMBOLS}
 	 */
 	public int getType() {
 		return type;
@@ -314,23 +311,24 @@ public class EODQuoteRange implements Cloneable {
 	/**
 	 * Returns whether the quote range contains the given symbol.
 	 *
-	 * @param   symbol  the symbol
-	 * @return  <code>true</code> if the symbol is in the quote range, <code>false</code>
-	 *          otherwise
+	 * @param symbol the symbol
+	 * @return <code>true</code> if the symbol is in the quote range,
+	 *         <code>false</code> otherwise
 	 */
 	public boolean containsSymbol(Symbol symbol) {
 
 		// containsSymbols() and containsAllSymbols() could be factored together
-		// but are not since containsSymbol() can be called a lot by QuoteBundle so its best
+		// but are not since containsSymbol() can be called a lot by QuoteBundle so its
+		// best
 		// to keep it as simple as possible
-		if(type == ALL_SYMBOLS)
+		if (type == ALL_SYMBOLS)
 			return true;
 
-		else if(type == GIVEN_SYMBOLS)
+		else if (type == GIVEN_SYMBOLS)
 			return symbols.contains(symbol);
 
-		else if(type == ALL_ORDINARIES)
-			if(!QuoteSourceManager.getSource().isMarketIndex(symbol))
+		else if (type == ALL_ORDINARIES)
+			if (!QuoteSourceManager.getSource().isMarketIndex(symbol))
 				return true;
 			else
 				return false;
@@ -351,34 +349,34 @@ public class EODQuoteRange implements Cloneable {
 	public void addSymbol(Symbol symbol) {
 		assert type == GIVEN_SYMBOLS;
 
-		if(!symbols.contains(symbol))
+		if (!symbols.contains(symbol))
 			symbols.add(symbol);
 	}
 
 	/**
 	 * Returns whether the quote range contains all the given symbols.
 	 *
-	 * @param   containedSymbols        all the symbols to check for
-	 * @return  <code>true</code> if all the symbols are in the quote range, <code>false</code>
-	 *          otherwise
+	 * @param containedSymbols all the symbols to check for
+	 * @return <code>true</code> if all the symbols are in the quote range,
+	 *         <code>false</code> otherwise
 	 */
 	public boolean containsAllSymbols(List containedSymbols) {
 
 		assert containedSymbols != null && containedSymbols.size() > 0;
 
-		if(type == ALL_SYMBOLS)
+		if (type == ALL_SYMBOLS)
 			return true;
 
-		else if(type == GIVEN_SYMBOLS)
+		else if (type == GIVEN_SYMBOLS)
 			return symbols.containsAll(containedSymbols);
 
-		else if(type == ALL_ORDINARIES) {
+		else if (type == ALL_ORDINARIES) {
 			Iterator iterator = containedSymbols.iterator();
 
-			while(iterator.hasNext()) {
-				Symbol symbol = (Symbol)iterator.next();
+			while (iterator.hasNext()) {
+				Symbol symbol = (Symbol) iterator.next();
 
-				if(QuoteSourceManager.getSource().isMarketIndex(symbol))
+				if (QuoteSourceManager.getSource().isMarketIndex(symbol))
 					return false;
 			}
 
@@ -390,10 +388,10 @@ public class EODQuoteRange implements Cloneable {
 
 			Iterator iterator = containedSymbols.iterator();
 
-			while(iterator.hasNext()) {
-				Symbol symbol = (Symbol)iterator.next();
+			while (iterator.hasNext()) {
+				Symbol symbol = (Symbol) iterator.next();
 
-				if(!QuoteSourceManager.getSource().isMarketIndex(symbol))
+				if (!QuoteSourceManager.getSource().isMarketIndex(symbol))
 					return false;
 			}
 
@@ -402,8 +400,8 @@ public class EODQuoteRange implements Cloneable {
 	}
 
 	/**
-	 * Creates a string representation of the quote range without referring
-	 * to the dates.
+	 * Creates a string representation of the quote range without referring to the
+	 * dates.
 	 *
 	 * @return string representation, e.g. "All Ordinaries"
 	 */
@@ -411,23 +409,22 @@ public class EODQuoteRange implements Cloneable {
 
 		// If the type is a list of symbols, we can do better than just
 		// saying "Given Symbols".
-		if(getType() == GIVEN_SYMBOLS) {
+		if (getType() == GIVEN_SYMBOLS) {
 			String string = "";
 
 			Iterator iterator = getAllSymbols().iterator();
 
-			while(iterator.hasNext()) {
-				Symbol symbol = (Symbol)iterator.next();
+			while (iterator.hasNext()) {
+				Symbol symbol = (Symbol) iterator.next();
 
 				string = string.concat(symbol.toString());
 
-				if(iterator.hasNext())
+				if (iterator.hasNext())
 					string = string.concat(", ");
 			}
 
 			return string;
-		}
-		else
+		} else
 			return getDescription(getType());
 	}
 
@@ -439,11 +436,11 @@ public class EODQuoteRange implements Cloneable {
 	 * @return string representation, e.g. "All Ordinaries"
 	 */
 	public static String getDescription(int type) {
-		if(type == ALL_SYMBOLS)
+		if (type == ALL_SYMBOLS)
 			return Locale.getString("ALL_SYMBOLS");
-		else if(type == GIVEN_SYMBOLS)
+		else if (type == GIVEN_SYMBOLS)
 			return Locale.getString("GIVEN_SYMBOLS");
-		else if(type == ALL_ORDINARIES)
+		else if (type == ALL_ORDINARIES)
 			return Locale.getString("ALL_ORDINARIES");
 		else {
 			assert type == MARKET_INDICES;
@@ -455,7 +452,7 @@ public class EODQuoteRange implements Cloneable {
 	 * Create a string representation of the quote range. This is for debugging
 	 * purposes.
 	 *
-	 * @return  string representation
+	 * @return string representation
 	 */
 	public String toString() {
 
@@ -463,24 +460,25 @@ public class EODQuoteRange implements Cloneable {
 		String string = getDescription();
 
 		// Between what dates? (This locale code might need some work).
-		if(getFirstDate() == null)
+		if (getFirstDate() == null)
 			string = Locale.getString("FOR_ALL_DATES", string);
-		else if(getFirstDate().equals(getLastDate()))
+		else if (getFirstDate().equals(getLastDate()))
 			string = Locale.getString("ON_DATE", string, getFirstDate().toString());
 		else
-			string = Locale.getString("BETWEEN_DATES", string, getFirstDate().toString(),
-					getLastDate().toString());
+			string = Locale.getString("BETWEEN_DATES", string, getFirstDate().toString(), getLastDate().toString());
 
 		return string;
 	}
 
 	/**
-	 * Return a new <i>clipped</i> quote range that, if possible, does not overlap with
-	 * this quote range. The idea behind this function is that when we need to load in
-	 * quotes specified from a quote range, we want to check with all the currently loaded
-	 * quote ranges to see if some of the quotes have already been loaded.
+	 * Return a new <i>clipped</i> quote range that, if possible, does not overlap
+	 * with this quote range. The idea behind this function is that when we need to
+	 * load in quotes specified from a quote range, we want to check with all the
+	 * currently loaded quote ranges to see if some of the quotes have already been
+	 * loaded.
 	 * <p>
 	 * e.g.
+	 * 
 	 * <pre>
 	 * EODQuoteRange quoteRange = new EODQuoteRange("CBA", new TradingDate(2000, 1, 1),
 	 *                                              new TradingDate(2000, 12, 1));
@@ -494,57 +492,52 @@ public class EODQuoteRange implements Cloneable {
 	 *
 	 * </pre>
 	 *
-	 * @param   quoteRange      quote range to clip
-	 * @return  the clipped quote range
+	 * @param quoteRange quote range to clip
+	 * @return the clipped quote range
 	 */
 	public EODQuoteRange clip(EODQuoteRange quoteRange) {
 		int overlapType = getOverlapType(quoteRange);
 
-		if(overlapType == CONTAINS || overlapType == PARTIAL_OVERLAP) {
+		if (overlapType == CONTAINS || overlapType == PARTIAL_OVERLAP) {
 
-			if((getType() == ALL_ORDINARIES && quoteRange.getType() == ALL_ORDINARIES) ||
-					(getType() == MARKET_INDICES && quoteRange.getType() == MARKET_INDICES) ||
-					getType() == ALL_SYMBOLS ||
+			if ((getType() == ALL_ORDINARIES && quoteRange.getType() == ALL_ORDINARIES)
+					|| (getType() == MARKET_INDICES && quoteRange.getType() == MARKET_INDICES)
+					|| getType() == ALL_SYMBOLS ||
 
-					(getType() == ALL_ORDINARIES && quoteRange.getType() == GIVEN_SYMBOLS &&
-					containsAllSymbols(quoteRange.getAllSymbols())) ||
+					(getType() == ALL_ORDINARIES && quoteRange.getType() == GIVEN_SYMBOLS
+							&& containsAllSymbols(quoteRange.getAllSymbols()))
+					||
 
-					(getType() == GIVEN_SYMBOLS && quoteRange.getType() == GIVEN_SYMBOLS &&
-					containsAllSymbols(quoteRange.getAllSymbols()))) {
+					(getType() == GIVEN_SYMBOLS && quoteRange.getType() == GIVEN_SYMBOLS
+							&& containsAllSymbols(quoteRange.getAllSymbols()))) {
 
 				// They partially overlap - perform clip
-				if(overlapType == PARTIAL_OVERLAP) {
-					EODQuoteRange clipped = (EODQuoteRange)quoteRange.clone();
+				if (overlapType == PARTIAL_OVERLAP) {
+					EODQuoteRange clipped = (EODQuoteRange) quoteRange.clone();
 
-					// this:        [----------]    -> [----------]
-					// quote range:    [----------]                [-]
-					if(getFirstDate().compareTo(quoteRange.getFirstDate()) <= 0 &&
-							getLastDate().compareTo(quoteRange.getLastDate()) <= 0)
+					// this: [----------] -> [----------]
+					// quote range: [----------] [-]
+					if (getFirstDate().compareTo(quoteRange.getFirstDate()) <= 0
+							&& getLastDate().compareTo(quoteRange.getLastDate()) <= 0)
 						clipped.setFirstDate(getLastDate().next(1));
 
-					// this:           [----------] ->    [----------]
-					// quote range: [----------]       [-]
+					// this: [----------] -> [----------]
+					// quote range: [----------] [-]
 					else {
-						assert
-						getFirstDate().compareTo(quoteRange.getFirstDate()) >= 0 &&
-						getLastDate().compareTo(quoteRange.getLastDate()) >= 0;
+						assert getFirstDate().compareTo(quoteRange.getFirstDate()) >= 0
+								&& getLastDate().compareTo(quoteRange.getLastDate()) >= 0;
 						clipped.setLastDate(getFirstDate().previous(1));
 					}
 
 					return clipped;
 
-				}
-				else {
+				} else {
 					assert overlapType == CONTAINS;
-					return new EODQuoteRange(new ArrayList(),
-							quoteRange.getFirstDate(),
-							quoteRange.getLastDate());
+					return new EODQuoteRange(new ArrayList(), quoteRange.getFirstDate(), quoteRange.getLastDate());
 				}
-			}
-			else
+			} else
 				return quoteRange;
-		}
-		else
+		} else
 			return quoteRange;
 	}
 
@@ -557,24 +550,24 @@ public class EODQuoteRange implements Cloneable {
 	// If the two quotes have the same start date but different
 	// end date (and vice versa), are they contained?
 	// The code used to return PARTIAL_OVERLAP, but this was causing
-	// an assertion to be triggered later on. 
+	// an assertion to be triggered later on.
 	private int getOverlapType(EODQuoteRange quoteRange) {
-		if(getFirstDate() == null)
+		if (getFirstDate() == null)
 			return CONTAINS;
 
-		else if(quoteRange.getFirstDate() == null)
+		else if (quoteRange.getFirstDate() == null)
 			return CONTAINED;
 
-		else if(getFirstDate().compareTo(quoteRange.getLastDate()) > 0 ||
-				getLastDate().compareTo(quoteRange.getFirstDate()) < 0)
+		else if (getFirstDate().compareTo(quoteRange.getLastDate()) > 0
+				|| getLastDate().compareTo(quoteRange.getFirstDate()) < 0)
 			return NO_OVERLAP;
 
-		else if(getFirstDate().compareTo(quoteRange.getFirstDate()) <= 0 &&
-				getLastDate().compareTo(quoteRange.getLastDate()) >= 0)
+		else if (getFirstDate().compareTo(quoteRange.getFirstDate()) <= 0
+				&& getLastDate().compareTo(quoteRange.getLastDate()) >= 0)
 			return CONTAINS;
 
-		else if(getFirstDate().compareTo(quoteRange.getFirstDate()) >= 0 &&
-				getLastDate().compareTo(quoteRange.getLastDate()) <= 0)
+		else if (getFirstDate().compareTo(quoteRange.getFirstDate()) >= 0
+				&& getLastDate().compareTo(quoteRange.getLastDate()) <= 0)
 			return CONTAINED;
 
 		return PARTIAL_OVERLAP;

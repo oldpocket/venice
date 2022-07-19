@@ -18,7 +18,6 @@
 
 package nz.org.venice.alert;
 
-
 import java.util.prefs.Preferences;
 
 import nz.org.venice.prefs.PreferencesManager;
@@ -26,238 +25,194 @@ import nz.org.venice.util.TradingDate;
 
 /**
  * Store new alerts in the filesystem. Update, delete and enable alerts already
- * stored. 
+ * stored.
  * 
  * @author Mark Hummel
  * @see AlertWriter
  */
 
-public class FileAlertWriter implements AlertWriter  {
+public class FileAlertWriter implements AlertWriter {
 
-    public FileAlertWriter() {
-    }
-
-    public void set(OHLCVAlert alert) {
-
-	TradingDate endDate = alert.getEndDate();
-	String endDateString = "NoEndDate";
-
-	if (endDate == null) {
-	    endDateString = "NoEndDate";
-	} else {
-	    endDateString = endDate.toString();
-	}
-	
-	String keyPath = 
-	    alert.getSymbol() + "," +  
-	    alert.getStartDate() + "," + 
-	    endDateString + "," + 
-	    alert.getTargetValue() + "," +
-	    alert.getDateSet() + "," + 
-	    Alert.boundTypeToString(alert.getBoundType()) + "," + 	    
-	    alert.getField();
-	
-	Preferences prefs = PreferencesManager.getUserNode("/table/alerts");	
-	prefs.put(keyPath, "enabled");
-
-	PreferencesManager.flush();
-    }
-
-    public void remove(OHLCVAlert alert) {
-	String endDateString = (alert.getEndDate() == null) ? "NoEndDate" : 
-	    alert.getEndDate().toString();
-
-	String keyPath = 
-	    alert.getSymbol() + "," + 
-	    alert.getStartDate() + "," + 
-	    endDateString + "," + 
-	    alert.getTargetValue() + "," +
-	    alert.getDateSet() + "," +   
-	    Alert.boundTypeToString(alert.getBoundType()) + "," + 
-	    alert.getField();
-	
-	Preferences prefs = PreferencesManager.getUserNode("/table/alerts");	
-	prefs.remove(keyPath);
-	
-	PreferencesManager.flush();
-    }
-
-    public void remove(GondolaAlert alert) {
-	String endDateString = "NoEndDate";
-	if (alert.getEndDate() != null) {
-	    endDateString = alert.getEndDate().toString();
+	public FileAlertWriter() {
 	}
 
-	String keyPath = 
-	    alert.getSymbol() + "," + 
-	    alert.getStartDate() + "," + 
-	    endDateString + "," + 
-	    escapeString(alert.getTargetExpression()) + "," + 
-	    alert.getDateSet();
-	
-	Preferences prefs = 
-	    PreferencesManager.getUserNode("/table/alerts");	
-	prefs.remove(keyPath);
-	
-	PreferencesManager.flush();
-    }
+	public void set(OHLCVAlert alert) {
 
-    public void set(GondolaAlert alert) {
-	String endDateString = "NoEndDate";
-	if (alert.getEndDate() != null) {
-	    endDateString = alert.getEndDate().toString();
+		TradingDate endDate = alert.getEndDate();
+		String endDateString = "NoEndDate";
+
+		if (endDate == null) {
+			endDateString = "NoEndDate";
+		} else {
+			endDateString = endDate.toString();
+		}
+
+		String keyPath = alert.getSymbol() + "," + alert.getStartDate() + "," + endDateString + ","
+				+ alert.getTargetValue() + "," + alert.getDateSet() + ","
+				+ Alert.boundTypeToString(alert.getBoundType()) + "," + alert.getField();
+
+		Preferences prefs = PreferencesManager.getUserNode("/table/alerts");
+		prefs.put(keyPath, "enabled");
+
+		PreferencesManager.flush();
 	}
 
-	String keyPath = 
-	    alert.getSymbol() + "," + 
-	    alert.getStartDate() + "," + 
-	    endDateString + "," + 
-	    escapeString(alert.getTargetExpression()) + "," + 
-	    alert.getDateSet();
-	
-	Preferences prefs = PreferencesManager.getUserNode("/table/alerts");	
-	prefs.put(keyPath, "enabled");
+	public void remove(OHLCVAlert alert) {
+		String endDateString = (alert.getEndDate() == null) ? "NoEndDate" : alert.getEndDate().toString();
 
-	PreferencesManager.flush();
-    }
+		String keyPath = alert.getSymbol() + "," + alert.getStartDate() + "," + endDateString + ","
+				+ alert.getTargetValue() + "," + alert.getDateSet() + ","
+				+ Alert.boundTypeToString(alert.getBoundType()) + "," + alert.getField();
 
+		Preferences prefs = PreferencesManager.getUserNode("/table/alerts");
+		prefs.remove(keyPath);
 
-
-    public void update(Alert alert, OHLCVAlert newAlert) {		
-	remove(alert);
-	set(newAlert);
-
-	PreferencesManager.flush();
-    }
-
-    public void update(Alert alert, GondolaAlert newAlert) {		
-	remove(alert);
-	set(newAlert);
-
-	PreferencesManager.flush();
-    }
-
-   
-    public void enable(GondolaAlert alert) {
-	String keyPath = 
-	    alert.getSymbol() + "," + 
-	    Alert.boundTypeToString(alert.getBoundType()) + "," + 
-	    escapeString(alert.getTargetExpression()) + 
-	    alert.getDateSet();
-	
-	Preferences prefs = PreferencesManager.getUserNode("/table/alerts");	
-	prefs.remove(keyPath);
-	prefs.put(keyPath, "enabled");
-
-	PreferencesManager.flush();
-    }
-
-    
-
-    public void disable(GondolaAlert alert) {
-	String keyPath = 
-	    alert.getSymbol() + "," + 
-	    Alert.boundTypeToString(alert.getBoundType()) + "," + 
-	    escapeString(alert.getTargetExpression()) + 
-	    alert.getDateSet();
-	
-	Preferences prefs = PreferencesManager.getUserNode("/table/alerts");	
-	prefs.remove(keyPath);
-	prefs.put(keyPath, "disabled");
-
-	PreferencesManager.flush();
-    }
-    
-    public void enable(OHLCVAlert alert) {
-	
-	String endDateString = (alert.getEndDate() == null) 
-	    ? "NoEndDate" 
-	    : alert.getEndDate().toString();	    
-
-	String keyPath = 
-	    alert.getSymbol() + "," + 
-	    alert.getStartDate() + "," + 
-	    endDateString + "," + 
-	    alert.getTargetValue() + "," + 
-	    alert.getDateSet() + "," + 
-	    Alert.boundTypeToString(alert.getBoundType()) + "," + 
-	    alert.getField();
-	
-	Preferences prefs = PreferencesManager.getUserNode("/table/alerts");	
-	prefs.remove(keyPath);
-	prefs.put(keyPath, "enabled");
-
-	PreferencesManager.flush();
-    }
-
-    public void disable(OHLCVAlert alert) {
-	String endDateString = (alert.getEndDate() == null) 
-	    ? "NoEndDate" 
-	    : alert.getEndDate().toString();	    
-
-	String keyPath = 
-	    alert.getSymbol() + "," + 
-	    alert.getStartDate() + "," + 
-	    endDateString + "," + 
-	    alert.getTargetValue() + "," + 
-	    alert.getDateSet() + "," + 
-	    Alert.boundTypeToString(alert.getBoundType()) + "," + 
-	    alert.getField();
-
-	Preferences prefs = PreferencesManager.getUserNode("/table/alerts");	
-	prefs.remove(keyPath);
-	prefs.put(keyPath, "disabled");
-
-	PreferencesManager.flush();
-    }
-
-    public void set(Alert alert) {	
-	if (alert.getType() == Alert.GONDOLA) {
-	    GondolaAlert alertToAdd = (GondolaAlert)alert;
-	    disable(alertToAdd);
-	} else {
-	    OHLCVAlert alertToAdd = (OHLCVAlert)alert;
-	    disable(alertToAdd);
+		PreferencesManager.flush();
 	}
-    }
 
-    public void remove(Alert alert) {
-	if (alert.getType() == Alert.GONDOLA) {
-	    GondolaAlert alertToRemove = (GondolaAlert)alert;	    
-	    remove(alertToRemove);
-	} else {
-	    OHLCVAlert alertToRemove = (OHLCVAlert)alert;	    
-	    remove(alertToRemove);
+	public void remove(GondolaAlert alert) {
+		String endDateString = "NoEndDate";
+		if (alert.getEndDate() != null) {
+			endDateString = alert.getEndDate().toString();
+		}
+
+		String keyPath = alert.getSymbol() + "," + alert.getStartDate() + "," + endDateString + ","
+				+ escapeString(alert.getTargetExpression()) + "," + alert.getDateSet();
+
+		Preferences prefs = PreferencesManager.getUserNode("/table/alerts");
+		prefs.remove(keyPath);
+
+		PreferencesManager.flush();
 	}
-    }
-    
-    public void enable(Alert alert) {
-	if (alert.getType() == Alert.GONDOLA) {
-	    GondolaAlert alertToEnable = (GondolaAlert)alert;
-	    enable(alertToEnable);
-	} else {
-	    OHLCVAlert alertToEnable = (OHLCVAlert)alert;
-	    enable(alertToEnable);
+
+	public void set(GondolaAlert alert) {
+		String endDateString = "NoEndDate";
+		if (alert.getEndDate() != null) {
+			endDateString = alert.getEndDate().toString();
+		}
+
+		String keyPath = alert.getSymbol() + "," + alert.getStartDate() + "," + endDateString + ","
+				+ escapeString(alert.getTargetExpression()) + "," + alert.getDateSet();
+
+		Preferences prefs = PreferencesManager.getUserNode("/table/alerts");
+		prefs.put(keyPath, "enabled");
+
+		PreferencesManager.flush();
 	}
-    }
-    public void disable(Alert alert) {
-	if (alert.getType() == Alert.GONDOLA) {
-	    GondolaAlert alertToDisable = (GondolaAlert)alert;
-	    disable(alertToDisable);
-	} else {
-	    OHLCVAlert alertToDisable = (OHLCVAlert)alert;
-	    disable(alertToDisable);
+
+	public void update(Alert alert, OHLCVAlert newAlert) {
+		remove(alert);
+		set(newAlert);
+
+		PreferencesManager.flush();
 	}
-    }
-    
-    //File alerts are saved as CSV - commas in expressions need to be
-    //escaped out.
-    private String escapeString(String expression) {
-	if (expression.indexOf(',') == -1) {
-	    return expression;
-	} else {
-	    String rv = expression.replaceAll(",","#COMMAREPLACED");
-	    return rv;
+
+	public void update(Alert alert, GondolaAlert newAlert) {
+		remove(alert);
+		set(newAlert);
+
+		PreferencesManager.flush();
 	}
-    }
+
+	public void enable(GondolaAlert alert) {
+		String keyPath = alert.getSymbol() + "," + Alert.boundTypeToString(alert.getBoundType()) + ","
+				+ escapeString(alert.getTargetExpression()) + alert.getDateSet();
+
+		Preferences prefs = PreferencesManager.getUserNode("/table/alerts");
+		prefs.remove(keyPath);
+		prefs.put(keyPath, "enabled");
+
+		PreferencesManager.flush();
+	}
+
+	public void disable(GondolaAlert alert) {
+		String keyPath = alert.getSymbol() + "," + Alert.boundTypeToString(alert.getBoundType()) + ","
+				+ escapeString(alert.getTargetExpression()) + alert.getDateSet();
+
+		Preferences prefs = PreferencesManager.getUserNode("/table/alerts");
+		prefs.remove(keyPath);
+		prefs.put(keyPath, "disabled");
+
+		PreferencesManager.flush();
+	}
+
+	public void enable(OHLCVAlert alert) {
+
+		String endDateString = (alert.getEndDate() == null) ? "NoEndDate" : alert.getEndDate().toString();
+
+		String keyPath = alert.getSymbol() + "," + alert.getStartDate() + "," + endDateString + ","
+				+ alert.getTargetValue() + "," + alert.getDateSet() + ","
+				+ Alert.boundTypeToString(alert.getBoundType()) + "," + alert.getField();
+
+		Preferences prefs = PreferencesManager.getUserNode("/table/alerts");
+		prefs.remove(keyPath);
+		prefs.put(keyPath, "enabled");
+
+		PreferencesManager.flush();
+	}
+
+	public void disable(OHLCVAlert alert) {
+		String endDateString = (alert.getEndDate() == null) ? "NoEndDate" : alert.getEndDate().toString();
+
+		String keyPath = alert.getSymbol() + "," + alert.getStartDate() + "," + endDateString + ","
+				+ alert.getTargetValue() + "," + alert.getDateSet() + ","
+				+ Alert.boundTypeToString(alert.getBoundType()) + "," + alert.getField();
+
+		Preferences prefs = PreferencesManager.getUserNode("/table/alerts");
+		prefs.remove(keyPath);
+		prefs.put(keyPath, "disabled");
+
+		PreferencesManager.flush();
+	}
+
+	public void set(Alert alert) {
+		if (alert.getType() == Alert.GONDOLA) {
+			GondolaAlert alertToAdd = (GondolaAlert) alert;
+			disable(alertToAdd);
+		} else {
+			OHLCVAlert alertToAdd = (OHLCVAlert) alert;
+			disable(alertToAdd);
+		}
+	}
+
+	public void remove(Alert alert) {
+		if (alert.getType() == Alert.GONDOLA) {
+			GondolaAlert alertToRemove = (GondolaAlert) alert;
+			remove(alertToRemove);
+		} else {
+			OHLCVAlert alertToRemove = (OHLCVAlert) alert;
+			remove(alertToRemove);
+		}
+	}
+
+	public void enable(Alert alert) {
+		if (alert.getType() == Alert.GONDOLA) {
+			GondolaAlert alertToEnable = (GondolaAlert) alert;
+			enable(alertToEnable);
+		} else {
+			OHLCVAlert alertToEnable = (OHLCVAlert) alert;
+			enable(alertToEnable);
+		}
+	}
+
+	public void disable(Alert alert) {
+		if (alert.getType() == Alert.GONDOLA) {
+			GondolaAlert alertToDisable = (GondolaAlert) alert;
+			disable(alertToDisable);
+		} else {
+			OHLCVAlert alertToDisable = (OHLCVAlert) alert;
+			disable(alertToDisable);
+		}
+	}
+
+	// File alerts are saved as CSV - commas in expressions need to be
+	// escaped out.
+	private String escapeString(String expression) {
+		if (expression.indexOf(',') == -1) {
+			return expression;
+		} else {
+			String rv = expression.replaceAll(",", "#COMMAREPLACED");
+			return rv;
+		}
+	}
 }

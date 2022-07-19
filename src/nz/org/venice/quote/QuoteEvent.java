@@ -21,8 +21,8 @@ package nz.org.venice.quote;
 import java.util.EventObject;
 
 /**
- * Representation of an event indicating that a new intra-day
- * quote has been downloaded.
+ * Representation of an event indicating that a new intra-day quote has been
+ * downloaded.
  *
  * @author Andrew Leppard
  * @see IDQuoteCache
@@ -30,12 +30,12 @@ import java.util.EventObject;
  */
 public class QuoteEvent extends EventObject {
 
-    /**
-     * Create a new quote event based on the given module.
-     *
-     * @param quoteCache The intra-day quote cache
-     */
-    public QuoteEvent(IDQuoteCache quoteCache) {
-        super(quoteCache);
-    }
+	/**
+	 * Create a new quote event based on the given module.
+	 *
+	 * @param quoteCache The intra-day quote cache
+	 */
+	public QuoteEvent(IDQuoteCache quoteCache) {
+		super(quoteCache);
+	}
 }

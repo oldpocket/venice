@@ -22,50 +22,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An exception which is raised when there is a problem parsing or
- * verifying a quote.
+ * An exception which is raised when there is a problem parsing or verifying a
+ * quote.
  *
  * @author Andrew Leppard
  */
 public class QuoteFormatException extends Throwable {
 
-    // List of quote format problems
-    private List messages;
+	// List of quote format problems
+	private List messages;
 
-    /**
-     * Create a new quote format exception.
-     *
-     * @param message the reason the quote was invalid
-     */
-    public QuoteFormatException(String message) {
-        messages = new ArrayList();
-        messages.add(message);
-    }
+	/**
+	 * Create a new quote format exception.
+	 *
+	 * @param message the reason the quote was invalid
+	 */
+	public QuoteFormatException(String message) {
+		messages = new ArrayList();
+		messages.add(message);
+	}
 
-    /**
-     * Create a new quote format exception.
-     *
-     * @param messages a list of reasons the quote was invalid
-     */
-    public QuoteFormatException(List messages) {
-        this.messages = messages;
-    }
+	/**
+	 * Create a new quote format exception.
+	 *
+	 * @param messages a list of reasons the quote was invalid
+	 */
+	public QuoteFormatException(List messages) {
+		this.messages = messages;
+	}
 
-    /**
-     * Return the reasons the quote was invalid.
-     *
-     * @return reasons
-     */
-    public List getMessages() {
-        return messages;
-    }
+	/**
+	 * Return the reasons the quote was invalid.
+	 *
+	 * @return reasons
+	 */
+	public List getMessages() {
+		return messages;
+	}
 
-    /**
-     * Return the first reason the quote was invalid.
-     *
-     * @return first reason
-     */
-    public String getMessage() {
-        return (String)messages.get(0);
-    }
+	/**
+	 * Return the first reason the quote was invalid.
+	 *
+	 * @return first reason
+	 */
+	public String getMessage() {
+		return (String) messages.get(0);
+	}
 }

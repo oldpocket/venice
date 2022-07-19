@@ -34,67 +34,64 @@ import nz.org.venice.quote.Symbol;
  */
 public class RandomWithSeedExpression extends UnaryExpression {
 
-    private Random random;
+	private Random random;
 
-    /**
-     * Create a new random expression for the given <code>seed</code>
-     */    
+	/**
+	 * Create a new random expression for the given <code>seed</code>
+	 */
 
-    public RandomWithSeedExpression(Expression arg) {
-	super(arg);
-        random = new Random();
-    }
-
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
-	throws EvaluationException {
-
-	double seed = getChild(0).evaluate(variables, 
-					   quoteBundle, 
-					   symbol,
-					   day);
-	    
-	random.setSeed( (long)seed);	 
-	return random.nextDouble();            	
-    }
-
-    /**
-     * Check the optional input argument to the expression. It can only be
-     * {@link #INTEGER_TYPE} or {@link #FLOAT_TYPE}
-     *
-     * @return the type of the expression
-     */
-    public int checkType() throws TypeMismatchException {
-	if (getChild(0) != null) {
-	    int type = getChild(0).checkType();
-	    if (type == FLOAT_TYPE || type == INTEGER_TYPE) {
-		return getType();
-	    } else {
-		throw new TypeMismatchException(this, type, FLOAT_TYPE);
-	    }
+	public RandomWithSeedExpression(Expression arg) {
+		super(arg);
+		random = new Random();
 	}
-	return getType();
-    }
 
-    /**
-     * Return the name of the expression. *
-     * @return random()
-     */
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-    public String toString() {
-	return new String("random()");
-    }
-    
+		double seed = getChild(0).evaluate(variables, quoteBundle, symbol, day);
 
-    /**
-     * Get the type of the expression
-     * 
-     * @return {@link #FLOAT_TYPE}
-     */
-    public int getType() {
-	return FLOAT_TYPE;
-    }
+		random.setSeed((long) seed);
+		return random.nextDouble();
+	}
 
-    public Object clone() {	
-        return new RandomWithSeedExpression(getChild(0));
-    }
+	/**
+	 * Check the optional input argument to the expression. It can only be
+	 * {@link #INTEGER_TYPE} or {@link #FLOAT_TYPE}
+	 *
+	 * @return the type of the expression
+	 */
+	public int checkType() throws TypeMismatchException {
+		if (getChild(0) != null) {
+			int type = getChild(0).checkType();
+			if (type == FLOAT_TYPE || type == INTEGER_TYPE) {
+				return getType();
+			} else {
+				throw new TypeMismatchException(this, type, FLOAT_TYPE);
+			}
+		}
+		return getType();
+	}
+
+	/**
+	 * Return the name of the expression. *
+	 * 
+	 * @return random()
+	 */
+
+	public String toString() {
+		return new String("random()");
+	}
+
+	/**
+	 * Get the type of the expression
+	 * 
+	 * @return {@link #FLOAT_TYPE}
+	 */
+	public int getType() {
+		return FLOAT_TYPE;
+	}
+
+	public Object clone() {
+		return new RandomWithSeedExpression(getChild(0));
+	}
 }

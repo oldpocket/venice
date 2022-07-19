@@ -16,10 +16,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-
 package nz.org.venice.prefs.settings;
-
 
 /**
  * This class represents WatchScreen Module data  which can restore modules upon restart. 
@@ -44,57 +41,50 @@ import nz.org.venice.table.PortfolioTableModule;
 import nz.org.venice.util.TradingDate;
 
 public class PortfolioTableModuleSettings extends AbstractSettings {
-    
-    /**
-     * 
-     * PortfolioTableModule default constructor
-     */
 
-    public PortfolioTableModuleSettings() {
-	super(Settings.TABLE, Settings.PORTFOLIOTABLEMODULE);
-    }
+	/**
+	 * 
+	 * PortfolioTableModule default constructor
+	 */
 
+	public PortfolioTableModuleSettings() {
+		super(Settings.TABLE, Settings.PORTFOLIOTABLEMODULE);
+	}
 
-    /**
-     * 
-     * Construct a WatchScreenSettings module with the title as key
-     *
-     * @param  title  The title of the WatchScreen
-     */
-    public PortfolioTableModuleSettings(String title) {
-	super(Settings.TABLE, Settings.PORTFOLIOTABLEMODULE);
-	super.setTitle(title);
-    }
+	/**
+	 * 
+	 * Construct a WatchScreenSettings module with the title as key
+	 *
+	 * @param title The title of the WatchScreen
+	 */
+	public PortfolioTableModuleSettings(String title) {
+		super(Settings.TABLE, Settings.PORTFOLIOTABLEMODULE);
+		super.setTitle(title);
+	}
 
-    /**
-     *
-     * Return a WatchScreenModule based on the WatchScreenSettings
-     * 
-     * @param  desktop  The Venice desktop
-     * @return  A WatchScreenModule     
-     */
+	/**
+	 *
+	 * Return a WatchScreenModule based on the WatchScreenSettings
+	 * 
+	 * @param desktop The Venice desktop
+	 * @return A WatchScreenModule
+	 */
 
-    public Module getModule(JDesktopPane desktop) {
-	
-	try {
-	    Portfolio portfolio = PreferencesManager.getPortfolio(getTitle());
-	    TradingDate lastDate = QuoteSourceManager.getSource().getLastDate();
-	    
+	public Module getModule(JDesktopPane desktop) {
 
-	   
+		try {
+			Portfolio portfolio = PreferencesManager.getPortfolio(getTitle());
+			TradingDate lastDate = QuoteSourceManager.getSource().getLastDate();
 
-	    if (lastDate != null) {	
+			if (lastDate != null) {
 
-		EODQuoteRange quoteRange = 
-		    new EODQuoteRange(portfolio.getStocksHeld(),
-				       lastDate.previous(1),
-				       lastDate);
-		
-		EODQuoteBundle quoteBundle = new EODQuoteBundle(quoteRange);		
-		return new PortfolioTableModule(portfolio, quoteBundle);
-	    }	    	    
-	} catch (PreferencesException pfe) {
-	}	
-	return null;	    
-    }
+				EODQuoteRange quoteRange = new EODQuoteRange(portfolio.getStocksHeld(), lastDate.previous(1), lastDate);
+
+				EODQuoteBundle quoteBundle = new EODQuoteBundle(quoteRange);
+				return new PortfolioTableModule(portfolio, quoteBundle);
+			}
+		} catch (PreferencesException pfe) {
+		}
+		return null;
+	}
 }

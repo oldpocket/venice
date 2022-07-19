@@ -33,228 +33,214 @@ import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
 
 public class KDGraph extends AbstractGraph {
-    private Graphable indicatorKGraphable = null;
-    private Graphable indicatorDGraphable = null;
-    private GraphSource low = null;
-    private GraphSource high = null;
-    private GraphSource close = null;
+	private Graphable indicatorKGraphable = null;
+	private Graphable indicatorDGraphable = null;
+	private GraphSource low = null;
+	private GraphSource high = null;
+	private GraphSource close = null;
 
-    public KDGraph(GraphSource low, GraphSource high, GraphSource close) {
-    	this(low,high,close,new HashMap());
-    }
+	public KDGraph(GraphSource low, GraphSource high, GraphSource close) {
+		this(low, high, close, new HashMap());
+	}
 
-    public KDGraph(GraphSource low, GraphSource high, GraphSource close, HashMap settings) {
-        super(null);
-        this.low = low;
-        this.high = high;
-        this.close = close;
-        this.setSettings(settings);
-    }
+	public KDGraph(GraphSource low, GraphSource high, GraphSource close, HashMap settings) {
+		super(null);
+		this.low = low;
+		this.high = high;
+		this.close = close;
+		this.setSettings(settings);
+	}
 
+	public void render(Graphics g, Color colour, int xoffset, int yoffset, double horizontalScale, double verticalScale,
+			double topLineValue, double bottomLineValue, List xRange, boolean vertOrientation) {
 
-    public void render(Graphics g, Color colour, int xoffset, int yoffset,
-		       double horizontalScale, double verticalScale,
-		       double topLineValue, double bottomLineValue, 
-		       List xRange, 
-		       boolean vertOrientation) {
-    	
-    	g.setColor(Color.red);
-    	GraphTools.renderLine(g, indicatorDGraphable, xoffset, yoffset,
-		      horizontalScale,
-		      verticalScale, 
-		      topLineValue, bottomLineValue, 
-		      xRange, 
-		      vertOrientation);
+		g.setColor(Color.red);
+		GraphTools.renderLine(g, indicatorDGraphable, xoffset, yoffset, horizontalScale, verticalScale, topLineValue,
+				bottomLineValue, xRange, vertOrientation);
 
-    	g.setColor(Color.green.darker());
-    	GraphTools.renderLine(g, indicatorKGraphable, xoffset, yoffset,
-			      horizontalScale,
-			      verticalScale, 
-			      topLineValue, bottomLineValue, 
-			      xRange, 
-			      vertOrientation);
+		g.setColor(Color.green.darker());
+		GraphTools.renderLine(g, indicatorKGraphable, xoffset, yoffset, horizontalScale, verticalScale, topLineValue,
+				bottomLineValue, xRange, vertOrientation);
 
-    }
+	}
 
-    public void createKDGraph(Graphable lowGraph, Graphable highGraph, Graphable closeGraph, int period, int ksmooth, int dsmooth) {
-    	indicatorKGraphable = new Graphable();
-    	indicatorDGraphable = new Graphable();
+	public void createKDGraph(Graphable lowGraph, Graphable highGraph, Graphable closeGraph, int period, int ksmooth,
+			int dsmooth) {
+		indicatorKGraphable = new Graphable();
+		indicatorDGraphable = new Graphable();
 
-        TradingDate date = (TradingDate)closeGraph.getStartX();
-        
-        List closes = new ArrayList(); //<Double>
-        List fastks = new ArrayList(); //<Double>
-        List ks = new ArrayList(); //<Double>
-        List ds = new ArrayList(); //<Double>
-        
-        List highs = new ArrayList(); //<Double>
-        List lows = new ArrayList();//<Double>
-        Double maxhigh = new Double(Double.MIN_VALUE);
-        Double minlow = new Double(Double.MAX_VALUE);
-        
-        for(Iterator hiter = highGraph.iterator(), liter = lowGraph.iterator(), citer = closeGraph.iterator();
-        		hiter.hasNext() && liter.hasNext() && citer.hasNext();
-        		) {
-            date = (TradingDate)citer.next();
-            boolean added = false;
-            
-            Double currentClose = closeGraph.getY(date); 
+		TradingDate date = (TradingDate) closeGraph.getStartX();
 
-            if (currentClose.isNaN()) continue;
-            
-            Double currentHigh = highGraph.getY(date);
-            Double currentLow =lowGraph.getY(date); 
+		List closes = new ArrayList(); // <Double>
+		List fastks = new ArrayList(); // <Double>
+		List ks = new ArrayList(); // <Double>
+		List ds = new ArrayList(); // <Double>
 
-            closes.add(currentClose);
-            highs.add(currentHigh);
-            lows.add(currentLow);
+		List highs = new ArrayList(); // <Double>
+		List lows = new ArrayList();// <Double>
+		Double maxhigh = new Double(Double.MIN_VALUE);
+		Double minlow = new Double(Double.MAX_VALUE);
 
-         // Calculate KD only when we have enough data
-            if (closes.size()>=period) {
-            	if (maxhigh.equals(new Double(Double.MIN_VALUE))) {
-            		minlow = new Double(Double.MAX_VALUE);
-            		for(int i = 0;i<highs.size();i++) {
-            			if (((Double) highs.get(i)).compareTo(maxhigh) > 0 ) maxhigh = (Double)highs.get(i);
-            			if (((Double)lows.get(i)).compareTo(minlow) < 0 ) minlow = (Double)lows.get(i);
-            		}
-            	} else {
-            		if (currentHigh.compareTo(maxhigh) > 0) maxhigh = currentHigh;
-            		if (currentLow.compareTo(minlow) < 0) minlow = currentLow;
-            	}
-                fastks.add(new Double((
-                		(currentClose.doubleValue()-minlow.doubleValue())
-                		/(maxhigh.doubleValue()-minlow.doubleValue()))*100.0));
-                // Calculate Slow K if K Smooth > 1 and corresponding D
-                int fastksize = fastks.size();
-                if (fastksize>ksmooth) {
-                	Double k = new Double(0.0);
-                	for(int i = 1;i<=ksmooth;i++)
-            			k = new Double(k.doubleValue() + ((Double)fastks.get(fastksize-i)).doubleValue());
-                	k = new Double(k.doubleValue()/ksmooth);
-                	ks.add(k);
-                	// We require at least 3 K to calculate D
-                	int kssize = ks.size();
-                	if (kssize>2) {
-                		Double d = new Double(0.0);
-                    	for(int i = 1;i<=dsmooth;i++)
-                			d = new Double(d.doubleValue() + ((Double)ks.get(kssize-i)).doubleValue());
-            			d = new Double(d.doubleValue()/dsmooth);
-                    	ds.add(d);
-                		indicatorKGraphable.putY(date, (Double)ks.get(kssize-1));
-                		indicatorDGraphable.putY(date, d);
-                		added = true;
-                	} else
-                		ds.add(new Double(0.0));
-                }
-                closes.remove(0);
-                // max or min being removed is the last high value, recalculate all
-                if ((maxhigh.equals(highs.get(0)) || minlow.equals(lows.get(0))))
-            		maxhigh = new Double(Double.MIN_VALUE);
-                highs.remove(0);
-                lows.remove(0);
-            }
-            if (!added) {
-        		indicatorKGraphable.putY(date, new Double(0.0));
-        		indicatorDGraphable.putY(date, new Double(0.0));
-            }
-            
-        }
-    }
+		for (Iterator hiter = highGraph.iterator(), liter = lowGraph.iterator(), citer = closeGraph.iterator(); hiter
+				.hasNext() && liter.hasNext() && citer.hasNext();) {
+			date = (TradingDate) citer.next();
+			boolean added = false;
 
-    public String getSourceName() {
-    	return close.getName();
-    }
-    
-    public int getSourceType() {
-    	return close.getType();
-    }
+			Double currentClose = closeGraph.getY(date);
 
-    public Comparable getStartX() {
-    	return close.getGraphable().getStartX();
-    }
-    
-    public Comparable getEndX() {
-    	return close.getGraphable().getEndX();
-    }
-    
-    public Set getXRange() {
-    	return close.getGraphable().getXRange();
-    }
-    
-    public double[] getAcceptableMajorDeltas() {
+			if (currentClose.isNaN())
+				continue;
 
-	    double[] major = {0.001D, // 0.1c
-			     0.01D, // 1c
-			     0.1D, // 10c
-			     1.0D, // $1
-			     10.0D, // $10
-			     100.0D, // $100
-			     1000.0D}; // $1000
-	    return major;	
-    }
+			Double currentHigh = highGraph.getY(date);
+			Double currentLow = lowGraph.getY(date);
 
-    public double[] getAcceptableMinorDeltas() {
-	    double[] minor = {1D, 1.1D, 1.25D, 1.3333D, 1.5D, 2D, 2.25D,
-			     2.5D, 3D, 3.3333D, 4D, 5D, 6D, 6.5D, 7D, 7.5D,
-			     8D, 9D};
-	    return minor;
-    }
+			closes.add(currentClose);
+			highs.add(currentHigh);
+			lows.add(currentLow);
 
-    public double getHighestY(List x) {
-    	return 100.0;
-    }
+			// Calculate KD only when we have enough data
+			if (closes.size() >= period) {
+				if (maxhigh.equals(new Double(Double.MIN_VALUE))) {
+					minlow = new Double(Double.MAX_VALUE);
+					for (int i = 0; i < highs.size(); i++) {
+						if (((Double) highs.get(i)).compareTo(maxhigh) > 0)
+							maxhigh = (Double) highs.get(i);
+						if (((Double) lows.get(i)).compareTo(minlow) < 0)
+							minlow = (Double) lows.get(i);
+					}
+				} else {
+					if (currentHigh.compareTo(maxhigh) > 0)
+						maxhigh = currentHigh;
+					if (currentLow.compareTo(minlow) < 0)
+						minlow = currentLow;
+				}
+				fastks.add(new Double(((currentClose.doubleValue() - minlow.doubleValue())
+						/ (maxhigh.doubleValue() - minlow.doubleValue())) * 100.0));
+				// Calculate Slow K if K Smooth > 1 and corresponding D
+				int fastksize = fastks.size();
+				if (fastksize > ksmooth) {
+					Double k = new Double(0.0);
+					for (int i = 1; i <= ksmooth; i++)
+						k = new Double(k.doubleValue() + ((Double) fastks.get(fastksize - i)).doubleValue());
+					k = new Double(k.doubleValue() / ksmooth);
+					ks.add(k);
+					// We require at least 3 K to calculate D
+					int kssize = ks.size();
+					if (kssize > 2) {
+						Double d = new Double(0.0);
+						for (int i = 1; i <= dsmooth; i++)
+							d = new Double(d.doubleValue() + ((Double) ks.get(kssize - i)).doubleValue());
+						d = new Double(d.doubleValue() / dsmooth);
+						ds.add(d);
+						indicatorKGraphable.putY(date, (Double) ks.get(kssize - 1));
+						indicatorDGraphable.putY(date, d);
+						added = true;
+					} else
+						ds.add(new Double(0.0));
+				}
+				closes.remove(0);
+				// max or min being removed is the last high value, recalculate all
+				if ((maxhigh.equals(highs.get(0)) || minlow.equals(lows.get(0))))
+					maxhigh = new Double(Double.MIN_VALUE);
+				highs.remove(0);
+				lows.remove(0);
+			}
+			if (!added) {
+				indicatorKGraphable.putY(date, new Double(0.0));
+				indicatorDGraphable.putY(date, new Double(0.0));
+			}
 
-    // Lowest Y value is the lowest of both the moving averages
-    public double getLowestY(List x) {
-    	return 0.0d;
-    }
-    
-    // Override vertical axis
-    public String getYLabel(double value) {
-    	return new Integer((int)value).toString();
-    }
-    
-    public void setSettings(HashMap settings) {
-        super.setSettings(settings);
-        int period = KDGraphUI.getPeriod(settings);
-        int ksmooth = KDGraphUI.getKSmooth(settings);
-        int dsmooth = KDGraphUI.getDSmooth(settings);
-        createKDGraph(low.getGraphable(), high.getGraphable(), close.getGraphable(), period, ksmooth, dsmooth);
-    }
+		}
+	}
 
-    /**
-     * Return the name of this graph.
-     *
-     * @return <code></code>
-     */
-    public String getName() {
-        return Locale.getString("KD");
-    }
+	public String getSourceName() {
+		return close.getName();
+	}
 
-    public boolean isPrimary() {
-        return false;
-    }
-    
-    public String getToolTipText(Comparable x, int y, int yoffset, double verticalScale, double bottomLineValue) {
-		   return this.getToolTipText(x);
-    }
-    
-    public String getToolTipText(Comparable x) {
-		TradingDate date = (TradingDate)x;
-	
-		return
-		    new String("<html>"+
-		    		date.toLongString()+"<p>" +
-    				"<font color=green>K "+((float)((int)(indicatorKGraphable.getY(x).floatValue()*100))/100)+"</font>" +
-		    		"&nbsp;"+
-					"<font color=red>D "+((float)((int)(indicatorDGraphable.getY(x).floatValue()*100))/100)+"</font>" +
-					"</p></html>");
-    }
-    
-    public GraphUI getUI(HashMap settings) {
-        return new KDGraphUI(settings);
-    }
+	public int getSourceType() {
+		return close.getType();
+	}
+
+	public Comparable getStartX() {
+		return close.getGraphable().getStartX();
+	}
+
+	public Comparable getEndX() {
+		return close.getGraphable().getEndX();
+	}
+
+	public Set getXRange() {
+		return close.getGraphable().getXRange();
+	}
+
+	public double[] getAcceptableMajorDeltas() {
+
+		double[] major = { 0.001D, // 0.1c
+				0.01D, // 1c
+				0.1D, // 10c
+				1.0D, // $1
+				10.0D, // $10
+				100.0D, // $100
+				1000.0D }; // $1000
+		return major;
+	}
+
+	public double[] getAcceptableMinorDeltas() {
+		double[] minor = { 1D, 1.1D, 1.25D, 1.3333D, 1.5D, 2D, 2.25D, 2.5D, 3D, 3.3333D, 4D, 5D, 6D, 6.5D, 7D, 7.5D, 8D,
+				9D };
+		return minor;
+	}
+
+	public double getHighestY(List x) {
+		return 100.0;
+	}
+
+	// Lowest Y value is the lowest of both the moving averages
+	public double getLowestY(List x) {
+		return 0.0d;
+	}
+
+	// Override vertical axis
+	public String getYLabel(double value) {
+		return new Integer((int) value).toString();
+	}
+
+	public void setSettings(HashMap settings) {
+		super.setSettings(settings);
+		int period = KDGraphUI.getPeriod(settings);
+		int ksmooth = KDGraphUI.getKSmooth(settings);
+		int dsmooth = KDGraphUI.getDSmooth(settings);
+		createKDGraph(low.getGraphable(), high.getGraphable(), close.getGraphable(), period, ksmooth, dsmooth);
+	}
+
+	/**
+	 * Return the name of this graph.
+	 *
+	 * @return <code></code>
+	 */
+	public String getName() {
+		return Locale.getString("KD");
+	}
+
+	public boolean isPrimary() {
+		return false;
+	}
+
+	public String getToolTipText(Comparable x, int y, int yoffset, double verticalScale, double bottomLineValue) {
+		return this.getToolTipText(x);
+	}
+
+	public String getToolTipText(Comparable x) {
+		TradingDate date = (TradingDate) x;
+
+		return new String("<html>" + date.toLongString() + "<p>" + "<font color=green>K "
+				+ ((float) ((int) (indicatorKGraphable.getY(x).floatValue() * 100)) / 100) + "</font>" + "&nbsp;"
+				+ "<font color=red>D " + ((float) ((int) (indicatorDGraphable.getY(x).floatValue() * 100)) / 100)
+				+ "</font>" + "</p></html>");
+	}
+
+	public GraphUI getUI(HashMap settings) {
+		return new KDGraphUI(settings);
+	}
 
 }
-
-

@@ -22,114 +22,109 @@ import nz.org.venice.util.TradingDate;
 
 /**
  * Representation of either an end-of-day or an intra-day stock quote. This
- * interface allows code to manipulate both quote kinds without writing
- * specific code to handle each.
+ * interface allows code to manipulate both quote kinds without writing specific
+ * code to handle each.
  *
  * @author Andrew Leppard
  */
 public interface Quote {
 
-    /**
-     * Represents day close quote for end-of-day quotes or
-     * last quote for intra-day quotes.
-     */
-    public static final int DAY_CLOSE = 0;
+	/**
+	 * Represents day close quote for end-of-day quotes or last quote for intra-day
+	 * quotes.
+	 */
+	public static final int DAY_CLOSE = 0;
 
-    /** Represents day open quote */
-    public static final int DAY_OPEN = 1;
+	/** Represents day open quote */
+	public static final int DAY_OPEN = 1;
 
-    /** 
-     * Represents day low quote for end-of-day quotes or
-     * current day low for intra-day quotes.
-     */
-    public static final int DAY_LOW = 2;
+	/**
+	 * Represents day low quote for end-of-day quotes or current day low for
+	 * intra-day quotes.
+	 */
+	public static final int DAY_LOW = 2;
 
-    /**
-     * Represents day high quote for end-of-day quotes or
-     * current day high for intra-day quotes.
-     */
-    public static final int DAY_HIGH = 3;
+	/**
+	 * Represents day high quote for end-of-day quotes or current day high for
+	 * intra-day quotes.
+	 */
+	public static final int DAY_HIGH = 3;
 
-    /** 
-     * Represents day volume quote for end-of-day quotes or
-     * current volume for intra-day quotes.
-     */
-    public static final int DAY_VOLUME = 4;
+	/**
+	 * Represents day volume quote for end-of-day quotes or current volume for
+	 * intra-day quotes.
+	 */
+	public static final int DAY_VOLUME = 4;
 
-    /** Represents current bid. */
-    public static final int BID = 5;
+	/** Represents current bid. */
+	public static final int BID = 5;
 
-    /** Represents current ask. */
-    public static final int ASK = 6;
+	/** Represents current ask. */
+	public static final int ASK = 6;
 
-    /**
-     * Return the stock's symbol.
-     *
-     * @return	the symbol
-     */
-    public Symbol getSymbol();
+	/**
+	 * Return the stock's symbol.
+	 *
+	 * @return the symbol
+	 */
+	public Symbol getSymbol();
 
-    /**
-     * Return the quote date.
-     *
-     * @return	the date
-     */
-    public TradingDate getDate();
+	/**
+	 * Return the quote date.
+	 *
+	 * @return the date
+	 */
+	public TradingDate getDate();
 
-    /**
-     * Return the day volume quote for end-of-day quotes or the
-     * current volume for intra-day quotes.
-     *
-     * @return	the volume
-     */
-    public long getDayVolume();
+	/**
+	 * Return the day volume quote for end-of-day quotes or the current volume for
+	 * intra-day quotes.
+	 *
+	 * @return the volume
+	 */
+	public long getDayVolume();
 
-    /**
-     * Return the day low for end-of-day quotes or the
-     * current day low for intra-day quotes.
-     *
-     * @return	the day low
-     */
-    public double getDayLow();
+	/**
+	 * Return the day low for end-of-day quotes or the current day low for intra-day
+	 * quotes.
+	 *
+	 * @return the day low
+	 */
+	public double getDayLow();
 
-    /**
-     * Return the day high for end-of-day quotes or the
-     * current day high for intra-day quotes.
-     *
-     * @return	the day high
-     */
-    public double getDayHigh();
+	/**
+	 * Return the day high for end-of-day quotes or the current day high for
+	 * intra-day quotes.
+	 *
+	 * @return the day high
+	 */
+	public double getDayHigh();
 
-    /**
-     * Return the day open.
-     *
-     * @return	the day open
-     */
-    public double getDayOpen();
+	/**
+	 * Return the day open.
+	 *
+	 * @return the day open
+	 */
+	public double getDayOpen();
 
-    /**
-     * Return the day close for end-of-day quotes or the last
-     * quote for intra-day quotes.
-     *
-     * @return	the day close
-     */
-    public double getDayClose();
+	/**
+	 * Return the day close for end-of-day quotes or the last quote for intra-day
+	 * quotes.
+	 *
+	 * @return the day close
+	 */
+	public double getDayClose();
 
-    /**
-     * Get a single quote.
-     *
-     * @param	quote	the quote type: 
-     *                  {@link #DAY_OPEN},
-     *                  {@link #DAY_CLOSE},
-     *                  {@link #DAY_HIGH},
-     *                  {@link #DAY_LOW},
-     *                  {@link #DAY_VOLUME},
-     *                  {@link #BID}, or
-     *                  {@link #ASK}
-     * @exception UnsupportedOperationException if the quote type is not
-     *            supported by the quote. For example, end of day quotes
-     *            do not contain bid or ask prices.
-     */
-    public double getQuote(int quote)
-        throws UnsupportedOperationException;
+	/**
+	 * Get a single quote.
+	 *
+	 * @param quote the quote type: {@link #DAY_OPEN}, {@link #DAY_CLOSE},
+	 *              {@link #DAY_HIGH}, {@link #DAY_LOW}, {@link #DAY_VOLUME},
+	 *              {@link #BID}, or {@link #ASK}
+	 * @exception UnsupportedOperationException if the quote type is not supported
+	 *                                          by the quote. For example, end of
+	 *                                          day quotes do not contain bid or ask
+	 *                                          prices.
+	 */
+	public double getQuote(int quote) throws UnsupportedOperationException;
 }

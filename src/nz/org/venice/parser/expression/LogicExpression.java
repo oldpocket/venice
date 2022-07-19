@@ -22,89 +22,83 @@ import nz.org.venice.parser.Expression;
 import nz.org.venice.parser.TypeMismatchException;
 
 /**
- * Abstract base class for the boolean expressions:
- * <code>and, or</code>
+ * Abstract base class for the boolean expressions: <code>and, or</code>
  */
 abstract public class LogicExpression extends BinaryExpression {
 
-    /**
-     * Create a new logic expression with the given left and
-     * right arguments.
-     */
-    public LogicExpression(Expression left, Expression right) {
-	super(left, right);
-    }
-
-    /**
-     * Check the input arguments to the expression. They must both be
-     * {@link #BOOLEAN_TYPE}.
-     *
-     * @return	{@link #BOOLEAN_TYPE}
-     */
-    public int checkType() throws TypeMismatchException {
-	// both types must be boolean
-	int leftType = getChild(0).checkType();
-	int rightType = getChild(1).checkType();
-
-	if(leftType == BOOLEAN_TYPE && rightType == BOOLEAN_TYPE)
-	    return BOOLEAN_TYPE;
-	else {
-	    String types = 
-		getChild(0).checkType() + " , " + 
-		getChild(1).checkType();
-	    
-	    String expectedTypes = BOOLEAN_TYPE + " , " + BOOLEAN_TYPE;
-		
-	    throw new TypeMismatchException(this, types, expectedTypes);
+	/**
+	 * Create a new logic expression with the given left and right arguments.
+	 */
+	public LogicExpression(Expression left, Expression right) {
+		super(left, right);
 	}
-    }
 
-    /**
-     * Get the type of the expression.
-     *
-     * @return {@link #BOOLEAN_TYPE}.
-     */
-    public int getType() {
-        return BOOLEAN_TYPE;
-    }
+	/**
+	 * Check the input arguments to the expression. They must both be
+	 * {@link #BOOLEAN_TYPE}.
+	 *
+	 * @return {@link #BOOLEAN_TYPE}
+	 */
+	public int checkType() throws TypeMismatchException {
+		// both types must be boolean
+		int leftType = getChild(0).checkType();
+		int rightType = getChild(1).checkType();
 
-    /**
-     * Helper method to conver the given expression to a string.
-     * Given an operator such as <code>and</code>, <code>or</code> etc
-     * it will return <code>arg1 operator arg2</code>. It will insert
-     * parentheses as needed.
-     *
-     * @param	operator	the binary operator
-     * @return	the string representation
-     */
-    protected String toString(String operator) {
-	String string = "";
+		if (leftType == BOOLEAN_TYPE && rightType == BOOLEAN_TYPE)
+			return BOOLEAN_TYPE;
+		else {
+			String types = getChild(0).checkType() + " , " + getChild(1).checkType();
 
-	Expression c1 = getChild(0);
-	Expression c2 = getChild(1);
+			String expectedTypes = BOOLEAN_TYPE + " , " + BOOLEAN_TYPE;
 
-	if (c1 != null) {
-	    if (c1.getChildCount() < 2) {
-		string += c1.toString();
-	    } else {
-		string += "(" + c1.toString() + ")";
-	    }
-	} else {
-	    string += "(null)";
+			throw new TypeMismatchException(this, types, expectedTypes);
+		}
 	}
-	string += " " + operator + " ";
-	
-	if (c2 != null) {
-	    if(c2.getChildCount() < 2) {
-		string += getChild(1).toString();
-	    } else {
-		string += "(" + getChild(1).toString() + ")";
-	    } 
-	} else {
-	    string += "(null)";
+
+	/**
+	 * Get the type of the expression.
+	 *
+	 * @return {@link #BOOLEAN_TYPE}.
+	 */
+	public int getType() {
+		return BOOLEAN_TYPE;
 	}
-	
-	return string;
-    }
+
+	/**
+	 * Helper method to conver the given expression to a string. Given an operator
+	 * such as <code>and</code>, <code>or</code> etc it will return
+	 * <code>arg1 operator arg2</code>. It will insert parentheses as needed.
+	 *
+	 * @param operator the binary operator
+	 * @return the string representation
+	 */
+	protected String toString(String operator) {
+		String string = "";
+
+		Expression c1 = getChild(0);
+		Expression c2 = getChild(1);
+
+		if (c1 != null) {
+			if (c1.getChildCount() < 2) {
+				string += c1.toString();
+			} else {
+				string += "(" + c1.toString() + ")";
+			}
+		} else {
+			string += "(null)";
+		}
+		string += " " + operator + " ";
+
+		if (c2 != null) {
+			if (c2.getChildCount() < 2) {
+				string += getChild(1).toString();
+			} else {
+				string += "(" + getChild(1).toString() + ")";
+			}
+		} else {
+			string += "(null)";
+		}
+
+		return string;
+	}
 }
-

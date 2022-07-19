@@ -23,95 +23,94 @@ import java.util.Iterator;
 
 import nz.org.venice.parser.expression.FunctionExpression;
 
-
-/** 
+/**
  * Container for parse and lexical analysis information. Used for debugging
  * purposes such as returning the line number on which an error occurred.
+ * 
  * @author Mark Hummel
  */
 
 public class ParseMetadata {
 
-    private final HashMap parseTree;
-    private final HashMap tokenLineMap;
-    private final HashMap bodyCache;
-    
+	private final HashMap parseTree;
+	private final HashMap tokenLineMap;
+	private final HashMap bodyCache;
 
-    /**
-     * Construct an object containing the information used to construct tghe
-     * parse tree.
-     * 
-     * @param parseTree The map containing links between the tokens and 
-     * constructed expressions
-     * @param tokenLineMap The map containing links between the tokens and
-     * the line number on which they appeared.
-     */
-    public ParseMetadata(HashMap parseTree, HashMap tokenLineMap) {
-	this.parseTree = parseTree;
-	this.tokenLineMap = tokenLineMap;
-	bodyCache = new HashMap();
-    }
-
-    /** 
-     * @return The expression containing the function body for a given function.
-     * @param functionName The name of the function which was called.
-     * 
-     */
-    
-    public Expression getFunctionBody(String functionName) {
-
-	if (bodyCache.get(functionName) != null) {
-	    return (Expression)bodyCache.get(functionName);
+	/**
+	 * Construct an object containing the information used to construct tghe parse
+	 * tree.
+	 * 
+	 * @param parseTree    The map containing links between the tokens and
+	 *                     constructed expressions
+	 * @param tokenLineMap The map containing links between the tokens and the line
+	 *                     number on which they appeared.
+	 */
+	public ParseMetadata(HashMap parseTree, HashMap tokenLineMap) {
+		this.parseTree = parseTree;
+		this.tokenLineMap = tokenLineMap;
+		bodyCache = new HashMap();
 	}
 
-    	Iterator iterator = parseTree.keySet().iterator();
-	while (iterator.hasNext()) {
-	    Expression e = (Expression)iterator.next();
-	    
-	    if (e instanceof FunctionExpression) {
-		String funcName = ((FunctionExpression)e).getName();
-		if (funcName.equals(functionName)) {
-		    bodyCache.put(functionName, e.getChild(1));
-		    return e.getChild(1);
+	/**
+	 * @return The expression containing the function body for a given function.
+	 * @param functionName The name of the function which was called.
+	 * 
+	 */
+
+	public Expression getFunctionBody(String functionName) {
+
+		if (bodyCache.get(functionName) != null) {
+			return (Expression) bodyCache.get(functionName);
 		}
-	    }
-	}
-	return null;
-    }
-    
-    /**
-     * @return The list of parameters for a given function
-     * @param functionName The name of the function.
-     */
-    public Expression getParameterNames(String functionName) {
-	Iterator iterator = parseTree.keySet().iterator();
-	while (iterator.hasNext()) {
-	    Expression e = (Expression)iterator.next();
-	    Token t = (Token)parseTree.get(e);
 
-	    if (e instanceof FunctionExpression) {
-		String funcName = ((FunctionExpression)e).getName();
-		if (funcName.equals(functionName)) {
-		    return e.getChild(0);
+		Iterator iterator = parseTree.keySet().iterator();
+		while (iterator.hasNext()) {
+			Expression e = (Expression) iterator.next();
+
+			if (e instanceof FunctionExpression) {
+				String funcName = ((FunctionExpression) e).getName();
+				if (funcName.equals(functionName)) {
+					bodyCache.put(functionName, e.getChild(1));
+					return e.getChild(1);
+				}
+			}
 		}
-	    }
+		return null;
 	}
-	return null;
-    }
 
-    /**
-     * @return the line number as a string where a given expression appears
-     */
-    public String getLineForExpression(Expression expression) {
-	Token token = (Token)parseTree.get(expression);
-	assert token != null;
+	/**
+	 * @return The list of parameters for a given function
+	 * @param functionName The name of the function.
+	 */
+	public Expression getParameterNames(String functionName) {
+		Iterator iterator = parseTree.keySet().iterator();
+		while (iterator.hasNext()) {
+			Expression e = (Expression) iterator.next();
+			Token t = (Token) parseTree.get(e);
 
-	Integer tmp = (Integer)tokenLineMap.get(token);	
-	if (tmp == null) {
-	    return "undef";
+			if (e instanceof FunctionExpression) {
+				String funcName = ((FunctionExpression) e).getName();
+				if (funcName.equals(functionName)) {
+					return e.getChild(0);
+				}
+			}
+		}
+		return null;
 	}
-	
-	String lineNumber = tmp.toString();
-	return lineNumber;
-    }
+
+	/**
+	 * @return the line number as a string where a given expression appears
+	 */
+	public String getLineForExpression(Expression expression) {
+		Token token = (Token) parseTree.get(expression);
+		assert token != null;
+
+		Integer tmp = (Integer) tokenLineMap.get(token);
+		if (tmp == null) {
+			return "undef";
+		}
+
+		String lineNumber = tmp.toString();
+		return lineNumber;
+	}
 }

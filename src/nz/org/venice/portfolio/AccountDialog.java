@@ -39,180 +39,175 @@ import nz.org.venice.util.Currency;
 import nz.org.venice.util.Locale;
 
 /**
- * A dialog that allows the user to enter an account name and currency. The account
- * could be a portfolio or a portfolio's account.
+ * A dialog that allows the user to enter an account name and currency. The
+ * account could be a portfolio or a portfolio's account.
  *
  * Example:
+ * 
  * <pre>
- *      AccountDialog dialog = new AccountDialog(desktop,
- *                                               Locale.getString("ENTER_PORTFOLIO_NAME"),
- *                                               Locale.getString("NEW_PORTFOLIO"));
- *      if(dialog.showDialog()) {
- *          String accountName = dialog.getAccountName();
- *          Currency accountCurrency = dialog.getAccountCurrency();
- *      }
+ * AccountDialog dialog = new AccountDialog(desktop, Locale.getString("ENTER_PORTFOLIO_NAME"),
+ * 		Locale.getString("NEW_PORTFOLIO"));
+ * if (dialog.showDialog()) {
+ * 	String accountName = dialog.getAccountName();
+ * 	Currency accountCurrency = dialog.getAccountCurrency();
+ * }
  * </pre>
  *
  * @author Quentin Bossard, Andrew Leppard
  */
 public class AccountDialog {
 
-    JComponent parent = null;
-    String accountName = null;
-    Currency accountCurrency = null;
-    JButton OKButton, cancelButton;
-    JTextField textField;
-    CurrencyComboBox comboBox;
-    JDialog textDialog;
-    JInternalFrame textFrame;
-    JPanel optionPanel;
+	JComponent parent = null;
+	String accountName = null;
+	Currency accountCurrency = null;
+	JButton OKButton, cancelButton;
+	JTextField textField;
+	CurrencyComboBox comboBox;
+	JDialog textDialog;
+	JInternalFrame textFrame;
+	JPanel optionPanel;
 
-    boolean isDone;
+	boolean isDone;
 
-    /**
-     * Create new account dialog.
-     *
-     * @param parent  The parent component to tie the dialog to
-     * @param message The prompt text
-     * @param title   The title to place on the dialog
-     */
-    public AccountDialog(JComponent parent, String message, String title) {
-	newDialog(parent, message, title, Currency.getDefaultCurrency());
-    }
+	/**
+	 * Create new account dialog.
+	 *
+	 * @param parent  The parent component to tie the dialog to
+	 * @param message The prompt text
+	 * @param title   The title to place on the dialog
+	 */
+	public AccountDialog(JComponent parent, String message, String title) {
+		newDialog(parent, message, title, Currency.getDefaultCurrency());
+	}
 
-    /**
-     * Create new account dialog.
-     *
-     * @param parent   The parent component to tie the dialog to
-     * @param message  The prompt text
-     * @param title    The title to place on the dialog
-     * @param currency The default currency for the account.
-     */
-    public AccountDialog(JComponent parent, String message, String title, Currency currency) {
-	newDialog(parent, message, title, currency);
-    }
+	/**
+	 * Create new account dialog.
+	 *
+	 * @param parent   The parent component to tie the dialog to
+	 * @param message  The prompt text
+	 * @param title    The title to place on the dialog
+	 * @param currency The default currency for the account.
+	 */
+	public AccountDialog(JComponent parent, String message, String title, Currency currency) {
+		newDialog(parent, message, title, currency);
+	}
 
-    /**
-     * Create new account dialog.
-     *
-     * @param parent   The parent component to tie the dialog to
-     * @param message  The prompt text
-     * @param title    The title to place on the dialog
-     * @param currency The default currency for the account.
-     */
-    private void newDialog(JComponent parent, String message, String title,  Currency currency) {
-        this.parent = parent;
+	/**
+	 * Create new account dialog.
+	 *
+	 * @param parent   The parent component to tie the dialog to
+	 * @param message  The prompt text
+	 * @param title    The title to place on the dialog
+	 * @param currency The default currency for the account.
+	 */
+	private void newDialog(JComponent parent, String message, String title, Currency currency) {
+		this.parent = parent;
 
-	OKButton = new JButton(Locale.getString("OK"));
-	cancelButton = new JButton(Locale.getString("CANCEL"));
-	textField = new JTextField();
-        comboBox = new CurrencyComboBox(currency);
+		OKButton = new JButton(Locale.getString("OK"));
+		cancelButton = new JButton(Locale.getString("CANCEL"));
+		textField = new JTextField();
+		comboBox = new CurrencyComboBox(currency);
 
-	JLabel label = new JLabel(message);
-        JLabel currencyLabel = new JLabel(Locale.getString("CURRENCY"));
+		JLabel label = new JLabel(message);
+		JLabel currencyLabel = new JLabel(Locale.getString("CURRENCY"));
 
-        // Make sure the label and text field are aligned
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        textField.setAlignmentX(Component.LEFT_ALIGNMENT);
-        currencyLabel.setAlignmentX(Component.LEFT_ALIGNMENT);        
-        comboBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		// Make sure the label and text field are aligned
+		label.setAlignmentX(Component.LEFT_ALIGNMENT);
+		textField.setAlignmentX(Component.LEFT_ALIGNMENT);
+		currencyLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		comboBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-	textField.setToolTipText(Locale.getString("ACCOUNT_FIELD_TOOLTIP"));
-	comboBox.setToolTipText(Locale.getString("ACCOUNT_CURRENCY_TOOLTIP"));
+		textField.setToolTipText(Locale.getString("ACCOUNT_FIELD_TOOLTIP"));
+		comboBox.setToolTipText(Locale.getString("ACCOUNT_CURRENCY_TOOLTIP"));
 
-        Box box = Box.createVerticalBox();
-        box.add(label);
-        box.add(Box.createVerticalStrut(5));
-        box.add(textField);
-        box.add(currencyLabel);        
-        box.add(comboBox);
+		Box box = Box.createVerticalBox();
+		box.add(label);
+		box.add(Box.createVerticalStrut(5));
+		box.add(textField);
+		box.add(currencyLabel);
+		box.add(comboBox);
 
-	OKButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    accountName = textField.getText();
-                    accountCurrency = comboBox.getSelectedCurrency();
-                    isDone = true;
-                    textFrame.dispose();
-                }
-            });
+		OKButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				accountName = textField.getText();
+				accountCurrency = comboBox.getSelectedCurrency();
+				isDone = true;
+				textFrame.dispose();
+			}
+		});
 
-	cancelButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    accountName = null;
-                    accountCurrency = null;
-                    isDone = true;
-                    textFrame.dispose();
-                }
-            });
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				accountName = null;
+				accountCurrency = null;
+				isDone = true;
+				textFrame.dispose();
+			}
+		});
 
-	Object options[] = {OKButton, cancelButton};
-	JOptionPane optionPane = new JOptionPane(box,
-						 JOptionPane.QUESTION_MESSAGE,
-						 JOptionPane.OK_CANCEL_OPTION,
-						 null, options, null);
+		Object options[] = { OKButton, cancelButton };
+		JOptionPane optionPane = new JOptionPane(box, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
+				options, null);
 
-	textFrame = optionPane.createInternalFrame(parent,
-						   title);
-	optionPane.getRootPane().setDefaultButton(OKButton);
-    }
-    
-    /*
-     * Pops up the dialog and waits for feedback
-     *
-     * @return the string value the user has typed in
-     */
-    public boolean showDialog() {
-        boolean invalidResponse;
+		textFrame = optionPane.createInternalFrame(parent, title);
+		optionPane.getRootPane().setDefaultButton(OKButton);
+	}
 
-        do {
-            isDone = false;
+	/*
+	 * Pops up the dialog and waits for feedback
+	 *
+	 * @return the string value the user has typed in
+	 */
+	public boolean showDialog() {
+		boolean invalidResponse;
 
-            textFrame.show();
-        
-            try {
-                while(!isDone) 
-                    Thread.sleep(10);
-                
-            } catch (InterruptedException e) {
-                // Ignore
-            }
+		do {
+			isDone = false;
 
-            invalidResponse = false;
+			textFrame.show();
 
-            // Make sure the account only contains [a-zA-Z -_0-9]. Other letters
-            // may trouble the XML format or cause problems in file names.
-            if (accountName != null && accountName.length() > 0) {
-                Pattern pattern = Pattern.compile("[^a-zA-Z0-9 _-]");
-                Matcher matcher = pattern.matcher(accountName);
-                if(matcher.find()) {
-                    invalidResponse = true;
-                    JOptionPane.showInternalMessageDialog(parent, 
-                                                          Locale.getString("INVALID_ACCOUNT_NAME", accountName),
-                                                          Locale.getString("INVALID_ACCOUNT_NAME_TITLE"),
-                                                          JOptionPane.ERROR_MESSAGE);
-                }
-            }
+			try {
+				while (!isDone)
+					Thread.sleep(10);
 
-        } while(invalidResponse);
+			} catch (InterruptedException e) {
+				// Ignore
+			}
 
-        return (accountName != null && accountName.length() > 0);
-    }
+			invalidResponse = false;
 
-    /**
-     * Return the account name entered into the dialog.
-     *
-     * @return the account name.
-     */
-    public String getAccountName() {
-        return accountName;
-    }
-    
-    /**
-     * Return the currency selected.
-     *
-     * @return the currency.
-     */
-    public Currency getAccountCurrency() {
-        return accountCurrency;
-    }
+			// Make sure the account only contains [a-zA-Z -_0-9]. Other letters
+			// may trouble the XML format or cause problems in file names.
+			if (accountName != null && accountName.length() > 0) {
+				Pattern pattern = Pattern.compile("[^a-zA-Z0-9 _-]");
+				Matcher matcher = pattern.matcher(accountName);
+				if (matcher.find()) {
+					invalidResponse = true;
+					JOptionPane.showInternalMessageDialog(parent, Locale.getString("INVALID_ACCOUNT_NAME", accountName),
+							Locale.getString("INVALID_ACCOUNT_NAME_TITLE"), JOptionPane.ERROR_MESSAGE);
+				}
+			}
+
+		} while (invalidResponse);
+
+		return (accountName != null && accountName.length() > 0);
+	}
+
+	/**
+	 * Return the account name entered into the dialog.
+	 *
+	 * @return the account name.
+	 */
+	public String getAccountName() {
+		return accountName;
+	}
+
+	/**
+	 * Return the currency selected.
+	 *
+	 * @return the currency.
+	 */
+	public Currency getAccountCurrency() {
+		return accountCurrency;
+	}
 }

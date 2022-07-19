@@ -26,12 +26,13 @@ import nz.org.venice.util.TradingDateFormatException;
 import nz.org.venice.util.UnknownCurrencyCodeException;
 
 /**
- * Provides a filter to parse currency exchange rates supplied from Generic Web Service.
- * The currency exchange rate format contains the two currencies being exchanged,
- * the current price, the date of the quote, the time of the quote, and
- * the bid and ask rates.
+ * Provides a filter to parse currency exchange rates supplied from Generic Web
+ * Service. The currency exchange rate format contains the two currencies being
+ * exchanged, the current price, the date of the quote, the time of the quote,
+ * and the bid and ask rates.
  *
  * Example:
+ * 
  * <pre>
  * "USDJPY=X", 115.845,	1/25/2006, 5:10pm, 115.83, 115.86
  * </pre>
@@ -40,81 +41,73 @@ import nz.org.venice.util.UnknownCurrencyCodeException;
  */
 public class GenericWSExchangeRateFilter {
 
-    /**
-     * Create an instance of this filter.
-     */
-    public GenericWSExchangeRateFilter() {
-        // Nothing to do
-    }
+	/**
+	 * Create an instance of this filter.
+	 */
+	public GenericWSExchangeRateFilter() {
+		// Nothing to do
+	}
 
-    /**
-     * Parse the given text string and return the exchange rate.
-     *
-     * @param line a single line of text containing the exchange rate
-     * @exception ExchangeRateFormatException if the line could not be parsed
-     * @return the exchange rate
-     */
-    public ExchangeRate toExchangeRate(String line)
-        throws ExchangeRateFormatException {
- 
-        assert line != null;
+	/**
+	 * Parse the given text string and return the exchange rate.
+	 *
+	 * @param line a single line of text containing the exchange rate
+	 * @exception ExchangeRateFormatException if the line could not be parsed
+	 * @return the exchange rate
+	 */
+	public ExchangeRate toExchangeRate(String line) throws ExchangeRateFormatException {
 
-        String[] parts = line.split(",");
-        int i = 0;
-        
-        // Parse to/from currencies.
-        
-        // It's actually 6 but we ignore the other entries, as it makes sense to
-        // try to be robust and not blow up if Yahoo adds or removes an entry.
-        if(parts.length < 3)
-            throw new ExchangeRateFormatException(Locale.getString("WRONG_FIELD_COUNT"));
-        
-        if(parts[i].length() != 10)
-            throw new ExchangeRateFormatException(Locale.getString("UNKNOWN_CURRENCY_CODE",
-                                                                   parts[i]));
-        
-        Currency sourceCurrency = null;
-        Currency destinationCurrency = null;
-        
-        String sourceCurrencyCode = parts[i].substring(1, 4);      // "USDJPY=X" -> USD
-        String destinationCurrencyCode = parts[i].substring(4, 7); // "USDJPY=X" -> JPY
-        
-        try {
-            sourceCurrency = new Currency(sourceCurrencyCode);
-            destinationCurrency = new Currency(destinationCurrencyCode);
-        }
-        catch(UnknownCurrencyCodeException e) {
-            throw new
-                ExchangeRateFormatException(Locale.getString("UNKNOWN_CURRENCY_CODE",
-                                                             e.getReason()));
-        }
-        
-        i++;
-        
-        // Parse exchange rate
-        double value = 0.0D;
-        
-        try {
-            value = Double.parseDouble(parts[i]);
-        }
-        catch(NumberFormatException e) {
-            throw new ExchangeRateFormatException(Locale.getString("ERROR_PARSING_NUMBER",
-                                                                   parts[i]));
-        }
-        
-        i++;
+		assert line != null;
 
-        // Parse date
-        TradingDate date = null;
-        String dateString = parts[i].replaceAll("\"", "");
+		String[] parts = line.split(",");
+		int i = 0;
 
-        try {
-            date = new TradingDate(dateString, TradingDate.US);
-        }
-        catch(TradingDateFormatException e) {
-            throw new ExchangeRateFormatException(e.getMessage());
-        }
+		// Parse to/from currencies.
 
-        return new ExchangeRate(date, sourceCurrency, destinationCurrency, value);
-    }
+		// It's actually 6 but we ignore the other entries, as it makes sense to
+		// try to be robust and not blow up if Yahoo adds or removes an entry.
+		if (parts.length < 3)
+			throw new ExchangeRateFormatException(Locale.getString("WRONG_FIELD_COUNT"));
+
+		if (parts[i].length() != 10)
+			throw new ExchangeRateFormatException(Locale.getString("UNKNOWN_CURRENCY_CODE", parts[i]));
+
+		Currency sourceCurrency = null;
+		Currency destinationCurrency = null;
+
+		String sourceCurrencyCode = parts[i].substring(1, 4); // "USDJPY=X" -> USD
+		String destinationCurrencyCode = parts[i].substring(4, 7); // "USDJPY=X" -> JPY
+
+		try {
+			sourceCurrency = new Currency(sourceCurrencyCode);
+			destinationCurrency = new Currency(destinationCurrencyCode);
+		} catch (UnknownCurrencyCodeException e) {
+			throw new ExchangeRateFormatException(Locale.getString("UNKNOWN_CURRENCY_CODE", e.getReason()));
+		}
+
+		i++;
+
+		// Parse exchange rate
+		double value = 0.0D;
+
+		try {
+			value = Double.parseDouble(parts[i]);
+		} catch (NumberFormatException e) {
+			throw new ExchangeRateFormatException(Locale.getString("ERROR_PARSING_NUMBER", parts[i]));
+		}
+
+		i++;
+
+		// Parse date
+		TradingDate date = null;
+		String dateString = parts[i].replaceAll("\"", "");
+
+		try {
+			date = new TradingDate(dateString, TradingDate.US);
+		} catch (TradingDateFormatException e) {
+			throw new ExchangeRateFormatException(e.getMessage());
+		}
+
+		return new ExchangeRate(date, sourceCurrency, destinationCurrency, value);
+	}
 }

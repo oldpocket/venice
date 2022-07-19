@@ -28,182 +28,145 @@ import nz.org.venice.quote.SymbolFormatException;
 import nz.org.venice.util.Locale;
 
 /**
- * A set of dialogs used for querying the user for commodities either
- * by name or symbol.
+ * A set of dialogs used for querying the user for commodities either by name or
+ * symbol.
  */
 public class SymbolListDialog {
 
-    private SymbolListDialog() {
-	// Cannot instantiate this class
-    }
+	private SymbolListDialog() {
+		// Cannot instantiate this class
+	}
 
-    /**
-     * Open a new <code>SymbolListDialog</code> dialog. Ask the user
-     * to enter a partial name of a symbol and return the appropriate
-     * symbol.
-     *
-     * @param	parent	the parent desktop
-     * @param	title	the title of the dialog
-     * @return	a sorted set containing a single commodity string or
-     * <code>null</code> if the user cancelled the dialog
-     */
-    /*
-    public static SortedSet getSymbolByName(JDesktopPane parent, 
-					    String title) {
-	SortedSet symbolSet;
-	String symbolName;
-	boolean invalidResponse;
+	/**
+	 * Open a new <code>SymbolListDialog</code> dialog. Ask the user to enter a
+	 * partial name of a symbol and return the appropriate symbol.
+	 *
+	 * @param parent the parent desktop
+	 * @param title  the title of the dialog
+	 * @return a sorted set containing a single commodity string or
+	 *         <code>null</code> if the user cancelled the dialog
+	 */
+	/*
+	 * public static SortedSet getSymbolByName(JDesktopPane parent, String title) {
+	 * SortedSet symbolSet; String symbolName; boolean invalidResponse;
+	 * 
+	 * do { symbolSet = null; symbolName = ""; invalidResponse = false; // assume
+	 * user does OK
+	 * 
+	 * // First prompt user for list TextDialog dlg = new TextDialog(parent,
+	 * "Please enter symbol name", title);
+	 * 
+	 * symbolName = dlg.showDialog();
+	 * 
+	 * // Parse what the user inputed if(symbolName != null) { String symbol =
+	 * QuoteSourceManager.getSource().getSymbol(symbolName);
+	 * 
+	 * // Not recognised? if(symbol == null) { String noData = "No match for '" +
+	 * symbol + "'";
+	 * 
+	 * JOptionPane. showInternalMessageDialog(parent, noData, "Unknown symbol",
+	 * JOptionPane.ERROR_MESSAGE); invalidResponse = true; }
+	 * 
+	 * // Recognised! Build symbol set else { symbolSet = new TreeSet();
+	 * symbolSet.add(symbol); } }
+	 * 
+	 * // Keep going while user hasnt entered a valid symbol and // is selecting
+	 * "ok" } while(invalidResponse);
+	 * 
+	 * // Return either null for no symbol selected or a set of one if(symbolSet !=
+	 * null && symbolSet.size() == 0) return null;
+	 * 
+	 * return symbolSet; }
+	 */
 
-	do {
-	    symbolSet = null;
-	    symbolName = "";
-	    invalidResponse = false; // assume user does OK
+	/**
+	 * Open a new <code>SymbolListDialog</code> dialog. Ask the user to enter a
+	 * single symbol. It will test to make sure it is a valid symbol.
+	 *
+	 * @param parent the parent desktop
+	 * @param title  the title of the dialog
+	 * @return a symbol or <code>null</code> if the user cancelled the dialog.
+	 */
+	public static Symbol getSymbol(JDesktopPane parent, String title) {
+		Symbol symbol;
+		String symbolString;
+		boolean invalidResponse;
 
-	    // First prompt user for list
-	    TextDialog dlg = new TextDialog(parent, 
-					    "Please enter symbol name",
-                                            title);
+		do {
+			symbol = null;
+			symbolString = "";
+			invalidResponse = false; // assume user does OK
 
-	    symbolName = dlg.showDialog();
-	    
-	    // Parse what the user inputed
-	    if(symbolName != null) {
-		String symbol = 
-		    QuoteSourceManager.getSource().getSymbol(symbolName);
-		
-		// Not recognised?
-		if(symbol == null) {
-		    String noData = 
-			"No match for '" + symbol + "'";
+			// First prompt user for symbol
+			TextDialog dialog = new TextDialog(parent, Locale.getString("SYMBOL"), title);
+			symbolString = dialog.showDialog();
 
-		    JOptionPane.
-			showInternalMessageDialog(parent, noData, 
-						  "Unknown symbol",
-						  JOptionPane.ERROR_MESSAGE);
-		    invalidResponse = true;
-		}
+			// Parse what the user inputed
+			if (symbolString != null) {
 
-		// Recognised! Build symbol set
-		else {
-		    symbolSet = new TreeSet();
-		    symbolSet.add(symbol);
-		}
-	    }
+				// Parse
+				try {
+					symbol = Symbol.toSymbol(symbolString);
+				} catch (SymbolFormatException e) {
+					invalidResponse = true;
 
-	    // Keep going while user hasnt entered a valid symbol and
-	    // is selecting "ok"
-	} while(invalidResponse); 
+					JOptionPane.showInternalMessageDialog(parent, e.getMessage(),
+							Locale.getString("ERROR_PARSING_SYMBOL"), JOptionPane.ERROR_MESSAGE);
+				}
+			}
 
-	// Return either null for no symbol selected or a set of one
-	if(symbolSet != null && symbolSet.size() == 0)
-	    return null;
-	
-	return symbolSet;
-    }
-    */
+			// Keep going while user hasnt entered a valid symbol and
+			// is selecting "ok"
+		} while (invalidResponse);
 
-    /**
-     * Open a new <code>SymbolListDialog</code> dialog. Ask the user
-     * to enter a single symbol. It will test to make sure it is
-     * a valid symbol.
-     *
-     * @param	parent	the parent desktop
-     * @param	title	the title of the dialog
-     * @return	a symbol or <code>null</code> if the user cancelled
-     *          the dialog.
-     */
-    public static Symbol getSymbol(JDesktopPane parent, String title) {
-        Symbol symbol;
-	String symbolString;
-	boolean invalidResponse;
+		return symbol;
+	}
 
-	do {
-	    symbol = null;
-	    symbolString = "";
-	    invalidResponse = false; // assume user does OK
+	/**
+	 * Open a new <code>SymbolListDialog</code> dialog. Ask the user to enter a list
+	 * of symbol symbols. It will test to make each is a valid symbol.
+	 *
+	 * @param parent the parent desktop
+	 * @param title  the title of the dialog
+	 * @return a sorted set containing at least one symbol symbol string or
+	 *         <code>null</code> if the user cancelled the dialog
+	 */
+	public static SortedSet getSymbols(JDesktopPane parent, String title) {
+		SortedSet symbolSet;
+		String symbols;
+		boolean invalidResponse;
 
-	    // First prompt user for symbol
-	    TextDialog dialog = new TextDialog(parent, 
-                                               Locale.getString("SYMBOL"),
-                                               title);
-	    symbolString = dialog.showDialog();
-            
-	    // Parse what the user inputed
-	    if(symbolString != null) {
-		
-                // Parse
-                try {
-                    symbol = Symbol.toSymbol(symbolString);
-                }
-                catch(SymbolFormatException e) {
-                    invalidResponse = true;
+		do {
+			symbolSet = null;
+			symbols = "";
+			invalidResponse = false; // assume user does OK
 
-                    JOptionPane.showInternalMessageDialog(parent, 
-                                                          e.getMessage(),
-                                                          Locale.getString("ERROR_PARSING_SYMBOL"),
-                                                          JOptionPane.ERROR_MESSAGE);
-                }
-	    }
+			// First prompt user for list
+			TextDialog dlg = new TextDialog(parent, Locale.getString("SYMBOLS"), title);
+			symbols = dlg.showDialog();
 
-	    // Keep going while user hasnt entered a valid symbol and
-	    // is selecting "ok"
-	} while(invalidResponse); 
+			// Parse what the user inputed
+			if (symbols != null) {
 
-	return symbol;
-    }
+				// Parse
+				try {
+					symbolSet = Symbol.toSortedSet(symbols, true);
+				} catch (SymbolFormatException e) {
+					invalidResponse = true;
 
-    /**
-     * Open a new <code>SymbolListDialog</code> dialog. Ask the user
-     * to enter a list of symbol symbols. It will test to make each is
-     * a valid symbol.
-     *
-     * @param	parent	the parent desktop
-     * @param	title	the title of the dialog
-     * @return	a sorted set containing at least one symbol symbol string or
-     * <code>null</code> if the user cancelled the dialog
-     */
-    public static SortedSet getSymbols(JDesktopPane parent, 
-				       String title) {
-	SortedSet symbolSet;
-	String symbols;
-	boolean invalidResponse;
+					JOptionPane.showInternalMessageDialog(parent, e.getMessage(),
+							Locale.getString("ERROR_PARSING_SYMBOLS"), JOptionPane.ERROR_MESSAGE);
+				}
+			}
 
-	do {
-	    symbolSet = null;
-	    symbols = "";
-	    invalidResponse = false; // assume user does OK
+			// Keep going while user hasnt entered a valid symbol and
+			// is selecting "ok"
+		} while (invalidResponse);
 
-	    // First prompt user for list
-	    TextDialog dlg = new TextDialog(parent, 
-					    Locale.getString("SYMBOLS"),
-                                            title);
-	    symbols = dlg.showDialog();
-					    
-	    // Parse what the user inputed
-	    if(symbols != null) {
-		
-                // Parse
-                try {
-                    symbolSet = Symbol.toSortedSet(symbols, true);
-                }
-                catch(SymbolFormatException e) {
-                    invalidResponse = true;
+		// If the set is empty return a null pointer
+		if (symbolSet != null && symbolSet.size() == 0)
+			return null;
 
-                    JOptionPane.showInternalMessageDialog(parent, 
-                                                          e.getMessage(),
-                                                          Locale.getString("ERROR_PARSING_SYMBOLS"),
-                                                          JOptionPane.ERROR_MESSAGE);
-                }
-	    }
-
-	    // Keep going while user hasnt entered a valid symbol and
-	    // is selecting "ok"
-	} while(invalidResponse); 
-
-	// If the set is empty return a null pointer
-	if(symbolSet != null && symbolSet.size() == 0)
-	    return null;
-
-	return symbolSet;
-    }
+		return symbolSet;
+	}
 }

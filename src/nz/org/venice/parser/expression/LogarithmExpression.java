@@ -30,79 +30,77 @@ import nz.org.venice.quote.Symbol;
  */
 public class LogarithmExpression extends UnaryExpression {
 
-    /**
-     * An expression which performs logarithm function <code>log</code> on the 
-     * sub-expressions.
-     */
-    public LogarithmExpression(Expression arg) {
-	super(arg);
-    }
-
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
-	throws EvaluationException {
-
-        double number = getChild(0).evaluate(variables, quoteBundle, symbol, day);
-
-        if(number > 0)
-            return (double)Math.log(number);
-        else {
-	    EvaluationException e = EvaluationException.LOGARITHM_NEGATIVE_EXCEPTION;
-	    e.setMessage(this, "", number);
-	    throw e;
+	/**
+	 * An expression which performs logarithm function <code>log</code> on the
+	 * sub-expressions.
+	 */
+	public LogarithmExpression(Expression arg) {
+		super(arg);
 	}
-    }
 
-    public Expression simplify() {
-        // First simplify child argument
-        Expression simplified = super.simplify();
-        
-        // If the child argument is a constant we can precompute.
-        if(simplified.getChild(0) instanceof NumberExpression) {
-            try {
-                return new NumberExpression(simplified.evaluate(null, null, null, 0), simplified.getType());
-            }
-            catch(EvaluationException e) {
-                // Can happen if we hit log(-1). In which case don't bother to simplify.
-                return simplified;
-            }
-        }
-        else {
-            return simplified;
-        }
-    }
-    
-    public String toString() {
-	String childString = (getChild(0) != null) ? getChild(0).toString() : "(null)";
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-	return new String("log(" + childString + ")");
-    }
+		double number = getChild(0).evaluate(variables, quoteBundle, symbol, day);
 
-    /**
-     * Check the input argument to the expression. It can only be
-     * {@link #INTEGER_TYPE} or {@link #FLOAT_TYPE}. 
-     *
-     * @return	the type of the expression
-     */
-    public int checkType() throws TypeMismatchException {
-        int type = getChild(0).checkType();
-
-        if(type == FLOAT_TYPE || type == INTEGER_TYPE)
-            return getType();
-        else {
-            throw new TypeMismatchException(this, type, FLOAT_TYPE);
+		if (number > 0)
+			return (double) Math.log(number);
+		else {
+			EvaluationException e = EvaluationException.LOGARITHM_NEGATIVE_EXCEPTION;
+			e.setMessage(this, "", number);
+			throw e;
+		}
 	}
-    }
 
-    /**
-     * Get the type of the expression.
-     *
-     * @return {@link #FLOAT_TYPE}.
-     */
-    public int getType() {
-        return FLOAT_TYPE;
-    }
+	public Expression simplify() {
+		// First simplify child argument
+		Expression simplified = super.simplify();
 
-    public Object clone() {
-        return new LogarithmExpression((Expression)getChild(0).clone());
-    }
+		// If the child argument is a constant we can precompute.
+		if (simplified.getChild(0) instanceof NumberExpression) {
+			try {
+				return new NumberExpression(simplified.evaluate(null, null, null, 0), simplified.getType());
+			} catch (EvaluationException e) {
+				// Can happen if we hit log(-1). In which case don't bother to simplify.
+				return simplified;
+			}
+		} else {
+			return simplified;
+		}
+	}
+
+	public String toString() {
+		String childString = (getChild(0) != null) ? getChild(0).toString() : "(null)";
+
+		return new String("log(" + childString + ")");
+	}
+
+	/**
+	 * Check the input argument to the expression. It can only be
+	 * {@link #INTEGER_TYPE} or {@link #FLOAT_TYPE}.
+	 *
+	 * @return the type of the expression
+	 */
+	public int checkType() throws TypeMismatchException {
+		int type = getChild(0).checkType();
+
+		if (type == FLOAT_TYPE || type == INTEGER_TYPE)
+			return getType();
+		else {
+			throw new TypeMismatchException(this, type, FLOAT_TYPE);
+		}
+	}
+
+	/**
+	 * Get the type of the expression.
+	 *
+	 * @return {@link #FLOAT_TYPE}.
+	 */
+	public int getType() {
+		return FLOAT_TYPE;
+	}
+
+	public Object clone() {
+		return new LogarithmExpression((Expression) getChild(0).clone());
+	}
 }

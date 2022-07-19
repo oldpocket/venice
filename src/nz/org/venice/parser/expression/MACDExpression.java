@@ -28,104 +28,83 @@ import nz.org.venice.quote.QuoteFunctions;
 import nz.org.venice.quote.Symbol;
 
 /**
- * An expression which finds the MACD (Moving Average Convergence Divergence) over a default trading period.
+ * An expression which finds the MACD (Moving Average Convergence Divergence)
+ * over a default trading period.
  *
  * @author Alberto Nacher
  */
 public class MACDExpression extends BinaryExpression {
-    
-    final public static int PERIOD_SLOW = 26;
-    final public static int PERIOD_FAST = 12;
 
-    /**
-     * Create a new Moving Average Convergence Divergence expression for the given <code>quote</code> kind,
-     * starting with <code>lag</code> days away.
-     * The periods and smoothing constants are set to default values.
-     *
-     * @param	quote	the quote kind
-     * @param	lag	the offset from the current day
-     */
-    public MACDExpression(Expression quote, Expression lag) {
-        super(quote, lag);
-    }
+	final public static int PERIOD_SLOW = 26;
+	final public static int PERIOD_FAST = 12;
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
-	throws EvaluationException {
-
-	QuoteSymbol quoteChild = (QuoteSymbol)getChild(0);
-
-        // Extract arguments
-        int quoteKind = quoteChild.getQuoteKind();
-	Symbol explicitSymbol = (quoteChild.getSymbol() != null) 
-	    ? quoteChild.getSymbol() : symbol;
-        int offset = (int)getChild(1).evaluate(variables, 
-					       quoteBundle, 
-					       explicitSymbol, 
-					       day);
-        if (offset > 0) {
-           EvaluationException e = EvaluationException.MACD_OFFSET_EXCEPTION;
-	   e.setMessage(this, "", offset);
-	    throw e;
+	/**
+	 * Create a new Moving Average Convergence Divergence expression for the given
+	 * <code>quote</code> kind, starting with <code>lag</code> days away. The
+	 * periods and smoothing constants are set to default values.
+	 *
+	 * @param quote the quote kind
+	 * @param lag   the offset from the current day
+	 */
+	public MACDExpression(Expression quote, Expression lag) {
+		super(quote, lag);
 	}
 
-        // Calculate and return the MACD.
-        QuoteBundleFunctionSource sourceSlow =
-            new QuoteBundleFunctionSource(quoteBundle, 
-					  explicitSymbol, 
-					  quoteKind, 
-					  day, 
-					  offset, 
-					  PERIOD_SLOW);
-        QuoteBundleFunctionSource sourceFast =
-            new QuoteBundleFunctionSource(quoteBundle, 
-					  explicitSymbol, 
-					  quoteKind, 
-					  day, 
-					  offset, 
-					  PERIOD_FAST);
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-        return QuoteFunctions.macd(sourceSlow, sourceFast);
-    }
+		QuoteSymbol quoteChild = (QuoteSymbol) getChild(0);
 
-    public String toString() {
-	String c1 = (getChild(0) != null) ? getChild(0).toString() : "(null)";
-	String c2 = (getChild(1) != null) ? getChild(1).toString() : "(null)";
-	
-	return new String("macd(" + 
-			  c1 + ", " +
-			  c2 + ")");
-    }
+		// Extract arguments
+		int quoteKind = quoteChild.getQuoteKind();
+		Symbol explicitSymbol = (quoteChild.getSymbol() != null) ? quoteChild.getSymbol() : symbol;
+		int offset = (int) getChild(1).evaluate(variables, quoteBundle, explicitSymbol, day);
+		if (offset > 0) {
+			EvaluationException e = EvaluationException.MACD_OFFSET_EXCEPTION;
+			e.setMessage(this, "", offset);
+			throw e;
+		}
 
-    public int checkType() throws TypeMismatchException {
-	// First type must be quote, second type must be integer value
-	if((getChild(0).checkType() == FLOAT_QUOTE_TYPE ||
-            getChild(0).checkType() == INTEGER_QUOTE_TYPE) &&
-	   getChild(1).checkType() == INTEGER_TYPE)
-	    return getType();
-	else {
-	    String types = 
-		getChild(0).getType() + " , " + 
-		getChild(1).getType();
+		// Calculate and return the MACD.
+		QuoteBundleFunctionSource sourceSlow = new QuoteBundleFunctionSource(quoteBundle, explicitSymbol, quoteKind,
+				day, offset, PERIOD_SLOW);
+		QuoteBundleFunctionSource sourceFast = new QuoteBundleFunctionSource(quoteBundle, explicitSymbol, quoteKind,
+				day, offset, PERIOD_FAST);
 
-	    String expectedTypes =
-		FLOAT_QUOTE_TYPE + " , " + 
-		INTEGER_TYPE;
-	    
-	    throw new TypeMismatchException(this, types, expectedTypes);
+		return QuoteFunctions.macd(sourceSlow, sourceFast);
 	}
-    }
 
-    public int getType() {
-        if(getChild(0).getType() == FLOAT_QUOTE_TYPE)
-            return FLOAT_TYPE;
-        else {
-            assert getChild(0).getType() == INTEGER_QUOTE_TYPE;
-            return INTEGER_TYPE;
-        }
-    }
+	public String toString() {
+		String c1 = (getChild(0) != null) ? getChild(0).toString() : "(null)";
+		String c2 = (getChild(1) != null) ? getChild(1).toString() : "(null)";
 
-    public Object clone() {
-        return new MACDExpression((Expression)getChild(0).clone(), 
-                                 (Expression)getChild(1).clone());
-    }
+		return new String("macd(" + c1 + ", " + c2 + ")");
+	}
+
+	public int checkType() throws TypeMismatchException {
+		// First type must be quote, second type must be integer value
+		if ((getChild(0).checkType() == FLOAT_QUOTE_TYPE || getChild(0).checkType() == INTEGER_QUOTE_TYPE)
+				&& getChild(1).checkType() == INTEGER_TYPE)
+			return getType();
+		else {
+			String types = getChild(0).getType() + " , " + getChild(1).getType();
+
+			String expectedTypes = FLOAT_QUOTE_TYPE + " , " + INTEGER_TYPE;
+
+			throw new TypeMismatchException(this, types, expectedTypes);
+		}
+	}
+
+	public int getType() {
+		if (getChild(0).getType() == FLOAT_QUOTE_TYPE)
+			return FLOAT_TYPE;
+		else {
+			assert getChild(0).getType() == INTEGER_QUOTE_TYPE;
+			return INTEGER_TYPE;
+		}
+	}
+
+	public Object clone() {
+		return new MACDExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone());
+	}
 }

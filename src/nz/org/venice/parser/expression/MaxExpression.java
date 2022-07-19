@@ -32,135 +32,111 @@ import nz.org.venice.quote.Symbol;
  * @author Andrew Leppard
  */
 public class MaxExpression extends TernaryExpression {
-    
-    /**
-     * Create a new maximum expression for the given <code>quote</code> kind,
-     * for the given number of <code>days</code> starting with 
-     * <code>lag</code> days away.
-     *
-     * @param	quote	the quote kind to find the maximum
-     * @param	days	the number of days to search
-     * @param	lag	the offset from the current day
-     */
-    public MaxExpression(Expression quote, Expression days,
-			 Expression lag) {
-	super(quote, days, lag);
-    }
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
-	throws EvaluationException {
-
-	QuoteSymbol quoteChild = (QuoteSymbol)getChild(0);
-	Symbol explicitSymbol = (quoteChild.getSymbol() != null) 
-	    ? quoteChild.getSymbol() : symbol;
-
-        int days = (int)getChild(1).evaluate(variables, 
-					     quoteBundle, 
-					     explicitSymbol, 
-					     day);
-        int quoteKind = quoteChild.getQuoteKind();
-	
-
-        if(days <= 0) {
-            EvaluationException e = EvaluationException.MAX_RANGE_EXCEPTION;
-	    e.setMessage(this, "", days);
-	    throw e;
+	/**
+	 * Create a new maximum expression for the given <code>quote</code> kind, for
+	 * the given number of <code>days</code> starting with <code>lag</code> days
+	 * away.
+	 *
+	 * @param quote the quote kind to find the maximum
+	 * @param days  the number of days to search
+	 * @param lag   the offset from the current day
+	 */
+	public MaxExpression(Expression quote, Expression days, Expression lag) {
+		super(quote, days, lag);
 	}
-        int offset = (int)getChild(2).evaluate(variables, 
-					       quoteBundle, 
-					       explicitSymbol, 
-					       day);
 
-        if (offset > 0) {
-           EvaluationException e = EvaluationException.MAX_OFFSET_EXCEPTION;
-	   e.setMessage(this, "", offset);
-	   throw e;
-	}
-        
-	return max(quoteBundle, explicitSymbol, quoteKind, days, day, offset);
-    }
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-    public String toString() {	
-String c1 = (getChild(0) != null) ? getChild(0).toString() : "(null)";
-	String c2 = (getChild(1) != null) ? getChild(1).toString() : "(null)";
-	String c3 = (getChild(2) != null) ? getChild(2).toString() : "(null)";
-	
+		QuoteSymbol quoteChild = (QuoteSymbol) getChild(0);
+		Symbol explicitSymbol = (quoteChild.getSymbol() != null) ? quoteChild.getSymbol() : symbol;
 
-	return new String("max(" + 
-			  c1 + ", " +
-			  c2 + ", " +
-			  c3 + ")");
-    }
+		int days = (int) getChild(1).evaluate(variables, quoteBundle, explicitSymbol, day);
+		int quoteKind = quoteChild.getQuoteKind();
 
-    public int checkType() throws TypeMismatchException {
-	// First type must be quote, second and third types must be value
-	if((getChild(0).checkType() == FLOAT_QUOTE_TYPE ||
-            getChild(0).checkType() == INTEGER_QUOTE_TYPE) &&
-	    getChild(1).checkType() == INTEGER_TYPE &&
-	    getChild(2).checkType() == INTEGER_TYPE)
-	    return getType();
-        else {
-	    String types = 
-		getChild(0).getType() + "," + 
-		getChild(1).getType() + "," + 
-		getChild(2).getType();
-
-	    String expectedTypes =
-		FLOAT_QUOTE_TYPE + " , " + 
-		INTEGER_TYPE     + " ,"  + 
-		INTEGER_TYPE;
-	    
-	    throw new TypeMismatchException(this, types, expectedTypes);
-	}
-    }
-
-    public int getType() {
-        if(getChild(0).getType() == FLOAT_QUOTE_TYPE)
-            return FLOAT_TYPE;
-        else {
-            assert getChild(0).getType() == INTEGER_QUOTE_TYPE;
-            return INTEGER_TYPE;
-        }
-    }
-
-    private double max(QuoteBundle quoteBundle, Symbol symbol, 
-                      int quote, int days, int day, int offset)
-        throws EvaluationException {
-
-	//double max = 0.0D;
-	double max = Double.MIN_VALUE;
-	boolean setValue = false;
-	boolean missingQuotes = false;
-	
-	for(int i = offset - days + 1; i <= offset; i++) {
-            try {
-                double value = quoteBundle.getQuote(symbol, quote, day, i);
-                if(value > max) {
-                    max = value;
+		if (days <= 0) {
+			EvaluationException e = EvaluationException.MAX_RANGE_EXCEPTION;
+			e.setMessage(this, "", days);
+			throw e;
 		}
-		
-		setValue = true;
-            } catch(MissingQuoteException e) {
-		missingQuotes = true;
-                // nothing to do
-            }
-	}
-	/* 
-	   Returning Double.MIN_VALUE here causes offset to overflow
-	   when the parent is a LagExpression. Consequently, offset becomes
-	   a positive value which triggers assertions which halt analyser 
-	   processes. 
-	*/
-	   
-	if (!setValue && missingQuotes) {
-	    throw EvaluationException.UNDEFINED_RESULT_EXCEPTION;
-	}            	   
-	return max;
-    }
+		int offset = (int) getChild(2).evaluate(variables, quoteBundle, explicitSymbol, day);
 
-    public Object clone() {
-        return new MaxExpression((Expression)getChild(0).clone(), 
-                                 (Expression)getChild(1).clone(),
-                                 (Expression)getChild(2).clone());
-    }
+		if (offset > 0) {
+			EvaluationException e = EvaluationException.MAX_OFFSET_EXCEPTION;
+			e.setMessage(this, "", offset);
+			throw e;
+		}
+
+		return max(quoteBundle, explicitSymbol, quoteKind, days, day, offset);
+	}
+
+	public String toString() {
+		String c1 = (getChild(0) != null) ? getChild(0).toString() : "(null)";
+		String c2 = (getChild(1) != null) ? getChild(1).toString() : "(null)";
+		String c3 = (getChild(2) != null) ? getChild(2).toString() : "(null)";
+
+		return new String("max(" + c1 + ", " + c2 + ", " + c3 + ")");
+	}
+
+	public int checkType() throws TypeMismatchException {
+		// First type must be quote, second and third types must be value
+		if ((getChild(0).checkType() == FLOAT_QUOTE_TYPE || getChild(0).checkType() == INTEGER_QUOTE_TYPE)
+				&& getChild(1).checkType() == INTEGER_TYPE && getChild(2).checkType() == INTEGER_TYPE)
+			return getType();
+		else {
+			String types = getChild(0).getType() + "," + getChild(1).getType() + "," + getChild(2).getType();
+
+			String expectedTypes = FLOAT_QUOTE_TYPE + " , " + INTEGER_TYPE + " ," + INTEGER_TYPE;
+
+			throw new TypeMismatchException(this, types, expectedTypes);
+		}
+	}
+
+	public int getType() {
+		if (getChild(0).getType() == FLOAT_QUOTE_TYPE)
+			return FLOAT_TYPE;
+		else {
+			assert getChild(0).getType() == INTEGER_QUOTE_TYPE;
+			return INTEGER_TYPE;
+		}
+	}
+
+	private double max(QuoteBundle quoteBundle, Symbol symbol, int quote, int days, int day, int offset)
+			throws EvaluationException {
+
+		// double max = 0.0D;
+		double max = Double.MIN_VALUE;
+		boolean setValue = false;
+		boolean missingQuotes = false;
+
+		for (int i = offset - days + 1; i <= offset; i++) {
+			try {
+				double value = quoteBundle.getQuote(symbol, quote, day, i);
+				if (value > max) {
+					max = value;
+				}
+
+				setValue = true;
+			} catch (MissingQuoteException e) {
+				missingQuotes = true;
+				// nothing to do
+			}
+		}
+		/*
+		 * Returning Double.MIN_VALUE here causes offset to overflow when the parent is
+		 * a LagExpression. Consequently, offset becomes a positive value which triggers
+		 * assertions which halt analyser processes.
+		 */
+
+		if (!setValue && missingQuotes) {
+			throw EvaluationException.UNDEFINED_RESULT_EXCEPTION;
+		}
+		return max;
+	}
+
+	public Object clone() {
+		return new MaxExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone(),
+				(Expression) getChild(2).clone());
+	}
 }

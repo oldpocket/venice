@@ -56,6 +56,7 @@ import nz.org.venice.util.TradingDateFormatException;
 
 /**
  * A dialog for letting the user add a new Alert
+ * 
  * <pre>
  * AlertDialog dialog = new AlertDialog(desktop, symbol);
  *
@@ -66,8 +67,7 @@ import nz.org.venice.util.TradingDateFormatException;
  * @see Alert
  * @author Mark Hummel
  */
-public class AlertDialog extends JInternalFrame 
-implements ActionListener, KeyListener {
+public class AlertDialog extends JInternalFrame implements ActionListener, KeyListener {
 
 	private JDesktopPane desktop;
 
@@ -91,13 +91,13 @@ implements ActionListener, KeyListener {
 	private JLabel alertTypeLabel;
 	private JLabel fieldTypeLabel;
 
-	//Data Values
+	// Data Values
 	private String symbolString;
 	private String startDateString;
 	private String endDateString;
 	private String targetString;
 	private String alertType;
-	private int boundType;    
+	private int boundType;
 	private String fieldType;
 	private TradingDate startDate;
 	private TradingDate endDate;
@@ -105,18 +105,15 @@ implements ActionListener, KeyListener {
 
 	private AlertWriter alertWriter;
 
-	//Previously created alert
-	private final Alert alert;    
+	// Previously created alert
+	private final Alert alert;
 	private Symbol symbol;
 
-
-
-	// Results of dialog. Has it finished. What button was pressed. 
+	// Results of dialog. Has it finished. What button was pressed.
 	private boolean isDone = false;
 	private boolean okButtonPressed = false;
 
-	public AlertDialog(JDesktopPane desktop, Alert alert, 
-			AlertWriter alertWriter) {
+	public AlertDialog(JDesktopPane desktop, Alert alert, AlertWriter alertWriter) {
 		super();
 		this.desktop = desktop;
 		this.alert = alert;
@@ -129,11 +126,10 @@ implements ActionListener, KeyListener {
 	/**
 	 * Create a new alert dialog.
 	 *
-	 * @param	desktop	the current desktop
-	 * @param	symbol	the symbol to create an alert for 
+	 * @param desktop the current desktop
+	 * @param symbol  the symbol to create an alert for
 	 */
-	public AlertDialog(JDesktopPane desktop, Symbol symbol, 
-			AlertWriter alertWriter) {
+	public AlertDialog(JDesktopPane desktop, Symbol symbol, AlertWriter alertWriter) {
 		super();
 		this.desktop = desktop;
 		this.symbol = symbol;
@@ -146,7 +142,7 @@ implements ActionListener, KeyListener {
 	/**
 	 * Create a new alert dialog.
 	 *
-	 * @param	desktop	the current desktop
+	 * @param desktop the current desktop
 	 */
 	public AlertDialog(JDesktopPane desktop) {
 		super();
@@ -155,8 +151,6 @@ implements ActionListener, KeyListener {
 
 		setupPanels();
 	}
-
-
 
 	private void setupPanels() {
 		// Make sure we can't be hidden behind other windows
@@ -177,145 +171,110 @@ implements ActionListener, KeyListener {
 		alertTypes.add(Locale.getString("QUOTES"));
 		alertTypes.add(Locale.getString("INPUT_EXPRESSION"));
 
-
-		alertTypeComboBox = GridBagHelper.addComboBox(mainPanel,
-				Locale.getString("ALERT_TYPE"),
-				alertTypes,
-				gridbag,
+		alertTypeComboBox = GridBagHelper.addComboBox(mainPanel, Locale.getString("ALERT_TYPE"), alertTypes, gridbag,
 				c);
 
 		alertTypeComboBox.addActionListener(this);
 		alertTypeComboBox.setToolTipText(Locale.getString("ALERT_TYPE_TOOLTIP"));
 
-		//If an alert is provided use the alert's start date,
-		//otherwise use today
-		TradingDate startDate = 
-				(alert != null) ? alert.getStartDate() : new TradingDate();
+		// If an alert is provided use the alert's start date,
+		// otherwise use today
+		TradingDate startDate = (alert != null) ? alert.getStartDate() : new TradingDate();
 
-				if (symbol == null) {
-					symbolTextField =
-							GridBagHelper.addTextRow(mainPanel, Locale.getString("SYMBOL"), 
-									"",
-									gridbag, c, 15);
-					symbolTextField.setToolTipText(Locale.getString("SYMBOL_FIELD_TOOLTIP"));
-				}
+		if (symbol == null) {
+			symbolTextField = GridBagHelper.addTextRow(mainPanel, Locale.getString("SYMBOL"), "", gridbag, c, 15);
+			symbolTextField.setToolTipText(Locale.getString("SYMBOL_FIELD_TOOLTIP"));
+		}
 
-				startDateTextField = 
-						GridBagHelper.addTextRow(mainPanel, Locale.getString("START_DATE"), 
-								startDate.toString("dd/mm/yyyy"), 
-								gridbag, c, 15);
+		startDateTextField = GridBagHelper.addTextRow(mainPanel, Locale.getString("START_DATE"),
+				startDate.toString("dd/mm/yyyy"), gridbag, c, 15);
 
-				startDateTextField.setToolTipText(Locale.getString("START_DATE_FIELD_TOOLTIP"));
+		startDateTextField.setToolTipText(Locale.getString("START_DATE_FIELD_TOOLTIP"));
 
-				endDateTextField = 
-						GridBagHelper.addTextRow(mainPanel, Locale.getString("END_DATE"), 
-								"", 
-								gridbag, c, 15);
+		endDateTextField = GridBagHelper.addTextRow(mainPanel, Locale.getString("END_DATE"), "", gridbag, c, 15);
 
-				endDateTextField.setToolTipText(Locale.getString("START_DATE_FIELD_TOOLTIP"));
+		endDateTextField.setToolTipText(Locale.getString("START_DATE_FIELD_TOOLTIP"));
 
-				targetTextField = 
-						GridBagHelper.addTextRow(mainPanel, 
-								Locale.getString("ALERT_TRIGGER"), 
-								"", 
-								gridbag, c, 15);
+		targetTextField = GridBagHelper.addTextRow(mainPanel, Locale.getString("ALERT_TRIGGER"), "", gridbag, c, 15);
 
-				targetTextField.setToolTipText(Locale.getString("ALERT_TARGET_TOOLTIP"));
+		targetTextField.setToolTipText(Locale.getString("ALERT_TARGET_TOOLTIP"));
 
+		if (symbolTextField != null) {
+			symbolTextField.addKeyListener(this);
+		}
+		startDateTextField.addKeyListener(this);
+		targetTextField.addKeyListener(this);
 
-				if (symbolTextField != null) {
-					symbolTextField.addKeyListener(this);
-				}
-				startDateTextField.addKeyListener(this);
-				targetTextField.addKeyListener(this);
+		Vector boundTypes = new Vector();
+		boundTypes.add(Locale.getString("ALERT_UPPER_BOUND"));
+		boundTypes.add(Locale.getString("ALERT_LOWER_BOUND"));
+		boundTypes.add(Locale.getString("ALERT_EXACT_BOUND"));
 
-				Vector boundTypes = new Vector();
-				boundTypes.add(Locale.getString("ALERT_UPPER_BOUND"));
-				boundTypes.add(Locale.getString("ALERT_LOWER_BOUND"));
-				boundTypes.add(Locale.getString("ALERT_EXACT_BOUND"));
+		boundTypeComboBox = GridBagHelper.addComboBox(mainPanel, Locale.getString("ALERT_BOUND_TYPE"), boundTypes,
+				gridbag, c);
 
-				boundTypeComboBox = GridBagHelper.addComboBox(mainPanel,
-						Locale.getString("ALERT_BOUND_TYPE"),
-						boundTypes,
-						gridbag, c);
+		boundTypeComboBox.addActionListener(this);
+		boundTypeComboBox.setToolTipText(Locale.getString("ALERT_BOUND_TYPE_TOOLTIP"));
 
-				boundTypeComboBox.addActionListener(this);
-				boundTypeComboBox.setToolTipText(Locale.getString("ALERT_BOUND_TYPE_TOOLTIP"));
+		Vector fieldTypes = new Vector();
+		fieldTypes.add(Locale.getString("DAY_OPEN"));
+		fieldTypes.add(Locale.getString("DAY_HIGH"));
+		fieldTypes.add(Locale.getString("DAY_LOW"));
+		fieldTypes.add(Locale.getString("DAY_CLOSE"));
+		fieldTypes.add(Locale.getString("VOLUME"));
 
+		fieldTypeLabel = new JLabel(Locale.getString("ALERT_FIELD_TYPE"));
+		c.gridwidth = 1;
+		gridbag.setConstraints(fieldTypeLabel, c);
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		gridbag.setConstraints(boundTypeComboBox, c);
 
-				Vector fieldTypes = new Vector();
-				fieldTypes.add(Locale.getString("DAY_OPEN"));
-				fieldTypes.add(Locale.getString("DAY_HIGH"));
-				fieldTypes.add(Locale.getString("DAY_LOW"));	
-				fieldTypes.add(Locale.getString("DAY_CLOSE"));
-				fieldTypes.add(Locale.getString("VOLUME"));
+		fieldTypeComboBox = GridBagHelper.addComboBox(mainPanel, Locale.getString("ALERT_FIELD_TYPE"), fieldTypes,
+				gridbag, c);
 
+		fieldTypeComboBox.addActionListener(this);
+		fieldTypeComboBox.setToolTipText(Locale.getString("ALERT_OHLCV_FIELD_TOOLTIP"));
 
-				fieldTypeLabel = new JLabel(Locale.getString("ALERT_FIELD_TYPE"));
-				c.gridwidth = 1;
-				gridbag.setConstraints(fieldTypeLabel, c);
-				c.gridwidth = GridBagConstraints.REMAINDER;
-				gridbag.setConstraints(boundTypeComboBox, c);       
+		// If an alert was supplied, setup the dialog with it's values
+		if (alert != null) {
+			if (alert.getType() == Alert.GONDOLA) {
+				alertTypeComboBox.setSelectedIndex(1);
+				boundTypeComboBox.setVisible(false);
+				fieldTypeComboBox.setVisible(false);
+				targetTextField.setText(alert.getTargetExpression());
+			}
 
-				fieldTypeComboBox = GridBagHelper.addComboBox(mainPanel,
-						Locale.getString("ALERT_FIELD_TYPE"),
-						fieldTypes,
-						gridbag,
-						c);
+			if (alert.getType() == Alert.OHLCV) {
+				alertTypeComboBox.setSelectedIndex(0);
+				boundTypeComboBox.setVisible(true);
+				fieldTypeComboBox.setVisible(true);
+				targetTextField.setText(alert.getTargetValue().toString());
+			}
+		}
 
-				fieldTypeComboBox.addActionListener(this);
-				fieldTypeComboBox.setToolTipText(Locale.getString("ALERT_OHLCV_FIELD_TOOLTIP"));
+		helpButton = GridBagHelper.addHelpButtonRow(mainPanel, Locale.getString("ALERT_TITLE"), gridbag, c);
+		helpButton.addActionListener(this);
 
+		JPanel buttonPanel = new JPanel();
+		okButton = new JButton(Locale.getString("OK"));
+		okButton.addActionListener(this);
+		okButton.setEnabled(false);
+		getRootPane().setDefaultButton(okButton);
 
-				//If an alert was supplied, setup the dialog with it's values
-				if (alert != null) {
-					if (alert.getType() == Alert.GONDOLA) {
-						alertTypeComboBox.setSelectedIndex(1);
-						boundTypeComboBox.setVisible(false);
-						fieldTypeComboBox.setVisible(false);
-						targetTextField.setText(alert.getTargetExpression());
-					}
+		cancelButton = new JButton(Locale.getString("CANCEL"));
+		cancelButton.addActionListener(this);
+		buttonPanel.add(okButton);
+		buttonPanel.add(cancelButton);
 
-					if (alert.getType() == Alert.OHLCV) {
-						alertTypeComboBox.setSelectedIndex(0);
-						boundTypeComboBox.setVisible(true);
-						fieldTypeComboBox.setVisible(true);
-						targetTextField.setText(alert.getTargetValue().toString());
-					}
-				}
+		getContentPane().add(mainPanel, BorderLayout.NORTH);
+		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-				helpButton = GridBagHelper.addHelpButtonRow(mainPanel, 
-						Locale.getString("ALERT_TITLE"),
-						gridbag,
-						c);	
-				helpButton.addActionListener(this);
-
-
-
-
-
-				JPanel buttonPanel = new JPanel();        
-				okButton = new JButton(Locale.getString("OK"));
-				okButton.addActionListener(this);
-				okButton.setEnabled(false);
-				getRootPane().setDefaultButton(okButton);
-
-				cancelButton = new JButton(Locale.getString("CANCEL"));
-				cancelButton.addActionListener(this);
-				buttonPanel.add(okButton);
-				buttonPanel.add(cancelButton);
-
-				getContentPane().add(mainPanel, BorderLayout.NORTH);
-				getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-
-				setFrameSize();
-
+		setFrameSize();
 
 	}
 
-
 	private void setFrameSize() {
-		Dimension preferred; 
+		Dimension preferred;
 		int width = 0;
 		int height = 0;
 
@@ -329,14 +288,12 @@ implements ActionListener, KeyListener {
 
 		setBounds(x, y, width, height);
 
-
 	}
 
 	/**
-	 * Display a dialog letting the user enter a new alert.
-	 * Add the alert.
+	 * Display a dialog letting the user enter a new alert. Add the alert.
 	 *
-	 * @return	whether the OK button was pressed
+	 * @return whether the OK button was pressed
 	 */
 	public boolean newAlert() {
 		String symbolString = (symbol != null) ? symbol.toString() : "";
@@ -346,16 +303,15 @@ implements ActionListener, KeyListener {
 		show();
 
 		try {
-			while(isDone == false) {
+			while (isDone == false) {
 				Thread.sleep(10);
 			}
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			// ignore
 		}
 
-		// If the user pressed the OK button then add the alert.	
-		if(okButtonPressed) {	    
+		// If the user pressed the OK button then add the alert.
+		if (okButtonPressed) {
 			if (alertWriter != null) {
 				if (alertType.equals(Locale.getString("QUOTES"))) {
 					OHLCVAlert newAlert = new OHLCVAlert();
@@ -363,7 +319,7 @@ implements ActionListener, KeyListener {
 					newAlert.setBoundType(boundType);
 					newAlert.setField(fieldType);
 					newAlert.setTargetValue(targetValue);
-					newAlert.setTargetExpression(targetString);		
+					newAlert.setTargetExpression(targetString);
 					newAlert.setStartDate(startDate);
 					newAlert.setEndDate(endDate);
 					newAlert.setDateSet(new TradingDate());
@@ -371,7 +327,7 @@ implements ActionListener, KeyListener {
 				} else {
 					GondolaAlert newAlert = new GondolaAlert();
 					newAlert.setSymbol(symbol);
-					newAlert.setTargetExpression(targetString);		
+					newAlert.setTargetExpression(targetString);
 					newAlert.setStartDate(startDate);
 					newAlert.setEndDate(endDate);
 					newAlert.setDateSet(new TradingDate());
@@ -383,10 +339,9 @@ implements ActionListener, KeyListener {
 	}
 
 	/**
-	 * Display a dialog letting the user edit an alert.
-	 * Modify the saved alert.
+	 * Display a dialog letting the user edit an alert. Modify the saved alert.
 	 *
-	 * @return	whether the OK button was pressed
+	 * @return whether the OK button was pressed
 	 */
 	public boolean editAlert() {
 		setTitle(Locale.getString("ALERT_EDIT") + " " + symbol);
@@ -395,24 +350,23 @@ implements ActionListener, KeyListener {
 		show();
 
 		try {
-			while(isDone == false) {
+			while (isDone == false) {
 				Thread.sleep(10);
 			}
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			// ignore
 		}
 
-		// If the user pressed the OK button then add the alert.	
-		if(okButtonPressed) {
-			if (alertWriter != null) {			
+		// If the user pressed the OK button then add the alert.
+		if (okButtonPressed) {
+			if (alertWriter != null) {
 				if (alertType.equals(Locale.getString("QUOTES"))) {
 					OHLCVAlert newAlert = new OHLCVAlert();
 					newAlert.setSymbol(symbol);
 					newAlert.setBoundType(boundType);
 					newAlert.setField(fieldType);
 					newAlert.setTargetValue(targetValue);
-					newAlert.setTargetExpression(targetString);		
+					newAlert.setTargetExpression(targetString);
 					newAlert.setStartDate(startDate);
 					newAlert.setEndDate(endDate);
 					newAlert.setDateSet(new TradingDate());
@@ -420,11 +374,11 @@ implements ActionListener, KeyListener {
 				} else {
 					GondolaAlert newAlert = new GondolaAlert();
 					newAlert.setSymbol(symbol);
-					newAlert.setTargetExpression(targetString);		
+					newAlert.setTargetExpression(targetString);
 					newAlert.setStartDate(startDate);
 					newAlert.setEndDate(endDate);
 					newAlert.setDateSet(new TradingDate());
-					alertWriter.update(alert, newAlert);		
+					alertWriter.update(alert, newAlert);
 				}
 			}
 		}
@@ -439,29 +393,29 @@ implements ActionListener, KeyListener {
 				isDone = true;
 				dispose();
 			} else {
-				//Do nothing - leave the dialog open
-				//as there is an error in the input
+				// Do nothing - leave the dialog open
+				// as there is an error in the input
 			}
 		} else if (e.getSource() == cancelButton) {
 			dispose();
-			isDone = true;	    
+			isDone = true;
 			okButtonPressed = false;
 		} else if (e.getSource() == alertTypeComboBox) {
-			String alertType = (String)alertTypeComboBox.getSelectedItem();
-			//Hide the bound type field if the alert is an expresion type
+			String alertType = (String) alertTypeComboBox.getSelectedItem();
+			// Hide the bound type field if the alert is an expresion type
 			if (alertType.equals(Locale.getString("INPUT_EXPRESSION"))) {
 				boundTypeComboBox.setVisible(false);
 				fieldTypeComboBox.setVisible(false);
 				fieldTypeLabel.setVisible(false);
-			}  else {
+			} else {
 				boundTypeComboBox.setVisible(true);
 				fieldTypeComboBox.setVisible(true);
-				fieldTypeLabel.setVisible(true);		
-			}			   
+				fieldTypeLabel.setVisible(true);
+			}
 		} else if (e.getSource() == helpButton) {
 			CommandManager.getInstance().openHelp("Alerts");
 		}
-	}	
+	}
 
 	private void getInput() {
 		if (symbolTextField != null) {
@@ -472,14 +426,11 @@ implements ActionListener, KeyListener {
 		endDateString = endDateTextField.getText();
 		targetString = targetTextField.getText();
 
-		alertType = (String)alertTypeComboBox.getSelectedItem();
-
+		alertType = (String) alertTypeComboBox.getSelectedItem();
 
 		if (alertType.equals(Locale.getString("QUOTES"))) {
-			String boundTypeString = 
-					(String)boundTypeComboBox.getSelectedItem();
-			String fieldTypeString = 
-					(String)fieldTypeComboBox.getSelectedItem();
+			String boundTypeString = (String) boundTypeComboBox.getSelectedItem();
+			String fieldTypeString = (String) fieldTypeComboBox.getSelectedItem();
 
 			boundType = -1;
 			if (boundTypeString.equals(Locale.getString("ALERT_UPPER_BOUND"))) {
@@ -490,7 +441,7 @@ implements ActionListener, KeyListener {
 				boundType = Alert.EXACT_BOUND;
 			} else {
 				assert false;
-			}	
+			}
 
 			fieldType = "";
 			if (fieldTypeString.equals(Locale.getString("DAY_OPEN"))) {
@@ -504,8 +455,7 @@ implements ActionListener, KeyListener {
 				fieldType = Alert.CLOSE_FIELD;
 			} else if (fieldTypeString.equals(Locale.getString("VOLUME"))) {
 				fieldType = Alert.LOW_FIELD;
-			}
-			else {
+			} else {
 				assert false;
 			}
 		}
@@ -518,65 +468,46 @@ implements ActionListener, KeyListener {
 			try {
 				symbol = Symbol.find(symbolString);
 			} catch (SymbolFormatException e) {
-				JOptionPane.
-				showInternalMessageDialog(desktop,
-						Locale.getString("SYMBOL_NOT_FOUND"),
-						Locale.getString("SYMBOL_NOT_FOUND"),
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showInternalMessageDialog(desktop, Locale.getString("SYMBOL_NOT_FOUND"),
+						Locale.getString("SYMBOL_NOT_FOUND"), JOptionPane.ERROR_MESSAGE);
 			}
 		}
 
 		try {
-			startDate = new TradingDate(startDateString,
-					TradingDate.BRITISH);
+			startDate = new TradingDate(startDateString, TradingDate.BRITISH);
 
-			endDate = (!endDateString.equals("")) 		
-					? new TradingDate(endDateString,
-							TradingDate.BRITISH) 
-							: null;
+			endDate = (!endDateString.equals("")) ? new TradingDate(endDateString, TradingDate.BRITISH) : null;
 
-		} catch (TradingDateFormatException e) {		
-			String message = 
-					new String(Locale.getString("ERROR_PARSING_DATE",
-							e.getDate()));
-			JOptionPane.showInternalMessageDialog(desktop, 
-					message,
-					Locale.
-					getString("ALERT_DIALOG_ERROR"),
-					JOptionPane.
-					ERROR_MESSAGE);	    
+		} catch (TradingDateFormatException e) {
+			String message = new String(Locale.getString("ERROR_PARSING_DATE", e.getDate()));
+			JOptionPane.showInternalMessageDialog(desktop, message, Locale.getString("ALERT_DIALOG_ERROR"),
+					JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 
 		if (alertType.equals(Locale.getString("QUOTES"))) {
 			try {
-				targetValue = new Double(targetString);		
+				targetValue = new Double(targetString);
 			} catch (NumberFormatException e) {
-				JOptionPane.
-				showInternalMessageDialog(desktop,
-						Locale.getString(("ERROR_PARSING_NUMBER"),e.getMessage()),
-						Locale.getString("INVALID_NUMBER_TITLE"),
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showInternalMessageDialog(desktop,
+						Locale.getString(("ERROR_PARSING_NUMBER"), e.getMessage()),
+						Locale.getString("INVALID_NUMBER_TITLE"), JOptionPane.ERROR_MESSAGE);
 				return false;
-			}	
+			}
 		} else {
 			try {
 				Parser.parse(targetString);
 			} catch (ExpressionException e) {
-				JOptionPane.
-				showInternalMessageDialog(desktop,
-						e.getReason(),
-						Locale.getString("ERROR_PARSING_EXPRESSION"),
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showInternalMessageDialog(desktop, e.getReason(),
+						Locale.getString("ERROR_PARSING_EXPRESSION"), JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-		} 
+		}
 		return true;
 	}
 
 	private boolean checkRequiredFieldsEntered() {
-		if (symbol == null &&
-				symbolTextField.getText().equals("")) {
+		if (symbol == null && symbolTextField.getText().equals("")) {
 			return false;
 		}
 		if (startDateTextField.getText().equals("")) {
@@ -585,7 +516,7 @@ implements ActionListener, KeyListener {
 		if (targetTextField.getText().equals("")) {
 			return false;
 		}
-		return true;	    
+		return true;
 	}
 
 	public void keyTyped(KeyEvent e) {

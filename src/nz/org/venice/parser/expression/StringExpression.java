@@ -27,61 +27,62 @@ import nz.org.venice.quote.Symbol;
  */
 public class StringExpression extends TerminalExpression {
 
-    // The string's text
-    private String text;
+	// The string's text
+	private String text;
 
-    /** Create a new string expression with the given string text.
-     *
-     * @param text the initial text of the string.
-     */
-    public StringExpression(String text) {
-        this.text = text;
-    }
+	/**
+	 * Create a new string expression with the given string text.
+	 *
+	 * @param text the initial text of the string.
+	 */
+	public StringExpression(String text) {
+		this.text = text;
+	}
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) {
-        // How can I get this to return a string without having to make the expression
-        // keep creating temporary objects?
-        return 0.0D;
-    }
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) {
+		// How can I get this to return a string without having to make the expression
+		// keep creating temporary objects?
+		return 0.0D;
+	}
 
-    public String toString() {
-        return "\"" + text + "\"";
-    }
+	public String toString() {
+		return "\"" + text + "\"";
+	}
 
-    public boolean equals(Object object) {
-        if(object instanceof StringExpression) {
-            StringExpression expression = (StringExpression)object;
+	public boolean equals(Object object) {
+		if (object instanceof StringExpression) {
+			StringExpression expression = (StringExpression) object;
 
-            if(expression.getText() == getText())
-                return true;
-        }
+			if (expression.getText() == getText())
+				return true;
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    public int hashCode() {
-	return getText().hashCode();
-    }
+	public int hashCode() {
+		return getText().hashCode();
+	}
 
-    /**
-     * Get the text of the string.
-     *
-     * @return string text
-     */
-    public String getText() {
-        return text;
-    }
+	/**
+	 * Get the text of the string.
+	 *
+	 * @return string text
+	 */
+	public String getText() {
+		return text;
+	}
 
-    /**
-     * Get the type of the expression.
-     *
-     * @return {@link #STRING_TYPE}
-     */
-    public int getType() {
-        return STRING_TYPE;
-    }
+	/**
+	 * Get the type of the expression.
+	 *
+	 * @return {@link #STRING_TYPE}
+	 */
+	public int getType() {
+		return STRING_TYPE;
+	}
 
-    public Object clone() {
-        return new StringExpression(text);
-    }
+	public Object clone() {
+		return new StringExpression(text);
+	}
 }

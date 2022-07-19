@@ -34,54 +34,60 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.HashMap;
 
-
 class MSEmasterFile {
 	private static MSEmasterFile instance = new MSEmasterFile();
-    public static synchronized MSEmasterFile getInstance() {  
-    	return instance;
-    }  
 
-    private boolean fileLoaded;
-    private File masterFile;
-    private RandomAccessFile masterStream;
-    private HashMap stocksByFile; // <String, MSDataInfo>
-  
-    public int filesNo;
-    public int lastFile;
-        
-    public boolean load(File masterFile) throws FileNotFoundException, IOException {
-    	if (this.masterFile != null && (masterFile.getPath().equals(this.masterFile.getPath())))
-    		return true;
-    	this.masterFile = masterFile;
-	this.stocksByFile = new HashMap(); // <String, MSDataInfo>
-    	this.masterStream = new RandomAccessFile(this.masterFile,"r");
-        byte[] b = new byte[2];
-        this.masterStream.read(b);
-        this.filesNo = ByteBuffer.wrap(b).order(ByteOrder.LITTLE_ENDIAN).getShort(); // (int)((0x000000FF & ((int)b[1]))  8  (0x000000FF & ((int)b[0])));
-        this.masterStream.read(b);
-        this.lastFile = ByteBuffer.wrap(b).order(ByteOrder.LITTLE_ENDIAN).getShort(); //(int)((0x000000FF & ((int)b[1]))  8  (0x000000FF & ((int)b[0])));
-        this.masterStream.skipBytes(188);
-        for(int i = 0; i < this.filesNo; i++) {
-            MSDataInfo sdi = new MSDataInfo(this.masterStream);
-            this.stocksByFile.put("F"+sdi.getFileNum()+".DAT", sdi);
-        }
-        this.fileLoaded = true;
-        return this.fileLoaded;
-    }
-    
-    public HashMap getDataInfo() { // <String, MSDataInfo>
-    	if (!this.fileLoaded) return null;
-    	return this.stocksByFile;
-    }
-    
-    public MSDataInfo getDataInfo(File file) {
-    	if (!this.containsFile(file)) return null;
-	return (MSDataInfo)this.stocksByFile.get(file.getName().toUpperCase());
-    }
-    
-    public boolean containsFile(File file) {
-    	if (this.stocksByFile == null) return false;
-    	return this.stocksByFile.containsKey(file.getName().toUpperCase());
-    }
+	public static synchronized MSEmasterFile getInstance() {
+		return instance;
+	}
+
+	private boolean fileLoaded;
+	private File masterFile;
+	private RandomAccessFile masterStream;
+	private HashMap stocksByFile; // <String, MSDataInfo>
+
+	public int filesNo;
+	public int lastFile;
+
+	public boolean load(File masterFile) throws FileNotFoundException, IOException {
+		if (this.masterFile != null && (masterFile.getPath().equals(this.masterFile.getPath())))
+			return true;
+		this.masterFile = masterFile;
+		this.stocksByFile = new HashMap(); // <String, MSDataInfo>
+		this.masterStream = new RandomAccessFile(this.masterFile, "r");
+		byte[] b = new byte[2];
+		this.masterStream.read(b);
+		this.filesNo = ByteBuffer.wrap(b).order(ByteOrder.LITTLE_ENDIAN).getShort(); // (int)((0x000000FF & ((int)b[1]))
+																						// 8 (0x000000FF &
+																						// ((int)b[0])));
+		this.masterStream.read(b);
+		this.lastFile = ByteBuffer.wrap(b).order(ByteOrder.LITTLE_ENDIAN).getShort(); // (int)((0x000000FF &
+																						// ((int)b[1])) 8 (0x000000FF &
+																						// ((int)b[0])));
+		this.masterStream.skipBytes(188);
+		for (int i = 0; i < this.filesNo; i++) {
+			MSDataInfo sdi = new MSDataInfo(this.masterStream);
+			this.stocksByFile.put("F" + sdi.getFileNum() + ".DAT", sdi);
+		}
+		this.fileLoaded = true;
+		return this.fileLoaded;
+	}
+
+	public HashMap getDataInfo() { // <String, MSDataInfo>
+		if (!this.fileLoaded)
+			return null;
+		return this.stocksByFile;
+	}
+
+	public MSDataInfo getDataInfo(File file) {
+		if (!this.containsFile(file))
+			return null;
+		return (MSDataInfo) this.stocksByFile.get(file.getName().toUpperCase());
+	}
+
+	public boolean containsFile(File file) {
+		if (this.stocksByFile == null)
+			return false;
+		return this.stocksByFile.containsKey(file.getName().toUpperCase());
+	}
 }
- 

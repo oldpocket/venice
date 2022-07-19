@@ -29,7 +29,6 @@
 
 package nz.org.venice.prefs;
 
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -54,7 +53,6 @@ import nz.org.venice.ui.AbstractTableModel;
 import nz.org.venice.ui.IndexEditorDialog;
 import nz.org.venice.util.Locale;
 
-
 public class IndexPreferencesPage extends JPanel implements PreferencesPage {
 
 	private JDesktopPane desktop;
@@ -73,8 +71,7 @@ public class IndexPreferencesPage extends JPanel implements PreferencesPage {
 	private static final int SYMBOL_COLUMN = 0;
 	private static final int NAME_COLUMN = 1;
 
-	final String[] names = { Locale.getString("STOCK"),
-			Locale.getString("NAME")};
+	final String[] names = { Locale.getString("STOCK"), Locale.getString("NAME") };
 
 	public IndexPreferencesPage(JDesktopPane desktop) {
 		this.desktop = desktop;
@@ -87,7 +84,7 @@ public class IndexPreferencesPage extends JPanel implements PreferencesPage {
 
 	public void save() {
 		try {
-			PreferencesManager.putSymbolMetadata(indexSymbols);	
+			PreferencesManager.putSymbolMetadata(indexSymbols);
 		} catch (PreferencesException e) {
 
 		}
@@ -146,15 +143,11 @@ public class IndexPreferencesPage extends JPanel implements PreferencesPage {
 		}
 
 		/*
-			SymbolMetadata is1 = new SymbolMetadata("XAO", "AU", true);
-			SymbolMetadata is2 = new SymbolMetadata("XAB", "AU", true);
-			SymbolMetadata is3 = new SymbolMetadata("XAC", "AU", true);
-			indexSymbols = new java.util.ArrayList();
-			indexSymbols.add(is1);
-			indexSymbols.add(is2);
-			indexSymbols.add(is3);
+		 * SymbolMetadata is1 = new SymbolMetadata("XAO", "AU", true); SymbolMetadata
+		 * is2 = new SymbolMetadata("XAB", "AU", true); SymbolMetadata is3 = new
+		 * SymbolMetadata("XAC", "AU", true); indexSymbols = new java.util.ArrayList();
+		 * indexSymbols.add(is1); indexSymbols.add(is2); indexSymbols.add(is3);
 		 */
-
 
 		// Define the table model
 
@@ -176,14 +169,13 @@ public class IndexPreferencesPage extends JPanel implements PreferencesPage {
 				return names[column];
 			}
 
-
 			public Class getColumnClass(int c) {
 				return getValueAt(0, c).getClass();
 			}
 
 			public Object getValueAt(int row, int col) {
-				SymbolMetadata index = (SymbolMetadata)indexSymbols.get(row);
-				switch (col) {		    
+				SymbolMetadata index = (SymbolMetadata) indexSymbols.get(row);
+				switch (col) {
 				case SYMBOL_COLUMN:
 					return index.getSymbol().toString();
 
@@ -211,11 +203,19 @@ public class IndexPreferencesPage extends JPanel implements PreferencesPage {
 					deleteButton.setEnabled(false);
 					editButton.setEnabled(true);
 				}
-			}	    
-			public void mousePressed(MouseEvent e) {}
-			public void mouseReleased(MouseEvent e) {}
-			public void mouseEntered(MouseEvent e) {}
-			public void mouseExited(MouseEvent e) {}
+			}
+
+			public void mousePressed(MouseEvent e) {
+			}
+
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			public void mouseExited(MouseEvent e) {
+			}
 		});
 
 		return indexTable;
@@ -250,7 +250,7 @@ public class IndexPreferencesPage extends JPanel implements PreferencesPage {
 		editButton.setText(Locale.getString("EDIT"));
 		editButton.setEnabled(false);
 
-		return editButton;    
+		return editButton;
 	}
 
 	/**
@@ -262,14 +262,14 @@ public class IndexPreferencesPage extends JPanel implements PreferencesPage {
 		addButton = new JButton();
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				selectedRow = -1;		    
+				selectedRow = -1;
 				editIndex();
 			}
 		});
 		addButton.setText(Locale.getString("ADD"));
 		addButton.setEnabled(true);
 
-		return addButton;    
+		return addButton;
 	}
 
 	/**
@@ -281,17 +281,16 @@ public class IndexPreferencesPage extends JPanel implements PreferencesPage {
 		deleteButton = new JButton();
 		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (selectedRow == -1) {return; }
-				SymbolMetadata index = (SymbolMetadata) indexSymbols
-						.get(selectedRow);
+				if (selectedRow == -1) {
+					return;
+				}
+				SymbolMetadata index = (SymbolMetadata) indexSymbols.get(selectedRow);
 
-				int response = 
-						JOptionPane.
-						showInternalConfirmDialog(deleteButton,
-								Locale.getString("SURE_DELETE_SYMBOL", index.getSymbol().toString()),
-								Locale.getString("DELETE_INDEX_TITLE"),
+				int response = JOptionPane.showInternalConfirmDialog(deleteButton,
+						Locale.getString("SURE_DELETE_SYMBOL", index.getSymbol().toString()),
+						Locale.getString("DELETE_INDEX_TITLE"),
 
-								JOptionPane.YES_NO_OPTION);
+						JOptionPane.YES_NO_OPTION);
 
 				if (response == JOptionPane.YES_OPTION) {
 					indexSymbols.remove(selectedRow);
@@ -301,7 +300,7 @@ public class IndexPreferencesPage extends JPanel implements PreferencesPage {
 
 					}
 					selectedRow = -1;
-					tableModel.fireTableDataChanged();			
+					tableModel.fireTableDataChanged();
 				}
 			}
 		});
@@ -312,10 +311,8 @@ public class IndexPreferencesPage extends JPanel implements PreferencesPage {
 	}
 
 	private void editIndex() {
-		editDialog = 
-				(selectedRow != -1) 
-				? new IndexEditorDialog((SymbolMetadata)indexSymbols.get(selectedRow))
-						: new IndexEditorDialog();
+		editDialog = (selectedRow != -1) ? new IndexEditorDialog((SymbolMetadata) indexSymbols.get(selectedRow))
+				: new IndexEditorDialog();
 
 		editDialog.addInternalFrameListener(new InternalFrameListener() {
 			public void internalFrameClosed(InternalFrameEvent ife) {
@@ -334,16 +331,27 @@ public class IndexPreferencesPage extends JPanel implements PreferencesPage {
 					} catch (PreferencesException e) {
 
 					}
-				} 
+				}
 			}
-			public void internalFrameActivated(InternalFrameEvent arg0) {}
-			public void internalFrameClosing(InternalFrameEvent e) {}
-			public void internalFrameDeactivated(InternalFrameEvent e) {}
-			public void internalFrameDeiconified(InternalFrameEvent arg0) {}
-			public void internalFrameIconified(InternalFrameEvent arg0) {}
-			public void internalFrameOpened(InternalFrameEvent arg0) {}
-		});    
+
+			public void internalFrameActivated(InternalFrameEvent arg0) {
+			}
+
+			public void internalFrameClosing(InternalFrameEvent e) {
+			}
+
+			public void internalFrameDeactivated(InternalFrameEvent e) {
+			}
+
+			public void internalFrameDeiconified(InternalFrameEvent arg0) {
+			}
+
+			public void internalFrameIconified(InternalFrameEvent arg0) {
+			}
+
+			public void internalFrameOpened(InternalFrameEvent arg0) {
+			}
+		});
 	}
 
 }
-

@@ -66,15 +66,15 @@ import nz.org.venice.util.TradingTimeFormatException;
 
 /**
  * The Preferences Manager contains a set of routines for loading and saving all
- * preferences data for the application. Consolidating these routines in a single
- * place allows us to maintain preferences namespace convention and also
+ * preferences data for the application. Consolidating these routines in a
+ * single place allows us to maintain preferences namespace convention and also
  * allows us to easily change the method of storage at a later date if desired.
  * <p>
- * If a save method first clears all preferences data from a node, it is imperative
- * that both the save and the equivalent load methods are <code>synchronized</code>.
- * Otherwise there is the possibility the load call is called just after the
- * delete call which would nuke all the values. Perhaps all the methods
- * should be synchronized.
+ * If a save method first clears all preferences data from a node, it is
+ * imperative that both the save and the equivalent load methods are
+ * <code>synchronized</code>. Otherwise there is the possibility the load call
+ * is called just after the delete call which would nuke all the values. Perhaps
+ * all the methods should be synchronized.
  *
  * @author Daniel Makovec
  */
@@ -189,31 +189,32 @@ public class PreferencesManager {
 		public int period;
 	}
 
-
 	/**
 	 * Forces the preferences data to be saved to the backend store (e.g. disk).
 	 */
 	public static void flush() {
 		try {
 			userRoot.flush();
-		} catch(BackingStoreException e) {
+		} catch (BackingStoreException e) {
 			// ignore
 		}
 	}
 
 	/**
 	 * Fetches the desired user node, based at the <code>base</code> branch.
+	 * 
 	 * @param node the path to the node to be fetched.
 	 */
 	public static Preferences getUserNode(String node) {
-		if (node.charAt(0) == '/') node = node.substring(1);
+		if (node.charAt(0) == '/')
+			node = node.substring(1);
 		return userRoot.node(node);
 	}
 
 	/**
-	 * Return whether we require the user to explicitly accept the GPL
-	 * license. Currently the license must be explicilty accepted by
-	 * the user for each version.
+	 * Return whether we require the user to explicitly accept the GPL license.
+	 * Currently the license must be explicilty accepted by the user for each
+	 * version.
 	 *
 	 * @return <code>true</code> if the user needs to explicitly accept the GPL.
 	 */
@@ -224,8 +225,8 @@ public class PreferencesManager {
 	}
 
 	/**
-	 * Set that the user has been shown the GPL and has accepted it. The user
-	 * will not be bothered again until the next version.
+	 * Set that the user has been shown the GPL and has accepted it. The user will
+	 * not be bothered again until the next version.
 	 */
 	public static void putHasGPLAcceptance() {
 		Preferences node = getUserNode("/license");
@@ -235,14 +236,14 @@ public class PreferencesManager {
 	/**
 	 * Load the last directory used when importing quote files.
 	 *
-	 * @param  dirtype the directory type (e.g. macros, importer, etc).
+	 * @param dirtype the directory type (e.g. macros, importer, etc).
 	 * @return the directory.
 	 */
 	public static String getDirectoryLocation(String dirtype) {
-		Preferences prefs = getUserNode("/"+dirtype);
+		Preferences prefs = getUserNode("/" + dirtype);
 		String directory = prefs.get("directory", "");
 
-		if(directory.length() != 0)
+		if (directory.length() != 0)
 			return directory;
 		else
 			return null;
@@ -251,11 +252,11 @@ public class PreferencesManager {
 	/**
 	 * Save the directory used to import quote files.
 	 *
-	 * @param dirtype the directory type (e.g. macros, importer, etc)
+	 * @param dirtype   the directory type (e.g. macros, importer, etc)
 	 * @param directory the directory.
 	 */
 	public static void putDirectoryLocation(String dirtype, String directory) {
-		Preferences prefs = getUserNode("/"+dirtype);
+		Preferences prefs = getUserNode("/" + dirtype);
 		prefs.put("directory", directory);
 	}
 
@@ -271,10 +272,9 @@ public class PreferencesManager {
 
 		try {
 			String[] keys = prefs.keys();
-			for(int i = 0; i < keys.length; i++)
+			for (int i = 0; i < keys.length; i++)
 				storedExpressions.add(new StoredExpression(keys[i], prefs.get(keys[i], "")));
-		}
-		catch(BackingStoreException e) {
+		} catch (BackingStoreException e) {
 			// ignore
 		}
 
@@ -294,12 +294,11 @@ public class PreferencesManager {
 			prefs.removeNode();
 			prefs = getUserNode("/equations");
 
-			for(Iterator iterator = storedExpressions.iterator(); iterator.hasNext();) {
-				StoredExpression storedExpression = (StoredExpression)iterator.next();
+			for (Iterator iterator = storedExpressions.iterator(); iterator.hasNext();) {
+				StoredExpression storedExpression = (StoredExpression) iterator.next();
 				prefs.put(storedExpression.name, storedExpression.expression);
 			}
-		}
-		catch(BackingStoreException e) {
+		} catch (BackingStoreException e) {
 			// ignore
 		}
 	}
@@ -312,29 +311,27 @@ public class PreferencesManager {
 	 */
 	public static synchronized List getStoredMacros() {
 		List stored_macros = new ArrayList();
-		//Preferences prefs = getUserNode("/macros/info");
+		// Preferences prefs = getUserNode("/macros/info");
 
 		String dirname = PreferencesManager.getMacroHome().getAbsolutePath();
-		if (dirname == null) return stored_macros;
+		if (dirname == null)
+			return stored_macros;
 		File directory = new File(dirname);
 		if (!directory.isDirectory())
 			return stored_macros;
 
 		String[] list = directory.list(new FilenameFilter() {
 			public boolean accept(File dir, String filename) {
-				return (dir.getAbsolutePath().equals(dirname) &&
-						filename.indexOf(".py") == filename.length()-3);
+				return (dir.getAbsolutePath().equals(dirname) && filename.indexOf(".py") == filename.length() - 3);
 			}
 		});
 
-		for(int i = 0; i < list.length; i++) {
-			String name = list[i].substring(0,list[i].length()-3);
-			Preferences macro_node = getUserNode("/macros_info/"+list[i]);
-			stored_macros.add(new StoredMacro(macro_node.get("name", name),
-					list[i],
-					macro_node.getBoolean("on_startup",false),
-					macro_node.getInt("start_sequence",0),
-					macro_node.getBoolean("in_menu", false)));
+		for (int i = 0; i < list.length; i++) {
+			String name = list[i].substring(0, list[i].length() - 3);
+			Preferences macro_node = getUserNode("/macros_info/" + list[i]);
+			stored_macros.add(
+					new StoredMacro(macro_node.get("name", name), list[i], macro_node.getBoolean("on_startup", false),
+							macro_node.getInt("start_sequence", 0), macro_node.getBoolean("in_menu", false)));
 		}
 		return stored_macros;
 	}
@@ -352,16 +349,15 @@ public class PreferencesManager {
 			prefs.removeNode();
 			prefs = getUserNode("/macros_info");
 
-			for(Iterator iterator = stored_macros.iterator(); iterator.hasNext();) {
-				StoredMacro stored_macro = (StoredMacro)iterator.next();
-				Preferences macro_node = getUserNode("/macros_info/"+stored_macro.getFilename());
+			for (Iterator iterator = stored_macros.iterator(); iterator.hasNext();) {
+				StoredMacro stored_macro = (StoredMacro) iterator.next();
+				Preferences macro_node = getUserNode("/macros_info/" + stored_macro.getFilename());
 				macro_node.put("name", stored_macro.getName());
 				macro_node.putBoolean("on_startup", stored_macro.isOn_startup());
 				macro_node.putInt("start_sequence", stored_macro.getStart_sequence());
 				macro_node.putBoolean("in_menu", stored_macro.isIn_menu());
 			}
-		}
-		catch(BackingStoreException e) {
+		} catch (BackingStoreException e) {
 			// ignore
 		}
 	}
@@ -374,11 +370,9 @@ public class PreferencesManager {
 		try {
 			FileInputStream inputStream = new FileInputStream(symbolMetadataFile);
 			symbolMetadata = SymbolMetadataReader.read(inputStream);
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			throw new PreferencesException(e.getMessage());
-		}
-		catch(SecurityException e) {
+		} catch (SecurityException e) {
 			throw new PreferencesException(e.getMessage());
 		}
 		return symbolMetadata;
@@ -391,24 +385,20 @@ public class PreferencesManager {
 			FileOutputStream outputStream = new FileOutputStream(symbolMetadataFile);
 			SymbolMetadataWriter.write(indexSymbols, outputStream);
 			outputStream.close();
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			throw new PreferencesException(e.getMessage());
-		}
-		catch(SecurityException e) {
+		} catch (SecurityException e) {
 			throw new PreferencesException(e.getMessage());
 		}
 	}
-
 
 	public static boolean isMarketIndex(Symbol symbol) {
 		try {
 			List symbolMetadata = getSymbolMetadata();
 			Iterator iterator = symbolMetadata.iterator();
 			while (iterator.hasNext()) {
-				SymbolMetadata data = (SymbolMetadata)iterator.next();
-				if (data.getSymbol().equals(symbol) &&
-						data.isIndex()) {
+				SymbolMetadata data = (SymbolMetadata) iterator.next();
+				if (data.getSymbol().equals(symbol) && data.isIndex()) {
 					return true;
 				}
 			}
@@ -418,7 +408,7 @@ public class PreferencesManager {
 		}
 	}
 
-	//Store the users text made for this symbol
+	// Store the users text made for this symbol
 	public static void putUserNotes(String symbol, String text) {
 		String xpath = "/userNotes/" + symbol;
 		Preferences prefs = getUserNode("/userNotes");
@@ -435,8 +425,8 @@ public class PreferencesManager {
 		text = "";
 		xpath = "/userNotes" + symbol;
 
-		//Pre 0.724b version saved userNotes in /userNotes
-		//Check in old location if no notes are found in the new location.
+		// Pre 0.724b version saved userNotes in /userNotes
+		// Check in old location if no notes are found in the new location.
 		prefs = getUserNode("/table/userNotes/" + symbol);
 		if (prefs != null) {
 			text = prefs.get(symbol, "");
@@ -466,15 +456,14 @@ public class PreferencesManager {
 		// Get all the settings that we've saved
 		try {
 			settingList = p.keys();
-		}
-		catch(BackingStoreException e) {
+		} catch (BackingStoreException e) {
 			// ignore
 		}
 
 		// Now populate settings into a hash
-		for(int i = 0; i < settingList.length; i++) {
+		for (int i = 0; i < settingList.length; i++) {
 			String value = p.get(settingList[i], "");
-			settings.put((Object)settingList[i], (Object)value);
+			settings.put((Object) settingList[i], (Object) value);
 		}
 
 		return settings;
@@ -483,7 +472,7 @@ public class PreferencesManager {
 	/**
 	 * Save all user input in an Analyser Page.
 	 *
-	 * @param key a key which identifies which page settings to save.
+	 * @param key      a key which identifies which page settings to save.
 	 * @param settings the settings to save.
 	 * @see nz.org.venice.analyser.AnalyserPage
 	 */
@@ -491,9 +480,9 @@ public class PreferencesManager {
 		Preferences p = getUserNode("/analyser/" + key);
 		Iterator iterator = settings.keySet().iterator();
 
-		while(iterator.hasNext()) {
-			String setting = (String)iterator.next();
-			String value = (String)settings.get((Object)setting);
+		while (iterator.hasNext()) {
+			String setting = (String) iterator.next();
+			String value = (String) settings.get((Object) setting);
 
 			p.put(setting, value);
 		}
@@ -542,7 +531,7 @@ public class PreferencesManager {
 	/**
 	 * Load the users preference for whether the quotes in the cache expire.
 	 * 
-	 * @return True if cacheExpiry is enabled. 
+	 * @return True if cacheExpiry is enabled.
 	 */
 	public static boolean getCacheExpiryEnabled() {
 		Preferences prefs = getUserNode("/cache");
@@ -550,21 +539,20 @@ public class PreferencesManager {
 	}
 
 	/**
-	 * Save the users preferences for whether the quotes in the cache expire. 
+	 * Save the users preferences for whether the quotes in the cache expire.
 	 *
-	 * @param expiry  If true, the quotes in the cache will expire.  
+	 * @param expiry If true, the quotes in the cache will expire.
 	 */
 	public static void putCacheExpiryEnabled(boolean expiry) {
 		Preferences prefs = getUserNode("/cache");
 		prefs.putBoolean("expiryEnabled", expiry);
 	}
 
-
 	/**
 	 * Save the users preference for when the quotes in the cache expire.
 	 * 
-	 * @param lifespan the number of minutes that must elapse before refreshing the 
-	 * cache.
+	 * @param lifespan the number of minutes that must elapse before refreshing the
+	 *                 cache.
 	 */
 	public static void putCacheExpiryTime(int lifespan) {
 		Preferences prefs = getUserNode("/cache");
@@ -574,11 +562,10 @@ public class PreferencesManager {
 	/**
 	 * Load the users preference for when the quotes in the cache expire.
 	 * 
-	 * @return The number of minutes that must elapse before refreshing the 
-	 * cache.
+	 * @return The number of minutes that must elapse before refreshing the cache.
 	 */
 	public static int getCacheExpiryTime() {
-		int defaultLifetime = 60 * 8; //8 hours
+		int defaultLifetime = 60 * 8; // 8 hours
 		Preferences prefs = getUserNode("/cache");
 		return prefs.getInt("expiryTime", defaultLifetime);
 	}
@@ -591,21 +578,23 @@ public class PreferencesManager {
 	public static List getWatchScreenNames() {
 		List watchScreenNames = new ArrayList();
 
-		// First retrieve all the watch screens stored in ~/Venice/WatchScreen/ (0.8 and up)
-		// Watch screens are now stored as files, as opposed to Java prefences, because this
+		// First retrieve all the watch screens stored in ~/Venice/WatchScreen/ (0.8 and
+		// up)
+		// Watch screens are now stored as files, as opposed to Java prefences, because
+		// this
 		// improves read and write times (especially on Mac OS X) and makes watch screen
 		// management easier for the user.
 		String[] watchScreenFileNames = getWatchScreenHome().list();
 		String suffix = ".xml";
 
-		for(int i = 0; i < watchScreenFileNames.length; i++) {
+		for (int i = 0; i < watchScreenFileNames.length; i++) {
 			String watchScreenFileName = watchScreenFileNames[i];
 
 			// Ignore files without trailing suffix
-			if(watchScreenFileName.endsWith(suffix)) {
+			if (watchScreenFileName.endsWith(suffix)) {
 				// Remove trailing suffix
-				String watchScreenName =
-						watchScreenFileName.substring(0, watchScreenFileName.length() - suffix.length());
+				String watchScreenName = watchScreenFileName.substring(0,
+						watchScreenFileName.length() - suffix.length());
 				watchScreenNames.add(watchScreenName);
 			}
 		}
@@ -615,12 +604,11 @@ public class PreferencesManager {
 			Preferences p = getUserNode("/watchscreens");
 			String preferenceWatchScreenNames[] = p.childrenNames();
 
-			for(int i = 0; i < preferenceWatchScreenNames.length; i++) {
+			for (int i = 0; i < preferenceWatchScreenNames.length; i++) {
 				String watchScreenName = preferenceWatchScreenNames[i];
 				watchScreenNames.add(watchScreenName);
 			}
-		}
-		catch(BackingStoreException e) {
+		} catch (BackingStoreException e) {
 			// don't care
 		}
 
@@ -636,10 +624,10 @@ public class PreferencesManager {
 	 *
 	 * @param name the name of the watch screen to retrieve.
 	 * @return the watch screen.
-	 * @exception PreferencesException if there was an error loading the watch screen.
+	 * @exception PreferencesException if there was an error loading the watch
+	 *                                 screen.
 	 */
-	private static WatchScreen getWatchScreenFromPreferences(String name)
-			throws PreferencesException {
+	private static WatchScreen getWatchScreenFromPreferences(String name) throws PreferencesException {
 
 		WatchScreen watchScreen = new WatchScreen(name);
 
@@ -649,14 +637,13 @@ public class PreferencesManager {
 			// Load symbols
 			String[] symbols = p.node("symbols").childrenNames();
 
-			for(int i = 0; i < symbols.length; i++)
+			for (int i = 0; i < symbols.length; i++)
 				try {
 					watchScreen.addSymbol(Symbol.find(symbols[i]));
-				} catch(SymbolFormatException e) {
+				} catch (SymbolFormatException e) {
 					assert false;
 				}
-		}
-		catch(BackingStoreException e) {
+		} catch (BackingStoreException e) {
 			throw new PreferencesException(e.getMessage());
 		}
 
@@ -669,23 +656,20 @@ public class PreferencesManager {
 	 *
 	 * @param watchScreenFile the file containing the watch screen.
 	 * @return the watch screen contained in the file.
-	 * @exception PreferencesException if there was an error loading the watch screen.
+	 * @exception PreferencesException if there was an error loading the watch
+	 *                                 screen.
 	 */
-	private static WatchScreen getWatchScreenFromFile(File watchScreenFile)
-			throws PreferencesException {
+	private static WatchScreen getWatchScreenFromFile(File watchScreenFile) throws PreferencesException {
 		try {
 			FileInputStream inputStream = new FileInputStream(watchScreenFile);
 			WatchScreen watchScreen = WatchScreenReader.read(inputStream);
 			inputStream.close();
 			return watchScreen;
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			throw new PreferencesException(e.getMessage());
-		}
-		catch(WatchScreenParserException e) {
+		} catch (WatchScreenParserException e) {
 			throw new PreferencesException(e.getMessage());
-		}
-		catch(SecurityException e) {
+		} catch (SecurityException e) {
 			throw new PreferencesException(e.getMessage());
 		}
 	}
@@ -695,14 +679,14 @@ public class PreferencesManager {
 	 *
 	 * @param watchScreenName the name of the watch screen to load.
 	 * @return the watch screen.
-	 * @exception PreferencesException if there was an error loading the watch screen.
+	 * @exception PreferencesException if there was an error loading the watch
+	 *                                 screen.
 	 */
-	public static synchronized WatchScreen getWatchScreen(String watchScreenName)
-			throws PreferencesException {
+	public static synchronized WatchScreen getWatchScreen(String watchScreenName) throws PreferencesException {
 		File watchScreenFile = new File(getWatchScreenHome(), watchScreenName.concat(".xml"));
 
 		// Load the watchScreen from ~/Venice/WatchScreen/ (0.8 and up)
-		if(watchScreenFile.exists())
+		if (watchScreenFile.exists())
 			return getWatchScreenFromFile(watchScreenFile);
 
 		// Load the watchScreen from Java preferences (up to 0.7)
@@ -714,21 +698,19 @@ public class PreferencesManager {
 	 * Save the watch screen.
 	 *
 	 * @param watchScreen the watch screen.
-	 * @exception PreferencesException if there was an error saving the watch screen.
+	 * @exception PreferencesException if there was an error saving the watch
+	 *                                 screen.
 	 */
-	public static synchronized void putWatchScreen(WatchScreen watchScreen)
-			throws PreferencesException {
+	public static synchronized void putWatchScreen(WatchScreen watchScreen) throws PreferencesException {
 
 		try {
 			File watchScreenFile = new File(getWatchScreenHome(), watchScreen.getName() + ".xml");
 			FileOutputStream outputStream = new FileOutputStream(watchScreenFile);
 			WatchScreenWriter.write(watchScreen, outputStream);
 			outputStream.close();
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			throw new PreferencesException(e.getMessage());
-		}
-		catch(SecurityException e) {
+		} catch (SecurityException e) {
 			throw new PreferencesException(e.getMessage());
 		}
 
@@ -736,8 +718,7 @@ public class PreferencesManager {
 		try {
 			Preferences p = getUserNode("/watchscreens/" + watchScreen.getName());
 			p.removeNode();
-		}
-		catch(BackingStoreException e) {
+		} catch (BackingStoreException e) {
 			throw new PreferencesException(e.getMessage());
 		}
 	}
@@ -756,14 +737,13 @@ public class PreferencesManager {
 		try {
 			Preferences p = getUserNode("/watchscreens/" + name);
 			p.removeNode();
-		}
-		catch(BackingStoreException e) {
+		} catch (BackingStoreException e) {
 			// don't care
 		}
 	}
 
 	/**
-	 * Return a  list of the names of all the portfolios.
+	 * Return a list of the names of all the portfolios.
 	 *
 	 * @return the list of portfolio names.
 	 */
@@ -771,20 +751,20 @@ public class PreferencesManager {
 		List portfolioNames = new ArrayList();
 
 		// First retrieve all the portfolios stored in ~/Venice/Portfolio/ (0.7b and up)
-		// Portfolios are now stored as files, as opposed to Java prefences, because this
+		// Portfolios are now stored as files, as opposed to Java prefences, because
+		// this
 		// improves read and write times (especially on Mac OS X) and makes portfolio
 		// management easier for the user.
 		String[] portfolioFileNames = getPortfolioHome().list();
 		String suffix = ".xml";
 
-		for(int i = 0; i < portfolioFileNames.length; i++) {
+		for (int i = 0; i < portfolioFileNames.length; i++) {
 			String portfolioFileName = portfolioFileNames[i];
 
 			// Ignore files without trailing suffix
-			if(portfolioFileName.endsWith(suffix)) {
+			if (portfolioFileName.endsWith(suffix)) {
 				// Remove trailing suffix
-				String portfolioName =
-						portfolioFileName.substring(0, portfolioFileName.length() - suffix.length());
+				String portfolioName = portfolioFileName.substring(0, portfolioFileName.length() - suffix.length());
 				portfolioNames.add(portfolioName);
 			}
 		}
@@ -794,12 +774,11 @@ public class PreferencesManager {
 			Preferences p = getUserNode("/portfolio");
 			String[] preferencePortfolioNames = p.childrenNames();
 
-			for(int i = 0; i < preferencePortfolioNames.length; i++) {
+			for (int i = 0; i < preferencePortfolioNames.length; i++) {
 				String portfolioName = preferencePortfolioNames[i];
 				portfolioNames.add(portfolioName);
 			}
-		}
-		catch(BackingStoreException e) {
+		} catch (BackingStoreException e) {
 			// don't care
 		}
 
@@ -823,35 +802,30 @@ public class PreferencesManager {
 		try {
 			Preferences p = getUserNode("/portfolio/" + name);
 			p.removeNode();
-		}
-		catch(BackingStoreException e) {
+		} catch (BackingStoreException e) {
 			// don't care
 		}
 	}
 
 	/**
-	 * Read the portfolio contained the given file. Venice stores portfolios
-	 * in files from 0.7b and up.
+	 * Read the portfolio contained the given file. Venice stores portfolios in
+	 * files from 0.7b and up.
 	 *
 	 * @param portfolioFile the file containing the portfolio.
 	 * @return the Portfolio contained in the file.
 	 * @exception PreferencesException if there was an error loading the portfolio.
 	 */
-	private static Portfolio getPortfolioFromFile(File portfolioFile)
-			throws PreferencesException {
+	private static Portfolio getPortfolioFromFile(File portfolioFile) throws PreferencesException {
 		try {
 			FileInputStream inputStream = new FileInputStream(portfolioFile);
 			Portfolio portfolio = PortfolioReader.read(inputStream);
 			inputStream.close();
 			return portfolio;
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			throw new PreferencesException(e.getMessage());
-		}
-		catch(PortfolioParserException e) {
+		} catch (PortfolioParserException e) {
 			throw new PreferencesException(e.getMessage());
-		}
-		catch(SecurityException e) {
+		} catch (SecurityException e) {
 			throw new PreferencesException(e.getMessage());
 		}
 	}
@@ -864,8 +838,7 @@ public class PreferencesManager {
 	 * @return the Portfolio.
 	 * @exception PreferencesException if there was an error loading the portfolio.
 	 */
-	private static Portfolio getPortfolioFromPreferences(String name)
-			throws PreferencesException {
+	private static Portfolio getPortfolioFromPreferences(String name) throws PreferencesException {
 		// Venice 0.6b did not support multiple currencies. So just default
 		// to the user's default currency.
 		Portfolio portfolio = new Portfolio(name, Currency.getDefaultCurrency());
@@ -876,16 +849,14 @@ public class PreferencesManager {
 			// Load accounts
 			String[] accountNames = p.node("accounts").childrenNames();
 
-			for(int i = 0; i < accountNames.length; i++) {
-				Preferences accountPrefs =
-						p.node("accounts").node(accountNames[i]);
+			for (int i = 0; i < accountNames.length; i++) {
+				Preferences accountPrefs = p.node("accounts").node(accountNames[i]);
 				Account account;
 
 				String accountType = accountPrefs.get("type", "share");
-				if(accountType.equals("share")) {
+				if (accountType.equals("share")) {
 					account = new ShareAccount(accountNames[i], Currency.getDefaultCurrency());
-				}
-				else {
+				} else {
 					account = new CashAccount(accountNames[i], Currency.getDefaultCurrency());
 				}
 
@@ -895,29 +866,22 @@ public class PreferencesManager {
 			// Load transactions
 			List transactions = new ArrayList();
 
-			String[] transactionNumbers =
-					p.node("transactions").childrenNames();
+			String[] transactionNumbers = p.node("transactions").childrenNames();
 
-			for(int i = 0; i < transactionNumbers.length; i++) {
-				Preferences transactionPrefs =
-						p.node("transactions").node(transactionNumbers[i]);
+			for (int i = 0; i < transactionNumbers.length; i++) {
+				Preferences transactionPrefs = p.node("transactions").node(transactionNumbers[i]);
 
 				int type = getTransactionType(transactionPrefs.get("type", ""));
 
 				TradingDate date = null;
 
 				try {
-					date =
-							new TradingDate(transactionPrefs.get("date",
-									"01/01/2000"),
-									TradingDate.BRITISH);
-				}
-				catch(TradingDateFormatException e) {
+					date = new TradingDate(transactionPrefs.get("date", "01/01/2000"), TradingDate.BRITISH);
+				} catch (TradingDateFormatException e) {
 					throw new PreferencesException(e.getMessage());
 				}
 
-				Money amount = new Money(Currency.getDefaultCurrency(),
-						transactionPrefs.getDouble("amount", 0.0D));
+				Money amount = new Money(Currency.getDefaultCurrency(), transactionPrefs.getDouble("amount", 0.0D));
 				Symbol symbol = null;
 				int shares = transactionPrefs.getInt("shares", 0);
 				Money tradeCost = new Money(Currency.getDefaultCurrency(),
@@ -926,10 +890,9 @@ public class PreferencesManager {
 				try {
 					String symbolString = transactionPrefs.get("symbol", "");
 
-					if(symbolString.length() > 0)
+					if (symbolString.length() > 0)
 						symbol = Symbol.find(transactionPrefs.get("symbol", ""));
-				}
-				catch(SymbolFormatException e) {
+				} catch (SymbolFormatException e) {
 					throw new PreferencesException(e.getMessage());
 				}
 
@@ -942,40 +905,29 @@ public class PreferencesManager {
 				ShareAccount shareAccount = null;
 
 				try {
-					cashAccount =
-							(CashAccount)portfolio.findAccountByName(cashAccountName);
-				}
-				catch(ClassCastException e) {
-					throw new PreferencesException(Locale.getString("EXPECTING_CASH_ACCOUNT",
-							cashAccountName));
+					cashAccount = (CashAccount) portfolio.findAccountByName(cashAccountName);
+				} catch (ClassCastException e) {
+					throw new PreferencesException(Locale.getString("EXPECTING_CASH_ACCOUNT", cashAccountName));
 				}
 
 				try {
-					cashAccount2 =
-							(CashAccount)portfolio.findAccountByName(cashAccountName2);
-				}
-				catch(ClassCastException e) {
-					throw new PreferencesException(Locale.getString("EXPECTING_CASH_ACCOUNT",
-							cashAccountName2));
+					cashAccount2 = (CashAccount) portfolio.findAccountByName(cashAccountName2);
+				} catch (ClassCastException e) {
+					throw new PreferencesException(Locale.getString("EXPECTING_CASH_ACCOUNT", cashAccountName2));
 				}
 
 				try {
-					shareAccount =
-							(ShareAccount)portfolio.findAccountByName(shareAccountName);
-				}
-				catch(ClassCastException e) {
-					throw new PreferencesException(Locale.getString("EXPECTING_SHARE_ACCOUNT",
-							shareAccountName));
+					shareAccount = (ShareAccount) portfolio.findAccountByName(shareAccountName);
+				} catch (ClassCastException e) {
+					throw new PreferencesException(Locale.getString("EXPECTING_SHARE_ACCOUNT", shareAccountName));
 				}
 
 				// Skip transactions which have an account. There seems to have been
 				// an old bug which created duplication transactions with no account.
-				if(cashAccount != null || cashAccount2 != null || shareAccount != null) {
+				if (cashAccount != null || cashAccount2 != null || shareAccount != null) {
 					// Build transaction and add it to the portfolio
-					Transaction transaction =
-							new Transaction(type, date, amount, symbol, shares,
-									tradeCost, cashAccount, cashAccount2,
-									shareAccount);
+					Transaction transaction = new Transaction(type, date, amount, symbol, shares, tradeCost,
+							cashAccount, cashAccount2, shareAccount);
 
 					transactions.add(transaction);
 				}
@@ -983,8 +935,7 @@ public class PreferencesManager {
 
 			portfolio.addTransactions(transactions);
 
-		}
-		catch(BackingStoreException e) {
+		} catch (BackingStoreException e) {
 			throw new PreferencesException(e.getMessage());
 		}
 
@@ -998,12 +949,11 @@ public class PreferencesManager {
 	 * @return the portfolio.
 	 * @exception PreferencesException if there was an error loading the portfolio.
 	 */
-	public static synchronized Portfolio getPortfolio(String portfolioName)
-			throws PreferencesException {
+	public static synchronized Portfolio getPortfolio(String portfolioName) throws PreferencesException {
 		File portfolioFile = new File(getPortfolioHome(), portfolioName.concat(".xml"));
 
 		// Load the portfolio from ~/Venice/Portfolio/ (0.7b and up)
-		if(portfolioFile.exists())
+		if (portfolioFile.exists())
 			return getPortfolioFromFile(portfolioFile);
 
 		// Load the portfolio from Java preferences (up to 0.6b)
@@ -1020,27 +970,26 @@ public class PreferencesManager {
 		// Venice 0.3+ saves transactions by numbers.
 		try {
 			return Integer.parseInt(transactionType);
-		}
-		catch(NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			// not a number
 		}
 
 		// Otherwise compare with all the old transaction names
-		if(transactionType.equals("Accumulate"))
+		if (transactionType.equals("Accumulate"))
 			return Transaction.ACCUMULATE;
-		else if(transactionType.equals("Reduce"))
+		else if (transactionType.equals("Reduce"))
 			return Transaction.REDUCE;
-		else if(transactionType.equals("Deposit"))
+		else if (transactionType.equals("Deposit"))
 			return Transaction.DEPOSIT;
-		else if(transactionType.equals("Fee"))
+		else if (transactionType.equals("Fee"))
 			return Transaction.FEE;
-		else if(transactionType.equals("Interest"))
+		else if (transactionType.equals("Interest"))
 			return Transaction.INTEREST;
-		else if(transactionType.equals("Withdrawal"))
+		else if (transactionType.equals("Withdrawal"))
 			return Transaction.WITHDRAWAL;
-		else if(transactionType.equals("Dividend"))
+		else if (transactionType.equals("Dividend"))
 			return Transaction.DIVIDEND;
-		else if(transactionType.equals("Dividend DRP"))
+		else if (transactionType.equals("Dividend DRP"))
 			return Transaction.DIVIDEND_DRP;
 		else
 			return Transaction.TRANSFER;
@@ -1099,8 +1048,8 @@ public class PreferencesManager {
 	}
 
 	/**
-	 * Return the directory which contains Venice's Symbol metadata.
-	 * Directory will be created if it does not already exist.
+	 * Return the directory which contains Venice's Symbol metadata. Directory will
+	 * be created if it does not already exist.
 	 *
 	 * @return SymbolMetaata directroy.
 	 */
@@ -1132,18 +1081,15 @@ public class PreferencesManager {
 	 * @param portfolio the portfolio.
 	 * @exception PreferencesException if there was an error saving the portfolio.
 	 */
-	public static synchronized void putPortfolio(Portfolio portfolio)
-			throws PreferencesException {
+	public static synchronized void putPortfolio(Portfolio portfolio) throws PreferencesException {
 		try {
 			File portfolioFile = new File(getPortfolioHome(), portfolio.getName() + ".xml");
 			FileOutputStream outputStream = new FileOutputStream(portfolioFile);
 			PortfolioWriter.write(portfolio, outputStream);
 			outputStream.close();
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			throw new PreferencesException(e.getMessage());
-		}
-		catch(SecurityException e) {
+		} catch (SecurityException e) {
 			throw new PreferencesException(e.getMessage());
 		}
 
@@ -1151,8 +1097,7 @@ public class PreferencesManager {
 		try {
 			Preferences p = getUserNode("/portfolio/" + portfolio.getName());
 			p.removeNode();
-		}
-		catch(BackingStoreException e) {
+		} catch (BackingStoreException e) {
 			throw new PreferencesException(e.getMessage());
 		}
 	}
@@ -1170,7 +1115,7 @@ public class PreferencesManager {
 		proxyPreferences.port = prefs.get("port", "8080");
 		proxyPreferences.isEnabled = prefs.getBoolean("enabled", false);
 
-		proxyPreferences.user= prefs.get("user", "");
+		proxyPreferences.user = prefs.get("user", "");
 		proxyPreferences.password = prefs.get("password", "");
 		proxyPreferences.authEnabled = prefs.getBoolean("authEnabled", false);
 
@@ -1226,7 +1171,7 @@ public class PreferencesManager {
 		String str = prefs.get("min_decimal_digits", "3");
 		try {
 			retValue = Integer.parseInt(str);
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			retValue = 3;
 		}
 		return retValue;
@@ -1254,7 +1199,7 @@ public class PreferencesManager {
 		String str = prefs.get("max_decimal_digits", "3");
 		try {
 			retValue = Integer.parseInt(str);
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			retValue = 3;
 		}
 		return retValue;
@@ -1283,7 +1228,7 @@ public class PreferencesManager {
 		String str = prefs.get("edit_tab_size", "8");
 		try {
 			retValue = Integer.parseInt(str);
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			retValue = defaultValue;
 		}
 		return retValue;
@@ -1292,7 +1237,8 @@ public class PreferencesManager {
 	/**
 	 * Save user interface setting.
 	 *
-	 * @param tabSize the number of characters to insert when the tab key is pressed.
+	 * @param tabSize the number of characters to insert when the tab key is
+	 *                pressed.
 	 */
 	public static void putEditTabSize(String tabSize) {
 		Preferences prefs = getUserNode("/max_user_interface");
@@ -1330,8 +1276,8 @@ public class PreferencesManager {
 	/**
 	 * Load default chart scroll bar position.
 	 *
-	 * @return whether to move the scroll bar to the end of the pane when 
-	 *         creating a new chart.   
+	 * @return whether to move the scroll bar to the end of the pane when creating a
+	 *         new chart.
 	 */
 	public static boolean getDefaultChartScrollToEnd() {
 		Preferences prefs = getUserNode("/default_chart_defaults");
@@ -1342,8 +1288,8 @@ public class PreferencesManager {
 	/**
 	 * Load default table scroll bar position.
 	 *
-	 * @return whether to move the scroll bar to the end of the pane when 
-	 *         creating a new table.   
+	 * @return whether to move the scroll bar to the end of the pane when creating a
+	 *         new table.
 	 */
 	public static boolean getDefaultTableScrollToEnd() {
 		Preferences prefs = getUserNode("/default_table_defaults");
@@ -1351,12 +1297,11 @@ public class PreferencesManager {
 		return new Boolean(str).booleanValue();
 	}
 
-
 	/**
 	 * Save wether to restore windows on restart.
 	 *
 	 * @param state a boolean flag which when true causes Venice to reconstruct
-	 * previously open windows.
+	 *              previously open windows.
 	 **/
 
 	public static void putRestoreSavedWindowsSetting(boolean state) {
@@ -1367,8 +1312,7 @@ public class PreferencesManager {
 	/**
 	 * Return wether to restore windows on restart
 	 *
-	 * @return wether Venice should to reconstruct
-	 * previously open windows.
+	 * @return wether Venice should to reconstruct previously open windows.
 	 **/
 
 	public static boolean getRestoreSavedWindowsSetting() {
@@ -1381,8 +1325,8 @@ public class PreferencesManager {
 	/**
 	 * Save whether Venice should confirm exit.
 	 *
-	 * @param state Flag when true causes venice to prompt the user to 
-	 *        confirm their exit.
+	 * @param state Flag when true causes venice to prompt the user to confirm their
+	 *              exit.
 	 *
 	 **/
 	public static void putConfirmExitSetting(boolean state) {
@@ -1393,8 +1337,7 @@ public class PreferencesManager {
 	/**
 	 * Return true if Venice should confirm exit.
 	 *
-	 * @return true if Venice should prompt the user to 
-	 *        confirm their exit.
+	 * @return true if Venice should prompt the user to confirm their exit.
 	 *
 	 **/
 
@@ -1404,8 +1347,6 @@ public class PreferencesManager {
 
 		return state.equals("true") ? true : false;
 	}
-
-
 
 	/**
 	 * Save default chart setting.
@@ -1428,7 +1369,7 @@ public class PreferencesManager {
 		Preferences prefs = getUserNode("/default_chart_defaults/default_chart_background_colour");
 
 		int red = backColour.getRed();
-		int green = backColour.getGreen();	
+		int green = backColour.getGreen();
 		int blue = backColour.getBlue();
 		int alpha = backColour.getAlpha();
 
@@ -1460,23 +1401,22 @@ public class PreferencesManager {
 		prefs.put("scroll_to_end", new Boolean(isSelected).toString());
 	}
 
-
-
 	/**
 	 * Get quote source setting.
 	 *
-	 * @return quote source, one of {@link #DATABASE}, {@link #FILES} or {@link #SAMPLES}.
+	 * @return quote source, one of {@link #DATABASE}, {@link #FILES} or
+	 *         {@link #SAMPLES}.
 	 */
 	public static int getQuoteSource() {
 		Preferences prefs = getUserNode("/quote_source");
 		String quoteSource = prefs.get("source", "samples");
 
-		if(quoteSource.equals("samples"))
+		if (quoteSource.equals("samples"))
 			return SAMPLES;
-		else if(quoteSource.equals("files"))
+		else if (quoteSource.equals("files"))
 			// File quote source is deprecated. Switch to internal quote source.
 			return INTERNAL;
-		else if(quoteSource.equals("database"))
+		else if (quoteSource.equals("database"))
 			return DATABASE;
 		else
 			return INTERNAL;
@@ -1485,18 +1425,18 @@ public class PreferencesManager {
 	/**
 	 * Set quote source setting.
 	 *
-	 * @param quoteSource the quote source, one of {@link #DATABASE}, {@link #INTERNAL} or
-	 *                    {@link #SAMPLES}.
+	 * @param quoteSource the quote source, one of {@link #DATABASE},
+	 *                    {@link #INTERNAL} or {@link #SAMPLES}.
 	 */
 	public static void putQuoteSource(int quoteSource) {
-		assert(quoteSource == DATABASE || quoteSource == SAMPLES || quoteSource == INTERNAL);
+		assert (quoteSource == DATABASE || quoteSource == SAMPLES || quoteSource == INTERNAL);
 
 		Preferences prefs = getUserNode("/quote_source");
 		String source;
 
-		if(quoteSource == SAMPLES)
+		if (quoteSource == SAMPLES)
 			source = "samples";
-		else if(quoteSource == DATABASE)
+		else if (quoteSource == DATABASE)
 			source = "database";
 		else
 			source = "internal";
@@ -1512,12 +1452,11 @@ public class PreferencesManager {
 	public static DatabasePreferences getDatabaseSettings() {
 		Preferences prefs = getUserNode("/quote_source/database");
 		PreferencesManager preferencesManager = new PreferencesManager();
-		DatabasePreferences databasePreferences =
-				preferencesManager.new DatabasePreferences();
+		DatabasePreferences databasePreferences = preferencesManager.new DatabasePreferences();
 		databasePreferences.software = prefs.get("software", "mysql");
-		databasePreferences.driver   = prefs.get("driver", "com.mysql.jdbc.Driver");
-		databasePreferences.host     = prefs.get("host", "db");
-		databasePreferences.port     = prefs.get("port", "3306");
+		databasePreferences.driver = prefs.get("driver", "com.mysql.jdbc.Driver");
+		databasePreferences.host = prefs.get("host", "db");
+		databasePreferences.port = prefs.get("port", "3306");
 		databasePreferences.database = prefs.get("dbname", "shares");
 		databasePreferences.username = prefs.get("username", "");
 		databasePreferences.password = prefs.get("password", "3306");
@@ -1553,11 +1492,9 @@ public class PreferencesManager {
 
 		try {
 			databaseFileName = databaseFile.getCanonicalPath();
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			// don't care
-		}
-		catch(SecurityException e) {
+		} catch (SecurityException e) {
 			// don't care
 		}
 
@@ -1572,8 +1509,7 @@ public class PreferencesManager {
 	public static DisplayPreferences getDisplaySettings() {
 		Preferences prefs = getUserNode("/display");
 		PreferencesManager preferencesManager = new PreferencesManager();
-		DisplayPreferences displayPreferences =
-				preferencesManager.new DisplayPreferences();
+		DisplayPreferences displayPreferences = preferencesManager.new DisplayPreferences();
 		displayPreferences.x = prefs.getInt("default_x", 0);
 		displayPreferences.y = prefs.getInt("default_y", 0);
 		displayPreferences.width = prefs.getInt("default_width", 400);
@@ -1603,19 +1539,16 @@ public class PreferencesManager {
 	public static IDQuoteSyncPreferences getIDQuoteSyncPreferences() {
 		Preferences prefs = getUserNode("/id_quote_sync");
 		PreferencesManager preferencesManager = new PreferencesManager();
-		IDQuoteSyncPreferences idQuoteSyncPreferences =
-				preferencesManager.new IDQuoteSyncPreferences();
+		IDQuoteSyncPreferences idQuoteSyncPreferences = preferencesManager.new IDQuoteSyncPreferences();
 
 		idQuoteSyncPreferences.isEnabled = prefs.getBoolean("isEnabled", false);
 		idQuoteSyncPreferences.symbols = prefs.get("symbols", "");
 		idQuoteSyncPreferences.suffix = prefs.get("suffix", "");
 
-
 		try {
 			idQuoteSyncPreferences.openTime = new TradingTime(prefs.get("openTime", "9:00:00"));
 			idQuoteSyncPreferences.closeTime = new TradingTime(prefs.get("closeTime", "16:00:00"));
-		}
-		catch(TradingTimeFormatException e) {
+		} catch (TradingTimeFormatException e) {
 			// This should never happen - but deal with the possibility gracefully.
 			idQuoteSyncPreferences.openTime = new TradingTime(9, 0, 0);
 			idQuoteSyncPreferences.closeTime = new TradingTime(16, 0, 0);
@@ -1641,10 +1574,11 @@ public class PreferencesManager {
 		prefs.putInt("period", idQuoteSyncPreferences.period);
 
 	}
-	/**
-	 * Return the location of the saved window data.
-	 * The directory is created if it does not exist.
 
+	/**
+	 * Return the location of the saved window data. The directory is created if it
+	 * does not exist.
+	 * 
 	 */
 
 	private static File getFrameSettingsHome() {
@@ -1667,11 +1601,11 @@ public class PreferencesManager {
 	 * Return a list of frames saved on the filesystem.
 	 *
 	 * @return A vector where the elements are File objects containing saved
-	 * ModuleFrame data.
+	 *         ModuleFrame data.
 	 *
-	 * The location of the saved frames is ~/Venice/SavedWindows.
-	 * As the restore saved windows feature is new, there is no
-	 * old preferences mechanism.
+	 *         The location of the saved frames is ~/Venice/SavedWindows. As the
+	 *         restore saved windows feature is new, there is no old preferences
+	 *         mechanism.
 	 */
 	public static Vector getSavedFrames() {
 		String[] savedFrameFileNames = PreferencesManager.getFrameSettingsHome().list();
@@ -1681,11 +1615,11 @@ public class PreferencesManager {
 
 		for (int i = 0; i < savedFrameFileNames.length; i++) {
 			String savedFrameFileName = savedFrameFileNames[i];
-			//Ignore files which are not XML
+			// Ignore files which are not XML
 			if (!savedFrameFileName.endsWith(suffix)) {
 				continue;
 			}
-			//Interested in the ModuleFrames, not the modules at this stage
+			// Interested in the ModuleFrames, not the modules at this stage
 			if (!savedFrameFileName.startsWith("FrameData")) {
 				continue;
 			}
@@ -1697,18 +1631,17 @@ public class PreferencesManager {
 		return savedFrames;
 	}
 
-
 	public static void putModuleFrameSettings(ModuleFrame frame) throws PreferencesException {
 
-		//Don't want to spam the filesystem with saved frames 
-		//unless the user is interested in restoring them.  
+		// Don't want to spam the filesystem with saved frames
+		// unless the user is interested in restoring them.
 		if (!PreferencesManager.getRestoreSavedWindowsSetting()) {
 			return;
 		}
 
 		try {
 
-			//Don't save an empty file
+			// Don't save an empty file
 			if (frame.getModule().getSettings() == null) {
 				return;
 			}
@@ -1731,7 +1664,6 @@ public class PreferencesManager {
 		}
 	}
 
-
 	/**
 	 *
 	 * Remove all the saved frames.
@@ -1741,29 +1673,28 @@ public class PreferencesManager {
 		Iterator iterator = list.iterator();
 
 		while (iterator.hasNext()) {
-			File f = (File)iterator.next();
+			File f = (File) iterator.next();
 			f.delete();
 		}
 	}
 
-	/** 
+	/**
 	 * Retrieve where the users is storing alerts
 	 */
 	public static String getAlertDestination() {
 		Preferences prefs = getUserNode("/alert_destination");
 
-		return prefs.get("destination","disabled");
+		return prefs.get("destination", "disabled");
 	}
 
 	/**
-	 * Save alert destination 
+	 * Save alert destination
 	 *
 	 * @param destination Where the alerts should be stored
 	 */
 	public static void putAlertDestination(String destination) {
-		if (!destination.equals(Locale.getString("ALERT_DISABLE_ALL")) &&
-				!destination.equals(Locale.getString("FILE")) &&
-				!destination.equals(Locale.getString("DATABASE"))) {
+		if (!destination.equals(Locale.getString("ALERT_DISABLE_ALL")) && !destination.equals(Locale.getString("FILE"))
+				&& !destination.equals(Locale.getString("DATABASE"))) {
 			assert false;
 		}
 

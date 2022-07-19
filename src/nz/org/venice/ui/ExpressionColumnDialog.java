@@ -40,194 +40,181 @@ import nz.org.venice.util.Locale;
 
 /**
  * A dialog which allows the user to set the user column expressions in a table.
- * All the quotes tables in venice (e.g. the historical quote data tables and the
- * watch screen), allow the user five rows of expression columns (refered to as
- * equation columns in the UI). This dialog allows the user to edit the
+ * All the quotes tables in venice (e.g. the historical quote data tables and
+ * the watch screen), allow the user five rows of expression columns (refered to
+ * as equation columns in the UI). This dialog allows the user to edit the
  * expressions in those columns.
  *
  * @author Andrew Leppard
  */
 public class ExpressionColumnDialog extends JInternalFrame implements ActionListener {
 
-    private JButton okButton;
-    private JButton cancelButton;
+	private JButton okButton;
+	private JButton cancelButton;
 
-    private JPanel mainPanel;
-    private JPanel transactionPanel;
+	private JPanel mainPanel;
+	private JPanel transactionPanel;
 
-    // Fields of a transaction
-    private JComboBox expressionColumnComboBox;
-    private JTextField columnNameTextField;
-    private ExpressionComboBox expressionComboBox;
+	// Fields of a transaction
+	private JComboBox expressionColumnComboBox;
+	private JTextField columnNameTextField;
+	private ExpressionComboBox expressionComboBox;
 
-    private boolean isDone = false;
+	private boolean isDone = false;
 
-    private ExpressionColumn[] expressionColumns;
-    private int currentExpressionColumn = 0;
+	private ExpressionColumn[] expressionColumns;
+	private int currentExpressionColumn = 0;
 
-    private boolean OKButtonPressed;
+	private boolean OKButtonPressed;
 
-    // TODO: This should just be "showDialog()".
-    public ExpressionColumnDialog(int expressionColumnCount) {
-	super(Locale.getString("APPLY_EQUATIONS"));
+	// TODO: This should just be "showDialog()".
+	public ExpressionColumnDialog(int expressionColumnCount) {
+		super(Locale.getString("APPLY_EQUATIONS"));
 
-	getContentPane().setLayout(new BorderLayout());
+		getContentPane().setLayout(new BorderLayout());
 
-	mainPanel = new JPanel();
-	GridBagLayout gridbag = new GridBagLayout();
-	GridBagConstraints c = new GridBagConstraints();
-	mainPanel.setLayout(gridbag);
-	mainPanel.setBorder(new EmptyBorder(4, 4, 4, 4));
+		mainPanel = new JPanel();
+		GridBagLayout gridbag = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		mainPanel.setLayout(gridbag);
+		mainPanel.setBorder(new EmptyBorder(4, 4, 4, 4));
 
-	c.weightx = 1.0;
-	c.ipadx = 5;
-	c.anchor = GridBagConstraints.WEST;
+		c.weightx = 1.0;
+		c.ipadx = 5;
+		c.anchor = GridBagConstraints.WEST;
 
-	JLabel typeLabel = new JLabel(Locale.getString("EQUATION_COLUMN"));
-	c.gridwidth = 1;
-	gridbag.setConstraints(typeLabel, c);
-	mainPanel.add(typeLabel);
+		JLabel typeLabel = new JLabel(Locale.getString("EQUATION_COLUMN"));
+		c.gridwidth = 1;
+		gridbag.setConstraints(typeLabel, c);
+		mainPanel.add(typeLabel);
 
-	expressionColumnComboBox = new JComboBox();
+		expressionColumnComboBox = new JComboBox();
 
-	String[] numbers = {Locale.getString("ONE"),
-                            Locale.getString("TWO"),
-                            Locale.getString("THREE"),
-                            Locale.getString("FOUR"),
-                            Locale.getString("FIVE")};
+		String[] numbers = { Locale.getString("ONE"), Locale.getString("TWO"), Locale.getString("THREE"),
+				Locale.getString("FOUR"), Locale.getString("FIVE") };
 
-	for(int i = 0; i < expressionColumnCount; i++)
-	    expressionColumnComboBox.addItem(numbers[i]);
+		for (int i = 0; i < expressionColumnCount; i++)
+			expressionColumnComboBox.addItem(numbers[i]);
 
-	expressionColumnComboBox.addActionListener(this);
+		expressionColumnComboBox.addActionListener(this);
 
-	c.gridwidth = GridBagConstraints.REMAINDER;
-	gridbag.setConstraints(expressionColumnComboBox, c);
-	mainPanel.add(expressionColumnComboBox);
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		gridbag.setConstraints(expressionColumnComboBox, c);
+		mainPanel.add(expressionColumnComboBox);
 
-        c.fill = GridBagConstraints.HORIZONTAL;
+		c.fill = GridBagConstraints.HORIZONTAL;
 
-	columnNameTextField =
-	    GridBagHelper.addTextRow(mainPanel, Locale.getString("COLUMN_NAME"), "",
-                                     gridbag, c, 18);
+		columnNameTextField = GridBagHelper.addTextRow(mainPanel, Locale.getString("COLUMN_NAME"), "", gridbag, c, 18);
 
-	expressionComboBox =
-	    GridBagHelper.addExpressionRow(mainPanel, Locale.getString("EQUATION"), "",
-                                         gridbag, c);
+		expressionComboBox = GridBagHelper.addExpressionRow(mainPanel, Locale.getString("EQUATION"), "", gridbag, c);
 
-	JPanel buttonPanel = new JPanel();
-	okButton = new JButton(Locale.getString("OK"));
-	okButton.addActionListener(this);
-	cancelButton = new JButton(Locale.getString("CANCEL"));
-	cancelButton.addActionListener(this);
-	buttonPanel.add(okButton);
-	buttonPanel.add(cancelButton);
+		JPanel buttonPanel = new JPanel();
+		okButton = new JButton(Locale.getString("OK"));
+		okButton.addActionListener(this);
+		cancelButton = new JButton(Locale.getString("CANCEL"));
+		cancelButton.addActionListener(this);
+		buttonPanel.add(okButton);
+		buttonPanel.add(cancelButton);
 
-	getRootPane().setDefaultButton(okButton);
+		getRootPane().setDefaultButton(okButton);
 
-	getContentPane().add(mainPanel, BorderLayout.NORTH);
-	getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		getContentPane().add(mainPanel, BorderLayout.NORTH);
+		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-	// Open dialog in centre of window
-	Dimension size = getPreferredSize();
-	int x = (DesktopManager.getDesktop().getWidth() - size.width) / 2;
-	int y = (DesktopManager.getDesktop().getHeight() - size.height) / 2;
-	setBounds(x, y, size.width, size.height);
-    }
-
-    public boolean showDialog(ExpressionColumn[] expressionColumns) {
-
-	// Creat copy of expression columns to work with
-	this.expressionColumns = new ExpressionColumn[expressionColumns.length];
-	for(int i = 0; i < expressionColumns.length; i++)
-	    this.expressionColumns[i] = (ExpressionColumn)expressionColumns[i].clone();
-
-	displayExpressionColumn(0);
-
-	DesktopManager.getDesktop().add(this);
-	show();
-
-	try {
-	    while(isDone == false) {
-		Thread.sleep(10);
-	    }
-	}
-	catch(Exception e) {
-	    // ignore
+		// Open dialog in centre of window
+		Dimension size = getPreferredSize();
+		int x = (DesktopManager.getDesktop().getWidth() - size.width) / 2;
+		int y = (DesktopManager.getDesktop().getHeight() - size.height) / 2;
+		setBounds(x, y, size.width, size.height);
 	}
 
-	return OKButtonPressed;
-    }
+	public boolean showDialog(ExpressionColumn[] expressionColumns) {
 
-    public ExpressionColumn[] getExpressionColumns() {
-	return expressionColumns;
-    }
+		// Creat copy of expression columns to work with
+		this.expressionColumns = new ExpressionColumn[expressionColumns.length];
+		for (int i = 0; i < expressionColumns.length; i++)
+			this.expressionColumns[i] = (ExpressionColumn) expressionColumns[i].clone();
 
-    private void saveExpressionColumn(int column) {
-	// Store new values the user has typed in
-	expressionColumns[column].setShortName(columnNameTextField.getText());
-	expressionColumns[column].setExpressionText(expressionComboBox.getExpressionText());
-    }
+		displayExpressionColumn(0);
 
-    private void displayExpressionColumn(int column) {
-	currentExpressionColumn = column;
+		DesktopManager.getDesktop().add(this);
+		show();
 
-	columnNameTextField.setText(expressionColumns[column].getShortName());
-	expressionComboBox.setExpressionText(expressionColumns[column].getExpressionText());
-    }
+		try {
+			while (isDone == false) {
+				Thread.sleep(10);
+			}
+		} catch (Exception e) {
+			// ignore
+		}
 
-    // Make sure the expression field is correct in each expression column. If
-    // any of the expressions do not parse then display an error dialog to
-    // the user.
-    private boolean parseExpressions() {
-        boolean success = true;
-        int i = 0;
-
-        try {
-            for(i = 0; i < expressionColumns.length; i++) {
-                String expressionString = expressionColumns[i].getExpressionText();
-
-                if(expressionString != null && expressionString.length() > 0)
-                    expressionColumns[i].setExpression(Parser.parse(expressionString));
-                else
-                    expressionColumns[i].setExpression(null);
-            }
-        }
-        catch(ExpressionException e) {
-            JOptionPane.
-                showInternalMessageDialog(this,
-                                          e.getReason(),
-                                          Locale.getString("ERROR_PARSING_EXPRESSION"),
-                                          JOptionPane.ERROR_MESSAGE);
-            success = false;
-        }
-
-        return success;
-    }
-
-    public void actionPerformed(ActionEvent e) {
-
-	if(e.getSource() == okButton) {
-	    saveExpressionColumn(currentExpressionColumn);
-
-            if(parseExpressions()) {
-                OKButtonPressed = true;
-                dispose();
-                isDone = true;
-            }
-	}
-	else if(e.getSource() == cancelButton) {
-	    saveExpressionColumn(currentExpressionColumn);
-
-	    OKButtonPressed = false;
-	    dispose();
-	    isDone = true;
+		return OKButtonPressed;
 	}
 
-	else if(e.getSource() == expressionColumnComboBox) {
-	    // Save the current values and display new ones
-	    saveExpressionColumn(currentExpressionColumn);
-	    displayExpressionColumn(expressionColumnComboBox.getSelectedIndex());
+	public ExpressionColumn[] getExpressionColumns() {
+		return expressionColumns;
 	}
-    }	
+
+	private void saveExpressionColumn(int column) {
+		// Store new values the user has typed in
+		expressionColumns[column].setShortName(columnNameTextField.getText());
+		expressionColumns[column].setExpressionText(expressionComboBox.getExpressionText());
+	}
+
+	private void displayExpressionColumn(int column) {
+		currentExpressionColumn = column;
+
+		columnNameTextField.setText(expressionColumns[column].getShortName());
+		expressionComboBox.setExpressionText(expressionColumns[column].getExpressionText());
+	}
+
+	// Make sure the expression field is correct in each expression column. If
+	// any of the expressions do not parse then display an error dialog to
+	// the user.
+	private boolean parseExpressions() {
+		boolean success = true;
+		int i = 0;
+
+		try {
+			for (i = 0; i < expressionColumns.length; i++) {
+				String expressionString = expressionColumns[i].getExpressionText();
+
+				if (expressionString != null && expressionString.length() > 0)
+					expressionColumns[i].setExpression(Parser.parse(expressionString));
+				else
+					expressionColumns[i].setExpression(null);
+			}
+		} catch (ExpressionException e) {
+			JOptionPane.showInternalMessageDialog(this, e.getReason(), Locale.getString("ERROR_PARSING_EXPRESSION"),
+					JOptionPane.ERROR_MESSAGE);
+			success = false;
+		}
+
+		return success;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+
+		if (e.getSource() == okButton) {
+			saveExpressionColumn(currentExpressionColumn);
+
+			if (parseExpressions()) {
+				OKButtonPressed = true;
+				dispose();
+				isDone = true;
+			}
+		} else if (e.getSource() == cancelButton) {
+			saveExpressionColumn(currentExpressionColumn);
+
+			OKButtonPressed = false;
+			dispose();
+			isDone = true;
+		}
+
+		else if (e.getSource() == expressionColumnComboBox) {
+			// Save the current values and display new ones
+			saveExpressionColumn(currentExpressionColumn);
+			displayExpressionColumn(expressionColumnComboBox.getSelectedIndex());
+		}
+	}
 }

@@ -25,39 +25,39 @@ import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.TradingDate;
 
 /**
- * A function that returns the current day of year. The first day of
- * the year (Januarary 1st) will be 1.
+ * A function that returns the current day of year. The first day of the year
+ * (Januarary 1st) will be 1.
  */
 public class DayOfYearExpression extends TerminalExpression {
 
-    public DayOfYearExpression() {
-        // nothing to do
-    }
+	public DayOfYearExpression() {
+		// nothing to do
+	}
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) {
-        TradingDate date = quoteBundle.offsetToDate(day);
-        return date.getDayOfYear();
-    }
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) {
+		TradingDate date = quoteBundle.offsetToDate(day);
+		return date.getDayOfYear();
+	}
 
-    public String toString() {
-        return "dayofyear()";
-    }
+	public String toString() {
+		return "dayofyear()";
+	}
 
-    public int checkType() throws TypeMismatchException {
-	return getType();
-    }
+	public int checkType() throws TypeMismatchException {
+		return getType();
+	}
 
-    /**
-     * Get the type of the expression.
-     *
-     * @return returns {@link #INTEGER_TYPE}.
-     */
-    public int getType() {
-        return INTEGER_TYPE;
-    }
+	/**
+	 * Get the type of the expression.
+	 *
+	 * @return returns {@link #INTEGER_TYPE}.
+	 */
+	public int getType() {
+		return INTEGER_TYPE;
+	}
 
-    public Object clone() {
-        return new DayOfYearExpression();
-    }
+	public Object clone() {
+		return new DayOfYearExpression();
+	}
 
 }

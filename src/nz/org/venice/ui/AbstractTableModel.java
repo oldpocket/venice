@@ -30,68 +30,69 @@ import java.util.List;
  */
 public abstract class AbstractTableModel extends javax.swing.table.AbstractTableModel {
 
-    // List of table columns
-    private List columns;
+	// List of table columns
+	private List columns;
 
-    /**
-     * Create a new table model with no columns.
-     */
-    public AbstractTableModel() {
-        columns = null;
-    }
+	/**
+	 * Create a new table model with no columns.
+	 */
+	public AbstractTableModel() {
+		columns = null;
+	}
 
-    /**
-     * Create a new table model with the set of columns.
-     *
-     * @param columns Table's columns.
-     */
-    public AbstractTableModel(List columns) {
-        this.columns = columns;
-    }
+	/**
+	 * Create a new table model with the set of columns.
+	 *
+	 * @param columns Table's columns.
+	 */
+	public AbstractTableModel(List columns) {
+		this.columns = columns;
+	}
 
-    /**
-     * Get number of columns in table.
-     */
-    public int getColumnCount() {
-        return columns.size();
-    }
-    
-    /**
-     * Get short name of column. This is the name that will be displayed in the table header.
-     *
-     * @param columnNumber Column number.
-     * @return Column's short name.
-     */
-    public String getColumnName(int columnNumber) {
-        return getColumn(columnNumber).getShortName();
-    }
-    
-    /**
-     * Get data type of column data.
-     *
-     * @param columnNumber Column number.
-     * @return Column data type
-     */
-    public Class getColumnClass(int columnNumber) {
-        return getColumn(columnNumber).getType();
-    }
+	/**
+	 * Get number of columns in table.
+	 */
+	public int getColumnCount() {
+		return columns.size();
+	}
 
-    /**
-     * Sets the columns in the table model.
-     *
-     * @param columns New columns.
-     */
-    public void setColumns(List columns) {
-        this.columns = columns;
-    }
+	/**
+	 * Get short name of column. This is the name that will be displayed in the
+	 * table header.
+	 *
+	 * @param columnNumber Column number.
+	 * @return Column's short name.
+	 */
+	public String getColumnName(int columnNumber) {
+		return getColumn(columnNumber).getShortName();
+	}
 
-    /**
-     * Get a column.
-     *
-     * @param columnNumber Column number.
-     * @return Column.
-     */
-    public Column getColumn(int columnNumber) {
-        return (Column)columns.get(columnNumber);
-    }
+	/**
+	 * Get data type of column data.
+	 *
+	 * @param columnNumber Column number.
+	 * @return Column data type
+	 */
+	public Class getColumnClass(int columnNumber) {
+		return getColumn(columnNumber).getType();
+	}
+
+	/**
+	 * Sets the columns in the table model.
+	 *
+	 * @param columns New columns.
+	 */
+	public void setColumns(List columns) {
+		this.columns = columns;
+	}
+
+	/**
+	 * Get a column.
+	 *
+	 * @param columnNumber Column number.
+	 * @return Column.
+	 */
+	public Column getColumn(int columnNumber) {
+		return (Column) columns.get(columnNumber);
+	}
 }

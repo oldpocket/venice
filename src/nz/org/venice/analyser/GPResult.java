@@ -31,101 +31,95 @@ import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
 
 public class GPResult {
-    private Individual individual;
-    private EODQuoteBundle quoteBundle;
-    private Money initialCapital;
-    private Money tradeCost;
-    private int generation;
-    private TradingDate startDate;	
-    private TradingDate endDate;
-    
-    public GPResult(Individual individual, EODQuoteBundle quoteBundle,
-                    Money initialCapital, Money tradeCost,
-                    int generation,
-                    TradingDate startDate,
-                    TradingDate endDate) {
-        this.individual = individual;
-        this.quoteBundle = quoteBundle;
-        this.initialCapital = initialCapital;
-        this.tradeCost = tradeCost;
-        this.generation = generation;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
+	private Individual individual;
+	private EODQuoteBundle quoteBundle;
+	private Money initialCapital;
+	private Money tradeCost;
+	private int generation;
+	private TradingDate startDate;
+	private TradingDate endDate;
 
-    public TradingDate getStartDate() {
-        return startDate;
-    }
+	public GPResult(Individual individual, EODQuoteBundle quoteBundle, Money initialCapital, Money tradeCost,
+			int generation, TradingDate startDate, TradingDate endDate) {
+		this.individual = individual;
+		this.quoteBundle = quoteBundle;
+		this.initialCapital = initialCapital;
+		this.tradeCost = tradeCost;
+		this.generation = generation;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
 
-    public TradingDate getEndDate() {
-        return endDate;
-    }
+	public TradingDate getStartDate() {
+		return startDate;
+	}
 
-    public String getSymbols() {
-        List symbolsTraded = getPortfolio().getSymbolsTraded();
-        
-        String string = new String();
-        Iterator iterator = symbolsTraded.iterator();
-        while(iterator.hasNext()) {
-            Symbol symbol = (Symbol)iterator.next();
-            
-            if(string.length() > 0)
-                string = string.concat(", " + symbol.toString());
-            else
-                string = symbol.toString();
-        }
-        
-        return string;
-    }
+	public TradingDate getEndDate() {
+		return endDate;
+	}
 
-    public String getBuyRule() {
-        return individual.getBuyRule().toString();
-    }
+	public String getSymbols() {
+		List symbolsTraded = getPortfolio().getSymbolsTraded();
 
-    public String getSellRule() {
-        return individual.getSellRule().toString();
-    }
+		String string = new String();
+		Iterator iterator = symbolsTraded.iterator();
+		while (iterator.hasNext()) {
+			Symbol symbol = (Symbol) iterator.next();
 
-    public int getGeneration() {
-        return generation;
-    }
+			if (string.length() > 0)
+				string = string.concat(", " + symbol.toString());
+			else
+				string = symbol.toString();
+		}
 
-    public Money getTradeCost() {
-        return tradeCost;
-    }
+		return string;
+	}
 
-    public int getNumberTrades() {
-        int accumulateTrades = 
-            getPortfolio().countTransactions(Transaction.ACCUMULATE);
-        int reduceTrades =
-            getPortfolio().countTransactions(Transaction.REDUCE);
-        
-        return accumulateTrades + reduceTrades;
-    }
+	public String getBuyRule() {
+		return individual.getBuyRule().toString();
+	}
 
-    public Money getInitialCapital() {
-        return initialCapital;
-    }
+	public String getSellRule() {
+		return individual.getSellRule().toString();
+	}
 
-    public Money getFinalCapital() {
-        Money finalCapital = Money.ZERO;
-        
-        try {
-            finalCapital = getPortfolio().getValue(getQuoteBundle(), getEndDate());
-        }
-        catch(MissingQuoteException e) {
-            // Already checked...
-            assert false;
-        }
-        
-        return finalCapital;
-    }
+	public int getGeneration() {
+		return generation;
+	}
 
-    public Portfolio getPortfolio() {
-        return individual.getPortfolio();
-    }
+	public Money getTradeCost() {
+		return tradeCost;
+	}
 
-    public EODQuoteBundle getQuoteBundle() {
-        return quoteBundle;
-    }
+	public int getNumberTrades() {
+		int accumulateTrades = getPortfolio().countTransactions(Transaction.ACCUMULATE);
+		int reduceTrades = getPortfolio().countTransactions(Transaction.REDUCE);
+
+		return accumulateTrades + reduceTrades;
+	}
+
+	public Money getInitialCapital() {
+		return initialCapital;
+	}
+
+	public Money getFinalCapital() {
+		Money finalCapital = Money.ZERO;
+
+		try {
+			finalCapital = getPortfolio().getValue(getQuoteBundle(), getEndDate());
+		} catch (MissingQuoteException e) {
+			// Already checked...
+			assert false;
+		}
+
+		return finalCapital;
+	}
+
+	public Portfolio getPortfolio() {
+		return individual.getPortfolio();
+	}
+
+	public EODQuoteBundle getQuoteBundle() {
+		return quoteBundle;
+	}
 }

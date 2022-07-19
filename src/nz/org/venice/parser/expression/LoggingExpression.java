@@ -30,140 +30,132 @@ import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.VeniceLog;
 
 /**
- * An no op expression which when evaluated halts the processing of rules.
- * Use for when something seriously wrong happens and you don't care about
- * the rest of the days results.
+ * An no op expression which when evaluated halts the processing of rules. Use
+ * for when something seriously wrong happens and you don't care about the rest
+ * of the days results.
  *
  * Will first display the alert message defined by the arguments.
  *
  * @author Mark Hummel
  */
 
-public class LoggingExpression extends UnaryExpression{
-   
-    private Expression mandatoryArg;
-    private Expression[] optionalArgs;
-    private final int argCount;
+public class LoggingExpression extends UnaryExpression {
 
-    /**
-     * Create a new logging expression.
-     * 
-     * @param arg The message expression 
-     * @param optionalArgs Optional expressions (max 4) which are appended to
-     * the message defined in arg.
-     */    
+	private Expression mandatoryArg;
+	private Expression[] optionalArgs;
+	private final int argCount;
 
-    public LoggingExpression(Expression arg, Expression[] optionalArgs) {
-	super(arg);
-	this.mandatoryArg = arg;
-	this.optionalArgs = optionalArgs;
-	int count = 1;
-	for (int i = 0; i < optionalArgs.length; i++) {
-	    if (optionalArgs[i] != null) {
-		count++;
-		optionalArgs[i].setParent(this);
-	    }
-	}
-	argCount = count;
-    }
+	/**
+	 * Create a new logging expression.
+	 * 
+	 * @param arg          The message expression
+	 * @param optionalArgs Optional expressions (max 4) which are appended to the
+	 *                     message defined in arg.
+	 */
 
-    /**
-     * Evaluate the expression and subexpressions, and then display the 
-     * resulting message.
-     * 
-     * @param variables The variables of the rule
-     * @param quoteBundle The quote bundle containing the symbol data
-     * @param symbol The implicit symbol of the rule
-     * @param day The date offset used to evaluate the rule.
-     * @return 0.0
-     */
-
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
-	throws EvaluationException {
-	
-	Date date = new Date();
-	String message = new Timestamp(date.getTime()) + " " + symbol + " " + quoteBundle.offsetToDate(day) + " : ";
-	
-	message += appendMessage(getChild(0), 
-				 variables, 
-				 quoteBundle,
-				 symbol, 
-				 day);
-
-	for (int i = 0; i < optionalArgs.length; i++) {
-	    if (optionalArgs[i] != null) {
-		message += appendMessage(optionalArgs[i], 
-					 variables, 
-					 quoteBundle, 
-					 symbol, 
-					 day);	 
-	    }   
+	public LoggingExpression(Expression arg, Expression[] optionalArgs) {
+		super(arg);
+		this.mandatoryArg = arg;
+		this.optionalArgs = optionalArgs;
+		int count = 1;
+		for (int i = 0; i < optionalArgs.length; i++) {
+			if (optionalArgs[i] != null) {
+				count++;
+				optionalArgs[i].setParent(this);
+			}
+		}
+		argCount = count;
 	}
 
-	VeniceLog.getInstance().log(message);
+	/**
+	 * Evaluate the expression and subexpressions, and then display the resulting
+	 * message.
+	 * 
+	 * @param variables   The variables of the rule
+	 * @param quoteBundle The quote bundle containing the symbol data
+	 * @param symbol      The implicit symbol of the rule
+	 * @param day         The date offset used to evaluate the rule.
+	 * @return 0.0
+	 */
 
-	return 0.0;
-    }
-    
-    private String appendMessage(Expression mesg, Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) throws EvaluationException {
-	String rv = "";
-	if (mesg instanceof StringExpression) {	    
-	    rv += ((StringExpression)mesg).getText();
-	} else {
-	    rv += mesg.evaluate(variables,quoteBundle, symbol, day);
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
+
+		Date date = new Date();
+		String message = new Timestamp(date.getTime()) + " " + symbol + " " + quoteBundle.offsetToDate(day) + " : ";
+
+		message += appendMessage(getChild(0), variables, quoteBundle, symbol, day);
+
+		for (int i = 0; i < optionalArgs.length; i++) {
+			if (optionalArgs[i] != null) {
+				message += appendMessage(optionalArgs[i], variables, quoteBundle, symbol, day);
+			}
+		}
+
+		VeniceLog.getInstance().log(message);
+
+		return 0.0;
 	}
-	return rv;
-    }
 
-    /**
-     * Check the argument to the expression. It can be an expression.
-     *
-     * @return the type of the expression
-     */
-    public int checkType() throws TypeMismatchException {
-	return getType();
-    }
-
-        /**
-     * Get the type of the expression
-     * 
-     * @return {@link #FLOAT_TYPE}
-     */
-    public int getType() {
-	return FLOAT_TYPE;
-    }
-
-    /**
-     * Return the number of children required in an alert expression.
-     * This will be a minimum of <code>1</code> and a maximum of <code>4</code>.
-     *
-     * @return	<code>The number of non null arguments.</code>
-     */
-    public int getChildCount() {
-	return argCount;
-    }
-
-
-    /**
-     * Return the child of this node at the given index.
-     *
-     * @return child at given index.
-     */
-    public Expression getChild(int child) {
-	assert child <= argCount;
-
-	if (child == 0) {
-	    return mandatoryArg;
-	} else {
-	    return optionalArgs[child-1];
+	private String appendMessage(Expression mesg, Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
+		String rv = "";
+		if (mesg instanceof StringExpression) {
+			rv += ((StringExpression) mesg).getText();
+		} else {
+			rv += mesg.evaluate(variables, quoteBundle, symbol, day);
+		}
+		return rv;
 	}
-    }
 
-    /**
-     * @return A clone of the object.
-     */
+	/**
+	 * Check the argument to the expression. It can be an expression.
+	 *
+	 * @return the type of the expression
+	 */
+	public int checkType() throws TypeMismatchException {
+		return getType();
+	}
 
-    public Object clone() {	
-        return new HaltExpression(getChild(0), optionalArgs);
-    }
+	/**
+	 * Get the type of the expression
+	 * 
+	 * @return {@link #FLOAT_TYPE}
+	 */
+	public int getType() {
+		return FLOAT_TYPE;
+	}
+
+	/**
+	 * Return the number of children required in an alert expression. This will be a
+	 * minimum of <code>1</code> and a maximum of <code>4</code>.
+	 *
+	 * @return <code>The number of non null arguments.</code>
+	 */
+	public int getChildCount() {
+		return argCount;
+	}
+
+	/**
+	 * Return the child of this node at the given index.
+	 *
+	 * @return child at given index.
+	 */
+	public Expression getChild(int child) {
+		assert child <= argCount;
+
+		if (child == 0) {
+			return mandatoryArg;
+		} else {
+			return optionalArgs[child - 1];
+		}
+	}
+
+	/**
+	 * @return A clone of the object.
+	 */
+
+	public Object clone() {
+		return new HaltExpression(getChild(0), optionalArgs);
+	}
 }

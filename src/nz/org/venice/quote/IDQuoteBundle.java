@@ -24,13 +24,14 @@ import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.util.TradingDate;
 
 /**
- * When a task requires intra-day stock quotes, it should create an instance of this class
- * which represents all the task's required quotes. The task can then access quotes
- * from this class, which in turn reads its stock quotes from the global intra-day quote
- * cache - {@link IDQuoteCache}. To be notified of new intra-day quotes call
- * {@link IDQuoteCache#addQuoteListener}.
+ * When a task requires intra-day stock quotes, it should create an instance of
+ * this class which represents all the task's required quotes. The task can then
+ * access quotes from this class, which in turn reads its stock quotes from the
+ * global intra-day quote cache - {@link IDQuoteCache}. To be notified of new
+ * intra-day quotes call {@link IDQuoteCache#addQuoteListener}.
  * <p>
  * Example:
+ * 
  * <pre>
  *      IDQuoteBundle quoteBundle = new IDQuoteBundle("CBA");
  *      try {
@@ -49,137 +50,132 @@ import nz.org.venice.util.TradingDate;
  */
 public class IDQuoteBundle implements QuoteBundle {
 
-    // Current date of all intra-day quotes
-    private TradingDate date;
+	// Current date of all intra-day quotes
+	private TradingDate date;
 
-    // List of symbols in quote bundle
-    private List symbols;
+	// List of symbols in quote bundle
+	private List symbols;
 
-    // Quick references to remove need to getInstance() calls
-    private static IDQuoteCache quoteCache = IDQuoteCache.getInstance();
-    private static IDQuoteSync quoteSync = IDQuoteSync.getInstance();
+	// Quick references to remove need to getInstance() calls
+	private static IDQuoteCache quoteCache = IDQuoteCache.getInstance();
+	private static IDQuoteSync quoteSync = IDQuoteSync.getInstance();
 
-    /**
-     * Create a new intra-day quote bundle containing all today's quotes for
-     * the given symbols.
-     *
-     * @param symbols the quote symbols
-     */
-    public IDQuoteBundle(List symbols) {
-        this.symbols = symbols;
+	/**
+	 * Create a new intra-day quote bundle containing all today's quotes for the
+	 * given symbols.
+	 *
+	 * @param symbols the quote symbols
+	 */
+	public IDQuoteBundle(List symbols) {
+		this.symbols = symbols;
 
-        // TODO: This isn't correct. Our latest quotes might be yesterday's.
-        this.date = new TradingDate();
-        
-        // Tell the quote sync to download intra-day quotes for these symbols
-        quoteSync.addSymbols(symbols);
-    }
+		// TODO: This isn't correct. Our latest quotes might be yesterday's.
+		this.date = new TradingDate();
 
-    public double getQuote(Symbol symbol, int quoteType, int now, int timeOffset)
-	throws EvaluationException, MissingQuoteException {
-
-        return getQuote(symbol, quoteType, now + timeOffset);
-    }
-
-    public double getQuote(Symbol symbol, int quoteType, int timeOffset)
-	throws MissingQuoteException {
-
-        double quote;
-
-        try {
-            quote = quoteCache.getQuote(symbol, quoteType, timeOffset);
-        }
-        catch(QuoteNotLoadedException e) {
-            // Expand the quote range to include the symbol if we don't already have it
-            if(!symbols.contains(symbol)) {
-                symbols.add(symbol);
-                quoteSync.addSymbols(symbols);
-            }
-
-            // The symbol won't be available until next polling period
-            throw MissingQuoteException.getInstance();
-        }
-
-        return quote;
-    }
-
-    public Quote getQuote(Symbol symbol, int timeOffset)
-        throws MissingQuoteException {
-
-        Quote quote;
-
-        try {
-            quote = quoteCache.getQuote(symbol, timeOffset);
-        }
-        catch(QuoteNotLoadedException e) {
-            // Expand the quote range to include the symbol if we don't already have it
-            if(!symbols.contains(symbol)) {
-                symbols.add(symbol);
-                quoteSync.addSymbols(symbols);
-            }
-
-            // The symbol won't be available until next polling period
-            throw MissingQuoteException.getInstance();            
-        }
-
-        return quote;
-    }
-
-    public double getNearestQuote(Symbol symbol, int quoteType, int timeOffset)
-	throws MissingQuoteException {
-
-        double quote = 0.0;
-	boolean foundQuote = false;
-	
-	while (timeOffset >= getFirstOffset()) {
-	    try {
-		quote = getQuote(symbol, quoteType, timeOffset);
-		foundQuote = true;
-		break;
-	    } catch (MissingQuoteException e) {
-		
-	    } finally {
-		timeOffset--;
-	    }
-	}	    
-
-	if (!foundQuote) {
-	    throw MissingQuoteException.getInstance();
+		// Tell the quote sync to download intra-day quotes for these symbols
+		quoteSync.addSymbols(symbols);
 	}
 
-        return quote;
-    }
+	public double getQuote(Symbol symbol, int quoteType, int now, int timeOffset)
+			throws EvaluationException, MissingQuoteException {
 
-    public TradingDate offsetToDate(int timeOffset) {
-        // The entire quote bundle is on the same date
-        return date;
-    }
+		return getQuote(symbol, quoteType, now + timeOffset);
+	}
 
-    /**
-     * Retrieve the fast access offset from the given quote.
-     *
-     * @param quote quote
-     * @return fast access offset
-     */
-    public int getOffset(Quote quote) {
-        throw new UnsupportedOperationException();
-    }
+	public double getQuote(Symbol symbol, int quoteType, int timeOffset) throws MissingQuoteException {
 
-    /**
-     * Return the fast access offset for the earliest quote in the bundle.
-     *
-     * @return fast access offset
-     */
-    public int getFirstOffset() {
-        return quoteCache.getFirstTimeOffset();
-    }
+		double quote;
 
-    /**
-     * Return the fast access offset for the latest quote in the bundle.
-     *
-     * @return fast access offset
-     */
-    public int getLastOffset() {
-        return quoteCache.getLastTimeOffset();
-    }
+		try {
+			quote = quoteCache.getQuote(symbol, quoteType, timeOffset);
+		} catch (QuoteNotLoadedException e) {
+			// Expand the quote range to include the symbol if we don't already have it
+			if (!symbols.contains(symbol)) {
+				symbols.add(symbol);
+				quoteSync.addSymbols(symbols);
+			}
+
+			// The symbol won't be available until next polling period
+			throw MissingQuoteException.getInstance();
+		}
+
+		return quote;
+	}
+
+	public Quote getQuote(Symbol symbol, int timeOffset) throws MissingQuoteException {
+
+		Quote quote;
+
+		try {
+			quote = quoteCache.getQuote(symbol, timeOffset);
+		} catch (QuoteNotLoadedException e) {
+			// Expand the quote range to include the symbol if we don't already have it
+			if (!symbols.contains(symbol)) {
+				symbols.add(symbol);
+				quoteSync.addSymbols(symbols);
+			}
+
+			// The symbol won't be available until next polling period
+			throw MissingQuoteException.getInstance();
+		}
+
+		return quote;
+	}
+
+	public double getNearestQuote(Symbol symbol, int quoteType, int timeOffset) throws MissingQuoteException {
+
+		double quote = 0.0;
+		boolean foundQuote = false;
+
+		while (timeOffset >= getFirstOffset()) {
+			try {
+				quote = getQuote(symbol, quoteType, timeOffset);
+				foundQuote = true;
+				break;
+			} catch (MissingQuoteException e) {
+
+			} finally {
+				timeOffset--;
+			}
+		}
+
+		if (!foundQuote) {
+			throw MissingQuoteException.getInstance();
+		}
+
+		return quote;
+	}
+
+	public TradingDate offsetToDate(int timeOffset) {
+		// The entire quote bundle is on the same date
+		return date;
+	}
+
+	/**
+	 * Retrieve the fast access offset from the given quote.
+	 *
+	 * @param quote quote
+	 * @return fast access offset
+	 */
+	public int getOffset(Quote quote) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * Return the fast access offset for the earliest quote in the bundle.
+	 *
+	 * @return fast access offset
+	 */
+	public int getFirstOffset() {
+		return quoteCache.getFirstTimeOffset();
+	}
+
+	/**
+	 * Return the fast access offset for the latest quote in the bundle.
+	 *
+	 * @return fast access offset
+	 */
+	public int getLastOffset() {
+		return quoteCache.getLastTimeOffset();
+	}
 }

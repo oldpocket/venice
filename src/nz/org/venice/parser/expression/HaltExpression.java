@@ -25,9 +25,9 @@ import nz.org.venice.quote.QuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
- * An no op expression which when evaluated halts the processing of rules.
- * Use for when something seriously wrong happens and you don't care about
- * the rest of the days results.
+ * An no op expression which when evaluated halts the processing of rules. Use
+ * for when something seriously wrong happens and you don't care about the rest
+ * of the days results.
  *
  * Will first display the alert message defined by the arguments.
  *
@@ -35,46 +35,47 @@ import nz.org.venice.quote.Symbol;
  */
 
 public class HaltExpression extends AlertExpression {
-   
-    private Expression mandatoryArg;
-    private Expression[] optionalArgs;
 
-    /**
-     * Create a new alert expression.
-     * 
-     * @param arg The message expression 
-     * @param optionalArgs Optional expressions (max 4) which are appended to
-     * the message defined in arg.
-     */    
+	private Expression mandatoryArg;
+	private Expression[] optionalArgs;
 
-    public HaltExpression(Expression arg, Expression[] optionalArgs) {
-	super(arg, optionalArgs);
-    }
+	/**
+	 * Create a new alert expression.
+	 * 
+	 * @param arg          The message expression
+	 * @param optionalArgs Optional expressions (max 4) which are appended to the
+	 *                     message defined in arg.
+	 */
 
-    /**
-     * Evaluate the expression and subexpressions, and then display the 
-     * resulting message.
-     * 
-     * @param variables The variables of the rule
-     * @param quoteBundle The quote bundle containing the symbol data
-     * @param symbol The implicit symbol of the rule
-     * @param day The date offset used to evaluate the rule.
-     * @return 0.0
-     */
+	public HaltExpression(Expression arg, Expression[] optionalArgs) {
+		super(arg, optionalArgs);
+	}
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
-	throws EvaluationException {
-	
-	super.evaluate(variables, quoteBundle, symbol, day);
+	/**
+	 * Evaluate the expression and subexpressions, and then display the resulting
+	 * message.
+	 * 
+	 * @param variables   The variables of the rule
+	 * @param quoteBundle The quote bundle containing the symbol data
+	 * @param symbol      The implicit symbol of the rule
+	 * @param day         The date offset used to evaluate the rule.
+	 * @return 0.0
+	 */
 
-	throw EvaluationException.EVALUATION_HALTED_EXCEPTION;
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-    }
-    /**
-     * @return A clone of the object.
-     */
+		super.evaluate(variables, quoteBundle, symbol, day);
 
-    public Object clone() {	
-        return new HaltExpression(getChild(0), optionalArgs);
-    }
+		throw EvaluationException.EVALUATION_HALTED_EXCEPTION;
+
+	}
+
+	/**
+	 * @return A clone of the object.
+	 */
+
+	public Object clone() {
+		return new HaltExpression(getChild(0), optionalArgs);
+	}
 }

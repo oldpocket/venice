@@ -29,70 +29,66 @@ import nz.org.venice.quote.Symbol;
  */
 public class EqualThanExpression extends ComparisionExpression {
 
-    public EqualThanExpression(Expression left, Expression right) {
-	super(left, right);
-    }
+	public EqualThanExpression(Expression left, Expression right) {
+		super(left, right);
+	}
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
-	throws EvaluationException {
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-	if(getChild(0).evaluate(variables, quoteBundle, symbol, day) ==
-	   getChild(1).evaluate(variables, quoteBundle, symbol, day))
-	    return TRUE;
-	else
-	    return FALSE;
-    }
+		if (getChild(0).evaluate(variables, quoteBundle, symbol, day) == getChild(1).evaluate(variables, quoteBundle,
+				symbol, day))
+			return TRUE;
+		else
+			return FALSE;
+	}
 
-    public Expression simplify() {
-        // First perform comparision simplifications
-        Expression simplified = super.simplify();
+	public Expression simplify() {
+		// First perform comparision simplifications
+		Expression simplified = super.simplify();
 
-        // If we haven't simplified the whole expression away and
-        // the left and right arguments are the same expression
-        // then the comparision must be true.
-        if(simplified.equals(this) && simplified.getChild(0).equals(simplified.getChild(1)))
-            return new NumberExpression(true);
-        else
-            return simplified;
-    }
+		// If we haven't simplified the whole expression away and
+		// the left and right arguments are the same expression
+		// then the comparision must be true.
+		if (simplified.equals(this) && simplified.getChild(0).equals(simplified.getChild(1)))
+			return new NumberExpression(true);
+		else
+			return simplified;
+	}
 
-    public boolean equals(Object object) {
+	public boolean equals(Object object) {
 
-        // Are they both equals expressions?
-        if(object instanceof EqualThanExpression) {
-            EqualThanExpression expression = (EqualThanExpression)object;
+		// Are they both equals expressions?
+		if (object instanceof EqualThanExpression) {
+			EqualThanExpression expression = (EqualThanExpression) object;
 
-            // (x == y) == (x == y)
-            if(getChild(0).equals(expression.getChild(0)) &&
-               getChild(1).equals(expression.getChild(1)))
-                return true;
+			// (x == y) == (x == y)
+			if (getChild(0).equals(expression.getChild(0)) && getChild(1).equals(expression.getChild(1)))
+				return true;
 
-            // (x == y) == (y == x)
-            if(getChild(0).equals(expression.getChild(1)) &&
-               getChild(1).equals(expression.getChild(0)))
-                return true;
-        }
-    
-        return false;
-    }
+			// (x == y) == (y == x)
+			if (getChild(0).equals(expression.getChild(1)) && getChild(1).equals(expression.getChild(0)))
+				return true;
+		}
 
-    public int hashCode() {
-	Expression child1 = getChild(0);
-	Expression child2 = getChild(1);
+		return false;
+	}
 
-	assert child1 != null;
-	assert child2 != null;
+	public int hashCode() {
+		Expression child1 = getChild(0);
+		Expression child2 = getChild(1);
 
-	return child1.hashCode() ^ child2.hashCode();	
-    }
+		assert child1 != null;
+		assert child2 != null;
 
-    public String toString() {
-	return super.toString("==");
-    }
+		return child1.hashCode() ^ child2.hashCode();
+	}
 
-    public Object clone() {
-        return new EqualThanExpression((Expression)getChild(0).clone(), 
-                                       (Expression)getChild(1).clone());
-    }
+	public String toString() {
+		return super.toString("==");
+	}
+
+	public Object clone() {
+		return new EqualThanExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone());
+	}
 }
-

@@ -44,52 +44,49 @@ import nz.org.venice.quote.Symbol;
  */
 public class WatchScreenWriter {
 
-    private WatchScreenWriter() {
-        // Nothing to do
-    }
+	private WatchScreenWriter() {
+		// Nothing to do
+	}
 
-    /**
-     * Write the watch screen to the output stream in XML format.
-     *
-     * @param watchScreen the watch screen to write
-     * @param stream      the output stream to write the watch screen.
-     */
-    public static void write(WatchScreen watchScreen, OutputStream stream) {
-        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+	/**
+	 * Write the watch screen to the output stream in XML format.
+	 *
+	 * @param watchScreen the watch screen to write
+	 * @param stream      the output stream to write the watch screen.
+	 */
+	public static void write(WatchScreen watchScreen, OutputStream stream) {
+		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 
-        try {
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            Document document = builder.newDocument();
+		try {
+			DocumentBuilder builder = builderFactory.newDocumentBuilder();
+			Document document = builder.newDocument();
 
-            Element watchScreenElement = (Element)document.createElement("watch_screen");
-            watchScreenElement.setAttribute("name", watchScreen.getName());
-            document.appendChild(watchScreenElement);
+			Element watchScreenElement = (Element) document.createElement("watch_screen");
+			watchScreenElement.setAttribute("name", watchScreen.getName());
+			document.appendChild(watchScreenElement);
 
-            Element symbolsElement = (Element)document.createElement("symbols");
+			Element symbolsElement = (Element) document.createElement("symbols");
 
-            watchScreenElement.appendChild(symbolsElement);
-            for(Iterator iterator = watchScreen.getSymbols().iterator(); iterator.hasNext();) {
-                Symbol symbol = (Symbol)iterator.next();
-                Element symbolElement =
-                    (Element)document.createElement("symbol");
-                symbolElement.setAttribute("name", symbol.toString());
-                symbolsElement.appendChild(symbolElement);
-            }
+			watchScreenElement.appendChild(symbolsElement);
+			for (Iterator iterator = watchScreen.getSymbols().iterator(); iterator.hasNext();) {
+				Symbol symbol = (Symbol) iterator.next();
+				Element symbolElement = (Element) document.createElement("symbol");
+				symbolElement.setAttribute("name", symbol.toString());
+				symbolsElement.appendChild(symbolElement);
+			}
 
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
 
-            DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(stream);
-            transformer.transform(source, result);
-        }
-        catch(ParserConfigurationException e) {
-            // This should not occur
-            assert false;
-        }
-        catch(TransformerException e) {
-            // This should not occur
-            assert false;
-        }
-    }
+			DOMSource source = new DOMSource(document);
+			StreamResult result = new StreamResult(stream);
+			transformer.transform(source, result);
+		} catch (ParserConfigurationException e) {
+			// This should not occur
+			assert false;
+		} catch (TransformerException e) {
+			// This should not occur
+			assert false;
+		}
+	}
 }

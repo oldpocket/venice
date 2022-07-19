@@ -23,20 +23,20 @@ import java.util.EventObject;
 import nz.org.venice.main.Module;
 
 /**
- * Representation of an event indicating that a module has been added,
- * removed or renamed.
+ * Representation of an event indicating that a module has been added, removed
+ * or renamed.
  *
  * @author Andrew Leppard
  * @see ModuleListener
  */
 public class ModuleEvent extends EventObject {
 
-    /**
-     * Create a new module event based on the given module.
-     *
-     * @param	module	the module
-     */
-    public ModuleEvent(Module module) {
-	super((Object)module);
-    }
+	/**
+	 * Create a new module event based on the given module.
+	 *
+	 * @param module the module
+	 */
+	public ModuleEvent(Module module) {
+		super((Object) module);
+	}
 }

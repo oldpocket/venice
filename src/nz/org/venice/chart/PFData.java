@@ -21,33 +21,32 @@ package nz.org.venice.chart;
 import java.util.Vector;
 
 /**
- * A wrapper for Point and Figure data 
+ * A wrapper for Point and Figure data
  *
  * @author Mark Hummel
  */
 public class PFData {
 
-    private Comparable date;
-    private Vector list;
-    private String marker;
+	private Comparable date;
+	private Vector list;
+	private String marker;
 
-    public PFData(Comparable date, Vector list, String marker) {
-	this.date = date;
-	this.list = list;
-	this.marker = marker;
-    }
+	public PFData(Comparable date, Vector list, String marker) {
+		this.date = date;
+		this.list = list;
+		this.marker = marker;
+	}
 
-    public Vector getList() {
-	return list;
-    }
+	public Vector getList() {
+		return list;
+	}
 
-    public Comparable getDate() {
-	return date;
-    }
+	public Comparable getDate() {
+		return date;
+	}
 
-    public String getMarker() {
-	return marker;
-    }
-
+	public String getMarker() {
+		return marker;
+	}
 
 }

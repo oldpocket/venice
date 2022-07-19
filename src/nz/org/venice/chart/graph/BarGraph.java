@@ -26,59 +26,51 @@ import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.source.GraphSource;
 
 /**
- * Horizontal bar graph. This graph is most commonly used to draw
- * the volume graph.
+ * Horizontal bar graph. This graph is most commonly used to draw the volume
+ * graph.
  *
  * @author Andrew Leppard
  */
 public class BarGraph extends AbstractGraph {
 
-    // The name of the graph, e.g. "Volume"
-    private String name;
+	// The name of the graph, e.g. "Volume"
+	private String name;
 
-    // See Graph.java
-    private boolean isPrimary;
+	// See Graph.java
+	private boolean isPrimary;
 
-    /**
-     * Create a new horizontal bar graph.
-     *
-     * @param	source	the source to render
-     * @param   name    the graph name
-     * @param   isPrimary is this a primary graph?
-     */
-    public BarGraph(GraphSource source, String name, boolean isPrimary) {
-	super(source);
-        this.name = name;
-        this.isPrimary = isPrimary;
-    }
+	/**
+	 * Create a new horizontal bar graph.
+	 *
+	 * @param source    the source to render
+	 * @param name      the graph name
+	 * @param isPrimary is this a primary graph?
+	 */
+	public BarGraph(GraphSource source, String name, boolean isPrimary) {
+		super(source);
+		this.name = name;
+		this.isPrimary = isPrimary;
+	}
 
+	// See Graph.java
+	public void render(Graphics g, Color colour, int xoffset, int yoffset, double horizontalScale, double verticalScale,
+			double topLineValue, double bottomLineValue, List xRange, boolean vertOrientation) {
 
-    // See Graph.java
-    public void render(Graphics g, Color colour, int xoffset, int yoffset,
-		       double horizontalScale, double verticalScale,
-		       double topLineValue, double bottomLineValue, 
-		       List xRange, 
-		       boolean vertOrientation) {
+		g.setColor(colour);
+		GraphTools.renderBar(g, getSource().getGraphable(), xoffset, yoffset, horizontalScale, verticalScale,
+				topLineValue, bottomLineValue, xRange, vertOrientation);
+	}
 
-	g.setColor(colour);
-	GraphTools.renderBar(g, getSource().getGraphable(),
-			     xoffset, yoffset, horizontalScale,
-			     verticalScale, 
-			     topLineValue, bottomLineValue, 
-			     xRange, 
-			     vertOrientation);
-    }
+	/**
+	 * Return the name of this graph.
+	 *
+	 * @return the name given to the constructor
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Return the name of this graph.
-     *
-     * @return the name given to the constructor
-     */
-    public String getName() {
-        return name;
-    }
-
-    public boolean isPrimary() {
-        return isPrimary;
-    }
+	public boolean isPrimary() {
+		return isPrimary;
+	}
 }

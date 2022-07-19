@@ -40,301 +40,274 @@ import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
 
-
 /**
- * Returns the singleton reference to the AlertDestination that the user
- * has selected in their preferences. This class will also be
- * updated when the user preferences has changed so the return Alert Destination
- * will always be update to date.
+ * Returns the singleton reference to the AlertDestination that the user has
+ * selected in their preferences. This class will also be updated when the user
+ * preferences has changed so the return Alert Destination will always be update
+ * to date.
  *
  * Example:
+ * 
  * <pre>
- *	List alerts = QuoteSourceManager.getDestination().getAlertsForSymbol("CBA");
+ * List alerts = QuoteSourceManager.getDestination().getAlertsForSymbol("CBA");
  * </pre>
  * 
  * @author Mark
  * @see Alert
- * @see AlertWriter 
+ * @see AlertWriter
  */
 public class AlertManager {
-    
-    // Singleton instances of AlertManager class - 
-    // an instance each for reading and writing alerts
-    private static AlertWriter destInstance = null;
-    private static AlertReader sourceInstance = null;
 
-    private AlertManager() {
-        // declared here so constructor is not public
-    }
-    
-    public static void setSourceInstance(AlertReader instance) {
-	sourceInstance = instance;
-    }
+	// Singleton instances of AlertManager class -
+	// an instance each for reading and writing alerts
+	private static AlertWriter destInstance = null;
+	private static AlertReader sourceInstance = null;
 
-    //Must read and write alerts from the same place.   
-    public static synchronized AlertReader getReader() {
-	if (sourceInstance == null) {
-	    String destination = PreferencesManager.getAlertDestination();
-	    
-	    if (destination.equals(Locale.getString("ALERT_DISABLED_ALL"))) {
-		
-	    }	    
-	    if (destination.equals(Locale.getString("FILE"))) {
-		sourceInstance = AlertFactory.createFileAlertReader();
-	    }
-	    if (destination.equals(Locale.getString("DATABASE"))) {
-		sourceInstance = AlertFactory.createDatabaseAlertReader();
-	    }
+	private AlertManager() {
+		// declared here so constructor is not public
 	}
-	return sourceInstance;
-    }
 
-    public static synchronized AlertWriter getWriter() {
-	if (destInstance == null) {
-	    String destination = PreferencesManager.getAlertDestination();
-
-	    if (destination.equals(Locale.getString("ALERT_DISABLE_ALL"))) {
-		
-	    }
-			    
-	    if (destination.equals(Locale.getString("FILE"))) {
-		destInstance = AlertFactory.createFileAlertWriter();
-	    }
-	    if (destination.equals(Locale.getString("DATABASE"))) {
-		destInstance = AlertFactory.createDatabaseAlertWriter();
-	    }
+	public static void setSourceInstance(AlertReader instance) {
+		sourceInstance = instance;
 	}
-	return destInstance;
-    }
 
-    public static boolean alertsTriggered(List triggeredAlerts, List triggerValues) {
-	AlertReader reader = getReader();
-	List alerts;
-	QuoteSource quoteSource = QuoteSourceManager.getSource();
-	EODQuoteBundle quoteBundle = null;
-	boolean alertsTriggered = false;
-	TradingDate today = new TradingDate();
+	// Must read and write alerts from the same place.
+	public static synchronized AlertReader getReader() {
+		if (sourceInstance == null) {
+			String destination = PreferencesManager.getAlertDestination();
 
-	boolean interrupted = false;
-	ProgressDialog progress = ProgressDialogManager.getProgressDialog();
-	Thread thread = Thread.currentThread();
-	
-	progress.show(Locale.getString("ALERT_CHECK"));
-	progress.setIndeterminate(true);
-	progress.setMaster(true);
-	
-	try {
-	    alerts = reader.getAlerts();
-	    //if there are no alerts, there's nothing to trigger	    
-	    if (alerts.size() == 0) {
-		return false;
-	    }
+			if (destination.equals(Locale.getString("ALERT_DISABLED_ALL"))) {
 
-	    ArrayList symbolList = new ArrayList();
-	    Iterator alertIterator = alerts.iterator();
-
-	    //Magic: For some reason, on startup, just using the size
-	    //as maximum means the triggered alerts won't show.
-	    //Increasing the size by at least 2 works for some reason. 	    
-	    progress.setMaximum(alerts.size() + 2);
-	    progress.setIndeterminate(false);
-	    progress.setProgress(0);
-	    
-	    //First get the list of symbols and build the quote bundle
-	    //containing all the symbols
-	    while (alertIterator.hasNext()) {
-		if (thread.isInterrupted()) {
-		    interrupted = true;
-		    ProgressDialogManager.closeProgressDialog(progress);
-		    return false;
+			}
+			if (destination.equals(Locale.getString("FILE"))) {
+				sourceInstance = AlertFactory.createFileAlertReader();
+			}
+			if (destination.equals(Locale.getString("DATABASE"))) {
+				sourceInstance = AlertFactory.createDatabaseAlertReader();
+			}
 		}
-		Alert alert = (Alert)alertIterator.next();
-		symbolList.add(alert.getSymbol());
-	    }
-	    
-
-	    EODQuoteRange quoteRange = new EODQuoteRange(symbolList);
-	    if (quoteSource.loadQuoteRange(quoteRange)) {
-		quoteBundle = new EODQuoteBundle(quoteRange);
-	    } else {
-		assert false;
-	    }
-	    
-	    //Now check the alerts to see if any trigger
-	    alertIterator = alerts.iterator();
-	    while (alertIterator.hasNext()) {
-		if (thread.isInterrupted()) {
-		    interrupted = true;
-		    ProgressDialogManager.closeProgressDialog(progress);
-		    return false;
-		}
-		Alert alert = (Alert)alertIterator.next();
-		
-		progress.increment();
-		
-		//If today is before the alert start date, skip
-		if (today.compareTo(alert.getStartDate()) < 0) {
-		    continue;
-		}
-
-		//if an end date has been set and today is after that date,
-		//skip
-		if (alert.getEndDate() != null && 
-		    today.compareTo(alert.getEndDate()) > 0) {
-		    continue;
-		}
-		
-		Symbol symbol = alert.getSymbol();
-		
-		int quoteType = (!alert.getField().equals(Alert.EXP_FIELD))
-		    ? Alert.fieldToQuote(alert.getField())
-				 : Quote.DAY_CLOSE;
-				
-		TradingDate lastDate = quoteBundle.getLastDate();
-		TradingDate firstDate = quoteBundle.getFirstDate();
-		
-		TradingDate latestDate = 
-		    latestDateWithQuote(alert.getSymbol(),
-					quoteType,
-					quoteBundle,
-					lastDate,
-					firstDate);
-		
-		if (latestDate.
-		    compareTo(alert.getStartDate()) < 0) {
-		    continue;
-		} else {
-		    if (alert.getEndDate() != null &&
-			latestDate.
-			compareTo(alert.getEndDate()) > 0) {
-			continue;
-		    }
-		}
-
-		if (triggers(alert, quoteBundle, latestDate)) {
-		    triggeredAlerts.add(alert);
-		    double quote = getQuote(alert.getSymbol(), quoteType,
-					    quoteBundle, latestDate);
-		    triggerValues.add(new Double(quote));
-		    alertsTriggered = true;
-		}
-	    }
-	} catch (AlertException e) {
-	    
-	} finally {
-	    if (!interrupted) {
-		ProgressDialogManager.closeProgressDialog(progress);
-	    }
-	    return alertsTriggered;
+		return sourceInstance;
 	}
-    }
-    
-    private static TradingDate latestDateWithQuote(Symbol symbol,
-						   int quoteType,
-						   EODQuoteBundle quoteBundle,
-						   TradingDate startDate,
-						   TradingDate endDate) {
-	TradingDate latest = (TradingDate)startDate.clone();
 
-	while (latest.compareTo(endDate) > 0) {
-	    if (latest.isWeekend()) {
-		latest = latest.previous(1);
-		continue;
-	    }
-	    try {
-		double quote = getQuote(symbol, quoteType, quoteBundle, latest);
+	public static synchronized AlertWriter getWriter() {
+		if (destInstance == null) {
+			String destination = PreferencesManager.getAlertDestination();
 
-		return latest;
-	    } catch (MissingQuoteException e) {
-		
-	    } catch (WeekendDateException e) {
-		//Shouldn't happen
-		assert false;
-	    } finally {
-		latest = latest.previous(1);
-	    }
+			if (destination.equals(Locale.getString("ALERT_DISABLE_ALL"))) {
+
+			}
+
+			if (destination.equals(Locale.getString("FILE"))) {
+				destInstance = AlertFactory.createFileAlertWriter();
+			}
+			if (destination.equals(Locale.getString("DATABASE"))) {
+				destInstance = AlertFactory.createDatabaseAlertWriter();
+			}
+		}
+		return destInstance;
 	}
-	return null;
-    }
 
-    //Check that this method doesn't already exist in quotebundle
-    private static double getQuote(Symbol symbol, int quoteType,
-			    EODQuoteBundle quoteBundle, 
-			    TradingDate date) 
-	throws MissingQuoteException, WeekendDateException {
-				       
-	int offset = quoteBundle.dateToOffset(date);
+	public static boolean alertsTriggered(List triggeredAlerts, List triggerValues) {
+		AlertReader reader = getReader();
+		List alerts;
+		QuoteSource quoteSource = QuoteSourceManager.getSource();
+		EODQuoteBundle quoteBundle = null;
+		boolean alertsTriggered = false;
+		TradingDate today = new TradingDate();
 
-	double rv = quoteBundle.getQuote(symbol,
-					 quoteType,
-					 offset);
+		boolean interrupted = false;
+		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		Thread thread = Thread.currentThread();
 
-	return rv;
-    }
+		progress.show(Locale.getString("ALERT_CHECK"));
+		progress.setIndeterminate(true);
+		progress.setMaster(true);
 
-    private static boolean triggers(Alert alert, EODQuoteBundle quoteBundle,
-				    TradingDate latestDate) {
-	
-	boolean rv = false;
-
-	try {
-	    //FIXME need to have better handling of OHLCV vs GONDOLA
-	    //Maybe seperate method
-	    Double tmp = alert.getTargetValue();
-	    double targetValue = (tmp != null) ? tmp.doubleValue() : 0.0;
-
-	    int offset = quoteBundle.dateToOffset(latestDate);
-
-	    int quoteType = (!alert.getField().equals(Alert.EXP_FIELD))
-		? Alert.fieldToQuote(alert.getField()) 
-		: Quote.DAY_CLOSE;
-	    
-	    double quote = quoteBundle.getQuote(alert.getSymbol(), 
-						quoteType, offset);
-
-	    
-
-	    switch (alert.getBoundType()) {
-	    case Alert.UPPER_BOUND:
-		 rv = (quote >= targetValue) ? true : false;
-		 break;
-	    case Alert.LOWER_BOUND:
-		rv = (quote <= targetValue) ? true : false;
-		break;
-	    case Alert.EXACT_BOUND:
-		rv = (quote == targetValue) ? true: false;
-		break;
-	    case Alert.GONDOLA_TRIGGER:
 		try {
-		    Expression expression = 
-			Parser.parse(null, alert.getTargetExpression());
-		    
-		    if (expression.evaluate(null, quoteBundle, 
-					    alert.getSymbol(),
-					    0) >= Expression.TRUE) {
-			rv = true;
-		    } else {
-			rv = false;
-		    }
-		} catch (EvaluationException e) {
-		    
-		} catch (ParserException e) {
+			alerts = reader.getAlerts();
+			// if there are no alerts, there's nothing to trigger
+			if (alerts.size() == 0) {
+				return false;
+			}
+
+			ArrayList symbolList = new ArrayList();
+			Iterator alertIterator = alerts.iterator();
+
+			// Magic: For some reason, on startup, just using the size
+			// as maximum means the triggered alerts won't show.
+			// Increasing the size by at least 2 works for some reason.
+			progress.setMaximum(alerts.size() + 2);
+			progress.setIndeterminate(false);
+			progress.setProgress(0);
+
+			// First get the list of symbols and build the quote bundle
+			// containing all the symbols
+			while (alertIterator.hasNext()) {
+				if (thread.isInterrupted()) {
+					interrupted = true;
+					ProgressDialogManager.closeProgressDialog(progress);
+					return false;
+				}
+				Alert alert = (Alert) alertIterator.next();
+				symbolList.add(alert.getSymbol());
+			}
+
+			EODQuoteRange quoteRange = new EODQuoteRange(symbolList);
+			if (quoteSource.loadQuoteRange(quoteRange)) {
+				quoteBundle = new EODQuoteBundle(quoteRange);
+			} else {
+				assert false;
+			}
+
+			// Now check the alerts to see if any trigger
+			alertIterator = alerts.iterator();
+			while (alertIterator.hasNext()) {
+				if (thread.isInterrupted()) {
+					interrupted = true;
+					ProgressDialogManager.closeProgressDialog(progress);
+					return false;
+				}
+				Alert alert = (Alert) alertIterator.next();
+
+				progress.increment();
+
+				// If today is before the alert start date, skip
+				if (today.compareTo(alert.getStartDate()) < 0) {
+					continue;
+				}
+
+				// if an end date has been set and today is after that date,
+				// skip
+				if (alert.getEndDate() != null && today.compareTo(alert.getEndDate()) > 0) {
+					continue;
+				}
+
+				Symbol symbol = alert.getSymbol();
+
+				int quoteType = (!alert.getField().equals(Alert.EXP_FIELD)) ? Alert.fieldToQuote(alert.getField())
+						: Quote.DAY_CLOSE;
+
+				TradingDate lastDate = quoteBundle.getLastDate();
+				TradingDate firstDate = quoteBundle.getFirstDate();
+
+				TradingDate latestDate = latestDateWithQuote(alert.getSymbol(), quoteType, quoteBundle, lastDate,
+						firstDate);
+
+				if (latestDate.compareTo(alert.getStartDate()) < 0) {
+					continue;
+				} else {
+					if (alert.getEndDate() != null && latestDate.compareTo(alert.getEndDate()) > 0) {
+						continue;
+					}
+				}
+
+				if (triggers(alert, quoteBundle, latestDate)) {
+					triggeredAlerts.add(alert);
+					double quote = getQuote(alert.getSymbol(), quoteType, quoteBundle, latestDate);
+					triggerValues.add(new Double(quote));
+					alertsTriggered = true;
+				}
+			}
+		} catch (AlertException e) {
 
 		} finally {
-		    return rv;
+			if (!interrupted) {
+				ProgressDialogManager.closeProgressDialog(progress);
+			}
+			return alertsTriggered;
 		}
-	    default:
-		assert false;
-		return false;
-	    }
-	} catch (MissingQuoteException e) {
-	    //Shouldn't happen because we supply the latest date which 
-	    //has a value.
-	    assert false;
-	    
-	} finally {
-	    return rv;
 	}
-    }
-}
 
+	private static TradingDate latestDateWithQuote(Symbol symbol, int quoteType, EODQuoteBundle quoteBundle,
+			TradingDate startDate, TradingDate endDate) {
+		TradingDate latest = (TradingDate) startDate.clone();
+
+		while (latest.compareTo(endDate) > 0) {
+			if (latest.isWeekend()) {
+				latest = latest.previous(1);
+				continue;
+			}
+			try {
+				double quote = getQuote(symbol, quoteType, quoteBundle, latest);
+
+				return latest;
+			} catch (MissingQuoteException e) {
+
+			} catch (WeekendDateException e) {
+				// Shouldn't happen
+				assert false;
+			} finally {
+				latest = latest.previous(1);
+			}
+		}
+		return null;
+	}
+
+	// Check that this method doesn't already exist in quotebundle
+	private static double getQuote(Symbol symbol, int quoteType, EODQuoteBundle quoteBundle, TradingDate date)
+			throws MissingQuoteException, WeekendDateException {
+
+		int offset = quoteBundle.dateToOffset(date);
+
+		double rv = quoteBundle.getQuote(symbol, quoteType, offset);
+
+		return rv;
+	}
+
+	private static boolean triggers(Alert alert, EODQuoteBundle quoteBundle, TradingDate latestDate) {
+
+		boolean rv = false;
+
+		try {
+			// FIXME need to have better handling of OHLCV vs GONDOLA
+			// Maybe seperate method
+			Double tmp = alert.getTargetValue();
+			double targetValue = (tmp != null) ? tmp.doubleValue() : 0.0;
+
+			int offset = quoteBundle.dateToOffset(latestDate);
+
+			int quoteType = (!alert.getField().equals(Alert.EXP_FIELD)) ? Alert.fieldToQuote(alert.getField())
+					: Quote.DAY_CLOSE;
+
+			double quote = quoteBundle.getQuote(alert.getSymbol(), quoteType, offset);
+
+			switch (alert.getBoundType()) {
+			case Alert.UPPER_BOUND:
+				rv = (quote >= targetValue) ? true : false;
+				break;
+			case Alert.LOWER_BOUND:
+				rv = (quote <= targetValue) ? true : false;
+				break;
+			case Alert.EXACT_BOUND:
+				rv = (quote == targetValue) ? true : false;
+				break;
+			case Alert.GONDOLA_TRIGGER:
+				try {
+					Expression expression = Parser.parse(null, alert.getTargetExpression());
+
+					if (expression.evaluate(null, quoteBundle, alert.getSymbol(), 0) >= Expression.TRUE) {
+						rv = true;
+					} else {
+						rv = false;
+					}
+				} catch (EvaluationException e) {
+
+				} catch (ParserException e) {
+
+				} finally {
+					return rv;
+				}
+			default:
+				assert false;
+				return false;
+			}
+		} catch (MissingQuoteException e) {
+			// Shouldn't happen because we supply the latest date which
+			// has a value.
+			assert false;
+
+		} finally {
+			return rv;
+		}
+	}
+}

@@ -43,11 +43,12 @@ import nz.org.venice.main.Module;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.prefs.settings.Settings;
 import nz.org.venice.util.Locale;
+
 /**
  * @author Dan Makovec venice@makovec.net
  *
- * This module gives the user to define and edit Python macro scripts
- * which control the behaviour of the overall application
+ *         This module gives the user to define and edit Python macro scripts
+ *         which control the behaviour of the overall application
  */
 public class MacroModule extends JPanel implements Module, ActionListener {
 
@@ -60,72 +61,90 @@ public class MacroModule extends JPanel implements Module, ActionListener {
 	private JButton import_button = null;
 	private JButton delete_button = null;
 
-    private PropertyChangeSupport propertySupport;
+	private PropertyChangeSupport propertySupport;
 
-    private String frameIcon = "nz/org/venice/images/TableIcon.gif";
+	private String frameIcon = "nz/org/venice/images/TableIcon.gif";
 
-    private Settings settings;
+	private Settings settings;
 
-    /* (non-Javadoc)
-     * @see nz.org.venice.main.Module#getTitle()
-     */
-    public String getTitle() {
-        return Locale.getString("MACRO_MANAGER");
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see nz.org.venice.main.Module#getTitle()
+	 */
+	public String getTitle() {
+		return Locale.getString("MACRO_MANAGER");
+	}
 
-    /* (non-Javadoc)
-     * @see nz.org.venice.main.Module#addModuleChangeListener(java.beans.PropertyChangeListener)
-     */
-    public void addModuleChangeListener(PropertyChangeListener listener) {
-        propertySupport.addPropertyChangeListener(listener);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see nz.org.venice.main.Module#addModuleChangeListener(java.beans.
+	 * PropertyChangeListener)
+	 */
+	public void addModuleChangeListener(PropertyChangeListener listener) {
+		propertySupport.addPropertyChangeListener(listener);
 
-    }
+	}
 
-    /* (non-Javadoc)
-     * @see nz.org.venice.main.Module#removeModuleChangeListener(java.beans.PropertyChangeListener)
-     */
-    public void removeModuleChangeListener(PropertyChangeListener listener) {
-        propertySupport.addPropertyChangeListener(listener);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see nz.org.venice.main.Module#removeModuleChangeListener(java.beans.
+	 * PropertyChangeListener)
+	 */
+	public void removeModuleChangeListener(PropertyChangeListener listener) {
+		propertySupport.addPropertyChangeListener(listener);
 
-    }
+	}
 
-    /* (non-Javadoc)
-     * @see nz.org.venice.main.Module#getFrameIcon()
-     */
-    public ImageIcon getFrameIcon() {
-    	return new ImageIcon(ClassLoader.getSystemClassLoader().getResource(frameIcon));
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see nz.org.venice.main.Module#getFrameIcon()
+	 */
+	public ImageIcon getFrameIcon() {
+		return new ImageIcon(ClassLoader.getSystemClassLoader().getResource(frameIcon));
+	}
 
-    /* (non-Javadoc)
-     * @see nz.org.venice.main.Module#getComponent()
-     */
-    public JComponent getComponent() {
-        return this;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see nz.org.venice.main.Module#getComponent()
+	 */
+	public JComponent getComponent() {
+		return this;
+	}
 
-    /* (non-Javadoc)
-     * @see nz.org.venice.main.Module#getJMenuBar()
-     */
-    public JMenuBar getJMenuBar() {
-        return null;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see nz.org.venice.main.Module#getJMenuBar()
+	 */
+	public JMenuBar getJMenuBar() {
+		return null;
+	}
 
-    /* (non-Javadoc)
-     * @see nz.org.venice.main.Module#encloseInScrollPane()
-     */
-    public boolean encloseInScrollPane() {
-        return false;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see nz.org.venice.main.Module#encloseInScrollPane()
+	 */
+	public boolean encloseInScrollPane() {
+		return false;
+	}
 
-    /* (non-Javadoc)
-     * @see nz.org.venice.main.Module#save()
-     */
-    public void save() {
-        // TODO Auto-generated method stub
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see nz.org.venice.main.Module#save()
+	 */
+	public void save() {
+		// TODO Auto-generated method stub
 
-    }
+	}
 
-    private JDesktopPane desktop;
+	private JDesktopPane desktop;
 
 	/**
 	 * This is the default constructor
@@ -141,12 +160,13 @@ public class MacroModule extends JPanel implements Module, ActionListener {
 	 *
 	 * @return void
 	 */
-	private  void initialize() {
+	private void initialize() {
 		this.setLayout(new BorderLayout());
-		this.setSize(300,200);
+		this.setSize(300, 200);
 		this.add(getJPanel(), java.awt.BorderLayout.CENTER);
 		this.add(getJPanel1(), java.awt.BorderLayout.SOUTH);
 	}
+
 	/**
 	 * This method initializes jPanel
 	 *
@@ -160,6 +180,7 @@ public class MacroModule extends JPanel implements Module, ActionListener {
 		}
 		return list_panel;
 	}
+
 	/**
 	 * This method initializes jPanel1
 	 *
@@ -175,6 +196,7 @@ public class MacroModule extends JPanel implements Module, ActionListener {
 		}
 		return button_panel;
 	}
+
 	/**
 	 * This method initializes macro_pane
 	 *
@@ -187,6 +209,7 @@ public class MacroModule extends JPanel implements Module, ActionListener {
 		}
 		return macro_pane;
 	}
+
 	/**
 	 * This method initializes jList
 	 *
@@ -198,6 +221,7 @@ public class MacroModule extends JPanel implements Module, ActionListener {
 		}
 		return macro_list;
 	}
+
 	/**
 	 * This method initializes jButton
 	 *
@@ -216,6 +240,7 @@ public class MacroModule extends JPanel implements Module, ActionListener {
 		}
 		return new_button;
 	}
+
 	/**
 	 * This method initializes jButton1
 	 *
@@ -229,6 +254,7 @@ public class MacroModule extends JPanel implements Module, ActionListener {
 		}
 		return edit_button;
 	}
+
 	/**
 	 * This method initializes jButton2
 	 *
@@ -242,48 +268,49 @@ public class MacroModule extends JPanel implements Module, ActionListener {
 		}
 		return import_button;
 	}
+
 	/**
 	 * This method initializes jButton3
 	 *
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButton3() {
-	    if (delete_button == null) {
-	        delete_button = new JButton();
-	        delete_button.setMnemonic(java.awt.event.KeyEvent.VK_D);
-	        delete_button.setText(Locale.getString("DELETE"));
-	    }
-	    return delete_button;
+		if (delete_button == null) {
+			delete_button = new JButton();
+			delete_button.setMnemonic(java.awt.event.KeyEvent.VK_D);
+			delete_button.setText(Locale.getString("DELETE"));
+		}
+		return delete_button;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-	    if (e.getSource() == new_button) {
-	    } else if (e.getSource() == edit_button) {
-	    } else if (e.getSource() == import_button) {
-	        JFileChooser chooser;
-	        String lastDirectory = PreferencesManager.getDirectoryLocation("macros");
+		if (e.getSource() == new_button) {
+		} else if (e.getSource() == edit_button) {
+		} else if (e.getSource() == import_button) {
+			JFileChooser chooser;
+			String lastDirectory = PreferencesManager.getDirectoryLocation("macros");
 
-	        if(lastDirectory != null)
-	            chooser = new JFileChooser(lastDirectory);
-	        else
-	            chooser = new JFileChooser();
+			if (lastDirectory != null)
+				chooser = new JFileChooser(lastDirectory);
+			else
+				chooser = new JFileChooser();
 
-	        chooser.setMultiSelectionEnabled(false);
-	        int action = chooser.showOpenDialog(desktop);
-	        if(action == JFileChooser.APPROVE_OPTION) {
-	            // Remember directory
-	            lastDirectory = chooser.getCurrentDirectory().getAbsolutePath();
-	            PreferencesManager.putDirectoryLocation("importer",lastDirectory);
+			chooser.setMultiSelectionEnabled(false);
+			int action = chooser.showOpenDialog(desktop);
+			if (action == JFileChooser.APPROVE_OPTION) {
+				// Remember directory
+				lastDirectory = chooser.getCurrentDirectory().getAbsolutePath();
+				PreferencesManager.putDirectoryLocation("importer", lastDirectory);
 
-	            File file = chooser.getSelectedFile();
-	            if (file != null) {
-	            }
-	        }
-	    } else if (e.getSource() == delete_button) {
-	    }
+				File file = chooser.getSelectedFile();
+				if (file != null) {
+				}
+			}
+		} else if (e.getSource() == delete_button) {
+		}
 	}
 
-    public Settings getSettings() {
-	return settings;
-    }
+	public Settings getSettings() {
+		return settings;
+	}
 }

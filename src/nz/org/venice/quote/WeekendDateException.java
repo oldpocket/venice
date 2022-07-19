@@ -19,18 +19,18 @@
 package nz.org.venice.quote;
 
 /**
- * This exception represents the error condition that occurs when the caller
- * is trying to retrieve a quote from a weekend. Stock markets do not trade on
+ * This exception represents the error condition that occurs when the caller is
+ * trying to retrieve a quote from a weekend. Stock markets do not trade on
  * weekends so there will never be any quotes.
  */
 public class WeekendDateException extends java.lang.Throwable {
 
-    /**
-     * Create an exception that represents the error condition that occurs when the caller
-     * is trying to retrieve a quote from a weekend. 
-     */
-    public WeekendDateException() {
-        // nothing to do
-    }
+	/**
+	 * Create an exception that represents the error condition that occurs when the
+	 * caller is trying to retrieve a quote from a weekend.
+	 */
+	public WeekendDateException() {
+		// nothing to do
+	}
 
 }

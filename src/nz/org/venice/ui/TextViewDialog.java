@@ -41,137 +41,131 @@ import nz.org.venice.util.Locale;
  */
 public class TextViewDialog {
 
-    private boolean isUp = true;
-    private int buttonPressed = 0;
-    private JInternalFrame internalFrame;
+	private boolean isUp = true;
+	private int buttonPressed = 0;
+	private JInternalFrame internalFrame;
 
-    // Minimum & preferred size to display text
-    private final static int ROWS = 20;
-    private final static int COLUMNS = 45;
+	// Minimum & preferred size to display text
+	private final static int ROWS = 20;
+	private final static int COLUMNS = 45;
 
-    /** Display text with a fixed-width font. */
-    public final static int FIXED_WIDTH = 0;
+	/** Display text with a fixed-width font. */
+	public final static int FIXED_WIDTH = 0;
 
-    /** Display text with a proportional width font. */
-    public final static int PROPORTIONAL = 1;
+	/** Display text with a proportional width font. */
+	public final static int PROPORTIONAL = 1;
 
-    private TextViewDialog(String text, String title, int rows, int columns, int fontType,
-                           String[] buttons) {
-        layout(text, title, rows, columns, fontType, buttons);
-    }
-
-    private void layout(String text, String title, int rows, int columns, int fontType,
-                        String[] buttons) {
-        internalFrame = new JInternalFrame(title,
-                                           true, /* resizable */
-                                           true, /* closable */
-                                           true, /* maximisible */
-                                           true); /* iconifiable */
-	JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-
-        JPanel textPanel = new JPanel();
-        final JTextArea textArea = new JTextArea(rows, columns);
-        textArea.setText(text);
-        textArea.setEditable(false);
-        if(fontType == FIXED_WIDTH)
-            textArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
-
-        textPanel.setLayout(new BorderLayout());
-        textPanel.add(new JScrollPane(textArea));
-
-        panel.add(textPanel, BorderLayout.CENTER);
-        JPanel buttonPanel = new JPanel();
-
-        for(int i = 0; i < buttons.length; i++) {
-            JButton button = new JButton(buttons[i]);
-            final int buttonNumber = i;
-
-            button.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        buttonPressed = buttonNumber;
-                        close();
-                    }});
-            buttonPanel.add(button);
-        }
-
-        panel.add(buttonPanel, BorderLayout.SOUTH);
-        
-        internalFrame.getContentPane().add(panel);
-
-        Dimension preferred = internalFrame.getPreferredSize();
-        internalFrame.setMinimumSize(preferred);
-        ModuleFrame.setSizeAndLocation(internalFrame, DesktopManager.getDesktop(),
-                                      true, true);
-        DesktopManager.getDesktop().add(internalFrame);
-        internalFrame.show();
-
-	try {
-	    internalFrame.setSelected(true);
+	private TextViewDialog(String text, String title, int rows, int columns, int fontType, String[] buttons) {
+		layout(text, title, rows, columns, fontType, buttons);
 	}
-	catch(PropertyVetoException v) {
-	    // ignore
+
+	private void layout(String text, String title, int rows, int columns, int fontType, String[] buttons) {
+		internalFrame = new JInternalFrame(title, true, /* resizable */
+				true, /* closable */
+				true, /* maximisible */
+				true); /* iconifiable */
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+
+		JPanel textPanel = new JPanel();
+		final JTextArea textArea = new JTextArea(rows, columns);
+		textArea.setText(text);
+		textArea.setEditable(false);
+		if (fontType == FIXED_WIDTH)
+			textArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+
+		textPanel.setLayout(new BorderLayout());
+		textPanel.add(new JScrollPane(textArea));
+
+		panel.add(textPanel, BorderLayout.CENTER);
+		JPanel buttonPanel = new JPanel();
+
+		for (int i = 0; i < buttons.length; i++) {
+			JButton button = new JButton(buttons[i]);
+			final int buttonNumber = i;
+
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					buttonPressed = buttonNumber;
+					close();
+				}
+			});
+			buttonPanel.add(button);
+		}
+
+		panel.add(buttonPanel, BorderLayout.SOUTH);
+
+		internalFrame.getContentPane().add(panel);
+
+		Dimension preferred = internalFrame.getPreferredSize();
+		internalFrame.setMinimumSize(preferred);
+		ModuleFrame.setSizeAndLocation(internalFrame, DesktopManager.getDesktop(), true, true);
+		DesktopManager.getDesktop().add(internalFrame);
+		internalFrame.show();
+
+		try {
+			internalFrame.setSelected(true);
+		} catch (PropertyVetoException v) {
+			// ignore
+		}
+
+		internalFrame.moveToFront();
 	}
-	
-	internalFrame.moveToFront();		    
-    }
 
-    private void close() {
-        isUp = false;
-        try {
-            internalFrame.setClosed(true);
-        }
-        catch(PropertyVetoException e) {
-            // nothing to do
-        }
-    }
+	private void close() {
+		isUp = false;
+		try {
+			internalFrame.setClosed(true);
+		} catch (PropertyVetoException e) {
+			// nothing to do
+		}
+	}
 
-    private boolean isUp() {
-        return isUp;
-    }
+	private boolean isUp() {
+		return isUp;
+	}
 
-    private int waitUntilClosed() {
-	try {
-	    while(isUp()) 
-		Thread.sleep(10);
+	private int waitUntilClosed() {
+		try {
+			while (isUp())
+				Thread.sleep(10);
 
-	} catch (InterruptedException e) {
-            // Finish.
-	}      
+		} catch (InterruptedException e) {
+			// Finish.
+		}
 
-        return buttonPressed;
-    }
+		return buttonPressed;
+	}
 
-    /**
-     * Displays the text in a new dialog and waits for the user to cancel the
-     * dialog.
-     *
-     * @param text the text to display
-     * @param title the title of the dialog
-     */
-    public static void showTextDialog(String text, String title) {
-        String buttons[] = {Locale.getString("OK")};
-        showTextDialog(text, title, ROWS, COLUMNS, PROPORTIONAL, buttons);
-    }
+	/**
+	 * Displays the text in a new dialog and waits for the user to cancel the
+	 * dialog.
+	 *
+	 * @param text  the text to display
+	 * @param title the title of the dialog
+	 */
+	public static void showTextDialog(String text, String title) {
+		String buttons[] = { Locale.getString("OK") };
+		showTextDialog(text, title, ROWS, COLUMNS, PROPORTIONAL, buttons);
+	}
 
-    /**
-     * Displays the text in a new dialog and waits for the user to cancel the
-     * dialog. This function allows the caller to provide a list of choices to
-     * the user and also to specify the size of the text box in characters.
-     *
-     * @param text the text to display
-     * @param title the title of the dialog
-     * @param rows the height of the text box in characters
-     * @param columns the width of the text box in characters
-     * @param fontType type of font, either {@link #FIXED_WIDTH} or {@link #PROPORTIONAL}.
-     * @param buttons a list of choices to be given to the user
-     * @return button pressed
-     */
-    public static int showTextDialog(String text, String title, int rows, int columns,
-                                     int fontType, String[] buttons) {
-        assert fontType == FIXED_WIDTH || fontType == PROPORTIONAL;
-        TextViewDialog dialog = new TextViewDialog(text, title, rows, columns, fontType, 
-                                                   buttons);
-	return dialog.waitUntilClosed();
-    }
+	/**
+	 * Displays the text in a new dialog and waits for the user to cancel the
+	 * dialog. This function allows the caller to provide a list of choices to the
+	 * user and also to specify the size of the text box in characters.
+	 *
+	 * @param text     the text to display
+	 * @param title    the title of the dialog
+	 * @param rows     the height of the text box in characters
+	 * @param columns  the width of the text box in characters
+	 * @param fontType type of font, either {@link #FIXED_WIDTH} or
+	 *                 {@link #PROPORTIONAL}.
+	 * @param buttons  a list of choices to be given to the user
+	 * @return button pressed
+	 */
+	public static int showTextDialog(String text, String title, int rows, int columns, int fontType, String[] buttons) {
+		assert fontType == FIXED_WIDTH || fontType == PROPORTIONAL;
+		TextViewDialog dialog = new TextViewDialog(text, title, rows, columns, fontType, buttons);
+		return dialog.waitUntilClosed();
+	}
 }

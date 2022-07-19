@@ -28,64 +28,65 @@ package nz.org.venice.chart.source;
 
 public class Adjustment {
 
-    //Type - Split or dividend. 
-    //A split applies a multiplier to a price value
-    //A dividend applies an add/subtract to a price value.
-    
-    public static final int ADJUST_SPLIT = 0; 
-    public static final int ADJUST_DIVIDEND = 1;
+	// Type - Split or dividend.
+	// A split applies a multiplier to a price value
+	// A dividend applies an add/subtract to a price value.
 
-    private final Comparable startPoint;
-    private final double value;
-    private final int type;
-    private final boolean direction;
+	public static final int ADJUST_SPLIT = 0;
+	public static final int ADJUST_DIVIDEND = 1;
 
-    /**
-     * Create a new adjustment to be applied to quote data.
-     * 
-     * @param type The type of the adjustment (ie split or dividend)
-     * @param value The value to apply
-     * @param startPoint The point in the data from which to apply the adjustment
-     * @param direction true if the adjustment is to be applied in a positive direction. 
-     */
-    
-    public Adjustment(int type, double value, Comparable startPoint, boolean direction) {
-	
-	this.type = type;
-	this.value = value;
-	this.startPoint = startPoint;
-	this.direction = direction;
-    }
-    
-    /**     
-     * @return the adjustment type.
-     */
+	private final Comparable startPoint;
+	private final double value;
+	private final int type;
+	private final boolean direction;
 
-    public int getType() {
-	return type;
-    }
+	/**
+	 * Create a new adjustment to be applied to quote data.
+	 * 
+	 * @param type       The type of the adjustment (ie split or dividend)
+	 * @param value      The value to apply
+	 * @param startPoint The point in the data from which to apply the adjustment
+	 * @param direction  true if the adjustment is to be applied in a positive
+	 *                   direction.
+	 */
 
-    /**     
-     * @return the adjustment value.
-     */
+	public Adjustment(int type, double value, Comparable startPoint, boolean direction) {
 
-    public double getValue() {
-	return value;
-    }
-    
-    /**     
-     * @return the starting point.
-     */
+		this.type = type;
+		this.value = value;
+		this.startPoint = startPoint;
+		this.direction = direction;
+	}
 
-    public Comparable getStartPoint() {
-	return startPoint;
-    }
+	/**
+	 * @return the adjustment type.
+	 */
 
-    /**     
-     * @return the direction.
-     */
-    
-    public boolean getDirection() {
-	    return direction;
-    }
+	public int getType() {
+		return type;
+	}
+
+	/**
+	 * @return the adjustment value.
+	 */
+
+	public double getValue() {
+		return value;
+	}
+
+	/**
+	 * @return the starting point.
+	 */
+
+	public Comparable getStartPoint() {
+		return startPoint;
+	}
+
+	/**
+	 * @return the direction.
+	 */
+
+	public boolean getDirection() {
+		return direction;
+	}
 }

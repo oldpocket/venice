@@ -28,71 +28,64 @@ import nz.org.venice.parser.TypeMismatchException;
  */
 abstract public class ComparisionExpression extends BinaryExpression {
 
-    /**
-     * Create a new comparision expression with the given left and
-     * right arguments.
-     */
-    public ComparisionExpression(Expression left, Expression right) {
-	super(left, right);
-    }
-
-    /**
-     * Check the input arguments to the expression. They can only be
-     * {@link #INTEGER_TYPE} or {@link #FLOAT_TYPE}. Both must be the same!
-     *
-     * @return	the type of the expression
-     */
-    public int checkType() throws TypeMismatchException {
-	// left & right types must be the same and not boolean or quote
-	int leftType = getChild(0).checkType();
-	int rightType = getChild(1).checkType();
-		
-	if(leftType == rightType && 
-           (leftType == FLOAT_TYPE || leftType == INTEGER_TYPE))
-            return getType();	
-	
-	if ( (leftType == FLOAT_TYPE || leftType == INTEGER_TYPE) &&
-	     (rightType == FLOAT_TYPE || rightType == INTEGER_TYPE)) 
-	    return getType();
-	
-	else {
-	    String types = 
-		getChild(0).getType() + " , " +
-		getChild(1).getType();
-	    String expectedTypes = FLOAT_TYPE + "," + FLOAT_TYPE;
-
-	    throw new TypeMismatchException(this, types, expectedTypes);
+	/**
+	 * Create a new comparision expression with the given left and right arguments.
+	 */
+	public ComparisionExpression(Expression left, Expression right) {
+		super(left, right);
 	}
-    }
 
-    public Expression simplify() {
+	/**
+	 * Check the input arguments to the expression. They can only be
+	 * {@link #INTEGER_TYPE} or {@link #FLOAT_TYPE}. Both must be the same!
+	 *
+	 * @return the type of the expression
+	 */
+	public int checkType() throws TypeMismatchException {
+		// left & right types must be the same and not boolean or quote
+		int leftType = getChild(0).checkType();
+		int rightType = getChild(1).checkType();
 
-        // First simplify all the child arguments
-        Expression simplified = super.simplify();
+		if (leftType == rightType && (leftType == FLOAT_TYPE || leftType == INTEGER_TYPE))
+			return getType();
 
-        // If both the child arguments are constant we can precompute.
-        if(simplified.getChild(0) instanceof NumberExpression &&
-           simplified.getChild(1) instanceof NumberExpression) {
-            try {
-                return new NumberExpression(simplified.evaluate(null, null, null, 0), getType());
-            }
-            catch(EvaluationException e) {
-                // Shouldn't happen
-                assert false;
-                return simplified;
-            }
-        }
-        else
-            return simplified;
-    }
+		if ((leftType == FLOAT_TYPE || leftType == INTEGER_TYPE)
+				&& (rightType == FLOAT_TYPE || rightType == INTEGER_TYPE))
+			return getType();
 
-    /**
-     * Get the type of the expression.
-     *
-     * @return {@link #BOOLEAN_TYPE}.
-     */
-    public int getType() {
-        return BOOLEAN_TYPE;
-    }
+		else {
+			String types = getChild(0).getType() + " , " + getChild(1).getType();
+			String expectedTypes = FLOAT_TYPE + "," + FLOAT_TYPE;
+
+			throw new TypeMismatchException(this, types, expectedTypes);
+		}
+	}
+
+	public Expression simplify() {
+
+		// First simplify all the child arguments
+		Expression simplified = super.simplify();
+
+		// If both the child arguments are constant we can precompute.
+		if (simplified.getChild(0) instanceof NumberExpression && simplified.getChild(1) instanceof NumberExpression) {
+			try {
+				return new NumberExpression(simplified.evaluate(null, null, null, 0), getType());
+			} catch (EvaluationException e) {
+				// Shouldn't happen
+				assert false;
+				return simplified;
+			}
+		} else
+			return simplified;
+	}
+
+	/**
+	 * Get the type of the expression.
+	 *
+	 * @return {@link #BOOLEAN_TYPE}.
+	 */
+	public int getType() {
+		return BOOLEAN_TYPE;
+	}
 
 }

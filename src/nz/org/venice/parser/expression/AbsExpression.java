@@ -29,80 +29,78 @@ import nz.org.venice.quote.Symbol;
  * An expression which calculates the absolute value of a number.
  */
 public class AbsExpression extends UnaryExpression {
-    
-    public AbsExpression(Expression number) {
-        super(number);
-    }
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
-	throws EvaluationException {
-
-        double number = getChild(0).evaluate(variables, quoteBundle, symbol, day);
-
-        return Math.abs(number);
-    }
-
-    public String toString() {
-	String c1 = (getChild(0) != null) ? getChild(0).toString() : "(null)";
-	return new String("abs(" + c1 + ")");
-    }
-
-    /**
-     * Check the input argument to the expression. It can only be
-     * {@link #INTEGER_TYPE} or {@link #FLOAT_TYPE}. 
-     *
-     * @return	the type of the expression
-     */
-    public int checkType() throws TypeMismatchException {
-        int type = getChild(0).checkType();
-
-        if(type == FLOAT_TYPE || type == INTEGER_TYPE)
-            return getType();
-        else {
-            throw new TypeMismatchException(this, type, FLOAT_TYPE);
+	public AbsExpression(Expression number) {
+		super(number);
 	}
-    }
 
-    public Expression simplify() {
-        // First simplify child argument
-        Expression simplified = super.simplify();
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-        // If the child argument is a constant we can precompute.
-        if(simplified.getChild(0) instanceof NumberExpression) {
-            try {
-                return new NumberExpression(simplified.evaluate(null, null, null, 0), simplified.getType());
-            }
-            catch(EvaluationException e) {
-                // abs() should never raise EvaluationException
-                assert false;
-                return simplified;
-            }
-        }
-        else
-            return simplified;
+		double number = getChild(0).evaluate(variables, quoteBundle, symbol, day);
 
-        // abs(x * x)
-        // abs(abs()) simplification.
-        // abs(sqrt()) simplification.
-        // sqrt(x * x) == abs(x).
-        // abs(day()) 
-        // etc...
-    }
-
-    /**
-     * Get the type of the expression.
-     *
-     * @return either {@link #FLOAT_TYPE} or {@link #INTEGER_TYPE}.
-     */
-    public int getType() {	
-	if (getChild(0) != null) {
-	    return getChild(0).getType();
-	} else {
-	    return -1;
+		return Math.abs(number);
 	}
-    }
-    
-    public Object clone() {
-        return new AbsExpression((Expression)getChild(0).clone());
-    }
+
+	public String toString() {
+		String c1 = (getChild(0) != null) ? getChild(0).toString() : "(null)";
+		return new String("abs(" + c1 + ")");
+	}
+
+	/**
+	 * Check the input argument to the expression. It can only be
+	 * {@link #INTEGER_TYPE} or {@link #FLOAT_TYPE}.
+	 *
+	 * @return the type of the expression
+	 */
+	public int checkType() throws TypeMismatchException {
+		int type = getChild(0).checkType();
+
+		if (type == FLOAT_TYPE || type == INTEGER_TYPE)
+			return getType();
+		else {
+			throw new TypeMismatchException(this, type, FLOAT_TYPE);
+		}
+	}
+
+	public Expression simplify() {
+		// First simplify child argument
+		Expression simplified = super.simplify();
+
+		// If the child argument is a constant we can precompute.
+		if (simplified.getChild(0) instanceof NumberExpression) {
+			try {
+				return new NumberExpression(simplified.evaluate(null, null, null, 0), simplified.getType());
+			} catch (EvaluationException e) {
+				// abs() should never raise EvaluationException
+				assert false;
+				return simplified;
+			}
+		} else
+			return simplified;
+
+		// abs(x * x)
+		// abs(abs()) simplification.
+		// abs(sqrt()) simplification.
+		// sqrt(x * x) == abs(x).
+		// abs(day())
+		// etc...
+	}
+
+	/**
+	 * Get the type of the expression.
+	 *
+	 * @return either {@link #FLOAT_TYPE} or {@link #INTEGER_TYPE}.
+	 */
+	public int getType() {
+		if (getChild(0) != null) {
+			return getChild(0).getType();
+		} else {
+			return -1;
+		}
+	}
+
+	public Object clone() {
+		return new AbsExpression((Expression) getChild(0).clone());
+	}
 }

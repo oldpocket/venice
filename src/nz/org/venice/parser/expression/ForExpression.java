@@ -29,10 +29,13 @@ import nz.org.venice.quote.QuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
- * An expression which represents the <code>for</code> command.
- * e.g. <pre>for(int i = 0; i < 10; i++) {
- *   a += i;
- *}</pre>
+ * An expression which represents the <code>for</code> command. e.g.
+ * 
+ * <pre>
+ * for (int i = 0; i < 10; i++) {
+ * 	a += i;
+ * }
+ * </pre>
  */
 public class ForExpression extends QuaternaryExpression {
 
@@ -42,26 +45,29 @@ public class ForExpression extends QuaternaryExpression {
 	private final static int LOOP = 2;
 	private final static int COMMAND = 3;
 
-	//Expression identifier - parent hashcode uses class hashcode
+	// Expression identifier - parent hashcode uses class hashcode
 	private UUID id;
 
 	/**
 	 * Construct a <code>for</code> expression.
-	 * <pre>for(initial; condition; loop) {
+	 * 
+	 * <pre>
+	 * for(initial; condition; loop) {
 	 *   command
-	 *}</pre>
-	 * @param	initial	loop initialisation.
-	 * @param	condition loop condition test.
-	 * @param	loop the loop traversal function.
-	 * @param	command	the command to loop.
+	 *}
+	 * </pre>
+	 * 
+	 * @param initial   loop initialisation.
+	 * @param condition loop condition test.
+	 * @param loop      the loop traversal function.
+	 * @param command   the command to loop.
 	 */
-	public ForExpression(Expression initial, Expression condition, Expression loop,
-			Expression command) {
+	public ForExpression(Expression initial, Expression condition, Expression loop, Expression command) {
 		super(initial, condition, loop, command);
 		id = UUID.randomUUID();
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		double value = 0.0D;
@@ -73,18 +79,17 @@ public class ForExpression extends QuaternaryExpression {
 		// Execute the initial
 		getChild(INITIAL).evaluate(variables, quoteBundle, symbol, day);
 
-		/*Used to be a do while, but because that executes at least once
-	  , that breaks for loops where the condition is false to begin with
-
+		/*
+		 * Used to be a do while, but because that executes at least once , that breaks
+		 * for loops where the condition is false to begin with
+		 * 
 		 */
 		// Now loop running the command until the condition is no longer true
-		while (getChild(CONDITION).evaluate(variables, quoteBundle, symbol,
-				day) >= Expression.TRUE_LEVEL) {
+		while (getChild(CONDITION).evaluate(variables, quoteBundle, symbol, day) >= Expression.TRUE_LEVEL) {
 
-			//Don't want to run forever - if the limit is exceeded
-			//could be an infinite loop. 
-			if (AnalyserGuard.getInstance().
-					evaluationTimeElapsed(this, loopId, symbol, day)) {
+			// Don't want to run forever - if the limit is exceeded
+			// could be an infinite loop.
+			if (AnalyserGuard.getInstance().evaluationTimeElapsed(this, loopId, symbol, day)) {
 				throw EvaluationException.EVAL_TIME_TOO_LONG_EXCEPTION;
 			}
 
@@ -94,38 +99,36 @@ public class ForExpression extends QuaternaryExpression {
 			// Execute loop
 			getChild(LOOP).evaluate(variables, quoteBundle, symbol, day);
 
-		} 
+		}
 
-		AnalyserGuard.getInstance().finishLoop(this, loopId, symbol, day);	
+		AnalyserGuard.getInstance().finishLoop(this, loopId, symbol, day);
 
 		// Return the results of the last command
 		return value;
 	}
 
 	public String toString() {
-		String string = ("for(" + getChild(INITIAL) + ";" + getChild(CONDITION) + ";" +
-				getChild(LOOP) + ")");
+		String string = ("for(" + getChild(INITIAL) + ";" + getChild(CONDITION) + ";" + getChild(LOOP) + ")");
 		string = string.concat(ClauseExpression.toString(getChild(COMMAND)));
 		return string;
 	}
 
 	/**
-	 * Check the input arguments to the expression. The arguments can be any
-	 * type except for the condition argument which must be {@link #BOOLEAN_TYPE}.
+	 * Check the input arguments to the expression. The arguments can be any type
+	 * except for the condition argument which must be {@link #BOOLEAN_TYPE}.
 	 *
-	 * @return	the type of the command argument.
+	 * @return the type of the command argument.
 	 */
 	public int checkType() throws TypeMismatchException {
 		getChild(INITIAL).checkType();
 		getChild(LOOP).checkType();
 		getChild(COMMAND).checkType();
 
-		if(getChild(CONDITION).checkType() != BOOLEAN_TYPE) {
+		if (getChild(CONDITION).checkType() != BOOLEAN_TYPE) {
 			int type = getChild(CONDITION).getType();
 			int expectedType = BOOLEAN_TYPE;
 			throw new TypeMismatchException(this, type, expectedType);
-		}
-		else
+		} else
 			return getType();
 	}
 
@@ -139,11 +142,8 @@ public class ForExpression extends QuaternaryExpression {
 	}
 
 	public Object clone() {
-		return new ForExpression((Expression)getChild(0).clone(), 
-				(Expression)getChild(1).clone(),
-				(Expression)getChild(2).clone(),
-				(Expression)getChild(3).clone());
+		return new ForExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone(),
+				(Expression) getChild(2).clone(), (Expression) getChild(3).clone());
 	}
 
 }
-

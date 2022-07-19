@@ -35,139 +35,121 @@ import nz.org.venice.util.TradingDate;
 
 /**
  * Exponentially Smoothed Moving Average graph. This graph draws a single moving
- * average. When the line crosses the original graph it indicates
- * a <b>Buy</b> or <b>Sell</b> recommendation.
+ * average. When the line crosses the original graph it indicates a <b>Buy</b>
+ * or <b>Sell</b> recommendation.
  *
  * @author Mark Hummel
  * @see ExpMovingAverageGraphUI
  */
 public class ExpMovingAverageGraph extends AbstractGraph {
 
-    // Moving average values ready to graph
-    private Graphable movingAverage;
+	// Moving average values ready to graph
+	private Graphable movingAverage;
 
-    /**
-     * Create a new exponentially smoothed moving average graph.
-     *
-     * @param	source	the source to create a moving average from
-     */
-    public ExpMovingAverageGraph(GraphSource source) {
-	super(source);	
-        setSettings(new HashMap());
-    }
+	/**
+	 * Create a new exponentially smoothed moving average graph.
+	 *
+	 * @param source the source to create a moving average from
+	 */
+	public ExpMovingAverageGraph(GraphSource source) {
+		super(source);
+		setSettings(new HashMap());
+	}
 
-    /**
-     * Create a new exponentially smoothed moving average graph.
-     *
-     * @param	source	the source to create a moving average from
-     * @param	settings the settings of the graph
-     */
-    public ExpMovingAverageGraph(GraphSource source, HashMap settings) {
-	super(source);	
-        setSettings(settings);
-	
-    }
+	/**
+	 * Create a new exponentially smoothed moving average graph.
+	 *
+	 * @param source   the source to create a moving average from
+	 * @param settings the settings of the graph
+	 */
+	public ExpMovingAverageGraph(GraphSource source, HashMap settings) {
+		super(source);
+		setSettings(settings);
 
-    public void render(Graphics g, Color colour, int xoffset, int yoffset,
-		       double horizontalScale, double verticalScale,
-		       double topLineValue, double bottomLineValue, 
-		       List xRange, 
-		       boolean vertOrientation) {
+	}
 
-	// We ignore the graph colours and use our own custom colours
-	g.setColor(Color.green.darker());
-	GraphTools.renderLine(g, movingAverage, xoffset, yoffset,
-			      horizontalScale,
-			      verticalScale, 
-			      topLineValue, bottomLineValue, xRange, 
-			      vertOrientation);
-    }
+	public void render(Graphics g, Color colour, int xoffset, int yoffset, double horizontalScale, double verticalScale,
+			double topLineValue, double bottomLineValue, List xRange, boolean vertOrientation) {
 
-    public String getToolTipText(Comparable x, int y, int yoffset,
-				 double verticalScale,
-				 double bottomLineValue)
-    {
-	return null; // we never give tool tip information
-    }
+		// We ignore the graph colours and use our own custom colours
+		g.setColor(Color.green.darker());
+		GraphTools.renderLine(g, movingAverage, xoffset, yoffset, horizontalScale, verticalScale, topLineValue,
+				bottomLineValue, xRange, vertOrientation);
+	}
 
-    // Highest Y value is in the moving average graph
-    public double getHighestY(List x) {
-	return movingAverage.getHighestY(x);
-    }
+	public String getToolTipText(Comparable x, int y, int yoffset, double verticalScale, double bottomLineValue) {
+		return null; // we never give tool tip information
+	}
 
-    // Lowest Y value is in the moving average graph
-    public double getLowestY(List x) {
-	return movingAverage.getLowestY(x);
-    }
+	// Highest Y value is in the moving average graph
+	public double getHighestY(List x) {
+		return movingAverage.getHighestY(x);
+	}
 
-    /**
-     * Return the name of this graph.
-     *
-     * @return	<code>Exponentially Weighted Moving Average</code>
-     */
-    public String getName() {
-	return Locale.getString("EXP_MOVING_AVERAGE");
-    }
+	// Lowest Y value is in the moving average graph
+	public double getLowestY(List x) {
+		return movingAverage.getLowestY(x);
+	}
 
-    /**
-     * Creates a new Exponential Moving Average based on the given data source.
-     *
-     * @param	source	the graph source to average
-     * @param	period	the desired period of the averaged data
-     * @return	the graphable containing averaged data from the source
-     */
-    public static Graphable createMovingAverage(Graphable source, int period,
-                                                double smoothingConstant) {
-	Graphable movingAverage = new Graphable();
-        TradingDate date = (TradingDate)source.getStartX();
-        GraphableQuoteFunctionSource quoteFunctionSource 
-            = new GraphableQuoteFunctionSource(source, date, period);
+	/**
+	 * Return the name of this graph.
+	 *
+	 * @return <code>Exponentially Weighted Moving Average</code>
+	 */
+	public String getName() {
+		return Locale.getString("EXP_MOVING_AVERAGE");
+	}
 
-        for(Iterator iterator = source.iterator(); iterator.hasNext();) {
-            date = (TradingDate)iterator.next();
-            quoteFunctionSource.setDate(date);
+	/**
+	 * Creates a new Exponential Moving Average based on the given data source.
+	 *
+	 * @param source the graph source to average
+	 * @param period the desired period of the averaged data
+	 * @return the graphable containing averaged data from the source
+	 */
+	public static Graphable createMovingAverage(Graphable source, int period, double smoothingConstant) {
+		Graphable movingAverage = new Graphable();
+		TradingDate date = (TradingDate) source.getStartX();
+		GraphableQuoteFunctionSource quoteFunctionSource = new GraphableQuoteFunctionSource(source, date, period);
 
-            try {
-                double average = QuoteFunctions.ema(quoteFunctionSource, period,
-                                                    smoothingConstant);
-                movingAverage.putY(date, new Double(average));
-            }
-            catch(EvaluationException e) {
-                // This can't happen since our source does not throw this exception
-                assert false;
-            }
-        }
+		for (Iterator iterator = source.iterator(); iterator.hasNext();) {
+			date = (TradingDate) iterator.next();
+			quoteFunctionSource.setDate(date);
 
-        return movingAverage;
-    }
+			try {
+				double average = QuoteFunctions.ema(quoteFunctionSource, period, smoothingConstant);
+				movingAverage.putY(date, new Double(average));
+			} catch (EvaluationException e) {
+				// This can't happen since our source does not throw this exception
+				assert false;
+			}
+		}
 
-    public boolean isPrimary() {
-        return true;
-    }
+		return movingAverage;
+	}
 
-    public void setSettings(HashMap settings) {
-        super.setSettings(settings);
+	public boolean isPrimary() {
+		return true;
+	}
 
-        // Retrieve settings from hashmap
-        int period = ExpMovingAverageGraphUI.getPeriod(settings);
-        double smoothingConstant =
-            ExpMovingAverageGraphUI.getSmoothingConstant(settings);
+	public void setSettings(HashMap settings) {
+		super.setSettings(settings);
 
-	// Create moving average graphable
-	movingAverage = createMovingAverage(getSource().getGraphable(),
-                                            period,
-                                            smoothingConstant);
-    }
+		// Retrieve settings from hashmap
+		int period = ExpMovingAverageGraphUI.getPeriod(settings);
+		double smoothingConstant = ExpMovingAverageGraphUI.getSmoothingConstant(settings);
 
-    /**
-     * Return the graph's user interface.
-     *
-     * @param settings the initial settings
-     * @return user interface
-     */
-    public GraphUI getUI(HashMap settings) {
-        return new ExpMovingAverageGraphUI(settings);
-    }
+		// Create moving average graphable
+		movingAverage = createMovingAverage(getSource().getGraphable(), period, smoothingConstant);
+	}
+
+	/**
+	 * Return the graph's user interface.
+	 *
+	 * @param settings the initial settings
+	 * @return user interface
+	 */
+	public GraphUI getUI(HashMap settings) {
+		return new ExpMovingAverageGraphUI(settings);
+	}
 }
-
-

@@ -25,25 +25,25 @@ import nz.org.venice.parser.TypeMismatchException;
  */
 abstract public class TerminalExpression extends AbstractExpression {
 
-    /**
-     * Create a new terminal expression.
-     */
-    public TerminalExpression() {
-	// nothing to do
-    }
+	/**
+	 * Create a new terminal expression.
+	 */
+	public TerminalExpression() {
+		// nothing to do
+	}
 
-    /**
-     * Return the number of children required in a terminal expression.
-     * This will always evaluate to <code>0</code>.
-     *
-     * @return	<code>0</code>
-     */
-    public int getChildCount() {
-	return 0;
-    }
+	/**
+	 * Return the number of children required in a terminal expression. This will
+	 * always evaluate to <code>0</code>.
+	 *
+	 * @return <code>0</code>
+	 */
+	public int getChildCount() {
+		return 0;
+	}
 
-    // A terminal expression cannot have a type mismatch
-    public int checkType() throws TypeMismatchException {
-        return getType();
-    }
+	// A terminal expression cannot have a type mismatch
+	public int checkType() throws TypeMismatchException {
+		return getType();
+	}
 }

@@ -46,79 +46,58 @@ public class DatabaseAlertWriter implements AlertWriter {
 		this.manager = manager;
 	}
 
+	public void set(OHLCVAlert alert) {
+		if (manager.getConnection()) {
+			String queryName = (alert.getEndDate() != null) ? "insertOHLCVAlert" : "insertOHLCVAlert_noEndDate";
 
-
-	public void set(OHLCVAlert alert) {	
-		if (manager.getConnection()) {	    
-			String queryName = (alert.getEndDate() != null) 
-					? "insertOHLCVAlert"
-							: "insertOHLCVAlert_noEndDate";
-
-			runQuery(queryName, alert, true);	    
+			runQuery(queryName, alert, true);
 		}
 	}
 
 	private String replaceParameters(String query, Alert alert) {
 		String rv = query;
 
-		rv = manager.replaceParameter(rv, "host", 
-				manager.getHost());
+		rv = manager.replaceParameter(rv, "host", manager.getHost());
 
-		rv = manager.replaceParameter(rv, "username", 
-				manager.getUserName());
+		rv = manager.replaceParameter(rv, "username", manager.getUserName());
 
-		rv = manager.replaceParameter(rv, "symbol", 
-				alert.getSymbol().toString());
+		rv = manager.replaceParameter(rv, "symbol", alert.getSymbol().toString());
 
-		rv = manager.replaceParameter(rv, "dateSet",
-				manager.toSQLDateString(alert.
-						getDateSet()));
+		rv = manager.replaceParameter(rv, "dateSet", manager.toSQLDateString(alert.getDateSet()));
 
 		if (alert.getBoundType() == Alert.GONDOLA_TRIGGER) {
-			rv = manager.replaceParameter(rv, "target",
-					alert.getTargetExpression());
+			rv = manager.replaceParameter(rv, "target", alert.getTargetExpression());
 		} else {
-			rv = manager.replaceParameter(rv, "target",
-					alert.getTargetValue().toString());
+			rv = manager.replaceParameter(rv, "target", alert.getTargetValue().toString());
 		}
 
-		rv = manager.replaceParameter(rv, "boundType",
-				Alert.boundTypeToString(alert.
-						getBoundType())
-				);
+		rv = manager.replaceParameter(rv, "boundType", Alert.boundTypeToString(alert.getBoundType()));
 
-		rv = manager.replaceParameter(rv, "fieldType",
-				alert.getField());
+		rv = manager.replaceParameter(rv, "fieldType", alert.getField());
 
-		rv = manager.replaceParameter(rv, "start_date",
-				manager.toSQLDateString(alert.
-						getStartDate()));
+		rv = manager.replaceParameter(rv, "start_date", manager.toSQLDateString(alert.getStartDate()));
 
 		if (alert.getEndDate() != null) {
-			rv = manager.replaceParameter(rv, "end_date",
-					manager.toSQLDateString(alert.
-							getEndDate()));
-		}	
+			rv = manager.replaceParameter(rv, "end_date", manager.toSQLDateString(alert.getEndDate()));
+		}
 
 		return rv;
 	}
 
 	public void set(GondolaAlert alert) {
-		if (manager.getConnection()) {	    
-			String queryName = (alert.getEndDate() != null) 
-					? "insertGondolaAlert"
-							: "insertGondolaAlert_noEndDate";
+		if (manager.getConnection()) {
+			String queryName = (alert.getEndDate() != null) ? "insertGondolaAlert" : "insertGondolaAlert_noEndDate";
 
-			runQuery(queryName, alert, true);	    
+			runQuery(queryName, alert, true);
 		}
-	} 
-
+	}
 
 	public void update(Alert alert, OHLCVAlert newAlert) {
 
 		remove(alert);
 		set(newAlert);
 	}
+
 	public void update(Alert alert, GondolaAlert newAlert) {
 		remove(alert);
 		set(newAlert);
@@ -138,14 +117,13 @@ public class DatabaseAlertWriter implements AlertWriter {
 
 	public void remove(Alert alert) {
 		if (manager.getConnection()) {
-			//If we're writing to the database, preferences should return
-			//a DatabaseAlertReader. 
-			DatabaseAlertReader reader = 
-					(DatabaseAlertReader)AlertManager.getReader();
+			// If we're writing to the database, preferences should return
+			// a DatabaseAlertReader.
+			DatabaseAlertReader reader = (DatabaseAlertReader) AlertManager.getReader();
 
 			String uuid = reader.getUUID(alert);
 
-			if (uuid == null) {		
+			if (uuid == null) {
 				return;
 			}
 			ArrayList newQueryList = new ArrayList();
@@ -153,7 +131,7 @@ public class DatabaseAlertWriter implements AlertWriter {
 			List queries = manager.getQueries(queryLabel);
 			Iterator iterator = queries.iterator();
 			while (iterator.hasNext()) {
-				String query = (String)iterator.next();
+				String query = (String) iterator.next();
 				query = manager.replaceParameter(query, "id", uuid);
 				query = replaceParameters(query, alert);
 				newQueryList.add(query);
@@ -168,27 +146,21 @@ public class DatabaseAlertWriter implements AlertWriter {
 				} catch (SQLException e) {
 
 				}
-			}	    
-		}     
+			}
+		}
 	}
 
-
-	public void remove(Symbol symbol) {	
+	public void remove(Symbol symbol) {
 		if (manager.getConnection()) {
 			try {
-				String queryString = 
-						"DELETE FROM " + DatabaseManager.ALERT_TABLE_NAME +
-						"where symbol = '" + symbol + "' AND "  + 
-						"host = '" + manager.getHost() + "' AND " +
-						"username = '" + manager.getUserName() + "'";
+				String queryString = "DELETE FROM " + DatabaseManager.ALERT_TABLE_NAME + "where symbol = '" + symbol
+						+ "' AND " + "host = '" + manager.getHost() + "' AND " + "username = '" + manager.getUserName()
+						+ "'";
 
 				Statement statement = manager.createStatement();
-				int result = statement.executeUpdate(queryString);	
+				int result = statement.executeUpdate(queryString);
 			} catch (SQLException e) {
-				DesktopManager.
-				showErrorMessage(Locale.
-						getString("ERROR_TALKING_TO_DATABASE",
-								e.getMessage()));
+				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
 			}
 		}
 	}
@@ -197,12 +169,11 @@ public class DatabaseAlertWriter implements AlertWriter {
 		String uuid = null;
 
 		if (!newAlert) {
-			DatabaseAlertReader reader = 
-					(DatabaseAlertReader)AlertManager.getReader();
+			DatabaseAlertReader reader = (DatabaseAlertReader) AlertManager.getReader();
 			uuid = reader.getUUID(alert);
 
 			if (uuid == null) {
-				//Didn't find alert
+				// Didn't find alert
 				return;
 			}
 		} else {
@@ -210,12 +181,12 @@ public class DatabaseAlertWriter implements AlertWriter {
 		}
 
 		ArrayList newQueryList = new ArrayList();
-		List queries = manager.getQueries(queryName);		
+		List queries = manager.getQueries(queryName);
 		assert queries != null;
 
 		Iterator iterator = queries.iterator();
 		while (iterator.hasNext()) {
-			String query = (String)iterator.next();
+			String query = (String) iterator.next();
 			query = manager.replaceParameter(query, "id", uuid);
 			query = replaceParameters(query, alert);
 			newQueryList.add(query);
@@ -231,5 +202,5 @@ public class DatabaseAlertWriter implements AlertWriter {
 
 			}
 		}
-	}    
+	}
 }

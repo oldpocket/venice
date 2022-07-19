@@ -16,10 +16,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-
 package nz.org.venice.prefs.settings;
-
 
 /**
  * This class  represents Preferences Module data  which can restore modules upon restart. 
@@ -36,19 +33,18 @@ import nz.org.venice.main.Module;
 import nz.org.venice.prefs.PreferencesModule;
 
 public class PreferencesModuleSettings extends AbstractSettings {
-    
-    public PreferencesModuleSettings() {
-	super(Settings.PREFERENCES, Settings.PREFERENCESMODULE);
-    }
 
-    public PreferencesModuleSettings(String title) {
-	super(Settings.PREFERENCES, Settings.PREFERENCESMODULE);
-	super.setTitle(title);
-    }
+	public PreferencesModuleSettings() {
+		super(Settings.PREFERENCES, Settings.PREFERENCESMODULE);
+	}
 
+	public PreferencesModuleSettings(String title) {
+		super(Settings.PREFERENCES, Settings.PREFERENCESMODULE);
+		super.setTitle(title);
+	}
 
-    public Module getModule(JDesktopPane desktop) {
-	return new PreferencesModule(desktop);	
-    }
+	public Module getModule(JDesktopPane desktop) {
+		return new PreferencesModule(desktop);
+	}
 
 }

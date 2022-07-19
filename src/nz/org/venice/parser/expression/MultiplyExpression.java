@@ -29,89 +29,86 @@ import nz.org.venice.quote.Symbol;
  */
 public class MultiplyExpression extends ArithmeticExpression {
 
-    public MultiplyExpression(Expression left, Expression right) {
-	super(left, right);
-    }
+	public MultiplyExpression(Expression left, Expression right) {
+		super(left, right);
+	}
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
-	throws EvaluationException {
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-	return getChild(0).evaluate(variables, quoteBundle, symbol, day) *
-	    getChild(1).evaluate(variables, quoteBundle, symbol, day);
-    }
+		return getChild(0).evaluate(variables, quoteBundle, symbol, day)
+				* getChild(1).evaluate(variables, quoteBundle, symbol, day);
+	}
 
-    public Expression simplify() {       
-        // First perform arithmetic simplifications
-        Expression simplified = super.simplify();
+	public Expression simplify() {
+		// First perform arithmetic simplifications
+		Expression simplified = super.simplify();
 
-	NumberExpression left = null;
-	NumberExpression right = null;
+		NumberExpression left = null;
+		NumberExpression right = null;
 
-        if(simplified.equals(this)) {
-            left = (simplified.getChild(0) instanceof NumberExpression? 
-                                     (NumberExpression)simplified.getChild(0) : null);
-            right = (simplified.getChild(1) instanceof NumberExpression? 
-		     (NumberExpression)simplified.getChild(1) : null);
+		if (simplified.equals(this)) {
+			left = (simplified.getChild(0) instanceof NumberExpression ? (NumberExpression) simplified.getChild(0)
+					: null);
+			right = (simplified.getChild(1) instanceof NumberExpression ? (NumberExpression) simplified.getChild(1)
+					: null);
 
-            // 0*a -> 0.
-            if(left != null && left.equals(0.0D)) {	       
-                return new NumberExpression(0.0D, simplified.getType());
-	    }
+			// 0*a -> 0.
+			if (left != null && left.equals(0.0D)) {
+				return new NumberExpression(0.0D, simplified.getType());
+			}
 
-            // a*0 -> 0.
-            else if(right != null && right.equals(0.0D)) {
-                return new NumberExpression(0.0D, simplified.getType());
-	    }
+			// a*0 -> 0.
+			else if (right != null && right.equals(0.0D)) {
+				return new NumberExpression(0.0D, simplified.getType());
+			}
 
-            // a*1 -> a.
-            else if(right != null && right.equals(1.0D)) {
-                return simplified.getChild(0);
-	    }
+			// a*1 -> a.
+			else if (right != null && right.equals(1.0D)) {
+				return simplified.getChild(0);
+			}
 
-	    //1 * a -> a
-	    else if (left != null && left.equals(1.0D)) {
-		return simplified.getChild(1);
-	    }
-        }
-	return simplified;    
-    }
+			// 1 * a -> a
+			else if (left != null && left.equals(1.0D)) {
+				return simplified.getChild(1);
+			}
+		}
+		return simplified;
+	}
 
-    public boolean equals(Object object) {
+	public boolean equals(Object object) {
 
-        // Are they both multiply expressions?
-        if(object instanceof MultiplyExpression) {
-            MultiplyExpression expression = (MultiplyExpression)object;
+		// Are they both multiply expressions?
+		if (object instanceof MultiplyExpression) {
+			MultiplyExpression expression = (MultiplyExpression) object;
 
-            // (x*y) == (x*y)
-            if(getChild(0).equals(expression.getChild(0)) &&
-               getChild(1).equals(expression.getChild(1)))
-                return true;
+			// (x*y) == (x*y)
+			if (getChild(0).equals(expression.getChild(0)) && getChild(1).equals(expression.getChild(1)))
+				return true;
 
-            // (x*y) == (y*x)
-            if(getChild(0).equals(expression.getChild(1)) &&
-               getChild(1).equals(expression.getChild(0)))
-                return true;
-        }
-    
-        return false;
-    }
+			// (x*y) == (y*x)
+			if (getChild(0).equals(expression.getChild(1)) && getChild(1).equals(expression.getChild(0)))
+				return true;
+		}
 
-    public int hashCode() {
-	Expression child1 = getChild(0);
-	Expression child2 = getChild(1);
+		return false;
+	}
 
-	assert child1 != null;
-	assert child2 != null;
+	public int hashCode() {
+		Expression child1 = getChild(0);
+		Expression child2 = getChild(1);
 
-	return child1.hashCode() ^ child2.hashCode();
-    }
+		assert child1 != null;
+		assert child2 != null;
 
-    public String toString() {
-	return super.toString("*");
-    }
+		return child1.hashCode() ^ child2.hashCode();
+	}
 
-    public Object clone() {
-        return new MultiplyExpression((Expression)getChild(0).clone(), 
-                                      (Expression)getChild(1).clone());
-    }
+	public String toString() {
+		return super.toString("*");
+	}
+
+	public Object clone() {
+		return new MultiplyExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone());
+	}
 }

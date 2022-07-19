@@ -22,8 +22,8 @@ import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.TradingDate;
 
 /**
- * An alert whose trigger condition is a Gondola Expression.
- * i.e. The alert triggers when the expression evaluates to True.
+ * An alert whose trigger condition is a Gondola Expression. i.e. The alert
+ * triggers when the expression evaluates to True.
  *
  * @author Mark Hummel
  * @see Alert
@@ -31,98 +31,92 @@ import nz.org.venice.util.TradingDate;
 
 public class GondolaAlert extends Alert {
 
-    public static final int UPPER_BOUND     = 0;
-    public static final int LOWER_BOUND     = 1;
-    public static final int EXACT_BOUND     = 2;
-    public static final int GONDOLA_TRIGGER = 3; //Gondola expression 
-    
-    public static final String OPEN_FIELD   = "open";
-    public static final String HIGH_FIELD   = "high";
-    public static final String LOW_FIELD    = "low";
-    public static final String CLOSE_FIELD  = "close";
-    public static final String VOLUME_FIELD = "volume";
-    public static final String EXP_FIELD    = "exp"; //Gondola Expression
-    
-    private String targetExpression;
-      
-    public GondolaAlert() {
-	super();
-    }
+	public static final int UPPER_BOUND = 0;
+	public static final int LOWER_BOUND = 1;
+	public static final int EXACT_BOUND = 2;
+	public static final int GONDOLA_TRIGGER = 3; // Gondola expression
 
-    public GondolaAlert(Symbol symbol, 
-			TradingDate startDate, 
-			TradingDate endDate,
-			String targetExpression,
+	public static final String OPEN_FIELD = "open";
+	public static final String HIGH_FIELD = "high";
+	public static final String LOW_FIELD = "low";
+	public static final String CLOSE_FIELD = "close";
+	public static final String VOLUME_FIELD = "volume";
+	public static final String EXP_FIELD = "exp"; // Gondola Expression
+
+	private String targetExpression;
+
+	public GondolaAlert() {
+		super();
+	}
+
+	public GondolaAlert(Symbol symbol, TradingDate startDate, TradingDate endDate, String targetExpression,
 			boolean enabled) {
 
-	super(symbol, startDate, endDate, enabled);
-	super.setType(Alert.GONDOLA);
-	this.targetExpression = targetExpression;
-    }
-
-    public void setTargetValue(Double value) {
-    }
-
-    public Double getTargetValue() {
-	return null;
-    }
-
-    public String getTargetExpression() {
-	return targetExpression;
-    }
-
-    public void setTargetExpression(String targetExpression) {
-	this.targetExpression = targetExpression;
-    }
-
-    public int getType() {
-	return GONDOLA;
-    }
-
-    public int getBoundType() {
-	return GONDOLA_TRIGGER;
-    }
-    
-    //do nothing, not applicable for this type of alert
-    //Just here so we can do manage alerts generically without
-    //doing stuff like: if instanceof OHLCVAlert do this otherwise do that.
-    public void setBoundType(int boundType) {	
-
-    }
-
-    public String getField() {
-	return EXP_FIELD;
-    }
-
-    //do nothing, see comment above.
-    public void setField(String field) {
-	
-    }
-
-    public String toString() {
-	return super.toString() + "," + getTargetExpression();
-    }
-
-    public Object clone() {
-	GondolaAlert clone = new GondolaAlert(getSymbol(), 
-					      getStartDate(), 
-					      getEndDate(),
-					      targetExpression,
-					      getEnabled());
-
-	clone.setDateSet(getDateSet());
-	return clone;
-    }
-
-    public boolean isEqualTo(Alert alert) {
-	if (!super.isEqualTo(alert)) {
-	    return false;
+		super(symbol, startDate, endDate, enabled);
+		super.setType(Alert.GONDOLA);
+		this.targetExpression = targetExpression;
 	}
 
-	if (!alert.getTargetExpression().equals(this.getTargetExpression())) {
-	    return false;
+	public void setTargetValue(Double value) {
 	}
-	return true;
-    }
-    
+
+	public Double getTargetValue() {
+		return null;
+	}
+
+	public String getTargetExpression() {
+		return targetExpression;
+	}
+
+	public void setTargetExpression(String targetExpression) {
+		this.targetExpression = targetExpression;
+	}
+
+	public int getType() {
+		return GONDOLA;
+	}
+
+	public int getBoundType() {
+		return GONDOLA_TRIGGER;
+	}
+
+	// do nothing, not applicable for this type of alert
+	// Just here so we can do manage alerts generically without
+	// doing stuff like: if instanceof OHLCVAlert do this otherwise do that.
+	public void setBoundType(int boundType) {
+
+	}
+
+	public String getField() {
+		return EXP_FIELD;
+	}
+
+	// do nothing, see comment above.
+	public void setField(String field) {
+
+	}
+
+	public String toString() {
+		return super.toString() + "," + getTargetExpression();
+	}
+
+	public Object clone() {
+		GondolaAlert clone = new GondolaAlert(getSymbol(), getStartDate(), getEndDate(), targetExpression,
+				getEnabled());
+
+		clone.setDateSet(getDateSet());
+		return clone;
+	}
+
+	public boolean isEqualTo(Alert alert) {
+		if (!super.isEqualTo(alert)) {
+			return false;
+		}
+
+		if (!alert.getTargetExpression().equals(this.getTargetExpression())) {
+			return false;
+		}
+		return true;
+	}
+
 }

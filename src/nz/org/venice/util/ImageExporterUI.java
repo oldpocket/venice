@@ -24,49 +24,48 @@
 
 */
 
-
 package nz.org.venice.util;
 
 import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.ui.ProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 
- public class ImageExporterUI {
-     private ProgressDialog progress = null;
-     private Thread mainThread;
+public class ImageExporterUI {
+	private ProgressDialog progress = null;
+	private Thread mainThread;
 
-     public ImageExporterUI() {
-	 mainThread = Thread.currentThread();
-	 progress = ProgressDialogManager.getProgressDialog();
-	 progress.setIndeterminate(false);
-	 progress.setProgress(0);	
+	public ImageExporterUI() {
+		mainThread = Thread.currentThread();
+		progress = ProgressDialogManager.getProgressDialog();
+		progress.setIndeterminate(false);
+		progress.setProgress(0);
 
-     }
+	}
 
-     public void setMaximum(int max) {
-	 progress.setMaximum(max);
-	 
-     }
+	public void setMaximum(int max) {
+		progress.setMaximum(max);
 
-     public void display() {
-	 progress.show(Locale.getString("GRAPH_EXPORTING"));	 
-     }
-     
-     public void error(String message) {
-    	 ProgressDialogManager.closeProgressDialog(progress);
-    	 DesktopManager.showErrorMessage(message);
-     }
+	}
 
-     public void update() {
-	 progress.increment();
-     }
+	public void display() {
+		progress.show(Locale.getString("GRAPH_EXPORTING"));
+	}
 
-     public boolean isActive() {
-	 return (mainThread.isInterrupted()) ? false : true;	 
-     }
+	public void error(String message) {
+		ProgressDialogManager.closeProgressDialog(progress);
+		DesktopManager.showErrorMessage(message);
+	}
 
-     public void finish() {
-	 ProgressDialogManager.closeProgressDialog(progress);
-     }
+	public void update() {
+		progress.increment();
+	}
 
- }
+	public boolean isActive() {
+		return (mainThread.isInterrupted()) ? false : true;
+	}
+
+	public void finish() {
+		ProgressDialogManager.closeProgressDialog(progress);
+	}
+
+}

@@ -19,13 +19,13 @@
 package nz.org.venice.analyser.ann;
 
 public final class ANNConstants {
-    
-    /*
-     * file extensions, if changed, you've also to change JOONE_ONLY string in localization.
-     * These extensions are used to automatically recognize the type of input/output
-     * file in import/export of artificial neural network.
-     */
-    public final static String SNET = "snet";
-    public final static String XML = "xml";
-    
+
+	/*
+	 * file extensions, if changed, you've also to change JOONE_ONLY string in
+	 * localization. These extensions are used to automatically recognize the type
+	 * of input/output file in import/export of artificial neural network.
+	 */
+	public final static String SNET = "snet";
+	public final static String XML = "xml";
+
 }

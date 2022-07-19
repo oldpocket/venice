@@ -30,134 +30,127 @@ import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
 /**
- * MenuHelper is a class that makes it easier to add menu items to a menu.
- * For example:
+ * MenuHelper is a class that makes it easier to add menu items to a menu. For
+ * example:
+ * 
  * <pre>
  * JMenuBar menuBar = new JMenuBar();
  * JMenu fileMenu = MenuHelper.addMenu(menuBar, "File", 'F');
- * JMenuItem importMenuItem = 
- *     MenuHelper.addMenuItem(this, fileMenu, "Import Quotes", 'I');
+ * JMenuItem importMenuItem = MenuHelper.addMenuItem(this, fileMenu, "Import Quotes", 'I');
  * frame.setJMenuBar(menuBar);
  * </pre>
  */
 public class MenuHelper {
 
-    private MenuHelper() {
-        // this class cannot be instantiated
-    }
-
-    /**
-     * Creates a check box menu item and attaches it to a menu
-     * @param parent The menu to attach the menu item to
-     * @param title The title of the menu item
-     */
-    public static JCheckBoxMenuItem addCheckBoxMenuItem(ActionListener 
-							listener, 
-							JMenuItem parent, 
-							String title) {
-
-	JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(title);
-	menuItem.addActionListener(listener);
-	parent.add(menuItem);
-
-	return menuItem;
-    }
-
-    /**
-     * Creates a menu item and attaches it to a menu.
-     *
-     * @param parent The menu to attach the menu item to
-     * @param title The title of the menu item
-     */
-    public static JMenuItem addMenuItem(ActionListener listener, 
-					JMenuItem parent, String title) {
-	return addMenuItem(listener, parent, title, (char)0);
-    }
-
-    /**
-     * Creates a menu item and attaches it to a menu.
-     *
-     * @param parent The menu to attach the menu item to
-     * @param title The title of the menu item
-     * @param key Accelerator key
-     */
-    public static JMenuItem addMenuItem(ActionListener listener, 
-					JMenuItem parent, String title, 
-					char key) {
-	JMenuItem menuItem = new JMenuItem(title);
-
-	if (key != 0) {
-            try {
-                // Determine the correct short cut key to use for menus
-                Toolkit toolKit = Toolkit.getDefaultToolkit();
-                int shortcutKey = toolKit.getMenuShortcutKeyMask();
-                KeyStroke keyStroke = KeyStroke.getKeyStroke(new Character(key), shortcutKey);
-                menuItem.setAccelerator(keyStroke);
-            } catch(HeadlessException e) {
-                assert false;
-            }
+	private MenuHelper() {
+		// this class cannot be instantiated
 	}
-	menuItem.addActionListener(listener);
-	parent.add(menuItem);
 
-	return menuItem;
-    } 
+	/**
+	 * Creates a check box menu item and attaches it to a menu
+	 * 
+	 * @param parent The menu to attach the menu item to
+	 * @param title  The title of the menu item
+	 */
+	public static JCheckBoxMenuItem addCheckBoxMenuItem(ActionListener listener, JMenuItem parent, String title) {
 
-    /**
-     * Creates a menu item and attaches it to a popup menu.
-     *
-     * @param parent The menu to attach the menu item to
-     * @param title The title of the menu item
-     */
-    public static JMenuItem addMenuItem(ActionListener listener, 
-					JPopupMenu parent, String title) {
-	return addMenuItem(listener, parent, title, (char)0);
-    }
+		JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(title);
+		menuItem.addActionListener(listener);
+		parent.add(menuItem);
 
-    /**
-     * Creates a menu item and attaches it to a popup menu.
-     *
-     * @param parent The menu to attach the menu item to
-     * @param title The title of the menu item
-     * @param key Accelerator key
-     */
-    public static JMenuItem addMenuItem(ActionListener listener, 
-					JPopupMenu parent, String title, 
-					char key) {
-	JMenuItem menuItem = new JMenuItem(title);
-	if (key != 0) {
-	    KeyStroke keyStroke = 
-		KeyStroke.getKeyStroke("ctrl " + key);
-
-	    menuItem.setAccelerator(keyStroke);
+		return menuItem;
 	}
-	menuItem.addActionListener(listener);
-	parent.add(menuItem);
 
-	return menuItem;
-    } 
+	/**
+	 * Creates a menu item and attaches it to a menu.
+	 *
+	 * @param parent The menu to attach the menu item to
+	 * @param title  The title of the menu item
+	 */
+	public static JMenuItem addMenuItem(ActionListener listener, JMenuItem parent, String title) {
+		return addMenuItem(listener, parent, title, (char) 0);
+	}
 
-    /**
-     * Creates a menu and attaches it to a component
-     * @param parent The component to attach the menu to
-     * @param title The title of the menu
-     * @param key The accelerator key for the menu
-     */
-    public static JMenu addMenu(JComponent parent, String title, char key) {
-	JMenu menu = new JMenu(title);
-	if (key != 0)
-	    menu.setMnemonic(key);
-	parent.add(menu);
-	
-	return menu;
-    }
+	/**
+	 * Creates a menu item and attaches it to a menu.
+	 *
+	 * @param parent The menu to attach the menu item to
+	 * @param title  The title of the menu item
+	 * @param key    Accelerator key
+	 */
+	public static JMenuItem addMenuItem(ActionListener listener, JMenuItem parent, String title, char key) {
+		JMenuItem menuItem = new JMenuItem(title);
 
-    /**
-     * Creates a menu and attaches it to a component
-     * @param parent The component to attach the menu to
-     * @param title The title of the menu
-     */
-    public static JMenu addMenu(JComponent parent, String title) {
-	return addMenu(parent, title, (char)0);
-    }
+		if (key != 0) {
+			try {
+				// Determine the correct short cut key to use for menus
+				Toolkit toolKit = Toolkit.getDefaultToolkit();
+				int shortcutKey = toolKit.getMenuShortcutKeyMask();
+				KeyStroke keyStroke = KeyStroke.getKeyStroke(new Character(key), shortcutKey);
+				menuItem.setAccelerator(keyStroke);
+			} catch (HeadlessException e) {
+				assert false;
+			}
+		}
+		menuItem.addActionListener(listener);
+		parent.add(menuItem);
+
+		return menuItem;
+	}
+
+	/**
+	 * Creates a menu item and attaches it to a popup menu.
+	 *
+	 * @param parent The menu to attach the menu item to
+	 * @param title  The title of the menu item
+	 */
+	public static JMenuItem addMenuItem(ActionListener listener, JPopupMenu parent, String title) {
+		return addMenuItem(listener, parent, title, (char) 0);
+	}
+
+	/**
+	 * Creates a menu item and attaches it to a popup menu.
+	 *
+	 * @param parent The menu to attach the menu item to
+	 * @param title  The title of the menu item
+	 * @param key    Accelerator key
+	 */
+	public static JMenuItem addMenuItem(ActionListener listener, JPopupMenu parent, String title, char key) {
+		JMenuItem menuItem = new JMenuItem(title);
+		if (key != 0) {
+			KeyStroke keyStroke = KeyStroke.getKeyStroke("ctrl " + key);
+
+			menuItem.setAccelerator(keyStroke);
+		}
+		menuItem.addActionListener(listener);
+		parent.add(menuItem);
+
+		return menuItem;
+	}
+
+	/**
+	 * Creates a menu and attaches it to a component
+	 * 
+	 * @param parent The component to attach the menu to
+	 * @param title  The title of the menu
+	 * @param key    The accelerator key for the menu
+	 */
+	public static JMenu addMenu(JComponent parent, String title, char key) {
+		JMenu menu = new JMenu(title);
+		if (key != 0)
+			menu.setMnemonic(key);
+		parent.add(menu);
+
+		return menu;
+	}
+
+	/**
+	 * Creates a menu and attaches it to a component
+	 * 
+	 * @param parent The component to attach the menu to
+	 * @param title  The title of the menu
+	 */
+	public static JMenu addMenu(JComponent parent, String title) {
+		return addMenu(parent, title, (char) 0);
+	}
 }

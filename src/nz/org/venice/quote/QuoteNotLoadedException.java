@@ -19,24 +19,24 @@
 package nz.org.venice.quote;
 
 /**
- * This exception represents the error condition that occurs when the caller
- * is trying to retrieve a quote that has not been loaded into Venice.
+ * This exception represents the error condition that occurs when the caller is
+ * trying to retrieve a quote that has not been loaded into Venice.
  */
 public class QuoteNotLoadedException extends Throwable {
 
-    private static QuoteNotLoadedException instance = new QuoteNotLoadedException();
+	private static QuoteNotLoadedException instance = new QuoteNotLoadedException();
 
-    private QuoteNotLoadedException() {
-        // nothing to do
-    }
+	private QuoteNotLoadedException() {
+		// nothing to do
+	}
 
-    /**
-     * Return the singleton instance of this exception. There is only a single
-     * instance of this exception defined. The reason is that this exception
-     * is thrown around a lot so needs to be fast - and the stack trace is
-     * not important. See "Java Performance Tuning" for an explanation.
-     */
-    public static synchronized QuoteNotLoadedException getInstance() {
-        return instance;
-    }
+	/**
+	 * Return the singleton instance of this exception. There is only a single
+	 * instance of this exception defined. The reason is that this exception is
+	 * thrown around a lot so needs to be fast - and the stack trace is not
+	 * important. See "Java Performance Tuning" for an explanation.
+	 */
+	public static synchronized QuoteNotLoadedException getInstance() {
+		return instance;
+	}
 }

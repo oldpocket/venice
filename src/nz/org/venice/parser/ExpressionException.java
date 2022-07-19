@@ -19,37 +19,37 @@
 package nz.org.venice.parser;
 
 /**
- * An exception which is raised when there is a problem parsing or
- * executing an expression.
+ * An exception which is raised when there is a problem parsing or executing an
+ * expression.
  */
 public class ExpressionException extends Throwable {
-    
-    private String reason = null;
 
-    /**
-     * Create a new expression exception with the given error reason.
-     *
-     * @param	reason	the reason the exception was thrown
-     */
-    public ExpressionException(String reason) {
-	this.reason = reason;
-    }
+	private String reason = null;
 
-    /**
-     * Return the reason this exception was raised.
-     *
-     * @return	the reason the exception was raised
-     */
-    public String getReason() {
-	return reason;
-    }
+	/**
+	 * Create a new expression exception with the given error reason.
+	 *
+	 * @param reason the reason the exception was thrown
+	 */
+	public ExpressionException(String reason) {
+		this.reason = reason;
+	}
 
-    /**
-     * Convert the exception to a string
-     *
-     * @return	string version of the exception
-     */
-    public String toString() {
-	return getReason();
-    }
+	/**
+	 * Return the reason this exception was raised.
+	 *
+	 * @return the reason the exception was raised
+	 */
+	public String getReason() {
+		return reason;
+	}
+
+	/**
+	 * Convert the exception to a string
+	 *
+	 * @return string version of the exception
+	 */
+	public String toString() {
+		return getReason();
+	}
 }

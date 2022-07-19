@@ -40,9 +40,9 @@ import nz.org.venice.util.TradingDate;
 
 /**
  * Advance/Decline graph. This graphs the Advance/Decline market indicator. This
- * graph is used to indicate whether trends in the market are short or long lived.
- * If the market is going up and the advance/decline line is going down, there
- * is something wrong.
+ * graph is used to indicate whether trends in the market are short or long
+ * lived. If the market is going up and the advance/decline line is going down,
+ * there is something wrong.
  */
 public class AdvanceDeclineGraph implements Graph {
 
@@ -58,24 +58,14 @@ public class AdvanceDeclineGraph implements Graph {
 		advanceDecline = createAdvanceDecline();
 	}
 
-	public void render(Graphics g, Color colour, int xoffset, int yoffset,
-			double horizontalScale, double verticalScale,
-			double topLineValue, double bottomLineValue, 
-			List xRange, 
-			boolean vertOrientation) {
+	public void render(Graphics g, Color colour, int xoffset, int yoffset, double horizontalScale, double verticalScale,
+			double topLineValue, double bottomLineValue, List xRange, boolean vertOrientation) {
 
-		GraphTools.renderLine(g, advanceDecline, xoffset, yoffset,
-				horizontalScale,
-				verticalScale, 
-				topLineValue, bottomLineValue, 
-				xRange, 
-				vertOrientation);
+		GraphTools.renderLine(g, advanceDecline, xoffset, yoffset, horizontalScale, verticalScale, topLineValue,
+				bottomLineValue, xRange, vertOrientation);
 	}
 
-	public String getToolTipText(Comparable x, int y, int yoffset,
-			double verticalScale,
-			double bottomLineValue)
-	{
+	public String getToolTipText(Comparable x, int y, int yoffset, double verticalScale, double bottomLineValue) {
 		// we will give out the number that advanced and the number that
 		// declined
 
@@ -85,8 +75,8 @@ public class AdvanceDeclineGraph implements Graph {
 	/**
 	 * Get the first X value that this graph will draw.
 	 *
-	 * @return	X value of the first x coordinate in the default
-	 *		<code>GraphSource</code>'s <code>Graphable</code>
+	 * @return X value of the first x coordinate in the default
+	 *         <code>GraphSource</code>'s <code>Graphable</code>
 	 */
 	public Comparable getStartX() {
 		return advanceDecline.getStartX();
@@ -95,8 +85,8 @@ public class AdvanceDeclineGraph implements Graph {
 	/**
 	 * Get the last X value that this graph will draw.
 	 *
-	 * @return	X value of the last x coordinate in the default
-	 *		<code>GraphSource</code>'s <code>Graphable</code>
+	 * @return X value of the last x coordinate in the default
+	 *         <code>GraphSource</code>'s <code>Graphable</code>
 	 */
 	public Comparable getEndX() {
 		return advanceDecline.getEndX();
@@ -105,30 +95,29 @@ public class AdvanceDeclineGraph implements Graph {
 	/**
 	 * Get all X values that this graph will draw.
 	 *
-	 * @return	X values in the default <code>GraphSource</code>'s
-	 *		<code>Graphable</code>
+	 * @return X values in the default <code>GraphSource</code>'s
+	 *         <code>Graphable</code>
 	 */
 	public Set getXRange() {
 		return advanceDecline.getXRange();
 	}
 
 	/**
-	 * Convert the Y value to a label to be displayed in the vertical
-	 * axis.
+	 * Convert the Y value to a label to be displayed in the vertical axis.
 	 *
-	 * @param	value	y value
-	 * @return	the Y label text that the default <code>GraphSource</code>
-	 *		would display
+	 * @param value y value
+	 * @return the Y label text that the default <code>GraphSource</code> would
+	 *         display
 	 */
 	public String getYLabel(double value) {
-		return Integer.toString((int)value);
+		return Integer.toString((int) value);
 	}
 
 	/**
 	 * Return the Y value for the given X value.
 	 *
-	 * @param	x value
-	 * @return	Y value of the default <code>GraphSource</code>
+	 * @param x value
+	 * @return Y value of the default <code>GraphSource</code>
 	 */
 	public Double getY(Comparable x) {
 		return advanceDecline.getY(x);
@@ -137,8 +126,8 @@ public class AdvanceDeclineGraph implements Graph {
 	/**
 	 * Return the highest Y value in the given X range.
 	 *
-	 * @param	x	range of X values
-	 * @return	the highest Y value of the default <code>GraphSource</code>
+	 * @param x range of X values
+	 * @return the highest Y value of the default <code>GraphSource</code>
 	 */
 	public double getHighestY(List x) {
 		return advanceDecline.getHighestY(x);
@@ -147,8 +136,8 @@ public class AdvanceDeclineGraph implements Graph {
 	/**
 	 * Return the loweset Y value in the given X range.
 	 *
-	 * @param	x	range of X values
-	 * @return	the lowest Y value of the default <code>GraphSource</code>
+	 * @param x range of X values
+	 * @return the lowest Y value of the default <code>GraphSource</code>
 	 */
 
 	public double getLowestY(List x) {
@@ -156,43 +145,40 @@ public class AdvanceDeclineGraph implements Graph {
 	}
 
 	/**
-	 * Return an array of acceptable major deltas for the vertical
-	 * axis.
+	 * Return an array of acceptable major deltas for the vertical axis.
 	 *
-	 * @return	an array of doubles representing the minor deltas
-	 *		of the default <code>GraphSource</code>
+	 * @return an array of doubles representing the minor deltas of the default
+	 *         <code>GraphSource</code>
 	 */
 	public double[] getAcceptableMajorDeltas() {
-		double[] major = {1.0D, // 1 point
+		double[] major = { 1.0D, // 1 point
 				10.0D, // 10 points
 				100.0D, // 100 points
 				1000.0D, // 1000 points
 				10000.0D, // 10,000 points
-				100000.0D}; // 100,000 points
-		return major;	
+				100000.0D }; // 100,000 points
+		return major;
 	}
 
 	/**
-	 * Return an array of acceptable minor deltas for the vertical
-	 * axis.
+	 * Return an array of acceptable minor deltas for the vertical axis.
 	 *
-	 * @return	an array of doubles representing the minor deltas
-	 *		of the default <code>GraphSource</code>
-	 * @see	Graph#getAcceptableMajorDeltas
+	 * @return an array of doubles representing the minor deltas of the default
+	 *         <code>GraphSource</code>
+	 * @see Graph#getAcceptableMajorDeltas
 	 */
 	public double[] getAcceptableMinorDeltas() {
-		double[] minor = {1D, 1.1D, 1.25D, 1.3333D, 1.5D, 2D, 2.25D,
-				2.5D, 3D, 3.3333D, 4D, 5D, 6D, 6.5D, 7D, 7.5D,
-				8D, 9D};
+		double[] minor = { 1D, 1.1D, 1.25D, 1.3333D, 1.5D, 2D, 2.25D, 2.5D, 3D, 3.3333D, 4D, 5D, 6D, 6.5D, 7D, 7.5D, 8D,
+				9D };
 		return minor;
 	}
 
 	/**
-	 * Return the annotations for this graph or <code>null</code> if it
-	 * does not have any. The annotations should be in a map of X values
-	 * to <code>String</code> values.
+	 * Return the annotations for this graph or <code>null</code> if it does not
+	 * have any. The annotations should be in a map of X values to
+	 * <code>String</code> values.
 	 *
-	 * @return	map of annotations
+	 * @return map of annotations
 	 */
 	public HashMap getAnnotations() {
 		return null;
@@ -201,8 +187,8 @@ public class AdvanceDeclineGraph implements Graph {
 	/**
 	 * Return if this graph has any annotations.
 	 *
-	 * @return	<code>true</code> if this graph has annotations;
-	 *		<code>false</code> otherwise
+	 * @return <code>true</code> if this graph has annotations; <code>false</code>
+	 *         otherwise
 	 */
 	public boolean hasAnnotations() {
 		return false;
@@ -218,7 +204,7 @@ public class AdvanceDeclineGraph implements Graph {
 		TradingDate firstDate = QuoteSourceManager.getSource().getFirstDate();
 		TradingDate lastDate = QuoteSourceManager.getSource().getLastDate();
 
-		List dates = TradingDate.dateRangeToList(firstDate, lastDate);	
+		List dates = TradingDate.dateRangeToList(firstDate, lastDate);
 
 		Thread thread = Thread.currentThread();
 		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
@@ -231,24 +217,22 @@ public class AdvanceDeclineGraph implements Graph {
 		int cumulativeAdvanceDecline = START_VALUE;
 
 		try {
-			HashMap advanceDeclines = QuoteSourceManager.getSource().getAdvanceDecline(firstDate, lastDate);	    
+			HashMap advanceDeclines = QuoteSourceManager.getSource().getAdvanceDecline(firstDate, lastDate);
 
 			SortedSet sortedAdvanceDeclines = new TreeSet(advanceDeclines.keySet());
-			Iterator iterator =  sortedAdvanceDeclines.iterator();
+			Iterator iterator = sortedAdvanceDeclines.iterator();
 			Iterator datesIterator = dates.iterator();
 
 			while (iterator.hasNext()) {
-				TradingDate date = (TradingDate)iterator.next();
+				TradingDate date = (TradingDate) iterator.next();
 
-				Integer advanceDeclineValue = 
-						(Integer)advanceDeclines.get(date);
+				Integer advanceDeclineValue = (Integer) advanceDeclines.get(date);
 
 				cumulativeAdvanceDecline += advanceDeclineValue.intValue();
 
-				advanceDecline.putY((Comparable)date,
-						new Double(cumulativeAdvanceDecline));
+				advanceDecline.putY((Comparable) date, new Double(cumulativeAdvanceDecline));
 
-				if (thread.isInterrupted()) 
+				if (thread.isInterrupted())
 					break;
 				progress.increment();
 			}
@@ -257,7 +241,7 @@ public class AdvanceDeclineGraph implements Graph {
 
 		}
 
-		ProgressDialogManager.closeProgressDialog(progress);	
+		ProgressDialogManager.closeProgressDialog(progress);
 
 		return advanceDecline;
 	}
@@ -278,7 +262,7 @@ public class AdvanceDeclineGraph implements Graph {
 	/**
 	 * Return the name of this graph.
 	 *
-	 * @return	<code>Advance/Decline</code>
+	 * @return <code>Advance/Decline</code>
 	 */
 	public String getName() {
 		return Locale.getString("ADVANCE_DECLINE");
@@ -300,5 +284,3 @@ public class AdvanceDeclineGraph implements Graph {
 		return true;
 	}
 }
-
-

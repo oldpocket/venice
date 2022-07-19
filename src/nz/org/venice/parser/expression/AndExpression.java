@@ -25,93 +25,89 @@ import nz.org.venice.quote.QuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
- * An expression which performs boolean <code>and</code> on two 
- * sub-expressions.
+ * An expression which performs boolean <code>and</code> on two sub-expressions.
  */
 public class AndExpression extends LogicExpression {
 
-    public AndExpression(Expression left, Expression right) {
-	super(left, right);
-    }
+	public AndExpression(Expression left, Expression right) {
+		super(left, right);
+	}
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
-	throws EvaluationException {
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-	if(getChild(0).evaluate(variables, quoteBundle, symbol, day) >= TRUE_LEVEL &&
-	   getChild(1).evaluate(variables, quoteBundle, symbol, day) >= TRUE_LEVEL)
-	    return TRUE;
-	else
-	    return FALSE;
-    }
+		if (getChild(0).evaluate(variables, quoteBundle, symbol, day) >= TRUE_LEVEL
+				&& getChild(1).evaluate(variables, quoteBundle, symbol, day) >= TRUE_LEVEL)
+			return TRUE;
+		else
+			return FALSE;
+	}
 
-    public Expression simplify() {
-        // First simplify all the child arguments
-        Expression simplified = super.simplify();
+	public Expression simplify() {
+		// First simplify all the child arguments
+		Expression simplified = super.simplify();
 
-        NumberExpression left = (simplified.getChild(0) instanceof NumberExpression? 
-                                 (NumberExpression)simplified.getChild(0) : null);
-        NumberExpression right = (simplified.getChild(1) instanceof NumberExpression? 
-                                  (NumberExpression)simplified.getChild(1) : null);
+		NumberExpression left = (simplified.getChild(0) instanceof NumberExpression
+				? (NumberExpression) simplified.getChild(0)
+				: null);
+		NumberExpression right = (simplified.getChild(1) instanceof NumberExpression
+				? (NumberExpression) simplified.getChild(1)
+				: null);
 
-        // If either child argument is the constant TRUE we can simplify to the 
-        // other child argument
-        if(left != null && left.getValue() >= TRUE_LEVEL)
-            return simplified.getChild(1);
-        else if(right != null && right.getValue() >= TRUE_LEVEL)
-            return simplified.getChild(0);
+		// If either child argument is the constant TRUE we can simplify to the
+		// other child argument
+		if (left != null && left.getValue() >= TRUE_LEVEL)
+			return simplified.getChild(1);
+		else if (right != null && right.getValue() >= TRUE_LEVEL)
+			return simplified.getChild(0);
 
-        // If either child argument is the constant FALSE we can simplify to the
-        // constant FALSE
-        else if((left != null && left.getValue() < TRUE_LEVEL) ||
-                (right != null && right.getValue() < TRUE_LEVEL))
-            return new NumberExpression(false);
+		// If either child argument is the constant FALSE we can simplify to the
+		// constant FALSE
+		else if ((left != null && left.getValue() < TRUE_LEVEL) || (right != null && right.getValue() < TRUE_LEVEL))
+			return new NumberExpression(false);
 
-        // If both child arguments are the same then we can simplify to the constant
-        // TRUE.
-        else if(simplified.getChild(0).equals(simplified.getChild(1)))
-            return new NumberExpression(true);
+		// If both child arguments are the same then we can simplify to the constant
+		// TRUE.
+		else if (simplified.getChild(0).equals(simplified.getChild(1)))
+			return new NumberExpression(true);
 
-        else
-            return simplified;
-    }
+		else
+			return simplified;
+	}
 
-    public boolean equals(Object object) {
+	public boolean equals(Object object) {
 
-        // Are they both and expressions?
-        if(object instanceof AndExpression) {
-            AndExpression expression = (AndExpression)object;
+		// Are they both and expressions?
+		if (object instanceof AndExpression) {
+			AndExpression expression = (AndExpression) object;
 
-            // (x and y) == (x and y)
-            if(getChild(0).equals(expression.getChild(0)) &&
-               getChild(1).equals(expression.getChild(1)))
-                return true;
+			// (x and y) == (x and y)
+			if (getChild(0).equals(expression.getChild(0)) && getChild(1).equals(expression.getChild(1)))
+				return true;
 
-            // (x and y) == (y and x)
-            if(getChild(0).equals(expression.getChild(1)) &&
-               getChild(1).equals(expression.getChild(0)))
-                return true;
-        }
-    
-        return false;
-    }
+			// (x and y) == (y and x)
+			if (getChild(0).equals(expression.getChild(1)) && getChild(1).equals(expression.getChild(0)))
+				return true;
+		}
 
-    public int hashCode() {
-	Expression child1 = getChild(0);
-	Expression child2 = getChild(1);
+		return false;
+	}
 
-	assert child1 != null;
-	assert child2 != null;
+	public int hashCode() {
+		Expression child1 = getChild(0);
+		Expression child2 = getChild(1);
 
-	return child1.hashCode() ^ child2.hashCode();	
-    }
+		assert child1 != null;
+		assert child2 != null;
 
-    public String toString() {
-	return super.toString("and");
-    }
+		return child1.hashCode() ^ child2.hashCode();
+	}
 
-    public Object clone() {
-        return new AndExpression((Expression)getChild(0).clone(), 
-                                 (Expression)getChild(1).clone());
-    }
+	public String toString() {
+		return super.toString("and");
+	}
+
+	public Object clone() {
+		return new AndExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone());
+	}
 }
-

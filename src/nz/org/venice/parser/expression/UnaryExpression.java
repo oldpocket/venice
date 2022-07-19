@@ -25,24 +25,24 @@ import nz.org.venice.parser.Expression;
  */
 abstract public class UnaryExpression extends AbstractExpression {
 
-    /**
-     * Create a new unary expression with the given argument.
-     *
-     * @param	sub	the sub argument
-     */
-    public UnaryExpression(Expression sub) {
-        super(new Expression[] {sub});
-        assert sub != null;
-        //setChild(sub, 0);
-    }
+	/**
+	 * Create a new unary expression with the given argument.
+	 *
+	 * @param sub the sub argument
+	 */
+	public UnaryExpression(Expression sub) {
+		super(new Expression[] { sub });
+		assert sub != null;
+		// setChild(sub, 0);
+	}
 
-    /**
-     * Return the number of children required in a unary expression.
-     * This will always evaluate to <code>1</code>.
-     *
-     * @return	<code>1</code>
-     */
-    public int getChildCount() {
-	return 1;
-    }
+	/**
+	 * Return the number of children required in a unary expression. This will
+	 * always evaluate to <code>1</code>.
+	 *
+	 * @return <code>1</code>
+	 */
+	public int getChildCount() {
+		return 1;
+	}
 }

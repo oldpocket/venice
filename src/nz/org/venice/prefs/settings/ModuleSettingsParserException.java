@@ -29,12 +29,12 @@ package nz.org.venice.prefs.settings;
  */
 public class ModuleSettingsParserException extends Throwable {
 
-    /**
-     * Create a new ModuleSettings parser exception.
-     *
-     * @param message a message describing the error.
-     */
-    public ModuleSettingsParserException(String message) {
-        super(message);
-    }
+	/**
+	 * Create a new ModuleSettings parser exception.
+	 *
+	 * @param message a message describing the error.
+	 */
+	public ModuleSettingsParserException(String message) {
+		super(message);
+	}
 }

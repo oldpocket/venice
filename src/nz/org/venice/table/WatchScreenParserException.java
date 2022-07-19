@@ -26,12 +26,12 @@ package nz.org.venice.table;
  */
 public class WatchScreenParserException extends Throwable {
 
-    /**
-     * Create a new watch screen parser exception.
-     *
-     * @param message a message describing the error.
-     */
-    public WatchScreenParserException(String message) {
-        super(message);
-    }
+	/**
+	 * Create a new watch screen parser exception.
+	 *
+	 * @param message a message describing the error.
+	 */
+	public WatchScreenParserException(String message) {
+		super(message);
+	}
 }

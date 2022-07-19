@@ -32,74 +32,76 @@ import nz.org.venice.parser.expression.NumberExpression;
  */
 public class ExpressionResult implements Comparable {
 
-    // Set to true if the result actually contains a result. Set to false
-    // if the result is empty.
-    boolean isResult;
+	// Set to true if the result actually contains a result. Set to false
+	// if the result is empty.
+	boolean isResult;
 
-    // Expression result type, e.g. {@link nz.org.venice.parser.Expression#BOOLEAN_TYPE},
-    // {@link nz.org.venice.parser.Expression#FLOAT_TYPE} etc
-    int type;
+	// Expression result type, e.g. {@link
+	// nz.org.venice.parser.Expression#BOOLEAN_TYPE},
+	// {@link nz.org.venice.parser.Expression#FLOAT_TYPE} etc
+	int type;
 
-    // Result
-    double result;
+	// Result
+	double result;
 
-    /** Empty or missing result. */
-    public final static ExpressionResult EMPTY = new ExpressionResult();
+	/** Empty or missing result. */
+	public final static ExpressionResult EMPTY = new ExpressionResult();
 
-    // Create a new result
-    private ExpressionResult() {
-        result = 0.0D;
-        isResult = false;
-    }
+	// Create a new result
+	private ExpressionResult() {
+		result = 0.0D;
+		isResult = false;
+	}
 
-    /**
-     * Create a new result.
-     *
-     * @param type   Type of the result, e.g. {@link nz.org.venice.parser.Expression#BOOLEAN_TYPE}
-     * @param result Value of result.
-     */
-    public ExpressionResult(int type, double result) {
-        isResult = true;
-        this.type = type;
-        this.result = result;
-    }
+	/**
+	 * Create a new result.
+	 *
+	 * @param type   Type of the result, e.g.
+	 *               {@link nz.org.venice.parser.Expression#BOOLEAN_TYPE}
+	 * @param result Value of result.
+	 */
+	public ExpressionResult(int type, double result) {
+		isResult = true;
+		this.type = type;
+		this.result = result;
+	}
 
-    /**
-     * Get result value.
-     *
-     * @return Result value.
-     */
-    public double getResult() {
-        return result;
-    }
+	/**
+	 * Get result value.
+	 *
+	 * @return Result value.
+	 */
+	public double getResult() {
+		return result;
+	}
 
-    /**
-     * Return a string representation of the result.
-     *
-     * @return String value.
-     */
-    public String toString() {
-        if(isResult)
-            return NumberExpression.toString(type, result);
-        else
-            return "";
-    }
-    
-    /**
-     * Compare this result to another result.
-     *
-     * @param object Result to compare with.
-     * @return <code>-1</code>if the result is before this result;
-     *         <code>0</code>if the results are equal;
-     *         <code>1</code> if the result is after this result.
-     */
-    public int compareTo(Object object) {
-        ExpressionResult result = (ExpressionResult)object;
-        if(getResult() < result.getResult())
-            return -1;
-        if(getResult() > result.getResult())
-            return 1;
-        else
-            return 0;
-    }
+	/**
+	 * Return a string representation of the result.
+	 *
+	 * @return String value.
+	 */
+	public String toString() {
+		if (isResult)
+			return NumberExpression.toString(type, result);
+		else
+			return "";
+	}
+
+	/**
+	 * Compare this result to another result.
+	 *
+	 * @param object Result to compare with.
+	 * @return <code>-1</code>if the result is before this result; <code>0</code>if
+	 *         the results are equal; <code>1</code> if the result is after this
+	 *         result.
+	 */
+	public int compareTo(Object object) {
+		ExpressionResult result = (ExpressionResult) object;
+		if (getResult() < result.getResult())
+			return -1;
+		if (getResult() > result.getResult())
+			return 1;
+		else
+			return 0;
+	}
 }

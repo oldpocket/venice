@@ -46,11 +46,11 @@ public class GenericWSIDQuoteImport {
 	// The following symbols will be replaced by the quote, date range we are after:
 	private final static String SYMBOLS = "_SYM_";
 
-	// Let's define the URL pattern that must be followed by the Generic Web Service.
+	// Let's define the URL pattern that must be followed by the Generic Web
+	// Service.
 	private final static String URL_PATTERN = ("s=" + SYMBOLS);
 
-	private final static String GENERIC_WS_URL_PATTERN =
-			("http://yfinance.lealis.com.br/id_quotes?" + URL_PATTERN);
+	private final static String GENERIC_WS_URL_PATTERN = ("http://yfinance.lealis.com.br/id_quotes?" + URL_PATTERN);
 
 	// This class is not instantiated.
 	private GenericWSIDQuoteImport() {
@@ -61,19 +61,18 @@ public class GenericWSIDQuoteImport {
 	 * Retrieve intra-day quotes from Web Service.
 	 *
 	 * @param symbols the symbols to import.
-	 * @param suffix optional suffix to append (e.g. ".AX"). This suffix tells
-	 *    which exchange the symbol belongs to and need to be supported by the Generic Web Service.
+	 * @param suffix  optional suffix to append (e.g. ".AX"). This suffix tells
+	 *                which exchange the symbol belongs to and need to be supported
+	 *                by the Generic Web Service.
 	 * @exception ImportExportException if there was an error retrieving the quotes
 	 */
-	public static List importSymbols(List symbols, String suffix)
-			throws ImportExportException {
+	public static List importSymbols(List symbols, String suffix) throws ImportExportException {
 
 		List quotes = new ArrayList();
 		String URLString = constructURL(symbols, suffix);
 		IDQuoteFilter filter = new GenericWSIDQuoteFilter();
 
-		PreferencesManager.ProxyPreferences proxyPreferences =
-				PreferencesManager.getProxySettings();
+		PreferencesManager.ProxyPreferences proxyPreferences = PreferencesManager.getProxySettings();
 
 		try {
 			URL url = new URL(URLString);
@@ -85,53 +84,46 @@ public class GenericWSIDQuoteImport {
 			do {
 				line = bufferedInput.readLine();
 
-				if(line != null) {
+				if (line != null) {
 					try {
 						IDQuote quote = filter.toIDQuote(line);
 						quote.verify();
 						quotes.add(quote);
-					}
-					catch(QuoteFormatException e) {
+					} catch (QuoteFormatException e) {
 						// Ignore
 					}
 				}
-			}
-			while(line != null);
+			} while (line != null);
 
 			bufferedInput.close();
 		}
 
-		catch(BindException e) {
-			throw new ImportExportException(Locale.getString("UNABLE_TO_CONNECT_ERROR",
-					e.getMessage()));
+		catch (BindException e) {
+			throw new ImportExportException(Locale.getString("UNABLE_TO_CONNECT_ERROR", e.getMessage()));
 		}
 
-		catch(ConnectException e) {
-			throw new ImportExportException(Locale.getString("UNABLE_TO_CONNECT_ERROR",
-					e.getMessage()));
+		catch (ConnectException e) {
+			throw new ImportExportException(Locale.getString("UNABLE_TO_CONNECT_ERROR", e.getMessage()));
 		}
 
-		catch(UnknownHostException e) {
-			throw new ImportExportException(Locale.getString("UNKNOWN_HOST_ERROR",
-					e.getMessage()));
+		catch (UnknownHostException e) {
+			throw new ImportExportException(Locale.getString("UNKNOWN_HOST_ERROR", e.getMessage()));
 		}
 
-		catch(NoRouteToHostException e) {
-			throw new ImportExportException(Locale.getString("DESTINATION_UNREACHABLE_ERROR",
-					e.getMessage()));
+		catch (NoRouteToHostException e) {
+			throw new ImportExportException(Locale.getString("DESTINATION_UNREACHABLE_ERROR", e.getMessage()));
 		}
 
-		catch(MalformedURLException e) {
-			throw new ImportExportException(Locale.getString("INVALID_PROXY_ERROR",
-					proxyPreferences.host,
-					proxyPreferences.port));
+		catch (MalformedURLException e) {
+			throw new ImportExportException(
+					Locale.getString("INVALID_PROXY_ERROR", proxyPreferences.host, proxyPreferences.port));
 		}
 
-		catch(FileNotFoundException e) {
+		catch (FileNotFoundException e) {
 			throw new ImportExportException(Locale.getString("ERROR_DOWNLOADING_QUOTES"));
 		}
 
-		catch(IOException e) {
+		catch (IOException e) {
 			throw new ImportExportException(Locale.getString("ERROR_DOWNLOADING_QUOTES"));
 		}
 
@@ -139,35 +131,40 @@ public class GenericWSIDQuoteImport {
 	}
 
 	/**
-	 * Construct the URL necessary to retrieve all the quotes for the given symbol between
-	 * the given dates from Web Service.
+	 * Construct the URL necessary to retrieve all the quotes for the given symbol
+	 * between the given dates from Web Service.
 	 *
 	 * @param symbols the symbos to import.
-	 * @param suffix optional suffix to append (e.g. ".AX"). This suffix tells
-	 *    which exchange the symbol belongs to and need to be supported by the Generic Web Service.
+	 * @param suffix  optional suffix to append (e.g. ".AX"). This suffix tells
+	 *                which exchange the symbol belongs to and need to be supported
+	 *                by the Generic Web Service.
 	 * @return URL string
 	 */
 	private static String constructURL(List symbols, String suffix) {
 		String URLString = GENERIC_WS_URL_PATTERN;
 		String symbolStringList = "";
 
-		if (suffix == null) suffix = "";
+		if (suffix == null)
+			suffix = "";
 
 		// Construct a plus separated list of symbols, e.g. IBM+MSFT+...
-		for(Iterator iterator = symbols.iterator(); iterator.hasNext();) {
-			Symbol symbol = (Symbol)iterator.next();
+		for (Iterator iterator = symbols.iterator(); iterator.hasNext();) {
+			Symbol symbol = (Symbol) iterator.next();
 			String symbolString = symbol.toString();
 
-			// Append symbol with optional suffix. If the user has not provided a full-stop, provide
+			// Append symbol with optional suffix. If the user has not provided a full-stop,
+			// provide
 			// them with one.
-			if(suffix.length() > 0) {
-				if(!suffix.startsWith(".")) symbolString += ".";
+			if (suffix.length() > 0) {
+				if (!suffix.startsWith("."))
+					symbolString += ".";
 				symbolString += suffix;
 			}
 
 			symbolStringList += symbolString;
 
-			if(iterator.hasNext()) symbolStringList += "%2B"; // character '+' url encoded
+			if (iterator.hasNext())
+				symbolStringList += "%2B"; // character '+' url encoded
 		}
 
 		URLString = Find.replace(URLString, SYMBOLS, symbolStringList);

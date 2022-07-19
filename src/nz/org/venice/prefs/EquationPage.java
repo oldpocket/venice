@@ -37,130 +37,129 @@ import javax.swing.event.ListSelectionListener;
 import nz.org.venice.util.Locale;
 
 /**
- * Provides a preference page to let the user manage stored equations.
- * Stored equations are equations which are mapped to names so that
- * the user does not have to type in the same equations each time they
- * are required, but can instead reference them with a name.
+ * Provides a preference page to let the user manage stored equations. Stored
+ * equations are equations which are mapped to names so that the user does not
+ * have to type in the same equations each time they are required, but can
+ * instead reference them with a name.
  *
  * @author Daniel Makovec
  */
-public class EquationPage extends JPanel implements PreferencesPage
-{
-    /** The desktop that new windows are opened upon */
-    private JDesktopPane desktop;
-    
-    private EquationTable equationTable;
-    private JButton addEquationButton;
-    private JButton editEquationButton;
-    private JButton deleteEquationsButton;
-    
-    /**
-     * Create a new stored equation preferences page.
-     *
-     * @param desktop the parent desktop.
-     */
-    public EquationPage(JDesktopPane desktop) {
-        this.desktop = desktop;
+public class EquationPage extends JPanel implements PreferencesPage {
+	/** The desktop that new windows are opened upon */
+	private JDesktopPane desktop;
 
-	setLayout(new BorderLayout());
-	equationTable = new EquationTable();
-	add(new JScrollPane(equationTable), BorderLayout.CENTER);
+	private EquationTable equationTable;
+	private JButton addEquationButton;
+	private JButton editEquationButton;
+	private JButton deleteEquationsButton;
 
-	JPanel buttonPanel = new JPanel();
-	addEquationButton = new JButton(Locale.getString("ADD"));
-	addEquationButton.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-		    equationTable.add();
-		    checkButtonDisabledStatus();
-		}});
+	/**
+	 * Create a new stored equation preferences page.
+	 *
+	 * @param desktop the parent desktop.
+	 */
+	public EquationPage(JDesktopPane desktop) {
+		this.desktop = desktop;
 
-	editEquationButton = new JButton(Locale.getString("EDIT"));
-	editEquationButton.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-		    int[] selectedRows = equationTable.getSelectedRows();
-		    if(selectedRows.length == 1)
-			equationTable.edit(selectedRows[0]);
-		}});
+		setLayout(new BorderLayout());
+		equationTable = new EquationTable();
+		add(new JScrollPane(equationTable), BorderLayout.CENTER);
 
-	deleteEquationsButton = new JButton(Locale.getString("DELETE"));
-	deleteEquationsButton.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
+		JPanel buttonPanel = new JPanel();
+		addEquationButton = new JButton(Locale.getString("ADD"));
+		addEquationButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				equationTable.add();
+				checkButtonDisabledStatus();
+			}
+		});
 
-		    //It looks like theres a confirmation in 
-		    //ExpressionComboBox, but I've never seen it fire.
-		    int option = JOptionPane.
-			showConfirmDialog(null,
-					  Locale.getString("SURE_DELETE_EQUATION", ""),
-					  Locale.getString("DELETE_EQUATION"),
-					  JOptionPane.YES_NO_OPTION);
-		    
-		    if(option == JOptionPane.YES_OPTION) {
-			equationTable.delete(equationTable.getSelectedRows());
-			checkButtonDisabledStatus();
-		    }
-		}});
-						
-	buttonPanel.add(addEquationButton);
-	buttonPanel.add(editEquationButton);
-	buttonPanel.add(deleteEquationsButton);
-	
-	add(buttonPanel, BorderLayout.SOUTH);
-	checkButtonDisabledStatus();
+		editEquationButton = new JButton(Locale.getString("EDIT"));
+		editEquationButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int[] selectedRows = equationTable.getSelectedRows();
+				if (selectedRows.length == 1)
+					equationTable.edit(selectedRows[0]);
+			}
+		});
 
-	// If the user double clicks on an equation, edit the equation
-	equationTable.addMouseListener(new MouseAdapter() {
-		public void mouseClicked(MouseEvent event) {
-                    handleMouseClicked(event);
-                }
-            });
-	
-	// Update the button enabled/disabled status depending on what is selected
-	equationTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-		public void valueChanged(ListSelectionEvent e) {
-		    checkButtonDisabledStatus();
-		}
-	});
-    }
+		deleteEquationsButton = new JButton(Locale.getString("DELETE"));
+		deleteEquationsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 
-    // If the user double clicks on an equation with the LMB, edit the equation
-    private void handleMouseClicked(MouseEvent event) {
-	if(event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 2) {
-	    Point point = event.getPoint();
-	    int row = equationTable.getUnsortedRow(equationTable.rowAtPoint(point));
-	    equationTable.edit(row);
+				// It looks like theres a confirmation in
+				// ExpressionComboBox, but I've never seen it fire.
+				int option = JOptionPane.showConfirmDialog(null, Locale.getString("SURE_DELETE_EQUATION", ""),
+						Locale.getString("DELETE_EQUATION"), JOptionPane.YES_NO_OPTION);
+
+				if (option == JOptionPane.YES_OPTION) {
+					equationTable.delete(equationTable.getSelectedRows());
+					checkButtonDisabledStatus();
+				}
+			}
+		});
+
+		buttonPanel.add(addEquationButton);
+		buttonPanel.add(editEquationButton);
+		buttonPanel.add(deleteEquationsButton);
+
+		add(buttonPanel, BorderLayout.SOUTH);
+		checkButtonDisabledStatus();
+
+		// If the user double clicks on an equation, edit the equation
+		equationTable.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent event) {
+				handleMouseClicked(event);
+			}
+		});
+
+		// Update the button enabled/disabled status depending on what is selected
+		equationTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				checkButtonDisabledStatus();
+			}
+		});
 	}
-    }
 
-    // Enable or disable the buttons depending on how many equations are highlighted
-    // in the table
-    private void checkButtonDisabledStatus() {
-	int numberOfSelectedRows = equationTable.getSelectedRowCount();
-	editEquationButton.setEnabled(numberOfSelectedRows == 1);
-	deleteEquationsButton.setEnabled(numberOfSelectedRows > 0);
-    }
+	// If the user double clicks on an equation with the LMB, edit the equation
+	private void handleMouseClicked(MouseEvent event) {
+		if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 2) {
+			Point point = event.getPoint();
+			int row = equationTable.getUnsortedRow(equationTable.rowAtPoint(point));
+			equationTable.edit(row);
+		}
+	}
 
-    /**
-     * Update the preferences file.
-     */
-    public void save() {
-	equationTable.save();
-    }    
+	// Enable or disable the buttons depending on how many equations are highlighted
+	// in the table
+	private void checkButtonDisabledStatus() {
+		int numberOfSelectedRows = equationTable.getSelectedRowCount();
+		editEquationButton.setEnabled(numberOfSelectedRows == 1);
+		deleteEquationsButton.setEnabled(numberOfSelectedRows > 0);
+	}
 
-    /**
-     * Return displayed component for this page.
-     *
-     * @return the component to display.
-     */
-    public JComponent getComponent() {
-        return this;
-    }    
+	/**
+	 * Update the preferences file.
+	 */
+	public void save() {
+		equationTable.save();
+	}
 
-    /**
-     * Return the window title.
-     *
-     * @return	the window title.
-     */
-    public String getTitle() {
-        return Locale.getString("EQUATION_PAGE_TITLE");
-    }
+	/**
+	 * Return displayed component for this page.
+	 *
+	 * @return the component to display.
+	 */
+	public JComponent getComponent() {
+		return this;
+	}
+
+	/**
+	 * Return the window title.
+	 *
+	 * @return the window title.
+	 */
+	public String getTitle() {
+		return Locale.getString("EQUATION_PAGE_TITLE");
+	}
 }

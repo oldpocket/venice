@@ -24,10 +24,10 @@ import java.util.List;
 
 import nz.org.venice.quote.Symbol;
 
-/** 
- * Representation of a watch screen. A watch screen contains a list of
- * stock symbols that the user has grouped together to monitor. Each watch
- * screen also has its own name.
+/**
+ * Representation of a watch screen. A watch screen contains a list of stock
+ * symbols that the user has grouped together to monitor. Each watch screen also
+ * has its own name.
  *
  * @author Andrew Leppard
  * @see Symbol
@@ -81,7 +81,7 @@ public class WatchScreen {
 	 * @param symbol the symbol to add.
 	 */
 	public void addSymbol(Symbol symbol) {
-		if(!symbols.contains(symbol))
+		if (!symbols.contains(symbol))
 			symbols.add(symbol);
 	}
 
@@ -91,8 +91,8 @@ public class WatchScreen {
 	 * @param symbols the list of symbols to add.
 	 */
 	public void addSymbols(List symbols) {
-		for(Iterator iterator = symbols.iterator(); iterator.hasNext();)
-			addSymbol((Symbol)iterator.next());
+		for (Iterator iterator = symbols.iterator(); iterator.hasNext();)
+			addSymbol((Symbol) iterator.next());
 	}
 
 	/**

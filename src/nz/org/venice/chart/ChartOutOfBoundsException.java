@@ -19,28 +19,27 @@
 package nz.org.venice.chart;
 
 /**
- * An exception which is raised when the chart is zoomed in where there 
- * is no graph data. 
+ * An exception which is raised when the chart is zoomed in where there is no
+ * graph data.
  *
  *
  * @author Mark Hummel
  */
 public class ChartOutOfBoundsException extends Throwable {
 
+	/**
+	 * Create a ChartOutOfBounds exception.
+	 *
+	 * @param reason for the exception.
+	 */
+	public ChartOutOfBoundsException(int reason) {
+	}
 
-    /**
-     * Create a ChartOutOfBounds exception.
-     *
-     * @param reason for the exception.
-     */    
-    public ChartOutOfBoundsException(int reason) {
-    }
-
-    /**
-     *  Create a ChartOutOfBounds exception.
-     *
-     */
-    public ChartOutOfBoundsException() {
-    }
+	/**
+	 * Create a ChartOutOfBounds exception.
+	 *
+	 */
+	public ChartOutOfBoundsException() {
+	}
 
 }

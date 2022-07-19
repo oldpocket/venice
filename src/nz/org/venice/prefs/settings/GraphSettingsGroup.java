@@ -28,50 +28,44 @@ package nz.org.venice.prefs.settings;
 
 public class GraphSettingsGroup {
 
-    private int levelIndex;
-    private String symbol;
-    private GraphSettings graphSettings;
-    private java.util.List subGraphSettingsList; //A list of graphSettingsGroup objects
-	
+	private int levelIndex;
+	private String symbol;
+	private GraphSettings graphSettings;
+	private java.util.List subGraphSettingsList; // A list of graphSettingsGroup objects
 
 	public GraphSettingsGroup() {
 
 	}
 
 	public GraphSettings getGraphSettings() {
-	    return graphSettings;
+		return graphSettings;
 	}
 
 	public void setGraphSettings(GraphSettings graphSettings) {
-	    this.graphSettings = graphSettings;
+		this.graphSettings = graphSettings;
 	}
 
 	public java.util.List getSubGraphSettingsList() {
-	    return subGraphSettingsList;
+		return subGraphSettingsList;
 	}
 
 	public void setSubGraphSettingsList(java.util.List subGraphSettingsList) {
-	    this.subGraphSettingsList = subGraphSettingsList;
+		this.subGraphSettingsList = subGraphSettingsList;
 	}
 
 	public int getLevelIndex() {
-	    return levelIndex;
+		return levelIndex;
 	}
 
 	public void setLevelIndex(int levelIndex) {
-	    this.levelIndex = levelIndex;
+		this.levelIndex = levelIndex;
 	}
 
 	public String getSymbol() {
-	    return symbol;
+		return symbol;
 	}
 
 	public void setSymbol(String symbol) {
-	    this.symbol = symbol;
+		this.symbol = symbol;
 	}
 }
-
-
-
-
-

@@ -38,72 +38,71 @@ import nz.org.venice.util.LocaleConstants;
  * @author Alberto Nacher
  */
 public class LanguagePage extends JPanel implements PreferencesPage {
-    
-    final private static int localeCount = LocaleConstants.localeCount;
-    final private static java.util.Locale[] locales = LocaleConstants.locales;
-    final private ButtonGroup group = new ButtonGroup();
-    final private JRadioButton[] radioButtons = new JRadioButton[localeCount];
-    
-        
-    private JDesktopPane desktop = null;
-    private String languageCode = null;
-    
-    /**
-     * Create a new language preferences page.
-     *
-     * @param	desktop	the parent desktop.
-     */
-    public LanguagePage(JDesktopPane desktop) {
-	this.desktop = desktop;
-	
-	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-	
-	add(createLanguagePanel());
-    }
-    
-    private JPanel createLanguagePanel() {
-	JPanel languagePanel = new JPanel();
-	languagePanel.setLayout(new BorderLayout());
-	JPanel borderPanel = new JPanel();
-        borderPanel.setLayout(new BoxLayout(borderPanel, BoxLayout.PAGE_AXIS));
-	
-        languageCode = PreferencesManager.getLanguageCode();
-        
-        if (languageCode == null)
-            languageCode = Locale.getLocale().getISO3Language();
 
-        for (int i = 0; i < localeCount; i++) {
-            radioButtons[i] = new JRadioButton(locales[i].getDisplayLanguage(Locale.getLocale()));
-            radioButtons[i].setActionCommand(new Integer(i).toString());
-            if (languageCode.equals(locales[i].getISO3Language()))
-                radioButtons[i].setSelected(true);
-            
-            group.add(radioButtons[i]);
-            borderPanel.add(radioButtons[i]);
-        
-            radioButtons[i].addActionListener(new ActionListener() {
-                    public void actionPerformed(final ActionEvent e) {
-                        String command = group.getSelection().getActionCommand();
-                        int i = Integer.parseInt(command);
-                        languageCode = locales[i].getISO3Language();
-                    }
-                });
-        }
+	final private static int localeCount = LocaleConstants.localeCount;
+	final private static java.util.Locale[] locales = LocaleConstants.locales;
+	final private ButtonGroup group = new ButtonGroup();
+	final private JRadioButton[] radioButtons = new JRadioButton[localeCount];
 
-	languagePanel.add(borderPanel, BorderLayout.NORTH);
+	private JDesktopPane desktop = null;
+	private String languageCode = null;
 
-	return languagePanel;
-    }
-    
-    public String getTitle() {
-	return Locale.getString("LANGUAGE_PAGE_TITLE");
-    }
-    
-    public void save() {
-	PreferencesManager.putLanguageCode(languageCode);
-    }
-    
-    public JComponent getComponent() {
-	return this;
-    }
+	/**
+	 * Create a new language preferences page.
+	 *
+	 * @param desktop the parent desktop.
+	 */
+	public LanguagePage(JDesktopPane desktop) {
+		this.desktop = desktop;
+
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+		add(createLanguagePanel());
+	}
+
+	private JPanel createLanguagePanel() {
+		JPanel languagePanel = new JPanel();
+		languagePanel.setLayout(new BorderLayout());
+		JPanel borderPanel = new JPanel();
+		borderPanel.setLayout(new BoxLayout(borderPanel, BoxLayout.PAGE_AXIS));
+
+		languageCode = PreferencesManager.getLanguageCode();
+
+		if (languageCode == null)
+			languageCode = Locale.getLocale().getISO3Language();
+
+		for (int i = 0; i < localeCount; i++) {
+			radioButtons[i] = new JRadioButton(locales[i].getDisplayLanguage(Locale.getLocale()));
+			radioButtons[i].setActionCommand(new Integer(i).toString());
+			if (languageCode.equals(locales[i].getISO3Language()))
+				radioButtons[i].setSelected(true);
+
+			group.add(radioButtons[i]);
+			borderPanel.add(radioButtons[i]);
+
+			radioButtons[i].addActionListener(new ActionListener() {
+				public void actionPerformed(final ActionEvent e) {
+					String command = group.getSelection().getActionCommand();
+					int i = Integer.parseInt(command);
+					languageCode = locales[i].getISO3Language();
+				}
+			});
+		}
+
+		languagePanel.add(borderPanel, BorderLayout.NORTH);
+
+		return languagePanel;
+	}
+
+	public String getTitle() {
+		return Locale.getString("LANGUAGE_PAGE_TITLE");
+	}
+
+	public void save() {
+		PreferencesManager.putLanguageCode(languageCode);
+	}
+
+	public JComponent getComponent() {
+		return this;
+	}
 }

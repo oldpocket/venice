@@ -30,90 +30,84 @@ import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
 
 public class ANNResult {
-    private Portfolio portfolio;
-    private EODQuoteBundle quoteBundle;
-    private Money initialCapital;
-    private Money tradeCost;
-    private TradingDate startDate;	
-    private TradingDate endDate;
-    private String tip;
+	private Portfolio portfolio;
+	private EODQuoteBundle quoteBundle;
+	private Money initialCapital;
+	private Money tradeCost;
+	private TradingDate startDate;
+	private TradingDate endDate;
+	private String tip;
 
-    public ANNResult(Portfolio portfolio, EODQuoteBundle quoteBundle,
-                            Money initialCapital, Money tradeCost,
-                            TradingDate startDate,
-                            TradingDate endDate,
-                            String tip) {
-        this.portfolio = portfolio;
-        this.quoteBundle = quoteBundle;
-        this.initialCapital = initialCapital;
-        this.tradeCost = tradeCost;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.tip = tip;
-    }
+	public ANNResult(Portfolio portfolio, EODQuoteBundle quoteBundle, Money initialCapital, Money tradeCost,
+			TradingDate startDate, TradingDate endDate, String tip) {
+		this.portfolio = portfolio;
+		this.quoteBundle = quoteBundle;
+		this.initialCapital = initialCapital;
+		this.tradeCost = tradeCost;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.tip = tip;
+	}
 
-    public TradingDate getStartDate() {
-        return startDate;
-    }
+	public TradingDate getStartDate() {
+		return startDate;
+	}
 
-    public TradingDate getEndDate() {
-        return endDate;
-    }
+	public TradingDate getEndDate() {
+		return endDate;
+	}
 
-    public String getSymbols() {
-        List symbolsTraded = getPortfolio().getSymbolsTraded();
-        
-        String string = new String();
-        Iterator iterator = symbolsTraded.iterator();
-        while(iterator.hasNext()) {
-            Symbol symbol = (Symbol)iterator.next();
-            
-            if(string.length() > 0)
-                string = string.concat(", " + symbol.toString());
-            else
-                string = symbol.toString();
-        }
-        
-        return string;
-    }
+	public String getSymbols() {
+		List symbolsTraded = getPortfolio().getSymbolsTraded();
 
-    public Money getTradeCost() {
-        return tradeCost;
-    }
+		String string = new String();
+		Iterator iterator = symbolsTraded.iterator();
+		while (iterator.hasNext()) {
+			Symbol symbol = (Symbol) iterator.next();
 
-    public int getNumberTrades() {
-        int accumulateTrades = 
-            getPortfolio().countTransactions(Transaction.ACCUMULATE);
-        int reduceTrades =
-            getPortfolio().countTransactions(Transaction.REDUCE);
-        
-        return accumulateTrades + reduceTrades;
-    }
+			if (string.length() > 0)
+				string = string.concat(", " + symbol.toString());
+			else
+				string = symbol.toString();
+		}
 
-    public Money getInitialCapital() {
-        return initialCapital;
-    }
+		return string;
+	}
 
-    public Money getFinalCapital() {
-        try {
-            return portfolio.getValue(getQuoteBundle(), getEndDate());
-        }
-        catch(MissingQuoteException e) {
-            // Already checked...
-            assert false;
-            return Money.ZERO;
-        }
-    }
+	public Money getTradeCost() {
+		return tradeCost;
+	}
 
-    public Portfolio getPortfolio() {
-        return portfolio;
-    }
+	public int getNumberTrades() {
+		int accumulateTrades = getPortfolio().countTransactions(Transaction.ACCUMULATE);
+		int reduceTrades = getPortfolio().countTransactions(Transaction.REDUCE);
 
-    public EODQuoteBundle getQuoteBundle() {
-        return quoteBundle;
-    }
-    
-    public String getTip() {
-        return tip;
-    }
+		return accumulateTrades + reduceTrades;
+	}
+
+	public Money getInitialCapital() {
+		return initialCapital;
+	}
+
+	public Money getFinalCapital() {
+		try {
+			return portfolio.getValue(getQuoteBundle(), getEndDate());
+		} catch (MissingQuoteException e) {
+			// Already checked...
+			assert false;
+			return Money.ZERO;
+		}
+	}
+
+	public Portfolio getPortfolio() {
+		return portfolio;
+	}
+
+	public EODQuoteBundle getQuoteBundle() {
+		return quoteBundle;
+	}
+
+	public String getTip() {
+		return tip;
+	}
 }

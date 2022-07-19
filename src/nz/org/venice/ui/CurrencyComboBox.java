@@ -33,44 +33,43 @@ import nz.org.venice.util.Currency;
  * @author Andrew Leppard
  */
 public class CurrencyComboBox extends JComboBox {
-    
-    // List of currencies displayed in ComboBox
-    private List currencyList;
 
-    /**
-     * Create a new Currency ComboBox with the given currency initialy selected.
-     *
-     * @param defaultCurrency the default selected currency
-     */
-    public CurrencyComboBox(Currency defaultCurrency) {
-        super();
-        
-        currencyList = Currency.getAvailableCurrencies();
-        for (Iterator iterator = currencyList.iterator(); iterator.hasNext();)
-            addItem(iterator.next());
+	// List of currencies displayed in ComboBox
+	private List currencyList;
 
-        // Select default currency
-        setSelectedItem(defaultCurrency);
-    }
+	/**
+	 * Create a new Currency ComboBox with the given currency initialy selected.
+	 *
+	 * @param defaultCurrency the default selected currency
+	 */
+	public CurrencyComboBox(Currency defaultCurrency) {
+		super();
 
-    /**
-     * Create a new Currency ComboBox. The currency for the default locale will initially
-     * be selected.
-     */
-    public CurrencyComboBox() {
-        this(Currency.getDefaultCurrency());
-    }
+		currencyList = Currency.getAvailableCurrencies();
+		for (Iterator iterator = currencyList.iterator(); iterator.hasNext();)
+			addItem(iterator.next());
 
-    /**
-     * Return the currency currently selected in the ComboBox.
-     *
-     * @return the currently selected currency.
-     */
-    public Currency getSelectedCurrency() {
-        int index = getSelectedIndex();
+		// Select default currency
+		setSelectedItem(defaultCurrency);
+	}
 
-        assert index < currencyList.size();
-        return (Currency)currencyList.get(index);
-    }
+	/**
+	 * Create a new Currency ComboBox. The currency for the default locale will
+	 * initially be selected.
+	 */
+	public CurrencyComboBox() {
+		this(Currency.getDefaultCurrency());
+	}
+
+	/**
+	 * Return the currency currently selected in the ComboBox.
+	 *
+	 * @return the currently selected currency.
+	 */
+	public Currency getSelectedCurrency() {
+		int index = getSelectedIndex();
+
+		assert index < currencyList.size();
+		return (Currency) currencyList.get(index);
+	}
 }
-    

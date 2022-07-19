@@ -26,90 +26,88 @@ import javax.swing.text.html.HTML.Tag;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.parser.ParserDelegator;
 
-
 /**
- * This class implements the help search functionality for the {@link HelpPage} Venice.
+ * This class implements the help search functionality for the {@link HelpPage}
+ * Venice.
+ * 
  * @see HelpModule
  */
-public class HelpSearch  {
+public class HelpSearch {
 
-    String searchText;
+	String searchText;
 
-    public HelpSearch(String text) {
-		HTMLEditorKit.ParserCallback callback =
-	    new HTMLEditorKit.ParserCallback () {
+	public HelpSearch(String text) {
+		HTMLEditorKit.ParserCallback callback = new HTMLEditorKit.ParserCallback() {
 
-		/*
-		  Parse the HTML creating a text string which resembles closely
-		  as possible how the output appears in the EditorPane.
+			/*
+			 * Parse the HTML creating a text string which resembles closely as possible how
+			 * the output appears in the EditorPane.
+			 * 
+			 * When a search is done, the index of the text in the pane will be the same as
+			 * the string created here.
+			 */
 
-		  When a search is done, the index of the text in the pane
-		  will be the same as the string created here.
-		 */
+			public void handleText(char[] data, int pos) {
+				for (int i = 0; i < data.length; i++) {
+					searchText += data[i];
+				}
+			}
 
-		public void handleText(char[] data, int pos) {
-                    for (int i = 0; i < data.length; i++) {
-                        searchText += data[i];
-                    }
-                }
+			public void handleSimpleTag(Tag t, MutableAttributeSet a, int pos) {
+			}
 
-		public void handleSimpleTag(Tag t, MutableAttributeSet a,
-				       int pos) {
+			public void handleStartTag(Tag t, MutableAttributeSet a, int pos) {
+				if (t == Tag.LI) {
+					searchText += "\n";
+				}
+				if (t == Tag.P) {
+					searchText += "\n";
+				}
+
+				if (t == Tag.H2) {
+					searchText += "\n";
+				}
+
+				if (t == Tag.H3) {
+					searchText += "\n";
+				}
+
+				if (t == Tag.UL) {
+				}
+
+				if (t == Tag.I) {
+				}
+
+				if (t == Tag.PRE) {
+					searchText += "\n";
+				}
+			}
+
+			// The last line of html text is newline
+			public void handleEndOfLineString(String eol) {
+				searchText += "\n";
+			}
+
+			public void handleComment(Tag t, MutableAttributeSet a, int pos) {
+			}
+
+		};
+
+		try {
+			searchText = "";
+
+			Reader reader = new StringReader(text);
+			new ParserDelegator().parse(reader, callback, false);
+		} catch (java.io.FileNotFoundException e) {
+			System.out.println("filenotfound: " + e);
+		} catch (java.io.IOException e) {
+			System.out.println("ioexception: " + e);
 		}
-		public void handleStartTag(Tag t, MutableAttributeSet a,
-				       int pos) {
-		    if (t == Tag.LI) {
-			searchText += "\n";
-		    }
-		    if (t == Tag.P) {
-			searchText += "\n";
-		    }
 
-                    if (t == Tag.H2) {
-                        searchText += "\n";
-                    }
-
-		    if (t == Tag.H3) {
-			searchText += "\n";
-		    }
-
-		    if (t == Tag.UL) {
-		    }
-
-		    if (t == Tag.I) {
-		    }
-
-		    if (t == Tag.PRE) {
-			searchText += "\n";
-		    }
-		}
-
-
-		//The last line of html text is newline
-		public void handleEndOfLineString(String eol) {
-		    searchText += "\n";
-		}
-		public void handleComment(Tag t, MutableAttributeSet a,
-				       int pos) {
-		}
-
-	    };
-
-	try {
-	    searchText = "";
-
-	    Reader reader = new StringReader(text);
-	    new ParserDelegator().parse(reader, callback, false);
-	} catch (java.io.FileNotFoundException e) {
-	    System.out.println("filenotfound: " + e);
-	} catch (java.io.IOException e) {
-	    System.out.println("ioexception: " + e);
 	}
 
-    }
-
-    public int find(String searchTerm, int prevIndex) {
-	return searchText.indexOf(searchTerm, prevIndex);
-    }
+	public int find(String searchTerm, int prevIndex) {
+		return searchText.indexOf(searchTerm, prevIndex);
+	}
 
 }

@@ -23,15 +23,16 @@ import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.TradingDateFormatException;
 
 /**
- * Provides a filter to parse the Generic Web Services end-of-day stock quote format.
- * This format uses a date with the month name, prices are in dollars.
- * The first column is the date, then open, high, low, close &
- * volume. The final field is the adjusted close.
+ * Provides a filter to parse the Generic Web Services end-of-day stock quote
+ * format. This format uses a date with the month name, prices are in dollars.
+ * The first column is the date, then open, high, low, close & volume. The final
+ * field is the adjusted close.
  *
- * This filter is not hooked up to the QuoteFilterList because we
- * cannot currently ask the user to enter the missing symbol.
+ * This filter is not hooked up to the QuoteFilterList because we cannot
+ * currently ask the user to enter the missing symbol.
  *
  * Example:
+ * 
  * <pre>
  * 16-Oct-03,38.75,39.15,38.22,38.70,307300,38.70
  * </pre>
@@ -53,35 +54,33 @@ public class GenericWSEODQuoteFilter implements EODQuoteFilter {
 	/**
 	 * Return the name of the filter.
 	 *
-	 * @return	the name of the filter.
+	 * @return the name of the filter.
 	 */
 	public String getName() {
 		return "Generic Web Service";
 	}
 
 	/**
-	 * Parse the given text string and returns the stock quote or null
-	 * if it did not contain a valid quote.
+	 * Parse the given text string and returns the stock quote or null if it did not
+	 * contain a valid quote.
 	 *
-	 * @param	quoteLine	a single line of text containing a quote
+	 * @param quoteLine a single line of text containing a quote
 	 * @exception QuoteFormatException if the quote could not be parsed
-	 * @return	the stock quote
+	 * @return the stock quote
 	 */
 	public EODQuote toEODQuote(String quoteLine) throws QuoteFormatException {
 		EODQuote quote = null;
 
-		if(quoteLine != null) {
+		if (quoteLine != null) {
 			String[] quoteParts = quoteLine.split(",");
 			int i = 0;
 
-			if(quoteParts.length == 7) {
+			if (quoteParts.length == 7) {
 				TradingDate date = null;
 
 				try {
-					date = new TradingDate(quoteParts[i++],
-							TradingDate.US);
-				}
-				catch(TradingDateFormatException e) {
+					date = new TradingDate(quoteParts[i++], TradingDate.US);
+				} catch (TradingDateFormatException e) {
 					throw new QuoteFormatException(e.getMessage());
 				}
 
@@ -93,15 +92,11 @@ public class GenericWSEODQuoteFilter implements EODQuoteFilter {
 					i++; // adjusted day close
 					long day_volume = Long.parseLong(quoteParts[i++]);
 
-					quote = new EODQuote(symbol, date, day_volume, day_low, day_high,
-							day_open, day_close);
-				} 
-				catch(NumberFormatException e) {
-					throw new QuoteFormatException(Locale.getString("ERROR_PARSING_NUMBER",
-							quoteParts[i - 1]));
+					quote = new EODQuote(symbol, date, day_volume, day_low, day_high, day_open, day_close);
+				} catch (NumberFormatException e) {
+					throw new QuoteFormatException(Locale.getString("ERROR_PARSING_NUMBER", quoteParts[i - 1]));
 				}
-			}
-			else
+			} else
 				throw new QuoteFormatException(Locale.getString("WRONG_FIELD_COUNT"));
 		}
 		return quote;
@@ -110,8 +105,8 @@ public class GenericWSEODQuoteFilter implements EODQuoteFilter {
 	/**
 	 * Convert the given stock quote to a string line.
 	 *
-	 * @param	quote	a stock quote
-	 * @return	string version of the quote
+	 * @param quote a stock quote
+	 * @return string version of the quote
 	 */
 	public String toString(EODQuote quote) {
 		throw new UnsupportedOperationException();

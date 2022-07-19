@@ -21,103 +21,101 @@ package nz.org.venice.prefs.settings;
 import java.awt.Rectangle;
 
 /**
- * This class stores geometry data and a module identifier for saved frames. 
+ * This class stores geometry data and a module identifier for saved frames.
  * 
  * @author Mark Hummel
  * @see ModuleFrameSettingsReader
  * @see ModuleFrameSettingsWriter
  * @see nz.org.venice.prefs.PreferencesManager
-   
+ * 
  */
 
 public class ModuleFrameSettings extends AbstractSettings {
-    Rectangle bounds;
-    String moduleKey;
-    Settings moduleSettings;
-    
-    
-    /**
-     *
-     * Create new ModuleFrameSettings. 
-     * 
-     */
+	Rectangle bounds;
+	String moduleKey;
+	Settings moduleSettings;
 
-    public ModuleFrameSettings() {
-	super(Settings.FRAME, Settings.MODULE);
-    }
+	/**
+	 *
+	 * Create new ModuleFrameSettings.
+	 * 
+	 */
 
-    /**
-     *
-     * Create new ModuleFrameSettings. 
-     * 
-     * @param   key     The ModuleFrame Settings Identifier       
-     */
+	public ModuleFrameSettings() {
+		super(Settings.FRAME, Settings.MODULE);
+	}
 
-    public ModuleFrameSettings(String key) {
-	super(Settings.FRAME, Settings.MODULE, key);
-    }
+	/**
+	 *
+	 * Create new ModuleFrameSettings.
+	 * 
+	 * @param key The ModuleFrame Settings Identifier
+	 */
 
-    /**
-     * Set the ModuleFrame bounds.
-     * 
-     * @param bounds  The JFrame bounds
-     */
+	public ModuleFrameSettings(String key) {
+		super(Settings.FRAME, Settings.MODULE, key);
+	}
 
-    public void setBounds(Rectangle bounds) {
-	this.bounds = bounds;
-    }
+	/**
+	 * Set the ModuleFrame bounds.
+	 * 
+	 * @param bounds The JFrame bounds
+	 */
 
-    /**
-     * 
-     * Set the module of the frame identifier (Deprecated)
-     * 
-     * @param key   The module identifier
-     */
+	public void setBounds(Rectangle bounds) {
+		this.bounds = bounds;
+	}
 
-    public void setModuleKey(String key) {
-	moduleKey = key;
-    }
+	/**
+	 * 
+	 * Set the module of the frame identifier (Deprecated)
+	 * 
+	 * @param key The module identifier
+	 */
 
-    public String getModuleKey() {
-	return moduleKey;
-    }
+	public void setModuleKey(String key) {
+		moduleKey = key;
+	}
 
+	public String getModuleKey() {
+		return moduleKey;
+	}
 
-    /**
-     * Return the geometry of the JFrame.
-     * 
-     * @return  The JFrame bounds  
-     */
+	/**
+	 * Return the geometry of the JFrame.
+	 * 
+	 * @return The JFrame bounds
+	 */
 
-    public Rectangle getBounds() {
-	return bounds;
-    }	
+	public Rectangle getBounds() {
+		return bounds;
+	}
 
-    /**
-     *  Return the Settings of the module of the frame.
-     *
-     * @return  The module settings as a Settings object.
-     *
-     */
-    public Settings getModuleSettings() {
-	return moduleSettings;
-    }
+	/**
+	 * Return the Settings of the module of the frame.
+	 *
+	 * @return The module settings as a Settings object.
+	 *
+	 */
+	public Settings getModuleSettings() {
+		return moduleSettings;
+	}
 
-    /**
-     *
-     * Set the module settings of the module.
-     * 
-     * @param moduleSettings   The module settings.
-     */
-    
-    public void setModuleSettings(Settings moduleSettings) {
-	this.moduleSettings = moduleSettings;
-    }
-    
-    /**
-     *
-     * Return a SettingsWriter to write the settings.
-     *
-     */
+	/**
+	 *
+	 * Set the module settings of the module.
+	 * 
+	 * @param moduleSettings The module settings.
+	 */
+
+	public void setModuleSettings(Settings moduleSettings) {
+		this.moduleSettings = moduleSettings;
+	}
+
+	/**
+	 *
+	 * Return a SettingsWriter to write the settings.
+	 *
+	 */
 
 }

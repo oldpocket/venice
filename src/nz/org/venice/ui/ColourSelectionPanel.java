@@ -35,38 +35,40 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 public class ColourSelectionPanel extends JPanel {
-    private ArrayList rbs;
-	
-    public ColourSelectionPanel(ArrayList colours) {
-      	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-    	ButtonGroup bg = new ButtonGroup();
+	private ArrayList rbs;
 
-	rbs = new ArrayList();
-	for(Iterator it = colours.iterator(); it.hasNext();) {
-	    Color c = (Color)it.next();
-	    JRadioButton btn = new JRadioButton("Venice",false);    	
-	    btn.setOpaque(true);
-	    btn.setBackground(c);
-	    btn.setForeground(c);
-	    btn.setAlignmentX(Component.CENTER_ALIGNMENT);
-	    add(btn);
-	    bg.add(btn);
-	    rbs.add(btn);
-	}
-    }
-	
-    public Color getSelectedColour() {
-        for(Iterator it = rbs.iterator(); it.hasNext();) {
-	    JRadioButton btn = (JRadioButton)it.next();
-	    if (btn.isSelected()) return btn.getBackground();
-	}
-	return Color.GRAY;
-    }
+	public ColourSelectionPanel(ArrayList colours) {
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		ButtonGroup bg = new ButtonGroup();
 
-  public void setSelectedColour(Color c) {
-    for(Iterator it = rbs.iterator(); it.hasNext();) {
-        JRadioButton btn = (JRadioButton)it.next();
-	if (btn.getBackground().equals(c)) btn.setSelected(true);
-    }
-  }
+		rbs = new ArrayList();
+		for (Iterator it = colours.iterator(); it.hasNext();) {
+			Color c = (Color) it.next();
+			JRadioButton btn = new JRadioButton("Venice", false);
+			btn.setOpaque(true);
+			btn.setBackground(c);
+			btn.setForeground(c);
+			btn.setAlignmentX(Component.CENTER_ALIGNMENT);
+			add(btn);
+			bg.add(btn);
+			rbs.add(btn);
+		}
+	}
+
+	public Color getSelectedColour() {
+		for (Iterator it = rbs.iterator(); it.hasNext();) {
+			JRadioButton btn = (JRadioButton) it.next();
+			if (btn.isSelected())
+				return btn.getBackground();
+		}
+		return Color.GRAY;
+	}
+
+	public void setSelectedColour(Color c) {
+		for (Iterator it = rbs.iterator(); it.hasNext();) {
+			JRadioButton btn = (JRadioButton) it.next();
+			if (btn.getBackground().equals(c))
+				btn.setSelected(true);
+		}
+	}
 }

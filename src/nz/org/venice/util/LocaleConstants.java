@@ -19,18 +19,14 @@
 package nz.org.venice.util;
 
 public final class LocaleConstants {
-    
-    // To be modified if another localization is added. Just add the supported languages here.
-    final public static java.util.Locale[] locales =  {
-	new java.util.Locale("CA"), // Catalan
-        java.util.Locale.ENGLISH,
-        java.util.Locale.FRENCH,
-	java.util.Locale.GERMAN,
-        java.util.Locale.ITALIAN,
-        java.util.Locale.SIMPLIFIED_CHINESE,
-	new java.util.Locale("SV"), // Swedish
-	new java.util.Locale("PL"), // Polish
-    };
 
-    final public static int localeCount = locales.length;
+	// To be modified if another localization is added. Just add the supported
+	// languages here.
+	final public static java.util.Locale[] locales = { new java.util.Locale("CA"), // Catalan
+			java.util.Locale.ENGLISH, java.util.Locale.FRENCH, java.util.Locale.GERMAN, java.util.Locale.ITALIAN,
+			java.util.Locale.SIMPLIFIED_CHINESE, new java.util.Locale("SV"), // Swedish
+			new java.util.Locale("PL"), // Polish
+	};
+
+	final public static int localeCount = locales.length;
 }

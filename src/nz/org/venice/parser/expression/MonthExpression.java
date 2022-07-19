@@ -29,34 +29,34 @@ import nz.org.venice.util.TradingDate;
  */
 public class MonthExpression extends TerminalExpression {
 
-    public MonthExpression() {
-        // nothing to do
-    }
+	public MonthExpression() {
+		// nothing to do
+	}
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) {
-        TradingDate date = quoteBundle.offsetToDate(day);
-        return date.getMonth();
-    }
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) {
+		TradingDate date = quoteBundle.offsetToDate(day);
+		return date.getMonth();
+	}
 
-    public String toString() {
-        return "month()";
-    }
+	public String toString() {
+		return "month()";
+	}
 
-    public int checkType() throws TypeMismatchException {
-	return getType();
-    }
+	public int checkType() throws TypeMismatchException {
+		return getType();
+	}
 
-    /**
-     * Get the type of the expression.
-     *
-     * @return returns {@link #INTEGER_TYPE}.
-     */
-    public int getType() {
-        return INTEGER_TYPE;
-    }
+	/**
+	 * Get the type of the expression.
+	 *
+	 * @return returns {@link #INTEGER_TYPE}.
+	 */
+	public int getType() {
+		return INTEGER_TYPE;
+	}
 
-    public Object clone() {
-        return new MonthExpression();
-    }
+	public Object clone() {
+		return new MonthExpression();
+	}
 
 }

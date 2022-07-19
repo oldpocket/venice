@@ -40,7 +40,7 @@ public interface IFileEODQuoteImport {
 	 */
 	public abstract boolean open(File file);
 
-	/** 
+	/**
 	 * Import the next bundle quotes from the file.
 	 *
 	 * @return list of quotes

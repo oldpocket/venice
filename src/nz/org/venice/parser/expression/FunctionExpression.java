@@ -32,104 +32,98 @@ import nz.org.venice.quote.Symbol;
  */
 public class FunctionExpression extends BinaryExpression {
 
-    private final String name;
-    private final int type;
+	private final String name;
+	private final int type;
 
-    /**
-     * Create a new average expression for the given <code>quote</code> kind,
-     * for <code>lag</code> days away.
-     *
-     * @param	name	the name of the function to define
-     * @param	type	the variable type that the function returns
-     * @param   parameterList List of DefineParameterExpressions 
-     * @param   body    the Expression representing the funciton body 
-     */
-    public FunctionExpression(String name, int type, Expression parameterList, Expression body) {
-        super(parameterList, body);
-	this.name = name;
-	this.type = type;
-    }
-
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
-	throws EvaluationException {
-	
-	//This expression defines the expression only; evaluating the expression
-	//occurs in EvalFunctionExpression when the function is called.
-	return 0.0;
-    }
-
-    public boolean equals(Object object) {
-	if (!(object instanceof FunctionExpression)) {
-	    return false;
-	}
-	FunctionExpression expression = (FunctionExpression)object;
-
-	if (!expression.getName().equals(name)) {
-	    return false;
+	/**
+	 * Create a new average expression for the given <code>quote</code> kind, for
+	 * <code>lag</code> days away.
+	 *
+	 * @param name          the name of the function to define
+	 * @param type          the variable type that the function returns
+	 * @param parameterList List of DefineParameterExpressions
+	 * @param body          the Expression representing the funciton body
+	 */
+	public FunctionExpression(String name, int type, Expression parameterList, Expression body) {
+		super(parameterList, body);
+		this.name = name;
+		this.type = type;
 	}
 
-	if (type != expression.getType()) {
-	    return false;
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
+
+		// This expression defines the expression only; evaluating the expression
+		// occurs in EvalFunctionExpression when the function is called.
+		return 0.0;
 	}
 
-	if (!getChild(0).equals(expression.getChild(0)) ||
-	    !getChild(1).equals(expression.getChild(1))) {
-	    return false;
-	} 
+	public boolean equals(Object object) {
+		if (!(object instanceof FunctionExpression)) {
+			return false;
+		}
+		FunctionExpression expression = (FunctionExpression) object;
 
-	return true;	
-    }
+		if (!expression.getName().equals(name)) {
+			return false;
+		}
 
-    public int hashCode() {
-	return name.hashCode() ^ (type * 37) ^ 
-	    getChild(0).hashCode() ^ 
-	    getChild(1).hashCode();
-    }
+		if (type != expression.getType()) {
+			return false;
+		}
 
-    public String toString() {
-	Expression parameterList = getChild(0);
-	Expression body = getChild(1);
+		if (!getChild(0).equals(expression.getChild(0)) || !getChild(1).equals(expression.getChild(1))) {
+			return false;
+		}
 
-	return getType() + " " + getName() + "(" + parameterList.toString() + 
-	    " " + ")" + "{" + body.toString() + "}";
-    }
-
-    public int checkType() throws TypeMismatchException {	
-	Expression body = getChild(1);
-	
-	//This will catch errors of returning the wrong type for the definition
-	//e.g. float function f { return true} 
-	if (body.checkType() != getType()) {
-	    String types = "" + body.getType();
-	    String expectedTypes = "" + getType();
-	    throw new TypeMismatchException(this, types, expectedTypes);
-	} else {
-	    return getType();
+		return true;
 	}
-    }
 
-    /**
-     * @return The name of the function
-     */
-    public String getName() {
-	return name;
-    }
+	public int hashCode() {
+		return name.hashCode() ^ (type * 37) ^ getChild(0).hashCode() ^ getChild(1).hashCode();
+	}
 
-    /**
-     * @return The return type of the function.
-     */
-    public int getType() {
-	return type;
-    }
+	public String toString() {
+		Expression parameterList = getChild(0);
+		Expression body = getChild(1);
 
-    /** 
-     * @return a Clone of the FunctionExpression object
-     */
-    public Object clone() {
-        return new FunctionExpression(getName(), 
-				      getType(),
-				      (Expression)getChild(0).clone(),
-				      (Expression)getChild(1).clone());
-    }
+		return getType() + " " + getName() + "(" + parameterList.toString() + " " + ")" + "{" + body.toString() + "}";
+	}
+
+	public int checkType() throws TypeMismatchException {
+		Expression body = getChild(1);
+
+		// This will catch errors of returning the wrong type for the definition
+		// e.g. float function f { return true}
+		if (body.checkType() != getType()) {
+			String types = "" + body.getType();
+			String expectedTypes = "" + getType();
+			throw new TypeMismatchException(this, types, expectedTypes);
+		} else {
+			return getType();
+		}
+	}
+
+	/**
+	 * @return The name of the function
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @return The return type of the function.
+	 */
+	public int getType() {
+		return type;
+	}
+
+	/**
+	 * @return a Clone of the FunctionExpression object
+	 */
+	public Object clone() {
+		return new FunctionExpression(getName(), getType(), (Expression) getChild(0).clone(),
+				(Expression) getChild(1).clone());
+	}
 
 }

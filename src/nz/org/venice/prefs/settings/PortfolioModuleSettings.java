@@ -16,10 +16,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-
 package nz.org.venice.prefs.settings;
-
 
 /**
  * This class represents PortfolioModule data which can restore Portfolio modules upon restart. 
@@ -45,102 +42,99 @@ import nz.org.venice.util.TradingDate;
 
 public class PortfolioModuleSettings extends AbstractSettings {
 
-    Portfolio portfolio;
-    EODQuoteBundle quoteBundle;
-    
-    /**
-     *
-     * PortfolioModuleSettings default constructor
-     */
+	Portfolio portfolio;
+	EODQuoteBundle quoteBundle;
 
-    public PortfolioModuleSettings() {
-	super(Settings.PORTFOLIO, Settings.PORTFOLIOMODULE);
-    }
+	/**
+	 *
+	 * PortfolioModuleSettings default constructor
+	 */
 
-    /**
-     * Construct a PortfolioModuleSettings with title as key
-     * 
-     * @param title  The Title of the PortfolioModule
-     */
-    public PortfolioModuleSettings(String title) {
-	super(Settings.PORTFOLIO, Settings.PORTFOLIOMODULE);
-	super.setTitle(title);
-    }
+	public PortfolioModuleSettings() {
+		super(Settings.PORTFOLIO, Settings.PORTFOLIOMODULE);
+	}
 
-    /**
-     *
-     * Set the quoteBundle for the PortfolioModule Settings
-     * 
-     * @param quoteBundle  The quoteBundle of the PortfolioModule
-     */
-    public void setQuoteBundle(EODQuoteBundle quoteBundle) {
-	this.quoteBundle = quoteBundle;
-    }
+	/**
+	 * Construct a PortfolioModuleSettings with title as key
+	 * 
+	 * @param title The Title of the PortfolioModule
+	 */
+	public PortfolioModuleSettings(String title) {
+		super(Settings.PORTFOLIO, Settings.PORTFOLIOMODULE);
+		super.setTitle(title);
+	}
 
-    /**
-     * 
-     * Get the quoteBundle from the PortfolioModuleSettings
-     * 
-     * @return the quoteBundle of a PortfolioModule
-     */
-    public EODQuoteBundle getQuoteBundle() {
-	return quoteBundle;
-    }
+	/**
+	 *
+	 * Set the quoteBundle for the PortfolioModule Settings
+	 * 
+	 * @param quoteBundle The quoteBundle of the PortfolioModule
+	 */
+	public void setQuoteBundle(EODQuoteBundle quoteBundle) {
+		this.quoteBundle = quoteBundle;
+	}
 
-    /**
-     * 
-     * Set the Portfolio for the PortfolioModuleSettings
-     * 
-     * @param portfolio  The portfolio of the PortfolioModule 
-     */
-    public void setPortfolio(Portfolio portfolio) {
-	this.portfolio = portfolio;
-    }
+	/**
+	 * 
+	 * Get the quoteBundle from the PortfolioModuleSettings
+	 * 
+	 * @return the quoteBundle of a PortfolioModule
+	 */
+	public EODQuoteBundle getQuoteBundle() {
+		return quoteBundle;
+	}
 
-    /**
-     * 
-     * Get the Portfolio of a PortfolioModule
-     * 
-     * @return  portfolio  A portfolio   
-     */
+	/**
+	 * 
+	 * Set the Portfolio for the PortfolioModuleSettings
+	 * 
+	 * @param portfolio The portfolio of the PortfolioModule
+	 */
+	public void setPortfolio(Portfolio portfolio) {
+		this.portfolio = portfolio;
+	}
 
-    public Portfolio getPortfolio() {
-	return portfolio;
-    }
+	/**
+	 * 
+	 * Get the Portfolio of a PortfolioModule
+	 * 
+	 * @return portfolio A portfolio
+	 */
 
-    /**
-     * 
-     * Return a PortfolioModule based on the PortfolioModuleSettings
-     * 
-     * @param desktop The Venice  desktop
-     * @return A PortfolioModule
-     * 
-     */
+	public Portfolio getPortfolio() {
+		return portfolio;
+	}
 
-    public Module getModule(JDesktopPane desktop) {
+	/**
+	 * 
+	 * Return a PortfolioModule based on the PortfolioModuleSettings
+	 * 
+	 * @param desktop The Venice desktop
+	 * @return A PortfolioModule
+	 * 
+	 */
 
-	try {
-	    portfolio = PreferencesManager.getPortfolio(getTitle());
-	    
-	    TradingDate lastDate = QuoteSourceManager.getSource().getLastDate();
-	    
-	    if (lastDate != null) {	
-		
-		EODQuoteRange quoteRange = 
-		    new EODQuoteRange(portfolio.getStocksHeld(),
-				       lastDate.previous(1),
-				       lastDate);
-		
-		quoteBundle = new EODQuoteBundle(quoteRange);
-		
-		setQuoteBundle(quoteBundle);
-		setPortfolio(portfolio);
+	public Module getModule(JDesktopPane desktop) {
 
-		return new PortfolioModule(desktop, this);
-	    }	    	    
-	} catch (PreferencesException pfe) {
-	}	
-	return null;
-    }
+		try {
+			portfolio = PreferencesManager.getPortfolio(getTitle());
+
+			TradingDate lastDate = QuoteSourceManager.getSource().getLastDate();
+
+			if (lastDate != null) {
+
+				EODQuoteRange quoteRange = new EODQuoteRange(portfolio.getStocksHeld(), lastDate.previous(1), lastDate);
+
+				quoteBundle = new EODQuoteBundle(quoteRange);
+
+				setQuoteBundle(quoteBundle);
+				setPortfolio(portfolio);
+
+				return new PortfolioModule(desktop, this);
+			}
+		} catch (PreferencesException pfe) {
+		}
+		return null;
+	}
 
 }

@@ -29,44 +29,45 @@ import nz.org.venice.quote.Symbol;
  */
 public class SubtractExpression extends ArithmeticExpression {
 
-    public SubtractExpression(Expression left, Expression right) {
-	super(left, right);
-    }
+	public SubtractExpression(Expression left, Expression right) {
+		super(left, right);
+	}
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
-	throws EvaluationException {
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-	return getChild(0).evaluate(variables, quoteBundle, symbol, day) -
-	    getChild(1).evaluate(variables, quoteBundle, symbol, day);
-    }
+		return getChild(0).evaluate(variables, quoteBundle, symbol, day)
+				- getChild(1).evaluate(variables, quoteBundle, symbol, day);
+	}
 
-    public Expression simplify() {
-        // First perform arithmetic simplifications
-        Expression simplified = super.simplify();
+	public Expression simplify() {
+		// First perform arithmetic simplifications
+		Expression simplified = super.simplify();
 
-        if(simplified.equals(this)) {
-            NumberExpression left = (simplified.getChild(0) instanceof NumberExpression? 
-                                     (NumberExpression)simplified.getChild(0) : null);
-            NumberExpression right = (simplified.getChild(1) instanceof NumberExpression? 
-                                      (NumberExpression)simplified.getChild(1) : null);
+		if (simplified.equals(this)) {
+			NumberExpression left = (simplified.getChild(0) instanceof NumberExpression
+					? (NumberExpression) simplified.getChild(0)
+					: null);
+			NumberExpression right = (simplified.getChild(1) instanceof NumberExpression
+					? (NumberExpression) simplified.getChild(1)
+					: null);
 
-            // a-0 -> a.
-            if(right != null && right.equals(0.0D))
-                return simplified.getChild(0);
+			// a-0 -> a.
+			if (right != null && right.equals(0.0D))
+				return simplified.getChild(0);
 
-            // a-a -> 0.
-            else if(getChild(0).equals(getChild(1)))
-                return new NumberExpression(0.0D, simplified.getType());
-        }
-        return simplified;
-    }
+			// a-a -> 0.
+			else if (getChild(0).equals(getChild(1)))
+				return new NumberExpression(0.0D, simplified.getType());
+		}
+		return simplified;
+	}
 
-    public String toString() {
-	return super.toString("-");
-    }
+	public String toString() {
+		return super.toString("-");
+	}
 
-    public Object clone() {
-        return new SubtractExpression((Expression)getChild(0).clone(), 
-                                      (Expression)getChild(1).clone());
-    }
+	public Object clone() {
+		return new SubtractExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone());
+	}
 }

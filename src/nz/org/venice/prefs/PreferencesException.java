@@ -19,20 +19,20 @@
 package nz.org.venice.prefs;
 
 /**
- * An exception raised when there is an error reading or writing a
- * preferences setting
+ * An exception raised when there is an error reading or writing a preferences
+ * setting
  *
  * @author Andrew Leppard
  */
 public class PreferencesException extends Throwable {
 
-    /**
-     * Create a new preferences exception.
-     *
-     * @param message a message describing the rror.
-     */
-    public PreferencesException(String message) {
-        super(message);
-    }
+	/**
+	 * Create a new preferences exception.
+	 *
+	 * @param message a message describing the rror.
+	 */
+	public PreferencesException(String message) {
+		super(message);
+	}
 
 }

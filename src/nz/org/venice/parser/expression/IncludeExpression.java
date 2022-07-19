@@ -29,43 +29,42 @@ import nz.org.venice.quote.Symbol;
  * A clause is an ordered list of sub-expressions. Each sub-expression is
  * executed serially. The value and type of the clause is the value and type of
  * the last sub-expression in the clause.
-
+ * 
  * @author Mark Hummel
  */
 
 public class IncludeExpression extends ClauseExpression {
-    // Number of sub-expressions in the clause
-    private int childCount;
+	// Number of sub-expressions in the clause
+	private int childCount;
 
-    private boolean included = false;
+	private boolean included = false;
 
-    /**
-     * Create a new clause expression from the given list of expressions.
-     *
-     * @param children
-     *            list of expressions.
-     */
-    public IncludeExpression(List children) {
-        super(children);
+	/**
+	 * Create a new clause expression from the given list of expressions.
+	 *
+	 * @param children list of expressions.
+	 */
+	public IncludeExpression(List children) {
+		super(children);
 
-    }
+	}
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle,
-                           Symbol symbol, int day) throws EvaluationException {
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-        // Execute all the sub-expressions in this clause and return the value
-        // of
-        // the last sub-expression.
-        double value = 0.0D;
+		// Execute all the sub-expressions in this clause and return the value
+		// of
+		// the last sub-expression.
+		double value = 0.0D;
 
-	//May only want to evaluate this once. 
-	//(Per run that is. Expressions aren't reconstructed every iteration)
-	included = true;
+		// May only want to evaluate this once.
+		// (Per run that is. Expressions aren't reconstructed every iteration)
+		included = true;
 
-        for (int child = 0; child < getChildCount(); child++)
-            value = getChild(child).evaluate(variables, quoteBundle, symbol, day);
+		for (int child = 0; child < getChildCount(); child++)
+			value = getChild(child).evaluate(variables, quoteBundle, symbol, day);
 
-        return value;
-    }
+		return value;
+	}
 
 }

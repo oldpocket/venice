@@ -36,142 +36,137 @@ import nz.org.venice.util.Locale;
  */
 public class TrackedQuoteModule extends QuoteModule {
 
-    private ChartTracking chartTracker = null;
-    private PropertyChangeSupport propertySupport;
-    private int position; //Which row in the table is selected
-    private QuoteModuleSettings settings = null;
+	private ChartTracking chartTracker = null;
+	private PropertyChangeSupport propertySupport;
+	private int position; // Which row in the table is selected
+	private QuoteModuleSettings settings = null;
 
-    /**
-     * Create a new module that lists all the quotes in the given quote bundle.
-     *
-     * @param quoteBundle quotes to table
-     * @param singleDate if this is set to true then only display the quotes
-     *                     on the last date in the quote bundle, otherwise
-     *                     display them all.
-     */
-    public TrackedQuoteModule(EODQuoteBundle quoteBundle,
-                       boolean singleDate) {
-	this(quoteBundle, null, singleDate);
-    }
-
-    /**
-     * Create a new module that only lists the quotes in the given bundle where
-     * the filter expression returns true. Set the <code>singleDate</code> flag
-     * if you want to display a single day's trading - and don't want to display
-     * the quotes from the bundle that may appear from executing some expressions.
-     * (e.g. comparing today's prices to yesterdays).
-     *
-     * @param quoteBundle quotes to table
-     * @param filterExpressionString expression string to filter by
-     * @param singleDate if this is set to true then only display the quotes
-     *                     on the last date in the quote bundle, otherwise
-     *                     display them all.
-     */
-    public TrackedQuoteModule(EODQuoteBundle quoteBundle,
-                       String filterExpressionString,
-                       boolean singleDate) {
-
-	super(quoteBundle, filterExpressionString, singleDate);		
-	propertySupport = new PropertyChangeSupport(this);
-	position = 0;
-    }
-
-    
-    /**
-     * Return the window title.
-     *
-     * @return	the window title
-     */
-    public String getTitle() {
-        // Title depends on the quote bundle we are listing
-	String title = Locale.getString("TRACKED_TABLE_OF", quoteBundle.getQuoteRange().getDescription());
-
-        // If there is only one date it makes sense to tell the user it
-        if(singleDate)
-            title = title.concat(" (" + quoteBundle.getLastDate().toString("dd/mm/yyyy") + ")");
-
-        return title;
-    }
-
-
-    /**
-     * Set the reference to the ChartTracking object which will manage
-     * the cursor location on the chart.
-     * @param chartTracker The ChartTracking reference
-     */
-    public void setTracker(ChartTracking chartTracker) {
-	this.chartTracker = chartTracker;
-    }
-
-    /**
-     * Close the window of this object. Call from ChartTracking when the 
-     * corresponding ChartModule is closed.
-     * 
-     */
-    public void close() {
-	propertySupport.
-	    firePropertyChange(ModuleFrame.WINDOW_CLOSE_PROPERTY, 0, 1);
-    }
-
-    //Changes when row selected by mouse or keyboard
-    protected void checkMenuDisabledStatus() {
-	super.checkMenuDisabledStatus();
-
-	int rowCount = getRowCount();
-	       
-	int[] selectedRows = getSelectedRows();
-	
-	//This happens when the table is first created.
-	if (selectedRows.length <= 0) {
-	    return;
+	/**
+	 * Create a new module that lists all the quotes in the given quote bundle.
+	 *
+	 * @param quoteBundle quotes to table
+	 * @param singleDate  if this is set to true then only display the quotes on the
+	 *                    last date in the quote bundle, otherwise display them all.
+	 */
+	public TrackedQuoteModule(EODQuoteBundle quoteBundle, boolean singleDate) {
+		this(quoteBundle, null, singleDate);
 	}
 
-	//Only interested in the last selection, if there's more than one
-	int position = selectedRows[selectedRows.length - 1];
-	
-	chartTracker.setPosition(position);
-    }
+	/**
+	 * Create a new module that only lists the quotes in the given bundle where the
+	 * filter expression returns true. Set the <code>singleDate</code> flag if you
+	 * want to display a single day's trading - and don't want to display the quotes
+	 * from the bundle that may appear from executing some expressions. (e.g.
+	 * comparing today's prices to yesterdays).
+	 *
+	 * @param quoteBundle            quotes to table
+	 * @param filterExpressionString expression string to filter by
+	 * @param singleDate             if this is set to true then only display the
+	 *                               quotes on the last date in the quote bundle,
+	 *                               otherwise display them all.
+	 */
+	public TrackedQuoteModule(EODQuoteBundle quoteBundle, String filterExpressionString, boolean singleDate) {
 
-    /**
-     * Change the currently selected row.
-     * @param position The row of the table to select.
-     */
-    public void setPosition(int position) {	
-	if (position < 0 || position >= getRowCount()) {
-	    return;
+		super(quoteBundle, filterExpressionString, singleDate);
+		propertySupport = new PropertyChangeSupport(this);
+		position = 0;
 	}
-	this.position = position;
-	changeSelection(position, 0 , false, false);	
-    }
 
-    /** 
-     * @return The currently selected row of the table.
-     */
-    public int getPosition() {
-	return position;
-    }
+	/**
+	 * Return the window title.
+	 *
+	 * @return the window title
+	 */
+	public String getTitle() {
+		// Title depends on the quote bundle we are listing
+		String title = Locale.getString("TRACKED_TABLE_OF", quoteBundle.getQuoteRange().getDescription());
 
-    /**
-     * Add a property change listener for module change events.
-     *
-     * @param	listener	listener
-     */
-    public void addModuleChangeListener(PropertyChangeListener listener) {
-        propertySupport.addPropertyChangeListener(listener);
-    }
+		// If there is only one date it makes sense to tell the user it
+		if (singleDate)
+			title = title.concat(" (" + quoteBundle.getLastDate().toString("dd/mm/yyyy") + ")");
 
-    /**
-     * Remove a property change listener for module change events.
-     *
-     * @param	listener	listener
-     */
-    public void removeModuleChangeListener(PropertyChangeListener listener) {
-        propertySupport.removePropertyChangeListener(listener);
-    }
+		return title;
+	}
 
-    //Don't want to save the state of the tracker    
-    public void save() {
-	
-    }
+	/**
+	 * Set the reference to the ChartTracking object which will manage the cursor
+	 * location on the chart.
+	 * 
+	 * @param chartTracker The ChartTracking reference
+	 */
+	public void setTracker(ChartTracking chartTracker) {
+		this.chartTracker = chartTracker;
+	}
+
+	/**
+	 * Close the window of this object. Call from ChartTracking when the
+	 * corresponding ChartModule is closed.
+	 * 
+	 */
+	public void close() {
+		propertySupport.firePropertyChange(ModuleFrame.WINDOW_CLOSE_PROPERTY, 0, 1);
+	}
+
+	// Changes when row selected by mouse or keyboard
+	protected void checkMenuDisabledStatus() {
+		super.checkMenuDisabledStatus();
+
+		int rowCount = getRowCount();
+
+		int[] selectedRows = getSelectedRows();
+
+		// This happens when the table is first created.
+		if (selectedRows.length <= 0) {
+			return;
+		}
+
+		// Only interested in the last selection, if there's more than one
+		int position = selectedRows[selectedRows.length - 1];
+
+		chartTracker.setPosition(position);
+	}
+
+	/**
+	 * Change the currently selected row.
+	 * 
+	 * @param position The row of the table to select.
+	 */
+	public void setPosition(int position) {
+		if (position < 0 || position >= getRowCount()) {
+			return;
+		}
+		this.position = position;
+		changeSelection(position, 0, false, false);
+	}
+
+	/**
+	 * @return The currently selected row of the table.
+	 */
+	public int getPosition() {
+		return position;
+	}
+
+	/**
+	 * Add a property change listener for module change events.
+	 *
+	 * @param listener listener
+	 */
+	public void addModuleChangeListener(PropertyChangeListener listener) {
+		propertySupport.addPropertyChangeListener(listener);
+	}
+
+	/**
+	 * Remove a property change listener for module change events.
+	 *
+	 * @param listener listener
+	 */
+	public void removeModuleChangeListener(PropertyChangeListener listener) {
+		propertySupport.removePropertyChangeListener(listener);
+	}
+
+	// Don't want to save the state of the tracker
+	public void save() {
+
+	}
 
 }

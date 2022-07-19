@@ -16,10 +16,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-
 package nz.org.venice.prefs.settings;
-
 
 /**
  * This class represents Transaction Module data  which can restore modules upon restart. 
@@ -45,92 +42,87 @@ import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.util.TradingDate;
 
 public class TransactionModuleSettings extends AbstractSettings {
-    
-    private String portfolioName;
 
-    /**
-     * 
-     * TransactioModuleSettings default constructor
-     */
+	private String portfolioName;
 
-    public TransactionModuleSettings() {
-	super(Settings.PORTFOLIO, Settings.TRANSACTIONMODULE);
-    }
+	/**
+	 * 
+	 * TransactioModuleSettings default constructor
+	 */
 
-    /**
-     * 
-     * Construct a TransactionModuleSettings with title as key
-     *
-     * @param title  The title of a TransactionModule
-     */
+	public TransactionModuleSettings() {
+		super(Settings.PORTFOLIO, Settings.TRANSACTIONMODULE);
+	}
 
-    public TransactionModuleSettings(String title) {
-	super(Settings.PORTFOLIO, Settings.TRANSACTIONMODULE);
-	super.setTitle(title);
-	portfolioName = title;
-    }
+	/**
+	 * 
+	 * Construct a TransactionModuleSettings with title as key
+	 *
+	 * @param title The title of a TransactionModule
+	 */
 
-    /**
-     * 
-     * Set the name of the Portfolio that the Transactions operated on
-     * 
-     * @param portfolioName  The name of the portfolio
-     */
+	public TransactionModuleSettings(String title) {
+		super(Settings.PORTFOLIO, Settings.TRANSACTIONMODULE);
+		super.setTitle(title);
+		portfolioName = title;
+	}
 
-    public void setPortfolioName(String portfolioName) {
-	this.portfolioName = portfolioName;
-    }
+	/**
+	 * 
+	 * Set the name of the Portfolio that the Transactions operated on
+	 * 
+	 * @param portfolioName The name of the portfolio
+	 */
 
-    /**
-     * 
-     * Get the name of the portfolio that the TransactionModule is attached to
-     * 
-     * @return  The name of the portfolio
-     */
+	public void setPortfolioName(String portfolioName) {
+		this.portfolioName = portfolioName;
+	}
 
-    public String getPortfolioName() {
-	return portfolioName;
-    }
-    
-    /**
-     * 
-     * Return a TransactionModule based on these settings
-     * 
-     * @param  desktop  The Venice desktop
-     * @return  A TransactionModule
-     */
+	/**
+	 * 
+	 * Get the name of the portfolio that the TransactionModule is attached to
+	 * 
+	 * @return The name of the portfolio
+	 */
 
-    public Module getModule(JDesktopPane desktop) {	
-	PortfolioModule portfolioModule;
-		
-	try {
-	    Portfolio portfolio = PreferencesManager.getPortfolio(portfolioName);
-	    
-	    TradingDate lastDate = QuoteSourceManager.getSource().getLastDate();
-	    
-	    if (lastDate != null) {	
-		
-		EODQuoteRange quoteRange = 
-		    new EODQuoteRange(portfolio.getStocksHeld(),
-				      lastDate.previous(1),
-				      lastDate);
-		
-		EODQuoteBundle quoteBundle = new EODQuoteBundle(quoteRange);
-		
-		PortfolioModuleSettings pms = new PortfolioModuleSettings();
-				
-		pms.setQuoteBundle(quoteBundle);
-		pms.setPortfolio(portfolio);
-		
-		portfolioModule = new PortfolioModule(desktop, pms);
+	public String getPortfolioName() {
+		return portfolioName;
+	}
 
-		return new TransactionModule(portfolioModule, portfolio);
-	    }	    	    
-	} catch (PreferencesException pfe) {
-	}	
-	return null;
-    }
-	
+	/**
+	 * 
+	 * Return a TransactionModule based on these settings
+	 * 
+	 * @param desktop The Venice desktop
+	 * @return A TransactionModule
+	 */
 
+	public Module getModule(JDesktopPane desktop) {
+		PortfolioModule portfolioModule;
+
+		try {
+			Portfolio portfolio = PreferencesManager.getPortfolio(portfolioName);
+
+			TradingDate lastDate = QuoteSourceManager.getSource().getLastDate();
+
+			if (lastDate != null) {
+
+				EODQuoteRange quoteRange = new EODQuoteRange(portfolio.getStocksHeld(), lastDate.previous(1), lastDate);
+
+				EODQuoteBundle quoteBundle = new EODQuoteBundle(quoteRange);
+
+				PortfolioModuleSettings pms = new PortfolioModuleSettings();
+
+				pms.setQuoteBundle(quoteBundle);
+				pms.setPortfolio(portfolio);
+
+				portfolioModule = new PortfolioModule(desktop, pms);
+
+				return new TransactionModule(portfolioModule, portfolio);
+			}
+		} catch (PreferencesException pfe) {
+		}
+		return null;
+	}
 
 }

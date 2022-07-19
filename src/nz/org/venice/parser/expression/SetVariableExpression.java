@@ -31,87 +31,78 @@ import nz.org.venice.util.Locale;
  * A representation of an expression to set and return the value of a variable.
  */
 public class SetVariableExpression extends UnaryExpression {
-    
-    // The variable's name and type
-    private String name;
-    private int type;
-    
-    public SetVariableExpression(String name, int type, Expression value) {
-	super(value);
 
-        assert name != null && name.length() > 0;
+	// The variable's name and type
+	private String name;
+	private int type;
 
-        this.name = name;
-        this.type = type;
-    }
+	public SetVariableExpression(String name, int type, Expression value) {
+		super(value);
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
-        throws EvaluationException {
+		assert name != null && name.length() > 0;
 
-        Variable variable = variables.get(name);
-
-	if(variable != null) {
-	    if(!variable.isConstant()) {
-		assert variable.getType() == type;
-		double value = getChild(0).evaluate(variables, quoteBundle, symbol, day);
-		variable.setValue(value);
-		return value;
-	    }
-	    else
-		throw new EvaluationException(Locale.getString("VARIABLE_IS_CONSTANT_ERROR",
-                                                               name));
+		this.name = name;
+		this.type = type;
 	}
-	else
-            throw new EvaluationException(Locale.getString("VARIABLE_NOT_DEFINED_ERROR",
-                                                           name));
-    }
 
-    public String toString() {
-	return new String(name + " = " + getChild(0));
-    }
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-    public String getName() {
-        return name;
-    }
+		Variable variable = variables.get(name);
 
-    public int getType() {
-        return type;
-    }
-
-
-
-    public int checkType() throws TypeMismatchException {
-	if(getType() == getChild(0).checkType())
-	    return getType();
-	else {
-	    throw new TypeMismatchException(this, 
-					    getChild(0).checkType(), 
-					    type);
+		if (variable != null) {
+			if (!variable.isConstant()) {
+				assert variable.getType() == type;
+				double value = getChild(0).evaluate(variables, quoteBundle, symbol, day);
+				variable.setValue(value);
+				return value;
+			} else
+				throw new EvaluationException(Locale.getString("VARIABLE_IS_CONSTANT_ERROR", name));
+		} else
+			throw new EvaluationException(Locale.getString("VARIABLE_NOT_DEFINED_ERROR", name));
 	}
-    }
 
-    public boolean equals(Object object) {
-        if(object instanceof SetVariableExpression) {
-            SetVariableExpression expression = (SetVariableExpression)object;
+	public String toString() {
+		return new String(name + " = " + getChild(0));
+	}
 
-            if(expression.getName().equals(getName()) &&
-               expression.getType() == getType() &&
-	       expression.getChild(0).equals(getChild(0)))
-                return true;
-        }
+	public String getName() {
+		return name;
+	}
 
-        return false;
-    }
+	public int getType() {
+		return type;
+	}
 
-    public int hashCode() {
-	Expression child1 = getChild(0);
-	assert child1 != null;
+	public int checkType() throws TypeMismatchException {
+		if (getType() == getChild(0).checkType())
+			return getType();
+		else {
+			throw new TypeMismatchException(this, getChild(0).checkType(), type);
+		}
+	}
 
-	return (child1.hashCode() ^ getName().hashCode() ^ (37 * getType()));
-    }
+	public boolean equals(Object object) {
+		if (object instanceof SetVariableExpression) {
+			SetVariableExpression expression = (SetVariableExpression) object;
 
-    public Object clone() {
-        return new SetVariableExpression(name, type, (Expression)getChild(0).clone());
-    }
+			if (expression.getName().equals(getName()) && expression.getType() == getType()
+					&& expression.getChild(0).equals(getChild(0)))
+				return true;
+		}
+
+		return false;
+	}
+
+	public int hashCode() {
+		Expression child1 = getChild(0);
+		assert child1 != null;
+
+		return (child1.hashCode() ^ getName().hashCode() ^ (37 * getType()));
+	}
+
+	public Object clone() {
+		return new SetVariableExpression(name, type, (Expression) getChild(0).clone());
+	}
 
 }

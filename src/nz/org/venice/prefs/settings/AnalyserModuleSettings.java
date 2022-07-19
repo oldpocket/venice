@@ -16,10 +16,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-
 package nz.org.venice.prefs.settings;
-
 
 /**
  * This class represents AnalyserModule data which can be used to restore analyser modules upon restart. 
@@ -40,40 +37,39 @@ import nz.org.venice.analyser.PaperTradeModule;
 import nz.org.venice.main.Module;
 
 public class AnalyserModuleSettings extends AbstractSettings {
-        
-    /**
-     * 
-     * Create a new AnalyserModuleSettings object
-     * 
-     * @param type  The type of the specific AnalyserModule
-     */
 
-    public AnalyserModuleSettings(int type) {
-	super(Settings.ANALYSER, type);	
-    }
+	/**
+	 * 
+	 * Create a new AnalyserModuleSettings object
+	 * 
+	 * @param type The type of the specific AnalyserModule
+	 */
 
-    /**
-     * 
-     * Return an AnalyserModule of the settings type based on these
-     * settings.
-     * 
-     * @return  An Analyser Module 
-     */
-        
-    public Module getModule(JDesktopPane desktop) {		
-	switch (getType()) {
-	case Settings.PAPERTRADEMODULE:	    	
-	    return new PaperTradeModule(desktop);
-	
-	case Settings.GPMODULE:	    	
-	    return new GPModule(desktop);
-	    
-	case Settings.GAMODULE:	    	
-	    return new GAModule(desktop);
-	
-	case Settings.ANNMODULE:	    	
-	    return new ANNModule(desktop);
-	}	
-	return null;
-    }    
+	public AnalyserModuleSettings(int type) {
+		super(Settings.ANALYSER, type);
+	}
+
+	/**
+	 * 
+	 * Return an AnalyserModule of the settings type based on these settings.
+	 * 
+	 * @return An Analyser Module
+	 */
+
+	public Module getModule(JDesktopPane desktop) {
+		switch (getType()) {
+		case Settings.PAPERTRADEMODULE:
+			return new PaperTradeModule(desktop);
+
+		case Settings.GPMODULE:
+			return new GPModule(desktop);
+
+		case Settings.GAMODULE:
+			return new GAModule(desktop);
+
+		case Settings.ANNMODULE:
+			return new ANNModule(desktop);
+		}
+		return null;
+	}
 }

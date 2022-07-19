@@ -45,90 +45,90 @@ import nz.org.venice.util.Locale;
  */
 public class WatchScreenReader {
 
-    /**
-     * This class cannot be instantiated.
-     */
-    private WatchScreenReader() {
-        // Nothing to do
-    }
+	/**
+	 * This class cannot be instantiated.
+	 */
+	private WatchScreenReader() {
+		// Nothing to do
+	}
 
-    /**
-     * Read and parse the watch screen in XML format from the input stream and return
-     * the watch screen object.
-     *
-     * @param stream the input stream containing the watch screen in XML format
-     * @return the watch screen
-     * @exception IOException if there was an I/O error reading from the stream.
-     * @exception WatchScreenParserException if there was an error parsing the watch screen.
-     */
-    public static WatchScreen read(InputStream stream) throws IOException, WatchScreenParserException {
-        WatchScreen watchScreen = null;
-        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+	/**
+	 * Read and parse the watch screen in XML format from the input stream and
+	 * return the watch screen object.
+	 *
+	 * @param stream the input stream containing the watch screen in XML format
+	 * @return the watch screen
+	 * @exception IOException                if there was an I/O error reading from
+	 *                                       the stream.
+	 * @exception WatchScreenParserException if there was an error parsing the watch
+	 *                                       screen.
+	 */
+	public static WatchScreen read(InputStream stream) throws IOException, WatchScreenParserException {
+		WatchScreen watchScreen = null;
+		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 
-        try {
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            Document document = builder.parse(stream);
-            Element watchScreenElement = (Element)document.getDocumentElement();
-            NamedNodeMap watchScreenAttributes = watchScreenElement.getAttributes();
-            Node watchScreenNameNode = watchScreenAttributes.getNamedItem("name");
+		try {
+			DocumentBuilder builder = builderFactory.newDocumentBuilder();
+			Document document = builder.parse(stream);
+			Element watchScreenElement = (Element) document.getDocumentElement();
+			NamedNodeMap watchScreenAttributes = watchScreenElement.getAttributes();
+			Node watchScreenNameNode = watchScreenAttributes.getNamedItem("name");
 
-            if(watchScreenNameNode == null)
-                throw new WatchScreenParserException(Locale.getString("MISSING_WATCH_SCREEN_NAME_ATTRIBUTE"));
+			if (watchScreenNameNode == null)
+				throw new WatchScreenParserException(Locale.getString("MISSING_WATCH_SCREEN_NAME_ATTRIBUTE"));
 
-            String watchScreenName = watchScreenNameNode.getNodeValue();
+			String watchScreenName = watchScreenNameNode.getNodeValue();
 
-            watchScreen = new WatchScreen(watchScreenName);
+			watchScreen = new WatchScreen(watchScreenName);
 
-            NodeList childNodes = watchScreenElement.getChildNodes();
+			NodeList childNodes = watchScreenElement.getChildNodes();
 
-            if (childNodes.getLength() == 1 &&
-                childNodes.item(0).getNodeName().equals("symbols"))
-                readSymbols(watchScreen, childNodes.item(0));
-            else
-                throw new WatchScreenParserException(Locale.getString("WATCH_SCREEN_TOP_LEVEL_ERROR"));
+			if (childNodes.getLength() == 1 && childNodes.item(0).getNodeName().equals("symbols"))
+				readSymbols(watchScreen, childNodes.item(0));
+			else
+				throw new WatchScreenParserException(Locale.getString("WATCH_SCREEN_TOP_LEVEL_ERROR"));
 
-        } catch (SAXException e) {
-            throw new WatchScreenParserException(e.getMessage());
-        } catch(ParserConfigurationException e) {
-            throw new WatchScreenParserException(e.getMessage());
-        }
+		} catch (SAXException e) {
+			throw new WatchScreenParserException(e.getMessage());
+		} catch (ParserConfigurationException e) {
+			throw new WatchScreenParserException(e.getMessage());
+		}
 
-        return watchScreen;
-    }
+		return watchScreen;
+	}
 
-    /**
-     * Read and parse the list of symbols in the watch screen.
-     *
-     * @param watchScreen the watch screen being created
-     * @param symbolsNode the node containing the list of symbols.
-     * @exception WatchScreenParserException if there was an error parsing the watch screen.
-     */
-    private static void readSymbols(WatchScreen watchScreen, Node symbolsNode)
-        throws WatchScreenParserException {
-        NodeList symbolNodeList = symbolsNode.getChildNodes();
+	/**
+	 * Read and parse the list of symbols in the watch screen.
+	 *
+	 * @param watchScreen the watch screen being created
+	 * @param symbolsNode the node containing the list of symbols.
+	 * @exception WatchScreenParserException if there was an error parsing the watch
+	 *                                       screen.
+	 */
+	private static void readSymbols(WatchScreen watchScreen, Node symbolsNode) throws WatchScreenParserException {
+		NodeList symbolNodeList = symbolsNode.getChildNodes();
 
-        for(int i = 0; i < symbolNodeList.getLength(); i++) {
-            Node symbolNode = (Node)symbolNodeList.item(i);
-            NamedNodeMap symbolAttributes = symbolNode.getAttributes();
-            Node symbolNameNode = symbolAttributes.getNamedItem("name");
+		for (int i = 0; i < symbolNodeList.getLength(); i++) {
+			Node symbolNode = (Node) symbolNodeList.item(i);
+			NamedNodeMap symbolAttributes = symbolNode.getAttributes();
+			Node symbolNameNode = symbolAttributes.getNamedItem("name");
 
-            if(symbolNameNode == null)
-                throw new WatchScreenParserException(Locale.getString("MISSING_SYMBOL_NAME_ATTRIBUTE"));
+			if (symbolNameNode == null)
+				throw new WatchScreenParserException(Locale.getString("MISSING_SYMBOL_NAME_ATTRIBUTE"));
 
-            String symbolName = symbolNameNode.getNodeValue();
+			String symbolName = symbolNameNode.getNodeValue();
 
-            if(!symbolNode.getNodeName().equals("symbol"))
-                throw new WatchScreenParserException(Locale.getString("EXPECTING_SYMBOL",
-                                                                      symbolNode.getNodeName()));
-            // Parse symbol, e.g. "CBA".
-            Symbol symbol = null;
+			if (!symbolNode.getNodeName().equals("symbol"))
+				throw new WatchScreenParserException(Locale.getString("EXPECTING_SYMBOL", symbolNode.getNodeName()));
+			// Parse symbol, e.g. "CBA".
+			Symbol symbol = null;
 
-            try {
-                symbol = Symbol.find(symbolNameNode.getNodeValue());
-                watchScreen.addSymbol(symbol);
-            } catch(SymbolFormatException e) {
-                throw new WatchScreenParserException(e.getMessage());
-            }
-        }
-    }
+			try {
+				symbol = Symbol.find(symbolNameNode.getNodeValue());
+				watchScreen.addSymbol(symbol);
+			} catch (SymbolFormatException e) {
+				throw new WatchScreenParserException(e.getMessage());
+			}
+		}
+	}
 }

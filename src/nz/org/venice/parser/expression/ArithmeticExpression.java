@@ -23,82 +23,77 @@ import nz.org.venice.parser.Expression;
 import nz.org.venice.parser.TypeMismatchException;
 
 /**
- * Abstract base class for the arithmetic expressions:
- * <code>+, /, *, -</code>
+ * Abstract base class for the arithmetic expressions: <code>+, /, *, -</code>
  */
 abstract public class ArithmeticExpression extends BinaryExpression {
 
-    /**
-     * Create a new arithmetic expression with the given left and
-     * right arguments.
-     */
-    public ArithmeticExpression(Expression left, Expression right) {
-	super(left, right);
-    }
-
-    /**
-     * Check the input arguments to the expression. They can only be
-     * {@link #INTEGER_TYPE} or {@link #FLOAT_TYPE}.
-     *     * There are 4 possible cases:
-     * {@link #INTEGER_TYPE} operator {@link #INTEGER_TYPE} returns a {@link #INTEGER_TYPE}
-     * {@link #INTEGER_TYPE} operator {@link #FLOAT_TYPE} returns a {@link #INTEGER_TYPE}
-     * {@link #FLOAT_TYPE} operator {@link #INTEGER_TYPE} returns a {@link #FLOAT_TYPE}
-     * {@link #FLOAT_TYPE} operator {@link #FLOAT_TYPE} returns a {@link #FLOAT_TYPE}
-     *
-     * @return	the type of the expression
-     */
-    public int checkType() throws TypeMismatchException {
-	// Types must be integer or float and not boolean or quote.
-	int leftType = getChild(0).checkType();
-	int rightType = getChild(1).checkType();
-
-	if((leftType == FLOAT_TYPE || leftType == INTEGER_TYPE) && 
-           (rightType == FLOAT_TYPE || rightType == INTEGER_TYPE))
-            return getType();
-	else {
-	    String types = leftType + " , " + rightType;
-	    String expectedTypes = FLOAT_TYPE + " , " + FLOAT_TYPE;
-	    throw new TypeMismatchException(this, types, expectedTypes);
+	/**
+	 * Create a new arithmetic expression with the given left and right arguments.
+	 */
+	public ArithmeticExpression(Expression left, Expression right) {
+		super(left, right);
 	}
-    }
 
-    public Expression simplify() {
-        // First simplify all the child arguments
-        Expression simplified = super.simplify();
+	/**
+	 * Check the input arguments to the expression. They can only be
+	 * {@link #INTEGER_TYPE} or {@link #FLOAT_TYPE}. * There are 4 possible cases:
+	 * {@link #INTEGER_TYPE} operator {@link #INTEGER_TYPE} returns a
+	 * {@link #INTEGER_TYPE} {@link #INTEGER_TYPE} operator {@link #FLOAT_TYPE}
+	 * returns a {@link #INTEGER_TYPE} {@link #FLOAT_TYPE} operator
+	 * {@link #INTEGER_TYPE} returns a {@link #FLOAT_TYPE} {@link #FLOAT_TYPE}
+	 * operator {@link #FLOAT_TYPE} returns a {@link #FLOAT_TYPE}
+	 *
+	 * @return the type of the expression
+	 */
+	public int checkType() throws TypeMismatchException {
+		// Types must be integer or float and not boolean or quote.
+		int leftType = getChild(0).checkType();
+		int rightType = getChild(1).checkType();
 
-        // If both the child arguments are constant we can precompute.
-        if(simplified.getChild(0) instanceof NumberExpression &&
-           simplified.getChild(1) instanceof NumberExpression) {
-            try {
-                return new NumberExpression(simplified.evaluate(null, null, null, 0), simplified.getType());
-            }
-            catch(EvaluationException e) {
-                // Can happen if we hit 1/0. In which case don't bother to simplify.
-                return simplified;
-            }
-        }
-        else
-            return simplified;
-    }
+		if ((leftType == FLOAT_TYPE || leftType == INTEGER_TYPE)
+				&& (rightType == FLOAT_TYPE || rightType == INTEGER_TYPE))
+			return getType();
+		else {
+			String types = leftType + " , " + rightType;
+			String expectedTypes = FLOAT_TYPE + " , " + FLOAT_TYPE;
+			throw new TypeMismatchException(this, types, expectedTypes);
+		}
+	}
 
-    /**
-     * Get the type of the expression.
-     *
-     * @return either {@link #FLOAT_TYPE} or {@link #INTEGER_TYPE}.
-     */
-    public int getType() {
-	int childCount = getChildCount();
-	int type = -1;
-	
-	for (int i = 0; i < childCount; i++) {
-	    if (getChild(i) != null) {
-		type = getChild(i).getType();
-	    }
-	    if (type == Expression.FLOAT_TYPE) {
+	public Expression simplify() {
+		// First simplify all the child arguments
+		Expression simplified = super.simplify();
+
+		// If both the child arguments are constant we can precompute.
+		if (simplified.getChild(0) instanceof NumberExpression && simplified.getChild(1) instanceof NumberExpression) {
+			try {
+				return new NumberExpression(simplified.evaluate(null, null, null, 0), simplified.getType());
+			} catch (EvaluationException e) {
+				// Can happen if we hit 1/0. In which case don't bother to simplify.
+				return simplified;
+			}
+		} else
+			return simplified;
+	}
+
+	/**
+	 * Get the type of the expression.
+	 *
+	 * @return either {@link #FLOAT_TYPE} or {@link #INTEGER_TYPE}.
+	 */
+	public int getType() {
+		int childCount = getChildCount();
+		int type = -1;
+
+		for (int i = 0; i < childCount; i++) {
+			if (getChild(i) != null) {
+				type = getChild(i).getType();
+			}
+			if (type == Expression.FLOAT_TYPE) {
+				return type;
+			}
+		}
 		return type;
-	    }
 	}
-        return type;
-    }
 
 }

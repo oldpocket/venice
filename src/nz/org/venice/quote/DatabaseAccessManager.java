@@ -32,21 +32,20 @@ import nz.org.venice.ui.PasswordDialog;
 import nz.org.venice.util.Locale;
 
 /**
- * Manages database settings where the data is session based (ie not stored
- * on disk )  
-
- * Where the database is stored locally, a simple mask is applied. While 
- * this is trivial to break, the purpose is to slow an attacker so they 
- * don't immediately gain access to the database.  (If an attacker has access 
- * to the user account, not even a session password will help)
-
+ * Manages database settings where the data is session based (ie not stored on
+ * disk )
+ * 
+ * Where the database is stored locally, a simple mask is applied. While this is
+ * trivial to break, the purpose is to slow an attacker so they don't
+ * immediately gain access to the database. (If an attacker has access to the
+ * user account, not even a session password will help)
+ * 
  * 
  * @author Mark Hummel
  * @see DatabaseManager
  * @see nz.org.venice.prefs.PreferencesManager
  */
-public class DatabaseAccessManager 
-{
+public class DatabaseAccessManager {
 	private static DatabaseAccessManager instance = null;
 	private String enteredPassword = null;
 
@@ -65,12 +64,12 @@ public class DatabaseAccessManager
 	}
 
 	/**
-	 * Set the QuoteSource and AlertManager source to null, forcing the
-	 * Factories to recreate their database objects. This method has an effect
-	 * only if the user chooses to a use a session password. 
+	 * Set the QuoteSource and AlertManager source to null, forcing the Factories to
+	 * recreate their database objects. This method has an effect only if the user
+	 * chooses to a use a session password.
 	 * 
-	 * This is used when the connection fails. So if the password is incorrect,
-	 * the user has another chance to enter it correctly.
+	 * This is used when the connection fails. So if the password is incorrect, the
+	 * user has another chance to enter it correctly.
 	 */
 	public void reset() {
 		if (PreferencesManager.getDatabaseSettings().passwordPrompt) {
@@ -80,58 +79,54 @@ public class DatabaseAccessManager
 		}
 	}
 
-	/**     
-	 * Return a plaintext string with the mask removed.  
+	/**
+	 * Return a plaintext string with the mask removed.
 	 * 
-	 * @param masked  A string which has had a mask applied by the mask method
+	 * @param masked A string which has had a mask applied by the mask method
 	 * @return A plaintext string.
 	 */
 	public String unMask(String masked) {
 		String unmasked = "";
 		try {
 			unmasked = decrypt(masked);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.out.println("Error unMask");
 		}
 		return unmasked;
 	}
 
 	/**
-	 * Return a string after the mask has been applied to a plain text string. 
+	 * Return a string after the mask has been applied to a plain text string.
 	 * 
-	 * @param unmasked  A plaintext string
+	 * @param unmasked A plaintext string
 	 * @return an encrypted string
 	 */
 	public String mask(String unmasked) {
 		String masked = "";
 		try {
 			masked = encrypt(unmasked);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.out.println("Error mask");
 		}
 		return masked;
 	}
 
 	/**
-	 * Return the database password. If the password has been stored locally
-	 * a plaintext string is returned after having been unmasked.
-	 * Otherwise, if the user chooses to supply the password per session,
-	 * and if the user has not already entered the password, prompt the user
-	 * to enter it.
+	 * Return the database password. If the password has been stored locally a
+	 * plaintext string is returned after having been unmasked. Otherwise, if the
+	 * user chooses to supply the password per session, and if the user has not
+	 * already entered the password, prompt the user to enter it.
 	 */
-	public String getPassword() {	
+	public String getPassword() {
 		DatabasePreferences prefs = PreferencesManager.getDatabaseSettings();
 
-		if (!prefs.passwordPrompt) {	    
-			//If the password is empty, no mask has been applied.
-			return (prefs.password.equals("")) 
-					? prefs.password
-							: unMask(prefs.password);
+		if (!prefs.passwordPrompt) {
+			// If the password is empty, no mask has been applied.
+			return (prefs.password.equals("")) ? prefs.password : unMask(prefs.password);
 		} else {
 			if (enteredPassword == null) {
-				PasswordDialog passwordField = new PasswordDialog(DesktopManager.getDesktop(), Locale.getString("PASSWORD_PROMPT"), Locale.getString("DATABASE_PASSWORD_TITLE"));
+				PasswordDialog passwordField = new PasswordDialog(DesktopManager.getDesktop(),
+						Locale.getString("PASSWORD_PROMPT"), Locale.getString("DATABASE_PASSWORD_TITLE"));
 				enteredPassword = passwordField.showDialog();
 			}
 			return enteredPassword;
@@ -151,7 +146,7 @@ public class DatabaseAccessManager
 
 		// Encode bytes to base64 to get a string
 		return Base64.getEncoder().encodeToString(enc);
-		//return new sun.misc.BASE64Encoder().encode(enc);
+		// return new sun.misc.BASE64Encoder().encode(enc);
 	}
 
 	private String decrypt(String str) throws Exception {
@@ -168,5 +163,3 @@ public class DatabaseAccessManager
 	}
 
 }
-
-

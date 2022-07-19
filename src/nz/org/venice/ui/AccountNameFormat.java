@@ -21,66 +21,65 @@ package nz.org.venice.ui;
 import nz.org.venice.util.Locale;
 
 /**
- * This class describes how to display and sort the name of portfolio
- * accounts in the table. Account names are simply displayed as strings,
- * in the table, and are basically sorted as Strings. The only exception
- * is that the total entry always appears at the bottom.
+ * This class describes how to display and sort the name of portfolio accounts
+ * in the table. Account names are simply displayed as strings, in the table,
+ * and are basically sorted as Strings. The only exception is that the total
+ * entry always appears at the bottom.
  */
 public class AccountNameFormat implements TwoWayComparable {
-    String name;
+	String name;
 
-    /** The account name format that represents the total row */
-    public final static AccountNameFormat TOTAL =
-        new AccountNameFormat(Locale.getString("TOTAL"));
+	/** The account name format that represents the total row */
+	public final static AccountNameFormat TOTAL = new AccountNameFormat(Locale.getString("TOTAL"));
 
-    /**
-     * Create a new account name format object.
-     *
-     * @param name the name of the account
-     */
-    public AccountNameFormat(String name) {
-        this.name = name;
-    }
+	/**
+	 * Create a new account name format object.
+	 *
+	 * @param name the name of the account
+	 */
+	public AccountNameFormat(String name) {
+		this.name = name;
+	}
 
-    /**
-     * Get the account name.
-     *
-     * @return	the name
-     */
-    public String getName() {
-	return name;
-    }
+	/**
+	 * Get the account name.
+	 *
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Compare two account names.
-     *
-     * @param	object	account name object to compare to
-     * @return	the value <code>0</code> if the objects are equal;
-     * <code>1</code> if this object is after the specified object or
-     * <code>-1</code> if this object is before the specified object
-     */
-    public int compareTo(Object object, boolean reverse) {
-        AccountNameFormat name = (AccountNameFormat)object;
+	/**
+	 * Compare two account names.
+	 *
+	 * @param object account name object to compare to
+	 * @return the value <code>0</code> if the objects are equal; <code>1</code> if
+	 *         this object is after the specified object or <code>-1</code> if this
+	 *         object is before the specified object
+	 */
+	public int compareTo(Object object, boolean reverse) {
+		AccountNameFormat name = (AccountNameFormat) object;
 
-        // The total row should always sort to the bottom
-        if(this == TOTAL)
-            return 1;
-        else if(name == TOTAL)
-            return -1;
+		// The total row should always sort to the bottom
+		if (this == TOTAL)
+			return 1;
+		else if (name == TOTAL)
+			return -1;
 
-        // Otherwise just compare the strings normally
-        else if(!reverse)
-            return getName().compareTo(name.getName());
-        else
-            return -(getName().compareTo(name.getName()));
-    }
+		// Otherwise just compare the strings normally
+		else if (!reverse)
+			return getName().compareTo(name.getName());
+		else
+			return -(getName().compareTo(name.getName()));
+	}
 
-    /**
-     * Return a string representation of the account name.
-     *
-     * @return account name
-     */
-    public String toString() {
-        return getName();
-    }
+	/**
+	 * Return a string representation of the account name.
+	 *
+	 * @return account name
+	 */
+	public String toString() {
+		return getName();
+	}
 }

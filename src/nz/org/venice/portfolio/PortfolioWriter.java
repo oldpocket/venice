@@ -42,161 +42,129 @@ import org.w3c.dom.Element;
  */
 public class PortfolioWriter {
 
-    private PortfolioWriter() {
-        // Nothing to do
-    }
+	private PortfolioWriter() {
+		// Nothing to do
+	}
 
-    /**
-     * Write the portfolio to the output stream in XML format.
-     *
-     * @param portfolio the portfolio to write
-     * @param stream    the output stream to write the portfolio.
-     */
-    public static void write(Portfolio portfolio, OutputStream stream) {
-        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+	/**
+	 * Write the portfolio to the output stream in XML format.
+	 *
+	 * @param portfolio the portfolio to write
+	 * @param stream    the output stream to write the portfolio.
+	 */
+	public static void write(Portfolio portfolio, OutputStream stream) {
+		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 
-        try {
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            Document document = builder.newDocument();
-            
-            Element portfolioElement = (Element)document.createElement("portfolio"); 
-            portfolioElement.setAttribute("name", portfolio.getName());
-            portfolioElement.setAttribute("currency", portfolio.getCurrency().getCurrencyCode());
+		try {
+			DocumentBuilder builder = builderFactory.newDocumentBuilder();
+			Document document = builder.newDocument();
 
-            document.appendChild(portfolioElement);
+			Element portfolioElement = (Element) document.createElement("portfolio");
+			portfolioElement.setAttribute("name", portfolio.getName());
+			portfolioElement.setAttribute("currency", portfolio.getCurrency().getCurrencyCode());
 
-            Element accountsElement = (Element)document.createElement("accounts");
+			document.appendChild(portfolioElement);
 
-            portfolioElement.appendChild(accountsElement);
-            for(Iterator iterator = portfolio.getAccounts().iterator(); iterator.hasNext();) {
-                Account account = (Account)iterator.next();
-                Element accountElement =
-                    (Element)document.createElement((account.getType() == Account.CASH_ACCOUNT?
-                                                     "cash" : "share"));
-                accountElement.setAttribute("name", account.getName());
-                accountElement.setAttribute("currency", account.getCurrency().getCurrencyCode());
-                accountsElement.appendChild(accountElement);
-            }
+			Element accountsElement = (Element) document.createElement("accounts");
 
-            Element transactionsElement = (Element)document.createElement("transactions");
-            portfolioElement.appendChild(transactionsElement);
+			portfolioElement.appendChild(accountsElement);
+			for (Iterator iterator = portfolio.getAccounts().iterator(); iterator.hasNext();) {
+				Account account = (Account) iterator.next();
+				Element accountElement = (Element) document
+						.createElement((account.getType() == Account.CASH_ACCOUNT ? "cash" : "share"));
+				accountElement.setAttribute("name", account.getName());
+				accountElement.setAttribute("currency", account.getCurrency().getCurrencyCode());
+				accountsElement.appendChild(accountElement);
+			}
 
-            for(Iterator iterator = portfolio.getTransactions().iterator(); iterator.hasNext();) {
-                Transaction transaction = (Transaction)iterator.next();
-                Element transactionElement = null;
+			Element transactionsElement = (Element) document.createElement("transactions");
+			portfolioElement.appendChild(transactionsElement);
 
-                switch(transaction.getType()) {
-                case Transaction.WITHDRAWAL:
-                    transactionElement = (Element)document.createElement("withdrawal");
-                    transactionElement.setAttribute("cash_account",
-                                                    transaction.getCashAccount().getName());
-                    transactionElement.setAttribute("amount",
-						    transaction.getAmount().export());
-                    break;
-                case Transaction.DEPOSIT:
-                    transactionElement = (Element)document.createElement("deposit");
-                    transactionElement.setAttribute("cash_account",
-                                                    transaction.getCashAccount().getName());
-                    transactionElement.setAttribute("amount",
-						    transaction.getAmount().export());
-                    break;
-                case Transaction.INTEREST:
-                    transactionElement = (Element)document.createElement("interest");
-                    transactionElement.setAttribute("cash_account",
-                                                    transaction.getCashAccount().getName());
-                    transactionElement.setAttribute("amount",
-						    transaction.getAmount().export());
-                    break;
-                case Transaction.FEE:
-                    transactionElement = (Element)document.createElement("fee");
-                    transactionElement.setAttribute("cash_account",
-                                                    transaction.getCashAccount().getName());
-                    transactionElement.setAttribute("amount",
-						    transaction.getAmount().export());
-                    break;
-                case Transaction.ACCUMULATE:
-                    transactionElement = (Element)document.createElement("accumulate");
-                    transactionElement.setAttribute("amount",
-						    transaction.getAmount().export());
-                    transactionElement.setAttribute("symbol",  
-                                                    transaction.getSymbol().toString());
-                    transactionElement.setAttribute("shares",  
-                                                    Integer.toString(transaction.getShares()));
-                    transactionElement.setAttribute("trade_cost",
-						    transaction.getTradeCost().export());
-                    transactionElement.setAttribute("cash_account",
-                                                    transaction.getCashAccount().getName());
-                    transactionElement.setAttribute("share_account",
-                                                    transaction.getShareAccount().getName());
-                    break;
-                case Transaction.REDUCE:
-                    transactionElement = (Element)document.createElement("reduce");
-                    transactionElement.setAttribute("amount",
-						    transaction.getAmount().export());
-                    transactionElement.setAttribute("symbol",  
-                                                    transaction.getSymbol().toString());
-                    transactionElement.setAttribute("shares",  
-                                                    Integer.toString(transaction.getShares()));
-                    transactionElement.setAttribute("trade_cost",
-						    transaction.getTradeCost().export());
-                    transactionElement.setAttribute("cash_account",
-                                                    transaction.getCashAccount().getName());
-                    transactionElement.setAttribute("share_account",
-                                                    transaction.getShareAccount().getName());
-                    break;
-                case Transaction.DIVIDEND:
-                    transactionElement = (Element)document.createElement("dividend");
-                    transactionElement.setAttribute("amount",
-						    transaction.getAmount().export());
-                   transactionElement.setAttribute("symbol",  
-                                                    transaction.getSymbol().toString());
-                    transactionElement.setAttribute("cash_account",
-                                                    transaction.getCashAccount().getName());
-                    transactionElement.setAttribute("share_account",
-                                                    transaction.getShareAccount().getName());
-                    break;
-                case Transaction.DIVIDEND_DRP:
-                    transactionElement = (Element)document.createElement("dividend_drp");
-                    transactionElement.setAttribute("symbol",  
-                                                    transaction.getSymbol().toString());
-                    transactionElement.setAttribute("shares",  
-                                                    Integer.toString(transaction.getShares()));
-                    transactionElement.setAttribute("share_account",
-                                                    transaction.getShareAccount().getName());
-                    break;
-                case Transaction.TRANSFER:
-                    transactionElement = (Element)document.createElement("transfer");
-                    transactionElement.setAttribute("source_cash_account",
-                                                    transaction.getCashAccount().getName());
-                    transactionElement.setAttribute("destination_cash_account",
-                                                    transaction.getCashAccount2().getName());
-                    transactionElement.setAttribute("amount",
-						    transaction.getAmount().export());
-                    break;
-                default:
-                    // Unknown transaction type
-                    assert false;
-                }
+			for (Iterator iterator = portfolio.getTransactions().iterator(); iterator.hasNext();) {
+				Transaction transaction = (Transaction) iterator.next();
+				Element transactionElement = null;
 
-                // All transaction elements have a date
-                transactionElement.setAttribute("date", transaction.getDate().toString());
-                transactionsElement.appendChild(transactionElement);
-            }
+				switch (transaction.getType()) {
+				case Transaction.WITHDRAWAL:
+					transactionElement = (Element) document.createElement("withdrawal");
+					transactionElement.setAttribute("cash_account", transaction.getCashAccount().getName());
+					transactionElement.setAttribute("amount", transaction.getAmount().export());
+					break;
+				case Transaction.DEPOSIT:
+					transactionElement = (Element) document.createElement("deposit");
+					transactionElement.setAttribute("cash_account", transaction.getCashAccount().getName());
+					transactionElement.setAttribute("amount", transaction.getAmount().export());
+					break;
+				case Transaction.INTEREST:
+					transactionElement = (Element) document.createElement("interest");
+					transactionElement.setAttribute("cash_account", transaction.getCashAccount().getName());
+					transactionElement.setAttribute("amount", transaction.getAmount().export());
+					break;
+				case Transaction.FEE:
+					transactionElement = (Element) document.createElement("fee");
+					transactionElement.setAttribute("cash_account", transaction.getCashAccount().getName());
+					transactionElement.setAttribute("amount", transaction.getAmount().export());
+					break;
+				case Transaction.ACCUMULATE:
+					transactionElement = (Element) document.createElement("accumulate");
+					transactionElement.setAttribute("amount", transaction.getAmount().export());
+					transactionElement.setAttribute("symbol", transaction.getSymbol().toString());
+					transactionElement.setAttribute("shares", Integer.toString(transaction.getShares()));
+					transactionElement.setAttribute("trade_cost", transaction.getTradeCost().export());
+					transactionElement.setAttribute("cash_account", transaction.getCashAccount().getName());
+					transactionElement.setAttribute("share_account", transaction.getShareAccount().getName());
+					break;
+				case Transaction.REDUCE:
+					transactionElement = (Element) document.createElement("reduce");
+					transactionElement.setAttribute("amount", transaction.getAmount().export());
+					transactionElement.setAttribute("symbol", transaction.getSymbol().toString());
+					transactionElement.setAttribute("shares", Integer.toString(transaction.getShares()));
+					transactionElement.setAttribute("trade_cost", transaction.getTradeCost().export());
+					transactionElement.setAttribute("cash_account", transaction.getCashAccount().getName());
+					transactionElement.setAttribute("share_account", transaction.getShareAccount().getName());
+					break;
+				case Transaction.DIVIDEND:
+					transactionElement = (Element) document.createElement("dividend");
+					transactionElement.setAttribute("amount", transaction.getAmount().export());
+					transactionElement.setAttribute("symbol", transaction.getSymbol().toString());
+					transactionElement.setAttribute("cash_account", transaction.getCashAccount().getName());
+					transactionElement.setAttribute("share_account", transaction.getShareAccount().getName());
+					break;
+				case Transaction.DIVIDEND_DRP:
+					transactionElement = (Element) document.createElement("dividend_drp");
+					transactionElement.setAttribute("symbol", transaction.getSymbol().toString());
+					transactionElement.setAttribute("shares", Integer.toString(transaction.getShares()));
+					transactionElement.setAttribute("share_account", transaction.getShareAccount().getName());
+					break;
+				case Transaction.TRANSFER:
+					transactionElement = (Element) document.createElement("transfer");
+					transactionElement.setAttribute("source_cash_account", transaction.getCashAccount().getName());
+					transactionElement.setAttribute("destination_cash_account",
+							transaction.getCashAccount2().getName());
+					transactionElement.setAttribute("amount", transaction.getAmount().export());
+					break;
+				default:
+					// Unknown transaction type
+					assert false;
+				}
 
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            
-            DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(stream);
-            transformer.transform(source, result);
-        }
-        catch(ParserConfigurationException e) {
-            // This should not occur
-            assert false;
-        }
-        catch(TransformerException e) {
-            // This should not occur
-            assert false;
-        }
-    }
+				// All transaction elements have a date
+				transactionElement.setAttribute("date", transaction.getDate().toString());
+				transactionsElement.appendChild(transactionElement);
+			}
+
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+
+			DOMSource source = new DOMSource(document);
+			StreamResult result = new StreamResult(stream);
+			transformer.transform(source, result);
+		} catch (ParserConfigurationException e) {
+			// This should not occur
+			assert false;
+		} catch (TransformerException e) {
+			// This should not occur
+			assert false;
+		}
+	}
 }

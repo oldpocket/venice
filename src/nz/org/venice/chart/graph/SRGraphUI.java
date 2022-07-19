@@ -40,159 +40,152 @@ import nz.org.venice.util.Locale;
  */
 public class SRGraphUI implements GraphUI {
 
-    // String name of settings
-    public final static String LAG = "Lag";
-    public final static String TYPE = "Type";
-	
-    // Limits
-    private final static int MIN_LAG = 1;
-    private final static int DEFAULT_LAG = 365;
-    private final static int DEFAULT_TYPE = SupportAndResistenceGraph.HEURISTIC;
+	// String name of settings
+	public final static String LAG = "Lag";
+	public final static String TYPE = "Type";
 
-    // The graph's user interface
-    private JPanel panel;
-    private JPanel panelTextBoxes;
-    // Details of lag
-    private JTextField lagTextField;
-    private JComboBox typeComboBox;
+	// Limits
+	private final static int MIN_LAG = 1;
+	private final static int DEFAULT_LAG = 365;
+	private final static int DEFAULT_TYPE = SupportAndResistenceGraph.HEURISTIC;
 
-    /**
-     * Create a new Support and Resistence user interface with the initial settings.
-     *
-     * @param settings the initial settings
-     */
-    public SRGraphUI(HashMap settings) {
-        buildPanel();
-        setSettings(settings);
-    }
+	// The graph's user interface
+	private JPanel panel;
+	private JPanel panelTextBoxes;
+	// Details of lag
+	private JTextField lagTextField;
+	private JComboBox typeComboBox;
 
-    /**
-     * Build the user interface JPanel.
-     */
-    private void buildPanel() {
-        panel = new JPanel();
-        
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));        
-        panelTextBoxes = new JPanel();
-
-	Vector options = new Vector();
-	options.add(Locale.getString("SR_HEURISTIC"));
-	options.add(Locale.getString("SR_BINS"));
-        
-        GridBagLayout layout = new GridBagLayout();
-        GridBagConstraints c = new GridBagConstraints();
-        panelTextBoxes.setLayout(layout);
-
-        c.weightx = 1.0;
-        c.ipadx = 5;
-        c.anchor = GridBagConstraints.SOUTH;
-        
-        lagTextField = GridBagHelper.addTextRow(panelTextBoxes, Locale.getString("PERIOD"), "",
-						layout, c, 8);
-
-	typeComboBox = GridBagHelper.addComboBox(panel, 
-						 Locale.getString("SR_TYPE"), 
-						 options,
-						 layout, c);
-
-	
-        panelTextBoxes.setAlignmentX(Component.LEFT_ALIGNMENT);
-        panel.add(panelTextBoxes);
-    }
-
-    public String checkSettings() {
-	return checkSettings(getSettings());
-    }
-    
-    public String checkSettings(HashMap settings) {
-        // Check lag + type
-        String lagString = (String)settings.get(LAG);
-	String typeString = (String)settings.get(TYPE);
-
-        int period;
-
-        try {
-            period = Integer.parseInt(lagString);
-        }
-        catch(NumberFormatException e) {
-            return Locale.getString("ERROR_PARSING_NUMBER", lagString);
-        }
-
-        if (period < MIN_LAG)
-            return Locale.getString("PERIOD_TOO_SMALL");
-                
-	if (typeString.compareTo(Locale.getString("SR_HEURISTIC")) != 0 &&
-	    typeString.compareTo(Locale.getString("SR_BINS")) != 0) {
-	    //It's a non editable drop down list, so shouldn't happen
-	    assert false;
+	/**
+	 * Create a new Support and Resistence user interface with the initial settings.
+	 *
+	 * @param settings the initial settings
+	 */
+	public SRGraphUI(HashMap settings) {
+		buildPanel();
+		setSettings(settings);
 	}
 
-        // Settings are OK
-        return null;
-    }
+	/**
+	 * Build the user interface JPanel.
+	 */
+	private void buildPanel() {
+		panel = new JPanel();
 
-    public HashMap getSettings() {
-        HashMap settings = new HashMap();
-        settings.put(LAG, lagTextField.getText());
-	settings.put(TYPE, (String)typeComboBox.getSelectedItem());
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panelTextBoxes = new JPanel();
 
-        return settings;
-    }
+		Vector options = new Vector();
+		options.add(Locale.getString("SR_HEURISTIC"));
+		options.add(Locale.getString("SR_BINS"));
 
-    public void setSettings(HashMap settings) {
-        lagTextField.setText(Integer.toString(getLag(settings)));
-	String type = (String)settings.get(TYPE);
-	if (type != null && !type.equals("")) {
-	    typeComboBox.setSelectedItem(type);
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		panelTextBoxes.setLayout(layout);
+
+		c.weightx = 1.0;
+		c.ipadx = 5;
+		c.anchor = GridBagConstraints.SOUTH;
+
+		lagTextField = GridBagHelper.addTextRow(panelTextBoxes, Locale.getString("PERIOD"), "", layout, c, 8);
+
+		typeComboBox = GridBagHelper.addComboBox(panel, Locale.getString("SR_TYPE"), options, layout, c);
+
+		panelTextBoxes.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panel.add(panelTextBoxes);
 	}
-    }
 
-    public JPanel getPanel() {
-        return panel;
-    }
+	public String checkSettings() {
+		return checkSettings(getSettings());
+	}
 
-    /**
-     * Retrieve the lag of the from the settings hashmap. If the hashmap
-     * is empty, then return the default.
-     *
-     * @param settings the settings
-     * @return the lag
-     */
-    public static int getLag(HashMap settings) {
-        int period = DEFAULT_LAG;
-        String text = (String)settings.get(LAG);
+	public String checkSettings(HashMap settings) {
+		// Check lag + type
+		String lagString = (String) settings.get(LAG);
+		String typeString = (String) settings.get(TYPE);
 
-        if(text != null) {
-            try {
-                period = Integer.parseInt(text);
-            }
-            catch(NumberFormatException e) {
-                // Value should already be checked
-                assert false;
-            }
-        }
+		int period;
 
-        return period;
-    }
+		try {
+			period = Integer.parseInt(lagString);
+		} catch (NumberFormatException e) {
+			return Locale.getString("ERROR_PARSING_NUMBER", lagString);
+		}
 
-    /**
-     * Retrieve the heuristic type from the settings hashmap. If the hashmap
-     * is empty, then return the default.
-     *
-     * @param settings the settings
-     * @return the type
-     */
-    public static int getType(HashMap settings) {
-        int type = DEFAULT_TYPE;
-        String text = (String)settings.get(TYPE);
+		if (period < MIN_LAG)
+			return Locale.getString("PERIOD_TOO_SMALL");
 
-        if(text != null) {
-	    if (text.compareTo(Locale.getString("SR_HEURISTIC")) == 0)
-		type = SupportAndResistenceGraph.HEURISTIC;
-	    else 
-		type = SupportAndResistenceGraph.BINS;		    
-        }
-        return type;
-    }
+		if (typeString.compareTo(Locale.getString("SR_HEURISTIC")) != 0
+				&& typeString.compareTo(Locale.getString("SR_BINS")) != 0) {
+			// It's a non editable drop down list, so shouldn't happen
+			assert false;
+		}
+
+		// Settings are OK
+		return null;
+	}
+
+	public HashMap getSettings() {
+		HashMap settings = new HashMap();
+		settings.put(LAG, lagTextField.getText());
+		settings.put(TYPE, (String) typeComboBox.getSelectedItem());
+
+		return settings;
+	}
+
+	public void setSettings(HashMap settings) {
+		lagTextField.setText(Integer.toString(getLag(settings)));
+		String type = (String) settings.get(TYPE);
+		if (type != null && !type.equals("")) {
+			typeComboBox.setSelectedItem(type);
+		}
+	}
+
+	public JPanel getPanel() {
+		return panel;
+	}
+
+	/**
+	 * Retrieve the lag of the from the settings hashmap. If the hashmap is empty,
+	 * then return the default.
+	 *
+	 * @param settings the settings
+	 * @return the lag
+	 */
+	public static int getLag(HashMap settings) {
+		int period = DEFAULT_LAG;
+		String text = (String) settings.get(LAG);
+
+		if (text != null) {
+			try {
+				period = Integer.parseInt(text);
+			} catch (NumberFormatException e) {
+				// Value should already be checked
+				assert false;
+			}
+		}
+
+		return period;
+	}
+
+	/**
+	 * Retrieve the heuristic type from the settings hashmap. If the hashmap is
+	 * empty, then return the default.
+	 *
+	 * @param settings the settings
+	 * @return the type
+	 */
+	public static int getType(HashMap settings) {
+		int type = DEFAULT_TYPE;
+		String text = (String) settings.get(TYPE);
+
+		if (text != null) {
+			if (text.compareTo(Locale.getString("SR_HEURISTIC")) == 0)
+				type = SupportAndResistenceGraph.HEURISTIC;
+			else
+				type = SupportAndResistenceGraph.BINS;
+		}
+		return type;
+	}
 
 }

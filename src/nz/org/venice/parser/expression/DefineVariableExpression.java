@@ -30,108 +30,102 @@ import nz.org.venice.util.Locale;
  * A representation of a variable definition.
  */
 public class DefineVariableExpression extends UnaryExpression {
-    
-    // The variable's name, type and constant status
-    private String name;
-    private int type;
-    private boolean isConstant;
-    
-    public DefineVariableExpression(String name, int type, boolean isConstant, Expression value) {
-	super(value);
 
-        assert name != null && name.length() > 0;
+	// The variable's name, type and constant status
+	private String name;
+	private int type;
+	private boolean isConstant;
 
-        this.name = name;
-        this.type = type;
-	this.isConstant = isConstant;
-    }
+	public DefineVariableExpression(String name, int type, boolean isConstant, Expression value) {
+		super(value);
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
-        throws EvaluationException {
+		assert name != null && name.length() > 0;
 
-	double value = getChild(0).evaluate(variables, quoteBundle, symbol, day);
-
-	// Check whether the variable exists *after* we've evaluated the expression
-	// otherwise we might miss the silly case of a variable being defined in its
-	// own definition. E.g.
-	// int a = 5 + (int a = 6)
-	if(!variables.contains(getName())) {
-	    variables.add(getName(), getType(), isConstant(), value);
-	    return value;
-	}
-	else
-            throw new EvaluationException(Locale.getString("VARIABLE_DEFINED_ERROR", getName()));
-    }
-
-    public String toString() {
-	// CONST int myVariable = 5
-	String string = "";
-	if(isConstant())
-	    string = string.concat("const ");
-
-	// const INT myVariable = 5
-	switch(getType()) {
-	case BOOLEAN_TYPE:
-	    string = string.concat("boolean");
-	    break;
-	case INTEGER_TYPE:
-	    string = string.concat("int");
-	    break;
-	default:
-	    assert getType() == FLOAT_TYPE;
-	    string = string.concat("float");
+		this.name = name;
+		this.type = type;
+		this.isConstant = isConstant;
 	}
 
-	// const int MYVARIABLE = 5
-	string = string.concat(" ");
-	string = string.concat(name);
-	string = string.concat(" = ");
-	string = string.concat(getChild(0).toString());
-	return string;
-    }
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-    public String getName() {
-        return name;
-    }
+		double value = getChild(0).evaluate(variables, quoteBundle, symbol, day);
 
-    public int getType() {
-        return type;
-    }
-   
-    public boolean isConstant() {
-	return isConstant;
-    }
-
-    public int checkType() throws TypeMismatchException {
-	if(getType() == getChild(0).checkType())
-	    return getType();
-	else {
-	    throw new TypeMismatchException(this, 
-					    getType(), 
-					    getChild(0).getType());
+		// Check whether the variable exists *after* we've evaluated the expression
+		// otherwise we might miss the silly case of a variable being defined in its
+		// own definition. E.g.
+		// int a = 5 + (int a = 6)
+		if (!variables.contains(getName())) {
+			variables.add(getName(), getType(), isConstant(), value);
+			return value;
+		} else
+			throw new EvaluationException(Locale.getString("VARIABLE_DEFINED_ERROR", getName()));
 	}
-    }
 
-    public boolean equals(Object object) {
-        if(object instanceof DefineVariableExpression) {
-            DefineVariableExpression expression = (DefineVariableExpression)object;
+	public String toString() {
+		// CONST int myVariable = 5
+		String string = "";
+		if (isConstant())
+			string = string.concat("const ");
 
-            if(expression.getName().equals(getName()) &&
-               expression.getType() == getType() &&
-	       expression.isConstant() == isConstant() &&
-	       expression.getChild(0).equals(getChild(0)))
-                return true;
-        }
+		// const INT myVariable = 5
+		switch (getType()) {
+		case BOOLEAN_TYPE:
+			string = string.concat("boolean");
+			break;
+		case INTEGER_TYPE:
+			string = string.concat("int");
+			break;
+		default:
+			assert getType() == FLOAT_TYPE;
+			string = string.concat("float");
+		}
 
-        return false;
-    }
+		// const int MYVARIABLE = 5
+		string = string.concat(" ");
+		string = string.concat(name);
+		string = string.concat(" = ");
+		string = string.concat(getChild(0).toString());
+		return string;
+	}
 
-    public int hashCode() {
-	return new Boolean(isConstant).hashCode() ^ getName().hashCode() ^ getType();
-    }
+	public String getName() {
+		return name;
+	}
 
-    public Object clone() {
-        return new DefineVariableExpression(getName(), getType(), isConstant(), 
-					    (Expression)getChild(0).clone());
-    }
+	public int getType() {
+		return type;
+	}
+
+	public boolean isConstant() {
+		return isConstant;
+	}
+
+	public int checkType() throws TypeMismatchException {
+		if (getType() == getChild(0).checkType())
+			return getType();
+		else {
+			throw new TypeMismatchException(this, getType(), getChild(0).getType());
+		}
+	}
+
+	public boolean equals(Object object) {
+		if (object instanceof DefineVariableExpression) {
+			DefineVariableExpression expression = (DefineVariableExpression) object;
+
+			if (expression.getName().equals(getName()) && expression.getType() == getType()
+					&& expression.isConstant() == isConstant() && expression.getChild(0).equals(getChild(0)))
+				return true;
+		}
+
+		return false;
+	}
+
+	public int hashCode() {
+		return new Boolean(isConstant).hashCode() ^ getName().hashCode() ^ getType();
+	}
+
+	public Object clone() {
+		return new DefineVariableExpression(getName(), getType(), isConstant(), (Expression) getChild(0).clone());
+	}
 }

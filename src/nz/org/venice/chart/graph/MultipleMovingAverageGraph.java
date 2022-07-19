@@ -31,176 +31,159 @@ import nz.org.venice.chart.source.GraphSource;
 import nz.org.venice.util.Locale;
 
 /**
- * Multiple Moving Average graph. This graph draws 10 simple moving averages.
- * It typically shows two groups - traders and investors.
- * When the two lines meet or interset they indicate agreement between 
- * the two groups
+ * Multiple Moving Average graph. This graph draws 10 simple moving averages. It
+ * typically shows two groups - traders and investors. When the two lines meet
+ * or interset they indicate agreement between the two groups
  */
 public class MultipleMovingAverageGraph extends AbstractGraph {
 
-    private Vector fastMovingAverages;
-    private Vector slowMovingAverages;
+	private Vector fastMovingAverages;
+	private Vector slowMovingAverages;
 
-    private int periodsFast[] = {3, 5, 8, 10, 15};
-    private int periodsSlow[] = {30,35, 40, 45, 50, 60};
-    
-    
-    /**
-     * Create a new multiple moving average graph.
-     *
-     * @param	source	the source to create the moving averages from
-     */
-    public MultipleMovingAverageGraph(GraphSource source) {
+	private int periodsFast[] = { 3, 5, 8, 10, 15 };
+	private int periodsSlow[] = { 30, 35, 40, 45, 50, 60 };
 
-	super(source);
-        setSettings(new HashMap());
-	
-    }
+	/**
+	 * Create a new multiple moving average graph.
+	 *
+	 * @param source the source to create the moving averages from
+	 */
+	public MultipleMovingAverageGraph(GraphSource source) {
 
-    /**
-     * Create a new multiple moving average graph according to Simple Moving Average.
-     *
-     * @param	source	the source to create two moving averages from
-     *
-     */
-    private void createMultipleMovingAverageGraph(Graphable source) {
-	int i;
+		super(source);
+		setSettings(new HashMap());
 
-	fastMovingAverages = new Vector();
-	slowMovingAverages = new Vector();
-
-	for (i = 0; i < periodsFast.length; i++) {
-	    Graphable avg = MovingAverageGraph.createMovingAverage(source, periodsFast[i]);
-	    fastMovingAverages.add(avg); 
 	}
-	for (i = 0; i < periodsSlow.length; i++) {
-	    Graphable avg = MovingAverageGraph.createMovingAverage(source, periodsSlow[i]);
-	    slowMovingAverages.add(avg); 
+
+	/**
+	 * Create a new multiple moving average graph according to Simple Moving
+	 * Average.
+	 *
+	 * @param source the source to create two moving averages from
+	 *
+	 */
+	private void createMultipleMovingAverageGraph(Graphable source) {
+		int i;
+
+		fastMovingAverages = new Vector();
+		slowMovingAverages = new Vector();
+
+		for (i = 0; i < periodsFast.length; i++) {
+			Graphable avg = MovingAverageGraph.createMovingAverage(source, periodsFast[i]);
+			fastMovingAverages.add(avg);
+		}
+		for (i = 0; i < periodsSlow.length; i++) {
+			Graphable avg = MovingAverageGraph.createMovingAverage(source, periodsSlow[i]);
+			slowMovingAverages.add(avg);
+		}
+
 	}
-	
-    }
 
-    public void render(Graphics g, Color colour, int xoffset, int yoffset,
-		       double horizontalScale, double verticalScale,
-		       double topLineValue, double bottomLineValue, 
-		       List dates, 
-		       boolean vertOrientation) {
+	public void render(Graphics g, Color colour, int xoffset, int yoffset, double horizontalScale, double verticalScale,
+			double topLineValue, double bottomLineValue, List dates, boolean vertOrientation) {
 
-	// We ignore the graph colours and use our own custom colours
+		// We ignore the graph colours and use our own custom colours
 
-	g.setColor(Color.green.darker());
-	Iterator iterator = fastMovingAverages.iterator();
-	while (iterator.hasNext()) {
-	    Graphable avg = (Graphable)iterator.next();
-	    GraphTools.renderLine(g, avg, xoffset, yoffset,
-				  horizontalScale,
-				  verticalScale, 
-				  topLineValue, bottomLineValue, dates, 
-				  vertOrientation);
-	    
+		g.setColor(Color.green.darker());
+		Iterator iterator = fastMovingAverages.iterator();
+		while (iterator.hasNext()) {
+			Graphable avg = (Graphable) iterator.next();
+			GraphTools.renderLine(g, avg, xoffset, yoffset, horizontalScale, verticalScale, topLineValue,
+					bottomLineValue, dates, vertOrientation);
+
+		}
+		g.setColor(Color.red.darker());
+		iterator = slowMovingAverages.iterator();
+		while (iterator.hasNext()) {
+			Graphable avg = (Graphable) iterator.next();
+			GraphTools.renderLine(g, avg, xoffset, yoffset, horizontalScale, verticalScale, topLineValue,
+					bottomLineValue, dates, vertOrientation);
+		}
+
 	}
-	g.setColor(Color.red.darker());
-	iterator = slowMovingAverages.iterator();
-	while (iterator.hasNext()) {
-	    Graphable avg = (Graphable)iterator.next();
-	    GraphTools.renderLine(g, avg, xoffset, yoffset,
-				  horizontalScale,
-				  verticalScale, 
-				  topLineValue, bottomLineValue, 
-				  dates, 
-				  vertOrientation);
+
+	public String getToolTipText(Comparable x, int y, int yoffset, double verticalScale, double bottomLineValue) {
+		return null; // we never give tool tip information
 	}
-	
-    }
 
-    public String getToolTipText(Comparable x, int y, int yoffset,
-				 double verticalScale,
-				 double bottomLineValue)
-    {
-	return null; // we never give tool tip information
-    }
+	// Highest Y value is the highest of all the moving averages
+	public double getHighestY(List x) {
 
-    // Highest Y value is the highest of all the moving averages
-    public double getHighestY(List x) {
-	
-	Iterator iterator = fastMovingAverages.iterator();
-	double max = Double.MIN_VALUE;
-	double value = 0.0;
+		Iterator iterator = fastMovingAverages.iterator();
+		double max = Double.MIN_VALUE;
+		double value = 0.0;
 
-	while (iterator.hasNext()) {
-	    Graphable avg = (Graphable)iterator.next();
-	    value = avg.getHighestY(x);
+		while (iterator.hasNext()) {
+			Graphable avg = (Graphable) iterator.next();
+			value = avg.getHighestY(x);
 
-	    if (value > max) {
-		max = value;
-	    }
+			if (value > max) {
+				max = value;
+			}
+		}
+		iterator = slowMovingAverages.iterator();
+		while (iterator.hasNext()) {
+			Graphable avg = (Graphable) iterator.next();
+			value = avg.getHighestY(x);
+			if (value > max) {
+				max = value;
+			}
+		}
+		return max;
 	}
-	iterator = slowMovingAverages.iterator();
-	while (iterator.hasNext()) {
-	    Graphable avg = (Graphable)iterator.next();
-	    value = avg.getHighestY(x);
-	    if (value > max) {
-		max = value;
-	    }
+
+	// Lowest Y value is the lowest of both the moving averages
+	public double getLowestY(List x) {
+
+		Iterator iterator = fastMovingAverages.iterator();
+		double min = Double.MAX_VALUE;
+		double value = 0.0;
+
+		while (iterator.hasNext()) {
+			Graphable avg = (Graphable) iterator.next();
+			value = avg.getLowestY(x);
+
+			if (value < min) {
+				min = value;
+			}
+		}
+		iterator = slowMovingAverages.iterator();
+		while (iterator.hasNext()) {
+			Graphable avg = (Graphable) iterator.next();
+			value = avg.getLowestY(x);
+			if (value < min) {
+				min = value;
+			}
+		}
+		return min;
 	}
-	return max;
-    }
 
-    // Lowest Y value is the lowest of both the moving averages
-    public double getLowestY(List x) {
-	
-	Iterator iterator = fastMovingAverages.iterator();
-	double min = Double.MAX_VALUE;
-	double value = 0.0;
-
-	while (iterator.hasNext()) {
-	    Graphable avg = (Graphable)iterator.next();
-	    value = avg.getLowestY(x);
-
-	    if (value < min) {
-		min = value;
-	    }
+	/**
+	 * Return the name of this graph.
+	 *
+	 * @return <code>MultipleMovingAverage</code>
+	 */
+	public String getName() {
+		return Locale.getString("MULT_MOVING_AVERAGE");
 	}
-	iterator = slowMovingAverages.iterator();
-	while (iterator.hasNext()) {
-	    Graphable avg = (Graphable)iterator.next();
-	    value = avg.getLowestY(x);
-	    if (value < min) {
-		min = value;
-	    }
+
+	public boolean isPrimary() {
+		return true;
 	}
-	return min;
-    }
 
-    /**
-     * Return the name of this graph.
-     *
-     * @return	<code>MultipleMovingAverage</code>
-     */
-    public String getName() {
-	return Locale.getString("MULT_MOVING_AVERAGE");
-    }
+	public void setSettings(HashMap settings) {
+		super.setSettings(settings);
 
-    public boolean isPrimary() {
-        return true;
-    }
+		createMultipleMovingAverageGraph(getSource().getGraphable());
+	}
 
-    public void setSettings(HashMap settings) {
-        super.setSettings(settings);
-        
-        createMultipleMovingAverageGraph(getSource().getGraphable());
-    }
-
-    /**
-     * Return the graph's user interface.
-     *
-     * @param settings the initial settings
-     * @return user interface
-     */
-    public GraphUI getUI(HashMap settings) {
-        return null;
-    }
+	/**
+	 * Return the graph's user interface.
+	 *
+	 * @param settings the initial settings
+	 * @return user interface
+	 */
+	public GraphUI getUI(HashMap settings) {
+		return null;
+	}
 }
-
-
-

@@ -19,96 +19,95 @@
 package nz.org.venice.util;
 
 /**
- * Manages a report or log. The class keeps the report in memory and
- * keeps track of the number of warnings and errors that have been
- * logged.
+ * Manages a report or log. The class keeps the report in memory and keeps track
+ * of the number of warnings and errors that have been logged.
  *
  * @author Andrew Leppard
  */
 public class Report {
 
-    /** The line number where the report is truncated. */
-    public static int TRUNCATE_LINE = 1000;
+	/** The line number where the report is truncated. */
+	public static int TRUNCATE_LINE = 1000;
 
-    // Internal report fields
-    private StringBuffer buffer;
-    private int warnings;
-    private int errors;
-    private int lines;
+	// Internal report fields
+	private StringBuffer buffer;
+	private int warnings;
+	private int errors;
+	private int lines;
 
-    /**
-     * Create a new empty report.
-     */
-    public Report() {
-        buffer = new StringBuffer();
-        warnings = 0;
-        errors = 0;
-        lines = 0;
-    }
-    
-    /**
-     * Add a message to the report.
-     *
-     * @param text text of message
-     */
-    public void addMessage(String text) {
-        if(lines == TRUNCATE_LINE) {
-            buffer.append("\n");
-            buffer.append(Locale.getString("REPORT_TRUNCATED", TRUNCATE_LINE));
-        }
+	/**
+	 * Create a new empty report.
+	 */
+	public Report() {
+		buffer = new StringBuffer();
+		warnings = 0;
+		errors = 0;
+		lines = 0;
+	}
 
-        else if(lines < TRUNCATE_LINE) {
-            buffer.append(text);
-            buffer.append("\n");
-        }
-        
-        lines++;
-    }
+	/**
+	 * Add a message to the report.
+	 *
+	 * @param text text of message
+	 */
+	public void addMessage(String text) {
+		if (lines == TRUNCATE_LINE) {
+			buffer.append("\n");
+			buffer.append(Locale.getString("REPORT_TRUNCATED", TRUNCATE_LINE));
+		}
 
-    /**
-     * Add a warning message to the report.
-     *
-     * @param text text of message
-     */
-    public void addWarning(String text) {
-        addMessage(text);
-        warnings++;
-    }
+		else if (lines < TRUNCATE_LINE) {
+			buffer.append(text);
+			buffer.append("\n");
+		}
 
-    /**
-     * Add an error message to the report.
-     *
-     * @param text text of message
-     */
-    public void addError(String text) {
-        addMessage(text);
-        errors++;
-    }
+		lines++;
+	}
 
-    /**
-     * Get the report text.
-     *
-     * @return text the text of the report
-     */
-    public String getText() {
-        return buffer.toString();
-    }
+	/**
+	 * Add a warning message to the report.
+	 *
+	 * @param text text of message
+	 */
+	public void addWarning(String text) {
+		addMessage(text);
+		warnings++;
+	}
 
-    /**
-     * Get the number of warnings logged.
-     *
-     * @return warning count
-     */
-    public int getWarningCount() {
-        return warnings;
-    }
+	/**
+	 * Add an error message to the report.
+	 *
+	 * @param text text of message
+	 */
+	public void addError(String text) {
+		addMessage(text);
+		errors++;
+	}
 
-    /**
-     * Get the number of errors logged.
-     *
-     * @return error count
-     */
-    public int getErrorCount() {
-        return errors;
-    }
+	/**
+	 * Get the report text.
+	 *
+	 * @return text the text of the report
+	 */
+	public String getText() {
+		return buffer.toString();
+	}
+
+	/**
+	 * Get the number of warnings logged.
+	 *
+	 * @return warning count
+	 */
+	public int getWarningCount() {
+		return warnings;
+	}
+
+	/**
+	 * Get the number of errors logged.
+	 *
+	 * @return error count
+	 */
+	public int getErrorCount() {
+		return errors;
+	}
 }

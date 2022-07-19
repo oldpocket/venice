@@ -37,222 +37,209 @@ import nz.org.venice.util.Locale;
  */
 public class RSIGraphUI implements GraphUI {
 
-    // The graph's user interface
-    private JPanel panel;
-    private JTextField periodTextField;
-    private JTextField overSoldTextField;
-    private JTextField overBoughtTextField;
-    private JCheckBox smoothFlagCheckBox;
+	// The graph's user interface
+	private JPanel panel;
+	private JTextField periodTextField;
+	private JTextField overSoldTextField;
+	private JTextField overBoughtTextField;
+	private JCheckBox smoothFlagCheckBox;
 
-    // String name of settings
-    private final static String PERIOD = "period";
-    private final static String OVER_SOLD = "oversold";
-    private final static String OVER_BOUGHT = "overbought";
-    private final static String SMOOTH_FLAG = "smoothing";
+	// String name of settings
+	private final static String PERIOD = "period";
+	private final static String OVER_SOLD = "oversold";
+	private final static String OVER_BOUGHT = "overbought";
+	private final static String SMOOTH_FLAG = "smoothing";
 
-    // Limits
-    private final static int MINIMUM_PERIOD = 2;
-    private final static int MINIMUM_OVER_SOLD = 1;
-    private final static int MAXIMUM_OVER_SOLD = 49;
-    private final static int MINIMUM_OVER_BOUGHT = 51;
-    private final static int MAXIMUM_OVER_BOUGHT = 99;
+	// Limits
+	private final static int MINIMUM_PERIOD = 2;
+	private final static int MINIMUM_OVER_SOLD = 1;
+	private final static int MAXIMUM_OVER_SOLD = 49;
+	private final static int MINIMUM_OVER_BOUGHT = 51;
+	private final static int MAXIMUM_OVER_BOUGHT = 99;
 
-    // Default values from Technical Analysis Explained by Martin J. Pring.
-    private final static int DEFAULT_PERIOD = 14;
-    private final static int DEFAULT_OVER_SOLD = 32;
-    private final static int DEFAULT_OVER_BOUGHT = 72;
-    private final static boolean DEFAULT_SMOOTH = false;
+	// Default values from Technical Analysis Explained by Martin J. Pring.
+	private final static int DEFAULT_PERIOD = 14;
+	private final static int DEFAULT_OVER_SOLD = 32;
+	private final static int DEFAULT_OVER_BOUGHT = 72;
+	private final static boolean DEFAULT_SMOOTH = false;
 
-    /**
-     * Create a new RSI user interface with the initial settings.
-     *
-     * @param settings the initial settings
-     */
-    public RSIGraphUI(HashMap settings) {
-        buildPanel();
-        setSettings(settings);
-    }
+	/**
+	 * Create a new RSI user interface with the initial settings.
+	 *
+	 * @param settings the initial settings
+	 */
+	public RSIGraphUI(HashMap settings) {
+		buildPanel();
+		setSettings(settings);
+	}
 
-    /**
-     * Build the user interface JPanel.
-     */
-    private void buildPanel() {
-        panel = new JPanel();
-        GridBagLayout layout = new GridBagLayout();
-        GridBagConstraints c = new GridBagConstraints();
-        panel.setLayout(layout);
+	/**
+	 * Build the user interface JPanel.
+	 */
+	private void buildPanel() {
+		panel = new JPanel();
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		panel.setLayout(layout);
 
-        c.weightx = 1.0;
-        c.ipadx = 5;
-        c.anchor = GridBagConstraints.WEST;
+		c.weightx = 1.0;
+		c.ipadx = 5;
+		c.anchor = GridBagConstraints.WEST;
 
-        periodTextField = GridBagHelper.addTextRow(panel, Locale.getString("PERIOD"), "",
-                                                   layout, c, 8);
-        overSoldTextField = GridBagHelper.addTextRow(panel, Locale.getString("OVER_SOLD"), "",
-                                                     layout, c, 8);
-        overBoughtTextField = GridBagHelper.addTextRow(panel, Locale.getString("OVER_BOUGHT"),
-                                                       "", layout, c, 8);
+		periodTextField = GridBagHelper.addTextRow(panel, Locale.getString("PERIOD"), "", layout, c, 8);
+		overSoldTextField = GridBagHelper.addTextRow(panel, Locale.getString("OVER_SOLD"), "", layout, c, 8);
+		overBoughtTextField = GridBagHelper.addTextRow(panel, Locale.getString("OVER_BOUGHT"), "", layout, c, 8);
 
-	smoothFlagCheckBox = GridBagHelper.addCheckBoxRow(panel, Locale.getString("RSI_SMOOTHING"), false, layout, c);
-    }
+		smoothFlagCheckBox = GridBagHelper.addCheckBoxRow(panel, Locale.getString("RSI_SMOOTHING"), false, layout, c);
+	}
 
-    public String checkSettings() {
-	return checkSettings(getSettings());
-    }
-    
-    public String checkSettings(HashMap settings) {
-        // Check period
-        String periodString = (String)settings.get(PERIOD);
-        int period;
+	public String checkSettings() {
+		return checkSettings(getSettings());
+	}
 
-        try {
-            period = Integer.parseInt(periodString);
-        }
-        catch(NumberFormatException e) {
-            return Locale.getString("ERROR_PARSING_NUMBER", periodString);
-        }
+	public String checkSettings(HashMap settings) {
+		// Check period
+		String periodString = (String) settings.get(PERIOD);
+		int period;
 
-        if (period < MINIMUM_PERIOD)
-            return Locale.getString("PERIOD_TOO_SMALL");
+		try {
+			period = Integer.parseInt(periodString);
+		} catch (NumberFormatException e) {
+			return Locale.getString("ERROR_PARSING_NUMBER", periodString);
+		}
 
-        // Check over sold
-        String overSoldString = (String)settings.get(OVER_SOLD);
-        int overSold;
+		if (period < MINIMUM_PERIOD)
+			return Locale.getString("PERIOD_TOO_SMALL");
 
-        try {
-            overSold = Integer.parseInt(overSoldString);
-        }
-        catch(NumberFormatException e) {
-            return Locale.getString("ERROR_PARSING_NUMBER", overSoldString);
-        }
+		// Check over sold
+		String overSoldString = (String) settings.get(OVER_SOLD);
+		int overSold;
 
-        if (overSold < MINIMUM_OVER_SOLD || overSold > MAXIMUM_OVER_SOLD)
-            return Locale.getString("ERROR_OVER_SOLD_LIMITS",
-                                    MINIMUM_OVER_SOLD,
-                                    MAXIMUM_OVER_SOLD);
+		try {
+			overSold = Integer.parseInt(overSoldString);
+		} catch (NumberFormatException e) {
+			return Locale.getString("ERROR_PARSING_NUMBER", overSoldString);
+		}
 
-        // Check over bought
-        String overBoughtString = (String)settings.get(OVER_BOUGHT);
-        int overBought;
+		if (overSold < MINIMUM_OVER_SOLD || overSold > MAXIMUM_OVER_SOLD)
+			return Locale.getString("ERROR_OVER_SOLD_LIMITS", MINIMUM_OVER_SOLD, MAXIMUM_OVER_SOLD);
 
-        try {
-            overBought = Integer.parseInt(overBoughtString);
-        }
-        catch(NumberFormatException e) {
-            return Locale.getString("ERROR_PARSING_NUMBER", overBoughtString);
-        }
+		// Check over bought
+		String overBoughtString = (String) settings.get(OVER_BOUGHT);
+		int overBought;
 
-        if (overBought < MINIMUM_OVER_BOUGHT || overBought > MAXIMUM_OVER_BOUGHT)
-            return Locale.getString("ERROR_OVER_BOUGHT_LIMITS",
-                                    MINIMUM_OVER_BOUGHT,
-                                    MAXIMUM_OVER_BOUGHT);
+		try {
+			overBought = Integer.parseInt(overBoughtString);
+		} catch (NumberFormatException e) {
+			return Locale.getString("ERROR_PARSING_NUMBER", overBoughtString);
+		}
 
-        // Settings are OK
-        return null;
-    }
+		if (overBought < MINIMUM_OVER_BOUGHT || overBought > MAXIMUM_OVER_BOUGHT)
+			return Locale.getString("ERROR_OVER_BOUGHT_LIMITS", MINIMUM_OVER_BOUGHT, MAXIMUM_OVER_BOUGHT);
 
-    public HashMap getSettings() {
-        HashMap settings = new HashMap();
-        settings.put(PERIOD, periodTextField.getText());
-        settings.put(OVER_SOLD, overSoldTextField.getText());
-        settings.put(OVER_BOUGHT, overBoughtTextField.getText());
-	settings.put(SMOOTH_FLAG, new Boolean(smoothFlagCheckBox.isSelected()));
-        return settings;
-    }
+		// Settings are OK
+		return null;
+	}
 
-    public void setSettings(HashMap settings) {
-        periodTextField.setText(Integer.toString(getPeriod(settings)));
-        overSoldTextField.setText(Integer.toString(getOverSold(settings)));
-        overBoughtTextField.setText(Integer.toString(getOverBought(settings)));
-	smoothFlagCheckBox.setSelected(getSmoothFlag(settings));
-    }
+	public HashMap getSettings() {
+		HashMap settings = new HashMap();
+		settings.put(PERIOD, periodTextField.getText());
+		settings.put(OVER_SOLD, overSoldTextField.getText());
+		settings.put(OVER_BOUGHT, overBoughtTextField.getText());
+		settings.put(SMOOTH_FLAG, new Boolean(smoothFlagCheckBox.isSelected()));
+		return settings;
+	}
 
-    public JPanel getPanel() {
-        return panel;
-    }
+	public void setSettings(HashMap settings) {
+		periodTextField.setText(Integer.toString(getPeriod(settings)));
+		overSoldTextField.setText(Integer.toString(getOverSold(settings)));
+		overBoughtTextField.setText(Integer.toString(getOverBought(settings)));
+		smoothFlagCheckBox.setSelected(getSmoothFlag(settings));
+	}
 
-    /**
-     * Retrieve the period from the settings hashmap. If the hashmap
-     * is empty, then return the default period.
-     *
-     * @param settings the settings
-     * @return the period
-     */
-    public static int getPeriod(HashMap settings) {
-        int period = DEFAULT_PERIOD;
-        String periodString = (String)settings.get(PERIOD);
+	public JPanel getPanel() {
+		return panel;
+	}
 
-        if(periodString != null) {
-            try {
-                period = Integer.parseInt(periodString);
-            }
-            catch(NumberFormatException e) {
-                // Value should already be checked
-                assert false;
-            }
-        }
+	/**
+	 * Retrieve the period from the settings hashmap. If the hashmap is empty, then
+	 * return the default period.
+	 *
+	 * @param settings the settings
+	 * @return the period
+	 */
+	public static int getPeriod(HashMap settings) {
+		int period = DEFAULT_PERIOD;
+		String periodString = (String) settings.get(PERIOD);
 
-        return period;
-    }
+		if (periodString != null) {
+			try {
+				period = Integer.parseInt(periodString);
+			} catch (NumberFormatException e) {
+				// Value should already be checked
+				assert false;
+			}
+		}
 
-    /**
-     * Retrieve the over sold line from the settings hashmap. If the hashmap
-     * is empty, then return the default.
-     *
-     * @param settings the settings
-     * @return the over sold line
-     */
-    public static int getOverSold(HashMap settings) {
-        int overSold = DEFAULT_OVER_SOLD;
-        String text = (String)settings.get(OVER_SOLD);
+		return period;
+	}
 
-        if(text != null) {
-            try {
-                overSold = Integer.parseInt(text);
-            }
-            catch(NumberFormatException e) {
-                // Value should already be checked
-                assert false;
-            }
-        }
+	/**
+	 * Retrieve the over sold line from the settings hashmap. If the hashmap is
+	 * empty, then return the default.
+	 *
+	 * @param settings the settings
+	 * @return the over sold line
+	 */
+	public static int getOverSold(HashMap settings) {
+		int overSold = DEFAULT_OVER_SOLD;
+		String text = (String) settings.get(OVER_SOLD);
 
-        return overSold;
-    }
+		if (text != null) {
+			try {
+				overSold = Integer.parseInt(text);
+			} catch (NumberFormatException e) {
+				// Value should already be checked
+				assert false;
+			}
+		}
 
-    /**
-     * Retrieve the over bought line from the settings hashmap. If the hashmap
-     * is empty, then return the default.
-     *
-     * @param settings the settings
-     * @return the over bought line
-     */
-    public static int getOverBought(HashMap settings) {
-        int overBought = DEFAULT_OVER_BOUGHT;
-        String text = (String)settings.get(OVER_BOUGHT);
+		return overSold;
+	}
 
-        if(text != null) {
-            try {
-                overBought = Integer.parseInt(text);
-            }
-            catch(NumberFormatException e) {
-                // Value should already be checked
-                assert false;
-            }
-        }
+	/**
+	 * Retrieve the over bought line from the settings hashmap. If the hashmap is
+	 * empty, then return the default.
+	 *
+	 * @param settings the settings
+	 * @return the over bought line
+	 */
+	public static int getOverBought(HashMap settings) {
+		int overBought = DEFAULT_OVER_BOUGHT;
+		String text = (String) settings.get(OVER_BOUGHT);
 
-        return overBought;
-    }
+		if (text != null) {
+			try {
+				overBought = Integer.parseInt(text);
+			} catch (NumberFormatException e) {
+				// Value should already be checked
+				assert false;
+			}
+		}
 
-    /**
-     * Retrieve the smoothing flag from the setings. Return the default (false)
-     *  if the map is empty.
-     * 
-     * @param settings the settings map
-     * @return the smoothing flag       
-     */
-    public static boolean getSmoothFlag(HashMap settings) {
-	boolean defaultSmoothFlag = DEFAULT_SMOOTH;
-        Boolean flag = (Boolean)settings.get(SMOOTH_FLAG);
-	return (flag != null) ? flag.booleanValue() : defaultSmoothFlag;
-    }
+		return overBought;
+	}
+
+	/**
+	 * Retrieve the smoothing flag from the setings. Return the default (false) if
+	 * the map is empty.
+	 * 
+	 * @param settings the settings map
+	 * @return the smoothing flag
+	 */
+	public static boolean getSmoothFlag(HashMap settings) {
+		boolean defaultSmoothFlag = DEFAULT_SMOOTH;
+		Boolean flag = (Boolean) settings.get(SMOOTH_FLAG);
+		return (flag != null) ? flag.booleanValue() : defaultSmoothFlag;
+	}
 }

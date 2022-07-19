@@ -26,33 +26,33 @@ package nz.org.venice.quote;
  */
 public class ExchangeRateFormatException extends Throwable {
 
-    // Reason for exception
-    private String reason = null;
+	// Reason for exception
+	private String reason = null;
 
-    /**
-     * Create a new exchange rate format exception.
-     *
-     * @param reason the reason for this exception
-     */
-    public ExchangeRateFormatException(String reason) {
-        this.reason = reason;
-    }
+	/**
+	 * Create a new exchange rate format exception.
+	 *
+	 * @param reason the reason for this exception
+	 */
+	public ExchangeRateFormatException(String reason) {
+		this.reason = reason;
+	}
 
-    /**
-     * Return the reason this exception was raised.
-     *
-     * @return the reason
-     */
-    public String getReason() {
-        return reason;
-    }
+	/**
+	 * Return the reason this exception was raised.
+	 *
+	 * @return the reason
+	 */
+	public String getReason() {
+		return reason;
+	}
 
-    /**
-     * Convert the exception to a string
-     *
-     * @return	string version of the exception
-     */
-    public String toString() {
-	return getReason();
-    }
+	/**
+	 * Convert the exception to a string
+	 *
+	 * @return string version of the exception
+	 */
+	public String toString() {
+		return getReason();
+	}
 }

@@ -19,18 +19,18 @@
 package nz.org.venice.quote;
 
 /**
- * This exception represents an error importing or exporting a quote to
- * or from Venice.
+ * This exception represents an error importing or exporting a quote to or from
+ * Venice.
  */
 public class ImportExportException extends Throwable {
 
-    /**
-     * Create an exception that represents the error condition that occurs when
-     * an import or export fails.
-     *
-     * @param message the failure reason
-     */
-    public ImportExportException(String message) {
-        super(message);
-    }
+	/**
+	 * Create an exception that represents the error condition that occurs when an
+	 * import or export fails.
+	 *
+	 * @param message the failure reason
+	 */
+	public ImportExportException(String message) {
+		super(message);
+	}
 }

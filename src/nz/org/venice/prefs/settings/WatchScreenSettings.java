@@ -16,10 +16,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-
 package nz.org.venice.prefs.settings;
-
 
 /**
  * This class represents WatchScreen Module data  which can restore modules upon restart. 
@@ -43,52 +40,50 @@ import nz.org.venice.table.WatchScreenModule;
 import nz.org.venice.util.TradingDate;
 
 public class WatchScreenSettings extends AbstractSettings {
-    
-    /**
-     * 
-     * WatchScreenSettings default constructor
-     */
 
-    public WatchScreenSettings() {
-	super(Settings.TABLE, Settings.WATCHSCREENMODULE);
-    }
+	/**
+	 * 
+	 * WatchScreenSettings default constructor
+	 */
 
+	public WatchScreenSettings() {
+		super(Settings.TABLE, Settings.WATCHSCREENMODULE);
+	}
 
-    /**
-     * 
-     * Construct a WatchScreenSettings module with the title as key
-     *
-     * @param  title  The title of the WatchScreen
-     */
-    public WatchScreenSettings(String title) {
-	super(Settings.TABLE, Settings.WATCHSCREENMODULE);
-	super.setTitle(title);
-    }
+	/**
+	 * 
+	 * Construct a WatchScreenSettings module with the title as key
+	 *
+	 * @param title The title of the WatchScreen
+	 */
+	public WatchScreenSettings(String title) {
+		super(Settings.TABLE, Settings.WATCHSCREENMODULE);
+		super.setTitle(title);
+	}
 
-    /**
-     *
-     * Return a WatchScreenModule based on the WatchScreenSettings
-     * 
-     * @param  desktop  The Venice desktop
-     * @return  A WatchScreenModule     
-     */
+	/**
+	 *
+	 * Return a WatchScreenModule based on the WatchScreenSettings
+	 * 
+	 * @param desktop The Venice desktop
+	 * @return A WatchScreenModule
+	 */
 
-    public Module getModule(JDesktopPane desktop) {
-	
-	try {
-	    WatchScreen watchScreen = PreferencesManager.getWatchScreen(getTitle());
-	    
-	    TradingDate lastDate = QuoteSourceManager.getSource().getLastDate();
-	    
-	    if (lastDate != null) {	
-		MixedQuoteBundle quoteBundle = new MixedQuoteBundle(watchScreen.getSymbols(),
-								    lastDate.previous(1),
-								    lastDate);
-		
-		return new WatchScreenModule(watchScreen, quoteBundle);
-	    }	    	    
-	} catch (PreferencesException pfe) {
-	}	
-	return null;	    
-    }
+	public Module getModule(JDesktopPane desktop) {
+
+		try {
+			WatchScreen watchScreen = PreferencesManager.getWatchScreen(getTitle());
+
+			TradingDate lastDate = QuoteSourceManager.getSource().getLastDate();
+
+			if (lastDate != null) {
+				MixedQuoteBundle quoteBundle = new MixedQuoteBundle(watchScreen.getSymbols(), lastDate.previous(1),
+						lastDate);
+
+				return new WatchScreenModule(watchScreen, quoteBundle);
+			}
+		} catch (PreferencesException pfe) {
+		}
+		return null;
+	}
 }

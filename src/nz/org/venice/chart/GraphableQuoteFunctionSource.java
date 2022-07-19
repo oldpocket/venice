@@ -28,120 +28,115 @@ import nz.org.venice.quote.QuoteFunctionSource;
 import nz.org.venice.util.TradingDate;
 
 /**
- * Allow the {@link nz.org.venice.quote.QuoteFunctions} package to use quotes directly 
- * from a {@link Graphable}. The following code, from
- * {@link nz.org.venice.chart.graph.MovingAverageGraph} shows an example of how to call
- * a quote function from a graph:
+ * Allow the {@link nz.org.venice.quote.QuoteFunctions} package to use quotes
+ * directly from a {@link Graphable}. The following code, from
+ * {@link nz.org.venice.chart.graph.MovingAverageGraph} shows an example of how
+ * to call a quote function from a graph:
  *
  * <pre>
- *      Graphable movingAverage = new Graphable();
- *      TradingDate date = (TradingDate)source.getStartX();
- *      GraphableQuoteFunctionSource quoteFunctionSource 
- *          = new GraphableQuoteFunctionSource(source, date, period);
+ * Graphable movingAverage = new Graphable();
+ * TradingDate date = (TradingDate) source.getStartX();
+ * GraphableQuoteFunctionSource quoteFunctionSource = new GraphableQuoteFunctionSource(source, date, period);
  *
- *      for(Iterator iterator = source.iterator(); iterator.hasNext();) {
- *          date = (TradingDate)iterator.next();
- *          quoteFunctionSource.setStartDate(date);
+ * for (Iterator iterator = source.iterator(); iterator.hasNext();) {
+ * 	date = (TradingDate) iterator.next();
+ * 	quoteFunctionSource.setStartDate(date);
  *
- *          try {
- *              double average = QuoteFunctions.avg(quoteFunctionSource, period);
- *              movingAverage.putY(date, new Double(average));
- *          }
- *          catch(EvaluationException e) {
- *          }
- *      }
+ * 	try {
+ * 		double average = QuoteFunctions.avg(quoteFunctionSource, period);
+ * 		movingAverage.putY(date, new Double(average));
+ * 	} catch (EvaluationException e) {
+ * 	}
+ * }
  * </pre>
+ * 
  * @author Andrew Leppard
  * @see nz.org.venice.quote.QuoteFunctions
  */
 public class GraphableQuoteFunctionSource implements QuoteFunctionSource {
 
-    // The graphable containing the quotes
-    private Graphable graphable;
- 
-    // Number of quote dates available to quote functions
-    private int period;
+	// The graphable containing the quotes
+	private Graphable graphable;
 
-    // Quote functions need to access values by offset, while the
-    // Graphable contains values mapped to dates. So create a mapping
-    // that maps offsets to values.
-    private List values;
+	// Number of quote dates available to quote functions
+	private int period;
 
-    // Mapping between date and offset in values array
-    private Map dateOffsets;
+	// Quote functions need to access values by offset, while the
+	// Graphable contains values mapped to dates. So create a mapping
+	// that maps offsets to values.
+	private List values;
 
-    // Offset of "current date" in values array.
-    private int currentDateOffset;
+	// Mapping between date and offset in values array
+	private Map dateOffsets;
 
-    /**
-     * Create a new quote function source that uses quotes directly from a
-     * {@link Graphable}.
-     *
-     * @param graphable the graphable containing the quotes
-     * @param date the current date, the previous quotes for period number of days
-     *        will be accessed
-     * @param period the number of quote dates available from this source
-     */
-    public GraphableQuoteFunctionSource(Graphable graphable, TradingDate date, int period) {
-        this.graphable = graphable;
-        this.period = period;
-        initialise();
-        setDate(date);
-    }
+	// Offset of "current date" in values array.
+	private int currentDateOffset;
 
-    /**
-     * Set the current date. Since quote functions use previous day's quote
-     * values, this function source will provide the previous quotes for period
-     * number of days. The date given here will be the most recent quote date available 
-     * from the source.
-     *
-     * @param date the current date
-     */
-    public void setDate(TradingDate date) {
-        Integer currentDateOffsetObject = (Integer)dateOffsets.get(date);
-        assert currentDateOffsetObject != null;
-        currentDateOffset = currentDateOffsetObject.intValue();
-    }
+	/**
+	 * Create a new quote function source that uses quotes directly from a
+	 * {@link Graphable}.
+	 *
+	 * @param graphable the graphable containing the quotes
+	 * @param date      the current date, the previous quotes for period number of
+	 *                  days will be accessed
+	 * @param period    the number of quote dates available from this source
+	 */
+	public GraphableQuoteFunctionSource(Graphable graphable, TradingDate date, int period) {
+		this.graphable = graphable;
+		this.period = period;
+		initialise();
+		setDate(date);
+	}
 
-    public double getValue(int index)
-        throws EvaluationException {
+	/**
+	 * Set the current date. Since quote functions use previous day's quote values,
+	 * this function source will provide the previous quotes for period number of
+	 * days. The date given here will be the most recent quote date available from
+	 * the source.
+	 *
+	 * @param date the current date
+	 */
+	public void setDate(TradingDate date) {
+		Integer currentDateOffsetObject = (Integer) dateOffsets.get(date);
+		assert currentDateOffsetObject != null;
+		currentDateOffset = currentDateOffsetObject.intValue();
+	}
 
-	assert index >= 0 && index < period;
+	public double getValue(int index) throws EvaluationException {
 
-        Double value = null;
-        int offset = currentDateOffset - period + index + 1;
+		assert index >= 0 && index < period;
 
-        // Return Double.NaN if the value isn't in the array
-        if(offset >= 0 && offset < values.size())
-            value = (Double)values.get(offset);
+		Double value = null;
+		int offset = currentDateOffset - period + index + 1;
 
-        // Return the value on that date if we have one
-        if(value != null)
-            return value.doubleValue();
-        else
-            return Double.NaN;
-    }
+		// Return Double.NaN if the value isn't in the array
+		if (offset >= 0 && offset < values.size())
+			value = (Double) values.get(offset);
 
-    /**
-     * Creates two objects to improve performance of getValue(). The first
-     * object contains an array of values so that the getValue() function
-     * can return values based on an index, rather than using date calculations
-     * to extract the date from the Graphable. The second object contains
-     * a mapping which maps the current date to an offset in the newly
-     * created array.
-     */
-    private void initialise() {
-        dateOffsets = new HashMap();
-        values = new ArrayList();
-    
-        TradingDate endDate = (TradingDate)graphable.getEndX();
-        int offset = 0;
+		// Return the value on that date if we have one
+		if (value != null)
+			return value.doubleValue();
+		else
+			return Double.NaN;
+	}
 
-        for(TradingDate date = (TradingDate)graphable.getStartX();
-            !date.after(endDate);
-            date = date.next(1)) {
-            values.add(graphable.getY(date));
-            dateOffsets.put(date, new Integer(offset++));
-        }
-    }
+	/**
+	 * Creates two objects to improve performance of getValue(). The first object
+	 * contains an array of values so that the getValue() function can return values
+	 * based on an index, rather than using date calculations to extract the date
+	 * from the Graphable. The second object contains a mapping which maps the
+	 * current date to an offset in the newly created array.
+	 */
+	private void initialise() {
+		dateOffsets = new HashMap();
+		values = new ArrayList();
+
+		TradingDate endDate = (TradingDate) graphable.getEndX();
+		int offset = 0;
+
+		for (TradingDate date = (TradingDate) graphable.getStartX(); !date.after(endDate); date = date.next(1)) {
+			values.add(graphable.getY(date));
+			dateOffsets.put(date, new Integer(offset++));
+		}
+	}
 }

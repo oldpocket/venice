@@ -35,51 +35,51 @@ import org.xml.sax.SAXException;
 
 public class SymbolMetadataReader {
 
-    private SymbolMetadataReader() {
+	private SymbolMetadataReader() {
 
-    }
+	}
 
-    public static List read(InputStream stream) throws IOException {
-	DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+	public static List read(InputStream stream) throws IOException {
+		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 
-	List symbolsMetadata = new ArrayList();
+		List symbolsMetadata = new ArrayList();
 
-        try {
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            Document document = builder.parse(stream);
-            Element symbolsMetadataElement = (Element)document.getDocumentElement();
-	    NodeList symbolsMetadataNode = symbolsMetadataElement.getElementsByTagName("symbolMetadata");
+		try {
+			DocumentBuilder builder = builderFactory.newDocumentBuilder();
+			Document document = builder.parse(stream);
+			Element symbolsMetadataElement = (Element) document.getDocumentElement();
+			NodeList symbolsMetadataNode = symbolsMetadataElement.getElementsByTagName("symbolMetadata");
 
-	    for (int i = 0; i < symbolsMetadataNode.getLength(); i++) {
-		Element n = (Element)symbolsMetadataNode.item(i);
-		String symbolString = getValue(n, "symbol");
-		String nameString = getValue(n, "name");
-		String isIndexString = getValue(n, "isIndex");		
+			for (int i = 0; i < symbolsMetadataNode.getLength(); i++) {
+				Element n = (Element) symbolsMetadataNode.item(i);
+				String symbolString = getValue(n, "symbol");
+				String nameString = getValue(n, "name");
+				String isIndexString = getValue(n, "isIndex");
 
-		SymbolMetadata data = new SymbolMetadata(symbolString, nameString,
-							 new Boolean(isIndexString).booleanValue());
-		symbolsMetadata.add(data);
-	    }
-        } catch (SAXException e) {
-            throw new IOException(e.getMessage());
-        } catch(ParserConfigurationException e) {
-            throw new IOException(e.getMessage());
-        }
+				SymbolMetadata data = new SymbolMetadata(symbolString, nameString,
+						new Boolean(isIndexString).booleanValue());
+				symbolsMetadata.add(data);
+			}
+		} catch (SAXException e) {
+			throw new IOException(e.getMessage());
+		} catch (ParserConfigurationException e) {
+			throw new IOException(e.getMessage());
+		}
 
-        return symbolsMetadata;
-    }
+		return symbolsMetadata;
+	}
 
-    private static String getValue(Element e, String tagName) {
-	
-	NodeList list = e.getElementsByTagName(tagName);	
-	assert list.getLength() == 1;
-	
-	Element parent = (Element)list.item(0);
-	NodeList list2 = parent.getChildNodes();
-	assert list2.getLength() == 1;
-		
-	Text textNode = (Text)list2.item(0);
-	
-	return textNode.getNodeValue();
-    }
+	private static String getValue(Element e, String tagName) {
+
+		NodeList list = e.getElementsByTagName(tagName);
+		assert list.getLength() == 1;
+
+		Element parent = (Element) list.item(0);
+		NodeList list2 = parent.getChildNodes();
+		assert list2.getLength() == 1;
+
+		Text textNode = (Text) list2.item(0);
+
+		return textNode.getNodeValue();
+	}
 }

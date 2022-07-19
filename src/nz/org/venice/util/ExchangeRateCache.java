@@ -37,308 +37,298 @@ import nz.org.venice.ui.NumberDialog;
 
 /**
  * Cache of exchange rates. This class caches exchange rates in memory from the
- * database. It is also responsible for importing the exchange rates, saving them
- * into the database, loading them from database, and querying the user for
- * exchange rates. It also provides helper functions to make performing cross-currency
- * calculations easier.
+ * database. It is also responsible for importing the exchange rates, saving
+ * them into the database, loading them from database, and querying the user for
+ * exchange rates. It also provides helper functions to make performing
+ * cross-currency calculations easier.
  *
  * @author Andrew Leppard
  */
 public class ExchangeRateCache {
 
-    // Singleton instance of this class
-    private static ExchangeRateCache instance = null;
+	// Singleton instance of this class
+	private static ExchangeRateCache instance = null;
 
-    // Map between the pair (source currency, destination currency) and a map
-    // which maps trading dates to exchange rates. See getKey().
-    private Map currencyMap;
-    
-    // Reference to the desktop so that the cache can display dialogs
-    private JDesktopPane desktopPane;
+	// Map between the pair (source currency, destination currency) and a map
+	// which maps trading dates to exchange rates. See getKey().
+	private Map currencyMap;
 
-    // Class should only be constructed once by this class
-    private ExchangeRateCache() {
-        currencyMap = new HashMap();
-        desktopPane = null;
-    }
+	// Reference to the desktop so that the cache can display dialogs
+	private JDesktopPane desktopPane;
 
-    /**
-     * Create or return the singleton instance of the exchange rate cache.
-     *
-     * @return singleton instance of this class
-     */
-    public static synchronized ExchangeRateCache getInstance() {
-	if(instance == null)
-	    instance = new ExchangeRateCache();
+	// Class should only be constructed once by this class
+	private ExchangeRateCache() {
+		currencyMap = new HashMap();
+		desktopPane = null;
+	}
 
-        return instance;
-    }
+	/**
+	 * Create or return the singleton instance of the exchange rate cache.
+	 *
+	 * @return singleton instance of this class
+	 */
+	public static synchronized ExchangeRateCache getInstance() {
+		if (instance == null)
+			instance = new ExchangeRateCache();
 
-    /**
-     * Inform the exchange rate cache of the desktop which will be used
-     * to display dialogs.
-     *
-     * @param desktopPane the desktop pane to use
-     */
-    public void setDesktopPane(JDesktopPane desktopPane) {
-        this.desktopPane = desktopPane;
-    }
+		return instance;
+	}
 
-    /**
-     * Return the exchange rate between the two currencies on the given date.
-     *
-     * @param date                the date for the exchange
-     * @param sourceCurrency      the source currency to convert from
-     * @param destinationCurrency the destination currency to convert to
-     */
-    public synchronized double getRate(TradingDate date, Currency sourceCurrency,
-                                       Currency destinationCurrency) {
-        Double rate = null;
+	/**
+	 * Inform the exchange rate cache of the desktop which will be used to display
+	 * dialogs.
+	 *
+	 * @param desktopPane the desktop pane to use
+	 */
+	public void setDesktopPane(JDesktopPane desktopPane) {
+		this.desktopPane = desktopPane;
+	}
 
-        // If the source and destination currencies are the same then return immediately.
-        if(sourceCurrency.equals(destinationCurrency))
-            return 1.0D;
+	/**
+	 * Return the exchange rate between the two currencies on the given date.
+	 *
+	 * @param date                the date for the exchange
+	 * @param sourceCurrency      the source currency to convert from
+	 * @param destinationCurrency the destination currency to convert to
+	 */
+	public synchronized double getRate(TradingDate date, Currency sourceCurrency, Currency destinationCurrency) {
+		Double rate = null;
 
-        // Have we loaded the exchange rates from the database between these two currencies?
-        TreeMap exchangeMap = (TreeMap)currencyMap.get(getKey(sourceCurrency,
-                                                              destinationCurrency));
+		// If the source and destination currencies are the same then return
+		// immediately.
+		if (sourceCurrency.equals(destinationCurrency))
+			return 1.0D;
 
-        // If we have no values, load exchange rates from the database.
-        if(exchangeMap == null) {
-            loadExchangeRates(sourceCurrency, destinationCurrency);
-            exchangeMap = (TreeMap)currencyMap.get(getKey(sourceCurrency, destinationCurrency));
-        }
+		// Have we loaded the exchange rates from the database between these two
+		// currencies?
+		TreeMap exchangeMap = (TreeMap) currencyMap.get(getKey(sourceCurrency, destinationCurrency));
 
-        // Is the rate in the cache?
-        if(exchangeMap != null) {
-            rate = (Double)exchangeMap.get(date);
-            if(rate != null)
-                return rate.doubleValue();
-        }
+		// If we have no values, load exchange rates from the database.
+		if (exchangeMap == null) {
+			loadExchangeRates(sourceCurrency, destinationCurrency);
+			exchangeMap = (TreeMap) currencyMap.get(getKey(sourceCurrency, destinationCurrency));
+		}
 
-        // If the date is not newer than any in the cache, find the first date
-        // after that date. Return the exchange rate on that date.
-        if(exchangeMap != null && exchangeMap.size() > 0) {
-            TradingDate latestDate = (TradingDate)exchangeMap.lastKey();
-            if(latestDate.after(date)) {
-                Set dateSet = exchangeMap.keySet();
-                for(Iterator iterator = dateSet.iterator(); iterator.hasNext();) {
-                    TradingDate iteratorDate = (TradingDate)iterator.next();
-                    if(iteratorDate.after(date) || !iterator.hasNext()) {
-                        rate = (Double)exchangeMap.get(iteratorDate);
-                        assert rate != null;
-                        return rate.doubleValue();
-                    }
-                }
-            }
-        }
+		// Is the rate in the cache?
+		if (exchangeMap != null) {
+			rate = (Double) exchangeMap.get(date);
+			if (rate != null)
+				return rate.doubleValue();
+		}
 
-        // If the date is newer than any in the cache, then import a new rate from the internet.
-        rate = importExchangeRate(sourceCurrency, destinationCurrency);
-        if (rate != null)
-            return rate.doubleValue();
+		// If the date is not newer than any in the cache, find the first date
+		// after that date. Return the exchange rate on that date.
+		if (exchangeMap != null && exchangeMap.size() > 0) {
+			TradingDate latestDate = (TradingDate) exchangeMap.lastKey();
+			if (latestDate.after(date)) {
+				Set dateSet = exchangeMap.keySet();
+				for (Iterator iterator = dateSet.iterator(); iterator.hasNext();) {
+					TradingDate iteratorDate = (TradingDate) iterator.next();
+					if (iteratorDate.after(date) || !iterator.hasNext()) {
+						rate = (Double) exchangeMap.get(iteratorDate);
+						assert rate != null;
+						return rate.doubleValue();
+					}
+				}
+			}
+		}
 
-        // Otherwise ask the user for the exchange rate.
-        rate = queryExchangeRate(date, sourceCurrency, destinationCurrency);
+		// If the date is newer than any in the cache, then import a new rate from the
+		// internet.
+		rate = importExchangeRate(sourceCurrency, destinationCurrency);
+		if (rate != null)
+			return rate.doubleValue();
 
-        return rate.doubleValue();
-    }
+		// Otherwise ask the user for the exchange rate.
+		rate = queryExchangeRate(date, sourceCurrency, destinationCurrency);
 
-    /**
-     * Add the two given monies. This function will perform currency conversion
-     * if necessary.
-     *
-     * @param date             the date for the exchange
-     * @param destinationMoney the "destination" money.
-     * @param sourceMoney      the "source" money
-     * @return the sum of the two monies in the same currency as the "destination" money.
-     */
-    public Money add(TradingDate date, Money destinationMoney, Money sourceMoney) {
-        if(!destinationMoney.getCurrency().equals(sourceMoney.getCurrency()))
-            sourceMoney = sourceMoney.exchange(destinationMoney.getCurrency(),
-                                               getRate(date,
-                                                       sourceMoney.getCurrency(),
-                                                       destinationMoney.getCurrency()));
-        return destinationMoney.add(sourceMoney);        
-    }
+		return rate.doubleValue();
+	}
 
-    /**
-     * Subtract the two given monies. The "source" money will be subtracted from
-     * the "destination" money. This function will perform currency conversion
-     * if necessary.
-     *
-     * @param date             the date for the exchange
-     * @param destinationMoney the "destination" money.
-     * @param sourceMoney      the "source" money
-     * @return the subtraction of "source" money from "destination" money in the same
-     *         currency as the "destination" money.
-     */
-    public Money subtract(TradingDate date, Money destinationMoney, Money sourceMoney) {
-        if(!destinationMoney.getCurrency().equals(sourceMoney.getCurrency()))
-            sourceMoney = sourceMoney.exchange(destinationMoney.getCurrency(),
-                                               getRate(date,
-                                                       sourceMoney.getCurrency(),
-                                                       destinationMoney.getCurrency()));
-        return destinationMoney.subtract(sourceMoney);        
-    }
+	/**
+	 * Add the two given monies. This function will perform currency conversion if
+	 * necessary.
+	 *
+	 * @param date             the date for the exchange
+	 * @param destinationMoney the "destination" money.
+	 * @param sourceMoney      the "source" money
+	 * @return the sum of the two monies in the same currency as the "destination"
+	 *         money.
+	 */
+	public Money add(TradingDate date, Money destinationMoney, Money sourceMoney) {
+		if (!destinationMoney.getCurrency().equals(sourceMoney.getCurrency()))
+			sourceMoney = sourceMoney.exchange(destinationMoney.getCurrency(),
+					getRate(date, sourceMoney.getCurrency(), destinationMoney.getCurrency()));
+		return destinationMoney.add(sourceMoney);
+	}
 
-    /**
-     * Exchange the given money for the given currency. Use the exchange rate that
-     * is valid on the given date.
-     *
-     * @param date     the date for the exchange
-     * @param money    the money to convert
-     * @param currency the currency to convert to
-     * @return the converted currency.
-     */
-    public Money exchange(TradingDate date, Money money, Currency currency) {
-        if(!money.getCurrency().equals(currency))
-            money = money.exchange(currency, getRate(date, money.getCurrency(), currency));
+	/**
+	 * Subtract the two given monies. The "source" money will be subtracted from the
+	 * "destination" money. This function will perform currency conversion if
+	 * necessary.
+	 *
+	 * @param date             the date for the exchange
+	 * @param destinationMoney the "destination" money.
+	 * @param sourceMoney      the "source" money
+	 * @return the subtraction of "source" money from "destination" money in the
+	 *         same currency as the "destination" money.
+	 */
+	public Money subtract(TradingDate date, Money destinationMoney, Money sourceMoney) {
+		if (!destinationMoney.getCurrency().equals(sourceMoney.getCurrency()))
+			sourceMoney = sourceMoney.exchange(destinationMoney.getCurrency(),
+					getRate(date, sourceMoney.getCurrency(), destinationMoney.getCurrency()));
+		return destinationMoney.subtract(sourceMoney);
+	}
 
-        return money;
-    }
+	/**
+	 * Exchange the given money for the given currency. Use the exchange rate that
+	 * is valid on the given date.
+	 *
+	 * @param date     the date for the exchange
+	 * @param money    the money to convert
+	 * @param currency the currency to convert to
+	 * @return the converted currency.
+	 */
+	public Money exchange(TradingDate date, Money money, Currency currency) {
+		if (!money.getCurrency().equals(currency))
+			money = money.exchange(currency, getRate(date, money.getCurrency(), currency));
 
-    /**
-     * Load all the exchange rates that convert between the given currencies from the
-     * database. The exchange rates will be stored in the cache.
-     *
-     * @param sourceCurrency      the source currency to convert from
-     * @param destinationCurrency the destination currency to convert to
-     */
-    private void loadExchangeRates(Currency sourceCurrency, Currency destinationCurrency) {
-        List exchangeRates = QuoteSourceManager.getSource().getExchangeRates(sourceCurrency,
-                                                                             destinationCurrency);
+		return money;
+	}
 
-        for(Iterator iterator = exchangeRates.iterator(); iterator.hasNext();) {
-            ExchangeRate exchangeRate = (ExchangeRate)iterator.next();
-            addToCache(exchangeRate);
-        }
-    }
+	/**
+	 * Load all the exchange rates that convert between the given currencies from
+	 * the database. The exchange rates will be stored in the cache.
+	 *
+	 * @param sourceCurrency      the source currency to convert from
+	 * @param destinationCurrency the destination currency to convert to
+	 */
+	private void loadExchangeRates(Currency sourceCurrency, Currency destinationCurrency) {
+		List exchangeRates = QuoteSourceManager.getSource().getExchangeRates(sourceCurrency, destinationCurrency);
 
-    /**
-     * Import the latest exchange rate to convert between the two given currencies.
-     * The exchange rate will be imported from Yahoo Finance.
-     *
-     * @param sourceCurrency      the source currency to convert from
-     * @param destinationCurrency the destination currency to convert to
-     * @return The exchange rate imported or <code>null</code> if there was an error.
-     */
-    private Double importExchangeRate(Currency sourceCurrency, Currency destinationCurrency) {
-        Double rate = null;
+		for (Iterator iterator = exchangeRates.iterator(); iterator.hasNext();) {
+			ExchangeRate exchangeRate = (ExchangeRate) iterator.next();
+			addToCache(exchangeRate);
+		}
+	}
 
-        try {
-            ExchangeRate exchangeRate =
-                GenericWSExchangeRateImport.importExchangeRate(sourceCurrency, destinationCurrency);
+	/**
+	 * Import the latest exchange rate to convert between the two given currencies.
+	 * The exchange rate will be imported from Yahoo Finance.
+	 *
+	 * @param sourceCurrency      the source currency to convert from
+	 * @param destinationCurrency the destination currency to convert to
+	 * @return The exchange rate imported or <code>null</code> if there was an
+	 *         error.
+	 */
+	private Double importExchangeRate(Currency sourceCurrency, Currency destinationCurrency) {
+		Double rate = null;
 
-            addToDatabase(exchangeRate);
-            addToCache(exchangeRate);
+		try {
+			ExchangeRate exchangeRate = GenericWSExchangeRateImport.importExchangeRate(sourceCurrency,
+					destinationCurrency);
 
-            rate = new Double(exchangeRate.getRate());
-        } catch(ImportExportException e) {
-            // TODO: Work out how to display errors to the user without returning
-            // control to the calling function.
-        }
+			addToDatabase(exchangeRate);
+			addToCache(exchangeRate);
 
-        return rate;
-    }
+			rate = new Double(exchangeRate.getRate());
+		} catch (ImportExportException e) {
+			// TODO: Work out how to display errors to the user without returning
+			// control to the calling function.
+		}
 
-    /**
-     * Query the user to entire an exchange rate to convert from the given
-     * source currency to the given destination currency.
-     *
-     * @param date                the date for the exchange rate
-     * @param sourceCurrency      the source currency to convert from
-     * @param destinationCurrency the destination currency to convert to
-     * @return The exchange rate given by the user.
-     */
-    private Double queryExchangeRate(TradingDate date, Currency sourceCurrency,
-                                     Currency destinationCurrency) {
-        double defaultValue = 1.0D;
+		return rate;
+	}
 
-        // Find the latest exchange rate for the currencies. Use this as the default
-        // exchange rate to display in the dialog. If none are found, simply use 1.0D.
-        TreeMap exchangeMap = (TreeMap)currencyMap.get(getKey(sourceCurrency,
-                                                              destinationCurrency));
+	/**
+	 * Query the user to entire an exchange rate to convert from the given source
+	 * currency to the given destination currency.
+	 *
+	 * @param date                the date for the exchange rate
+	 * @param sourceCurrency      the source currency to convert from
+	 * @param destinationCurrency the destination currency to convert to
+	 * @return The exchange rate given by the user.
+	 */
+	private Double queryExchangeRate(TradingDate date, Currency sourceCurrency, Currency destinationCurrency) {
+		double defaultValue = 1.0D;
 
-        if(exchangeMap != null && exchangeMap.size() > 0) {
-            TradingDate latestDate = (TradingDate)exchangeMap.lastKey();
-            Double latestRate = (Double)exchangeMap.get(latestDate);
-            if(latestRate != null)
-                defaultValue = latestRate.doubleValue();
-        }
+		// Find the latest exchange rate for the currencies. Use this as the default
+		// exchange rate to display in the dialog. If none are found, simply use 1.0D.
+		TreeMap exchangeMap = (TreeMap) currencyMap.get(getKey(sourceCurrency, destinationCurrency));
 
-        // Now display a dialog querying the user to enter the exchange rate.
-        Double value = NumberDialog.getDouble(desktopPane,
-                                              Locale.getString("EXCHANGE_RATE_TITLE"),
-                                              Locale.getString("EXCHANGE_RATE_PROMPT",
-                                                               sourceCurrency.toString(),
-                                                               destinationCurrency.toString(),
-                                                               date.toString()),
-                                              defaultValue);
+		if (exchangeMap != null && exchangeMap.size() > 0) {
+			TradingDate latestDate = (TradingDate) exchangeMap.lastKey();
+			Double latestRate = (Double) exchangeMap.get(latestDate);
+			if (latestRate != null)
+				defaultValue = latestRate.doubleValue();
+		}
 
-        // If the user supplies a value, cache it, and use that.
-        if (value != null) {
-            // Cache value if given
-            ExchangeRate rate = new ExchangeRate(date, sourceCurrency, destinationCurrency,
-                                                 value.doubleValue());
-            addToDatabase(rate);
-            addToCache(rate);
-        }
+		// Now display a dialog querying the user to enter the exchange rate.
+		Double value = NumberDialog
+				.getDouble(
+						desktopPane, Locale.getString("EXCHANGE_RATE_TITLE"), Locale.getString("EXCHANGE_RATE_PROMPT",
+								sourceCurrency.toString(), destinationCurrency.toString(), date.toString()),
+						defaultValue);
 
-        // Otherwise just use the default rate we calculated above.
-        else
-            value = new Double(defaultValue);
+		// If the user supplies a value, cache it, and use that.
+		if (value != null) {
+			// Cache value if given
+			ExchangeRate rate = new ExchangeRate(date, sourceCurrency, destinationCurrency, value.doubleValue());
+			addToDatabase(rate);
+			addToCache(rate);
+		}
 
-        return value;
-    }
+		// Otherwise just use the default rate we calculated above.
+		else
+			value = new Double(defaultValue);
 
-    /**
-     * Return the key to use in the cache's <code>currencyMap<code> to extract another
-     * map that maps trading dates to exchange rates for converting from the given
-     * source currency to the given destination currency.
-     *
-     * @param sourceCurrency the source currency to convert from
-     * @param destinationCurrency the destination currency to convert to
-     * @return key for <code>currencyMap</code>
-     */
-    private Object getKey(Currency sourceCurrency, Currency destinationCurrency) {
-        return sourceCurrency.getCurrencyCode() + destinationCurrency.getCurrencyCode();
-    }
+		return value;
+	}
 
-    /**
-     * Store the given exchange rate in the database.
-     *
-     * @param rate the exchange rate to store in the database.
-     */
-    private void addToDatabase(ExchangeRate rate) {
-        // If we aren't using a database, then no import is necessary.
-        int quoteSource = PreferencesManager.getQuoteSource();
-        if(quoteSource == PreferencesManager.DATABASE ||
-           quoteSource == PreferencesManager.INTERNAL) {
-            DatabaseQuoteSource databaseQuoteSource =
-                (DatabaseQuoteSource)QuoteSourceManager.getSource();
-            List list = new ArrayList();
+	/**
+	 * Return the key to use in the cache's
+	 * <code>currencyMap<code> to extract another
+	 * map that maps trading dates to exchange rates for converting from the given
+	 * source currency to the given destination currency.
+	 *
+	 * &#64;param sourceCurrency the source currency to convert from
+	 * &#64;param destinationCurrency the destination currency to convert to
+	 * &#64;return key for <code>currencyMap</code>
+	 */
+	private Object getKey(Currency sourceCurrency, Currency destinationCurrency) {
+		return sourceCurrency.getCurrencyCode() + destinationCurrency.getCurrencyCode();
+	}
 
-            list.add(rate);
-            databaseQuoteSource.importExchangeRates(list);
-        }
-    }
+	/**
+	 * Store the given exchange rate in the database.
+	 *
+	 * @param rate the exchange rate to store in the database.
+	 */
+	private void addToDatabase(ExchangeRate rate) {
+		// If we aren't using a database, then no import is necessary.
+		int quoteSource = PreferencesManager.getQuoteSource();
+		if (quoteSource == PreferencesManager.DATABASE || quoteSource == PreferencesManager.INTERNAL) {
+			DatabaseQuoteSource databaseQuoteSource = (DatabaseQuoteSource) QuoteSourceManager.getSource();
+			List list = new ArrayList();
 
-    /**
-     * Add the given exchange rate to the cache.
-     *
-     * @param rate the exchange rate to cache
-     */
-    private void addToCache(ExchangeRate rate) {
-        TreeMap exchangeMap = (TreeMap)currencyMap.get(getKey(rate.getSourceCurrency(),
-                                                              rate.getDestinationCurrency()));
-        if(exchangeMap == null) {
-            exchangeMap = new TreeMap();
-            currencyMap.put(getKey(rate.getSourceCurrency(),
-                                   rate.getDestinationCurrency()),
-                            exchangeMap);
-        }
+			list.add(rate);
+			databaseQuoteSource.importExchangeRates(list);
+		}
+	}
 
-        exchangeMap.put(rate.getDate(), new Double(rate.getRate()));
-    }
+	/**
+	 * Add the given exchange rate to the cache.
+	 *
+	 * @param rate the exchange rate to cache
+	 */
+	private void addToCache(ExchangeRate rate) {
+		TreeMap exchangeMap = (TreeMap) currencyMap
+				.get(getKey(rate.getSourceCurrency(), rate.getDestinationCurrency()));
+		if (exchangeMap == null) {
+			exchangeMap = new TreeMap();
+			currencyMap.put(getKey(rate.getSourceCurrency(), rate.getDestinationCurrency()), exchangeMap);
+		}
+
+		exchangeMap.put(rate.getDate(), new Double(rate.getRate()));
+	}
 }

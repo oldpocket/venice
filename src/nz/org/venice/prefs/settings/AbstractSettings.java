@@ -16,8 +16,6 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-
 package nz.org.venice.prefs.settings;
 
 import javax.swing.JDesktopPane;
@@ -32,165 +30,159 @@ import nz.org.venice.main.Module;
  * @author Mark Hummel
  * @see Settings
  * @see SettingsWriter
-*/
+ */
 
 public abstract class AbstractSettings implements Settings {
 
-        
-    private int group;
-    private int type;
-    private String name;
+	private int group;
+	private int type;
+	private String name;
 
-    private String key;
-    private String title;
+	private String key;
+	private String title;
 
-    private int hbarValue;
-    private int vbarValue;
+	private int hbarValue;
+	private int vbarValue;
 
-    private int hbarPolicy;
-    private int vbarPolicy;
+	private int hbarPolicy;
+	private int vbarPolicy;
 
-    public AbstractSettings(int group, int type) {
-	this.group = group;
-	this.type = type;
+	public AbstractSettings(int group, int type) {
+		this.group = group;
+		this.type = type;
 
-	name = this.getClass().getName();
-    }
+		name = this.getClass().getName();
+	}
 
-    public AbstractSettings(int group, int type, String key) {
-	this.group = group;
-	this.type = type;
-	this.key = key;	
+	public AbstractSettings(int group, int type, String key) {
+		this.group = group;
+		this.type = type;
+		this.key = key;
 
-	name = this.getClass().getName();
-	
+		name = this.getClass().getName();
 
-    }
+	}
 
-    /**
-     * Set the title of the Module.
-     * 
-     * @param title The module title
-     */
+	/**
+	 * Set the title of the Module.
+	 * 
+	 * @param title The module title
+	 */
 
-    public void setTitle(String title) {
-	this.title = title;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    /**
-     *
-     * Get the title of the module
-     * 
-     * @return The module title
-     */
+	/**
+	 *
+	 * Get the title of the module
+	 * 
+	 * @return The module title
+	 */
 
-    public String getTitle() {
-	return title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public int getType() {
-	return type;
-    }
+	public int getType() {
+		return type;
+	}
 
-    public int getGroup() {
-	return group;
-    }
+	public int getGroup() {
+		return group;
+	}
 
-    public void setGroup(int group) {
-	this.group = group;
-    }
+	public void setGroup(int group) {
+		this.group = group;
+	}
 
-    public void setType(int type) {
-	this.type = type;
-    }
+	public void setType(int type) {
+		this.type = type;
+	}
 
-    public void setKey(String key) {
-	this.key = key;
-    }
+	public void setKey(String key) {
+		this.key = key;
+	}
 
-    public String getKey() {
-	return key;
-    }
-    
-    public Module getModule(JDesktopPane desktop) {
-	return null;
-    }
+	public String getKey() {
+		return key;
+	}
 
-    public String toString() {
-	String rv = "Group: " + String.valueOf(group) + 
-	    "Type: " + String.valueOf(type) +
-	    "Title: " + title;
+	public Module getModule(JDesktopPane desktop) {
+		return null;
+	}
 
-	return rv;
-    }
+	public String toString() {
+		String rv = "Group: " + String.valueOf(group) + "Type: " + String.valueOf(type) + "Title: " + title;
 
-    public void setHBarValue(int hbarValue) {
-	this.hbarValue = hbarValue;
-    }
+		return rv;
+	}
 
-    public int getHBarValue() {
-	return hbarValue;
-    }
+	public void setHBarValue(int hbarValue) {
+		this.hbarValue = hbarValue;
+	}
 
-    public void setVBarValue(int vbarValue) {
-	this.vbarValue = vbarValue;
-    }
+	public int getHBarValue() {
+		return hbarValue;
+	}
 
-    public int getVBarValue() {
-	return vbarValue;
-    }
+	public void setVBarValue(int vbarValue) {
+		this.vbarValue = vbarValue;
+	}
 
-    public int getHBarPolicy() {
-	return hbarPolicy;
-    }
+	public int getVBarValue() {
+		return vbarValue;
+	}
 
-    public void setHBarPolicy(int policy) {
-	hbarPolicy = policy;
-    }
+	public int getHBarPolicy() {
+		return hbarPolicy;
+	}
 
-    public void setVBarPolicy(int policy) {
-	vbarPolicy = policy;
-    }
+	public void setHBarPolicy(int policy) {
+		hbarPolicy = policy;
+	}
 
-    
-    public int getVBarPolicy() {
-	return vbarPolicy;
-    }
+	public void setVBarPolicy(int policy) {
+		vbarPolicy = policy;
+	}
 
-    /**
-     *
-     * Set the scrollPane scrollbar values with this settings scroll bar
-     * values 
-     * 
-     * @param scrollPane  The ModuleFrame scrollPane to update
-     */
+	public int getVBarPolicy() {
+		return vbarPolicy;
+	}
 
-    public void updateScrollPane(JScrollPane scrollPane) {
+	/**
+	 *
+	 * Set the scrollPane scrollbar values with this settings scroll bar values
+	 * 
+	 * @param scrollPane The ModuleFrame scrollPane to update
+	 */
 
-	scrollPane.setHorizontalScrollBarPolicy(getHBarPolicy());
-	scrollPane.getHorizontalScrollBar().setValue(getHBarValue());	       
-	scrollPane.setVerticalScrollBarPolicy(getVBarPolicy());
-	scrollPane.getVerticalScrollBar().setValue(getVBarValue());
-	
-    }
-    
-    /**
-     *
-     * Set the Settings scrollbar values from the ModuleFame scrollPane
-     *
-     * @param scrollPane  The ModuleFrame scrollPane to read scrollbar values from
+	public void updateScrollPane(JScrollPane scrollPane) {
 
-     */
+		scrollPane.setHorizontalScrollBarPolicy(getHBarPolicy());
+		scrollPane.getHorizontalScrollBar().setValue(getHBarValue());
+		scrollPane.setVerticalScrollBarPolicy(getVBarPolicy());
+		scrollPane.getVerticalScrollBar().setValue(getVBarValue());
 
-    public void setScrollBarValues(JScrollPane scrollPane) {
+	}
 
-	JScrollBar hbar = scrollPane.getHorizontalScrollBar();
-	JScrollBar vbar = scrollPane.getVerticalScrollBar();
-	
-	setHBarValue(hbar.getValue());
-	setHBarPolicy(scrollPane.getHorizontalScrollBarPolicy());
-	setVBarValue(vbar.getValue());
-	setVBarPolicy(scrollPane.getVerticalScrollBarPolicy());
-	
-    }
+	/**
+	 *
+	 * Set the Settings scrollbar values from the ModuleFame scrollPane
+	 *
+	 * @param scrollPane The ModuleFrame scrollPane to read scrollbar values from
+	 * 
+	 */
+
+	public void setScrollBarValues(JScrollPane scrollPane) {
+
+		JScrollBar hbar = scrollPane.getHorizontalScrollBar();
+		JScrollBar vbar = scrollPane.getVerticalScrollBar();
+
+		setHBarValue(hbar.getValue());
+		setHBarPolicy(scrollPane.getHorizontalScrollBarPolicy());
+		setVBarValue(vbar.getValue());
+		setVBarPolicy(scrollPane.getVerticalScrollBarPolicy());
+
+	}
 }

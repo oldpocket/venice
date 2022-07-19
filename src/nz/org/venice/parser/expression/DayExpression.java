@@ -25,38 +25,39 @@ import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.TradingDate;
 
 /**
- * A function that returns the current day of month. The first day of the month will be 1.
+ * A function that returns the current day of month. The first day of the month
+ * will be 1.
  */
 public class DayExpression extends TerminalExpression {
 
-    public DayExpression() {
-        // nothing to do
-    }
+	public DayExpression() {
+		// nothing to do
+	}
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) {
-        TradingDate date = quoteBundle.offsetToDate(day);
-        return date.getDay();
-    }
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) {
+		TradingDate date = quoteBundle.offsetToDate(day);
+		return date.getDay();
+	}
 
-    public String toString() {
-        return "day()";
-    }
+	public String toString() {
+		return "day()";
+	}
 
-    public int checkType() throws TypeMismatchException {
-	return getType();
-    }
+	public int checkType() throws TypeMismatchException {
+		return getType();
+	}
 
-    /**
-     * Get the type of the expression.
-     *
-     * @return returns {@link #INTEGER_TYPE}.
-     */
-    public int getType() {
-        return INTEGER_TYPE;
-    }
+	/**
+	 * Get the type of the expression.
+	 *
+	 * @return returns {@link #INTEGER_TYPE}.
+	 */
+	public int getType() {
+		return INTEGER_TYPE;
+	}
 
-    public Object clone() {
-        return new DayExpression();
-    }
+	public Object clone() {
+		return new DayExpression();
+	}
 
 }

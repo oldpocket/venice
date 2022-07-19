@@ -20,11 +20,11 @@ package nz.org.venice.ui;
 
 /**
  * A version of the Comparable interface which allow objects to be sorted
- * differently in forward and backwards order.
- * This means that the ordering is not simply the reverse ordering
- * when the reverse flag is set. This is useful for orderings where
- * certain elements should always remain at the top or the bottom of the sort,
- * e.g. summation values. E.g. A, B, C, Total and C, B, A, Total.
+ * differently in forward and backwards order. This means that the ordering is
+ * not simply the reverse ordering when the reverse flag is set. This is useful
+ * for orderings where certain elements should always remain at the top or the
+ * bottom of the sort, e.g. summation values. E.g. A, B, C, Total and C, B, A,
+ * Total.
  *
  * This comparable is supported in the {@link SortedTable}.
  *
@@ -32,14 +32,14 @@ package nz.org.venice.ui;
  */
 public interface TwoWayComparable {
 
-    /**
-     * Compare this object with the specified object.
-     *
-     * @param object object to compare with
-     * @param reverse order of sort, if set reverse the order.
-     * @return	the value <code>0</code> if the objects are equal;
-     * <code>1</code> if this object is after the specified object or
-     * <code>-1</code> if this object is before the specified object
-     */
-    public int compareTo(Object object, boolean reverse);
+	/**
+	 * Compare this object with the specified object.
+	 *
+	 * @param object  object to compare with
+	 * @param reverse order of sort, if set reverse the order.
+	 * @return the value <code>0</code> if the objects are equal; <code>1</code> if
+	 *         this object is after the specified object or <code>-1</code> if this
+	 *         object is before the specified object
+	 */
+	public int compareTo(Object object, boolean reverse);
 }

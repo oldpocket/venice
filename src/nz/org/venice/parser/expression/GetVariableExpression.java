@@ -29,62 +29,59 @@ import nz.org.venice.util.Locale;
  * A representation of an expression to return the value of a variable.
  */
 public class GetVariableExpression extends TerminalExpression {
-    
-    // The variable's name and type
-    private String name;
-    private int type;
-    
-    
-    public GetVariableExpression(String name, int type) {
-        assert name != null && name.length() > 0;
-	
-        this.name = name;
-        this.type = type;
-    }
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
-        throws EvaluationException {
+	// The variable's name and type
+	private String name;
+	private int type;
 
-        Variable variable = variables.get(name);
+	public GetVariableExpression(String name, int type) {
+		assert name != null && name.length() > 0;
 
-        if(variable != null) {
-            assert (variable.getType() == type);
-            return variables.getValue(name);
-        }
-        else
-            throw new EvaluationException(Locale.getString("VARIABLE_NOT_DEFINED_ERROR", name));
-    }
+		this.name = name;
+		this.type = type;
+	}
 
-    public String toString() {
-	return name;
-    }
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-    public String getName() {
-        return name;
-    }
+		Variable variable = variables.get(name);
 
-    public int getType() {
-        return type;
-    }
-    
-    public boolean equals(Object object) {
-        if(object instanceof GetVariableExpression) {
-            GetVariableExpression expression = (GetVariableExpression)object;
+		if (variable != null) {
+			assert (variable.getType() == type);
+			return variables.getValue(name);
+		} else
+			throw new EvaluationException(Locale.getString("VARIABLE_NOT_DEFINED_ERROR", name));
+	}
 
-            if(expression.getName().equals(getName()) &&
-               expression.getType() == getType())
-                return true;
-        }
+	public String toString() {
+		return name;
+	}
 
-        return false;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public int hashCode() {
-	return getName().hashCode() ^ (getType() * 37);
-    }
+	public int getType() {
+		return type;
+	}
 
-    public Object clone() {
-        return new GetVariableExpression(name, type);
-    }
-    
+	public boolean equals(Object object) {
+		if (object instanceof GetVariableExpression) {
+			GetVariableExpression expression = (GetVariableExpression) object;
+
+			if (expression.getName().equals(getName()) && expression.getType() == getType())
+				return true;
+		}
+
+		return false;
+	}
+
+	public int hashCode() {
+		return getName().hashCode() ^ (getType() * 37);
+	}
+
+	public Object clone() {
+		return new GetVariableExpression(name, type);
+	}
+
 }

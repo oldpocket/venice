@@ -28,110 +28,90 @@ import nz.org.venice.quote.QuoteFunctions;
 import nz.org.venice.quote.Symbol;
 
 /**
- * An expression which generates the trend line over the quote and extrapolates the next value.
+ * An expression which generates the trend line over the quote and extrapolates
+ * the next value.
  *
  * @author Mark Hummel
  */
 public class TrendExpression extends TernaryExpression {
 
-    /**
-     * Create a new trend expression for the given <code>quote</code> kind,
-     * for the given number of <code>days</code>, starting with <code>lag</code> days away, and the given value.
-     *
-     * @param	quote	the quote kind to average
-     * @param	days	the number of days to average over
-     * @param	lag	the offset from the current day
-     */
-    public TrendExpression(Expression quote, Expression days, Expression lag) {
-        super(quote, days, lag);
-	
-    }
+	/**
+	 * Create a new trend expression for the given <code>quote</code> kind, for the
+	 * given number of <code>days</code>, starting with <code>lag</code> days away,
+	 * and the given value.
+	 *
+	 * @param quote the quote kind to average
+	 * @param days  the number of days to average over
+	 * @param lag   the offset from the current day
+	 */
+	public TrendExpression(Expression quote, Expression days, Expression lag) {
+		super(quote, days, lag);
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
-	throws EvaluationException {
-
-	QuoteSymbol quoteChild = (QuoteSymbol)getChild(0);	
-	Symbol explicitSymbol = (quoteChild.getSymbol() != null) 
-	    ? quoteChild.getSymbol() : symbol;
-
-	// Extract arguments
-	int quoteKind = quoteChild.getQuoteKind();
-	int period = (int)getChild(1).evaluate(variables, 
-					       quoteBundle, 
-					       explicitSymbol, 
-					       day);
-
-	if(period < 0) {
-             EvaluationException e = EvaluationException.AVG_RANGE_EXCEPTION;
-	     e.setMessage(this, "", period);
-	     throw e;
 	}
 
-        int offset = (int)getChild(2).evaluate(variables, 
-					       quoteBundle, 
-					       explicitSymbol, 
-					       day);
-	
-        if (offset > 0) {
-            EvaluationException e = EvaluationException.AVG_OFFSET_EXCEPTION;
-	    e.setMessage(this, "", offset);
-	    throw e;
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
+
+		QuoteSymbol quoteChild = (QuoteSymbol) getChild(0);
+		Symbol explicitSymbol = (quoteChild.getSymbol() != null) ? quoteChild.getSymbol() : symbol;
+
+		// Extract arguments
+		int quoteKind = quoteChild.getQuoteKind();
+		int period = (int) getChild(1).evaluate(variables, quoteBundle, explicitSymbol, day);
+
+		if (period < 0) {
+			EvaluationException e = EvaluationException.AVG_RANGE_EXCEPTION;
+			e.setMessage(this, "", period);
+			throw e;
+		}
+
+		int offset = (int) getChild(2).evaluate(variables, quoteBundle, explicitSymbol, day);
+
+		if (offset > 0) {
+			EvaluationException e = EvaluationException.AVG_OFFSET_EXCEPTION;
+			e.setMessage(this, "", offset);
+			throw e;
+		}
+
+		// Calculate and return the line of best fit.
+		QuoteBundleFunctionSource source = new QuoteBundleFunctionSource(quoteBundle, explicitSymbol, quoteKind, day,
+				offset, period);
+
+		return QuoteFunctions.bestFit(source, period);
 	}
 
-        // Calculate and return the line of best fit.
-        QuoteBundleFunctionSource source =
-            new QuoteBundleFunctionSource(quoteBundle, 
-					  explicitSymbol, 
-					  quoteKind, 
-					  day, 
-					  offset, 
-					  period);
-
-        return QuoteFunctions.bestFit(source, period);            	
-    }
-
-    public String toString() {
-	return new String("trend(" + 
-			  getChild(0).toString() + ", " +
-			  getChild(1).toString() + ", " +
-			  getChild(2).toString() + ")");
-    }
-
-    public int checkType() throws TypeMismatchException {
-	// First and second type must be quote, second and third types must be integer value,        
-
-	if((getChild(0).checkType() == FLOAT_QUOTE_TYPE ||
-            getChild(0).checkType() == INTEGER_QUOTE_TYPE) &&
-	   getChild(1).checkType() == INTEGER_TYPE &&
-	   getChild(2).checkType() == INTEGER_TYPE)	    
-	    return getType();
-	else {
-	    String types = 
-		getChild(0).getType() + " , " + 
-		getChild(1).getType() + " , " + 
-		getChild(2).getType();
-
-	    String expectedTypes =
-		FLOAT_QUOTE_TYPE + " , " + 
-		INTEGER_TYPE     + " , " + 
-		INTEGER_TYPE;
-
-	    throw new TypeMismatchException(this, types, expectedTypes);
+	public String toString() {
+		return new String("trend(" + getChild(0).toString() + ", " + getChild(1).toString() + ", "
+				+ getChild(2).toString() + ")");
 	}
-    }
 
-    public int getType() {
-        if(getChild(0).getType() == FLOAT_QUOTE_TYPE)
-            return FLOAT_TYPE;
-        else {
-            assert getChild(0).getType() == INTEGER_QUOTE_TYPE;
-            return INTEGER_TYPE;
-        }
-    }
+	public int checkType() throws TypeMismatchException {
+		// First and second type must be quote, second and third types must be integer
+		// value,
 
-    public Object clone() {
-        return new TrendExpression((Expression)getChild(0).clone(), 
-				   (Expression)getChild(1).clone(),
-				   (Expression)getChild(2).clone());
-    }
+		if ((getChild(0).checkType() == FLOAT_QUOTE_TYPE || getChild(0).checkType() == INTEGER_QUOTE_TYPE)
+				&& getChild(1).checkType() == INTEGER_TYPE && getChild(2).checkType() == INTEGER_TYPE)
+			return getType();
+		else {
+			String types = getChild(0).getType() + " , " + getChild(1).getType() + " , " + getChild(2).getType();
+
+			String expectedTypes = FLOAT_QUOTE_TYPE + " , " + INTEGER_TYPE + " , " + INTEGER_TYPE;
+
+			throw new TypeMismatchException(this, types, expectedTypes);
+		}
+	}
+
+	public int getType() {
+		if (getChild(0).getType() == FLOAT_QUOTE_TYPE)
+			return FLOAT_TYPE;
+		else {
+			assert getChild(0).getType() == INTEGER_QUOTE_TYPE;
+			return INTEGER_TYPE;
+		}
+	}
+
+	public Object clone() {
+		return new TrendExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone(),
+				(Expression) getChild(2).clone());
+	}
 }

@@ -33,161 +33,134 @@ import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.util.Locale;
 
 /**
- * Provides a preferences page to let the user set user interface
- * parameters.
+ * Provides a preferences page to let the user set user interface parameters.
  */
-public class UserInterfacePage extends JPanel implements PreferencesPage
-{
-    private JDesktopPane desktop;
-    private JTextField minDecimalDigitsTextField;
-    private JTextField maxDecimalDigitsTextField;
-    private JTextField tabSizeTextField;
-    private JCheckBox scrollToLatestDataChart;
-    private JCheckBox scrollToLatestDataTable; 
-    private JCheckBox restoreWindowsCheckBox;
-    private JCheckBox confirmExitCheckBox;
-    
-    
-   
-    /**
-     * Create a new user interface preferences page.
-     *
-     * @param	desktop	the parent desktop.
-     */
-    public UserInterfacePage(JDesktopPane desktop) {
-	this.desktop = desktop;
+public class UserInterfacePage extends JPanel implements PreferencesPage {
+	private JDesktopPane desktop;
+	private JTextField minDecimalDigitsTextField;
+	private JTextField maxDecimalDigitsTextField;
+	private JTextField tabSizeTextField;
+	private JCheckBox scrollToLatestDataChart;
+	private JCheckBox scrollToLatestDataTable;
+	private JCheckBox restoreWindowsCheckBox;
+	private JCheckBox confirmExitCheckBox;
 
-	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-	
-        add(createQuotesPanel());
-    }
-    
-    private JPanel createQuotesPanel() {
-        JPanel quotesPanel = new JPanel();
-        quotesPanel.setLayout(new BorderLayout());
-        JPanel borderPanel = new JPanel();
+	/**
+	 * Create a new user interface preferences page.
+	 *
+	 * @param desktop the parent desktop.
+	 */
+	public UserInterfacePage(JDesktopPane desktop) {
+		this.desktop = desktop;
 
-        GridBagLayout gridbag = new GridBagLayout();
-        GridBagConstraints c = new GridBagConstraints();
-        borderPanel.setLayout(gridbag);
-        
-        c.weightx = 1.0;
-        c.ipadx = 5;
-        c.anchor = GridBagConstraints.WEST;
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        int minDecimalDigits = PreferencesManager.getMinDecimalDigits();
-        int maxDecimalDigits = PreferencesManager.getMaxDecimalDigits();
-
-        minDecimalDigitsTextField = 
-            GridBagHelper.addTextRow(borderPanel, 
-                                     Locale.getString("MIN_DECIMAL_DIGITS"), 
-                                     Integer.toString(minDecimalDigits),
-                                     gridbag, c, 10);
-        maxDecimalDigitsTextField = 
-            GridBagHelper.addTextRow(borderPanel, 
-                                     Locale.getString("MAX_DECIMAL_DIGITS"), 
-                                     Integer.toString(maxDecimalDigits),
-                                     gridbag, c, 10);
-
-	minDecimalDigitsTextField.setToolTipText(Locale.getString("DECIMAL_DIGITS_FIELD_TOOLTIP"));
-	maxDecimalDigitsTextField.setToolTipText(Locale.getString("DECIMAL_DIGITS_FIELD_TOOLTIP"));
-
-	int tabSizeDigits = PreferencesManager.getEditTabSize();
-	tabSizeTextField = 
-            GridBagHelper.addTextRow(borderPanel, 
-                                     Locale.getString("EDIT_TAB_SIZE"), 
-                                     Integer.toString(tabSizeDigits),
-                                     gridbag, c, 10);
-
-	tabSizeTextField.setToolTipText(Locale.getString("TAB_LENGTH_FIELD_TOOLTIP"));
-
-	scrollToLatestDataChart = 
-	    GridBagHelper.addCheckBoxRow(borderPanel,
-					 Locale.getString("CHART_SHOW_LATEST_LABEL"),
-					 PreferencesManager.getDefaultChartScrollToEnd(),
-					 gridbag, c);
-
-	scrollToLatestDataChart.setToolTipText(Locale.getString("SCROLL_CHART_TO_END_TOOLTIP"));
-
-	scrollToLatestDataTable = 
-	    GridBagHelper.addCheckBoxRow(borderPanel,
-					 Locale.getString("TABLE_SHOW_LATEST_LABEL"),
-					 PreferencesManager.getDefaultTableScrollToEnd(),
-					 gridbag, c);
-	
-	scrollToLatestDataTable.setToolTipText(Locale.getString("SCROLL_TABLE_TO_END_TOOLTIP"));
-	
-	restoreWindowsCheckBox = 
-	    GridBagHelper.addCheckBoxRow(borderPanel,
-					 Locale.getString("RESTORE_SAVED_WINDOWS"),
-					 PreferencesManager.getRestoreSavedWindowsSetting(),
-					 gridbag, c);
-	
-	
-	restoreWindowsCheckBox.setToolTipText(Locale.getString("RESTORE_SAVED_WINDOWS_CHECKBOX_TOOLTIP"));
-
-	confirmExitCheckBox = 
-	    GridBagHelper.addCheckBoxRow(borderPanel,
-					 Locale.getString("CONFIRM_VENICE_EXIT_TITLE"),
-					 PreferencesManager.getConfirmExitSetting(),
-					 gridbag, c);
-
-	confirmExitCheckBox.setToolTipText(Locale.getString("CONFIRM_EXIT_CHECKBOX_TOOLTIP"));
-
-        quotesPanel.add(borderPanel, BorderLayout.NORTH);
-	
-        return quotesPanel;
-    }
-
-    public JComponent getComponent() {
-	return this;
-    }
-
-    public String getTitle() {
-	return Locale.getString("USER_INTERFACE_PAGE_TITLE");
-    }
-
-    public void save() {
-        int minDecimalDigits = 0;
-        int maxDecimalDigits = 0;
-	int editTabSize      = 0;
-	boolean scrollToChartEnd;
-	boolean scrollToTableEnd;
-	boolean restoreSavedWindows;
-	boolean confirmExit;
-
-        try {
-            minDecimalDigits = Integer.parseInt(minDecimalDigitsTextField.getText());
-            maxDecimalDigits = Integer.parseInt(maxDecimalDigitsTextField.getText());
-
-	    editTabSize = Integer.parseInt(tabSizeTextField.getText());
-        }
-        catch(NumberFormatException e) {
-            // ignore
-        }
-
-        if(minDecimalDigits > 0) {
-            PreferencesManager.putMinDecimalDigits(minDecimalDigitsTextField.getText());
-        }
-        if(maxDecimalDigits > 0) {
-            PreferencesManager.putMaxDecimalDigits(maxDecimalDigitsTextField.getText());
-        }
-
-	if (editTabSize > 0) {
-	    PreferencesManager.putEditTabSize(tabSizeTextField.getText());
+		add(createQuotesPanel());
 	}
 
-	scrollToChartEnd =  scrollToLatestDataChart.isSelected(); 
-	PreferencesManager.putDefaultChartScrollToEnd(scrollToChartEnd);
+	private JPanel createQuotesPanel() {
+		JPanel quotesPanel = new JPanel();
+		quotesPanel.setLayout(new BorderLayout());
+		JPanel borderPanel = new JPanel();
 
-	scrollToTableEnd =  scrollToLatestDataTable.isSelected(); 
-	PreferencesManager.putDefaultTableScrollToEnd(scrollToTableEnd);
+		GridBagLayout gridbag = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		borderPanel.setLayout(gridbag);
 
-	restoreSavedWindows = restoreWindowsCheckBox.isSelected();
-	PreferencesManager.putRestoreSavedWindowsSetting(restoreSavedWindows);
+		c.weightx = 1.0;
+		c.ipadx = 5;
+		c.anchor = GridBagConstraints.WEST;
 
-	confirmExit = confirmExitCheckBox.isSelected();
-	PreferencesManager.putConfirmExitSetting(confirmExit);
+		int minDecimalDigits = PreferencesManager.getMinDecimalDigits();
+		int maxDecimalDigits = PreferencesManager.getMaxDecimalDigits();
 
-    }
+		minDecimalDigitsTextField = GridBagHelper.addTextRow(borderPanel, Locale.getString("MIN_DECIMAL_DIGITS"),
+				Integer.toString(minDecimalDigits), gridbag, c, 10);
+		maxDecimalDigitsTextField = GridBagHelper.addTextRow(borderPanel, Locale.getString("MAX_DECIMAL_DIGITS"),
+				Integer.toString(maxDecimalDigits), gridbag, c, 10);
+
+		minDecimalDigitsTextField.setToolTipText(Locale.getString("DECIMAL_DIGITS_FIELD_TOOLTIP"));
+		maxDecimalDigitsTextField.setToolTipText(Locale.getString("DECIMAL_DIGITS_FIELD_TOOLTIP"));
+
+		int tabSizeDigits = PreferencesManager.getEditTabSize();
+		tabSizeTextField = GridBagHelper.addTextRow(borderPanel, Locale.getString("EDIT_TAB_SIZE"),
+				Integer.toString(tabSizeDigits), gridbag, c, 10);
+
+		tabSizeTextField.setToolTipText(Locale.getString("TAB_LENGTH_FIELD_TOOLTIP"));
+
+		scrollToLatestDataChart = GridBagHelper.addCheckBoxRow(borderPanel, Locale.getString("CHART_SHOW_LATEST_LABEL"),
+				PreferencesManager.getDefaultChartScrollToEnd(), gridbag, c);
+
+		scrollToLatestDataChart.setToolTipText(Locale.getString("SCROLL_CHART_TO_END_TOOLTIP"));
+
+		scrollToLatestDataTable = GridBagHelper.addCheckBoxRow(borderPanel, Locale.getString("TABLE_SHOW_LATEST_LABEL"),
+				PreferencesManager.getDefaultTableScrollToEnd(), gridbag, c);
+
+		scrollToLatestDataTable.setToolTipText(Locale.getString("SCROLL_TABLE_TO_END_TOOLTIP"));
+
+		restoreWindowsCheckBox = GridBagHelper.addCheckBoxRow(borderPanel, Locale.getString("RESTORE_SAVED_WINDOWS"),
+				PreferencesManager.getRestoreSavedWindowsSetting(), gridbag, c);
+
+		restoreWindowsCheckBox.setToolTipText(Locale.getString("RESTORE_SAVED_WINDOWS_CHECKBOX_TOOLTIP"));
+
+		confirmExitCheckBox = GridBagHelper.addCheckBoxRow(borderPanel, Locale.getString("CONFIRM_VENICE_EXIT_TITLE"),
+				PreferencesManager.getConfirmExitSetting(), gridbag, c);
+
+		confirmExitCheckBox.setToolTipText(Locale.getString("CONFIRM_EXIT_CHECKBOX_TOOLTIP"));
+
+		quotesPanel.add(borderPanel, BorderLayout.NORTH);
+
+		return quotesPanel;
+	}
+
+	public JComponent getComponent() {
+		return this;
+	}
+
+	public String getTitle() {
+		return Locale.getString("USER_INTERFACE_PAGE_TITLE");
+	}
+
+	public void save() {
+		int minDecimalDigits = 0;
+		int maxDecimalDigits = 0;
+		int editTabSize = 0;
+		boolean scrollToChartEnd;
+		boolean scrollToTableEnd;
+		boolean restoreSavedWindows;
+		boolean confirmExit;
+
+		try {
+			minDecimalDigits = Integer.parseInt(minDecimalDigitsTextField.getText());
+			maxDecimalDigits = Integer.parseInt(maxDecimalDigitsTextField.getText());
+
+			editTabSize = Integer.parseInt(tabSizeTextField.getText());
+		} catch (NumberFormatException e) {
+			// ignore
+		}
+
+		if (minDecimalDigits > 0) {
+			PreferencesManager.putMinDecimalDigits(minDecimalDigitsTextField.getText());
+		}
+		if (maxDecimalDigits > 0) {
+			PreferencesManager.putMaxDecimalDigits(maxDecimalDigitsTextField.getText());
+		}
+
+		if (editTabSize > 0) {
+			PreferencesManager.putEditTabSize(tabSizeTextField.getText());
+		}
+
+		scrollToChartEnd = scrollToLatestDataChart.isSelected();
+		PreferencesManager.putDefaultChartScrollToEnd(scrollToChartEnd);
+
+		scrollToTableEnd = scrollToLatestDataTable.isSelected();
+		PreferencesManager.putDefaultTableScrollToEnd(scrollToTableEnd);
+
+		restoreSavedWindows = restoreWindowsCheckBox.isSelected();
+		PreferencesManager.putRestoreSavedWindowsSetting(restoreSavedWindows);
+
+		confirmExit = confirmExitCheckBox.isSelected();
+		PreferencesManager.putConfirmExitSetting(confirmExit);
+
+	}
 }

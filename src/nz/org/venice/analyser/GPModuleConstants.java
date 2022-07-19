@@ -19,21 +19,21 @@
 package nz.org.venice.analyser;
 
 public final class GPModuleConstants {
-    
-    // percent format
-    public final static String format = "0.00#";
-    // max percent
-    public final static double PERCENT_DOUBLE = 100.0;
-    public final static int PERCENT_INT = 10000;
-    
-    // use "@" as separator char in the preferences
-    public final static String separatorString = "@";
-    // use " " as null string
-    public final static String nullString = " ";
-    
-    // Number of rules (buy rule and sell rule)
-    public final static int BUY_RULE = 0;
-    public final static int SELL_RULE = 1;
-    public final static int NUMBER_RULES = 2;
-    
+
+	// percent format
+	public final static String format = "0.00#";
+	// max percent
+	public final static double PERCENT_DOUBLE = 100.0;
+	public final static int PERCENT_INT = 10000;
+
+	// use "@" as separator char in the preferences
+	public final static String separatorString = "@";
+	// use " " as null string
+	public final static String nullString = " ";
+
+	// Number of rules (buy rule and sell rule)
+	public final static int BUY_RULE = 0;
+	public final static int SELL_RULE = 1;
+	public final static int NUMBER_RULES = 2;
+
 }

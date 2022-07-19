@@ -39,173 +39,164 @@ import nz.org.venice.util.Report;
  */
 public class FileEODQuoteImport implements IFileEODQuoteImport {
 
-    // Maximum number of quotes imported by importNext()
-    private static final int MAX_QUOTE_COUNT = 500;
+	// Maximum number of quotes imported by importNext()
+	private static final int MAX_QUOTE_COUNT = 500;
 
-    private Report report;
-    private EODQuoteFilter filter;
-    private File file;
+	private Report report;
+	private EODQuoteFilter filter;
+	private File file;
 
-    private FileInputStream fileStream;
-    private InputStreamReader inputStream;
-    private BufferedReader fileReader;
-    private String fileName;
-    private int lineNumber;
-    private boolean isNext;
+	private FileInputStream fileStream;
+	private InputStreamReader inputStream;
+	private BufferedReader fileReader;
+	private String fileName;
+	private int lineNumber;
+	private boolean isNext;
 
-    /**
-     * Create a new object to import quotes. Write any errors or warnings to the
-     * given report file and use the given quote filter.
-     *
-     * @param report the report
-     * @param filter the quote filter
-     */
-    public FileEODQuoteImport(Report report, EODQuoteFilter filter) {
-        this.report = report;
-        this.filter = filter;
-        this.file = null;
-        this.fileName = null;
+	/**
+	 * Create a new object to import quotes. Write any errors or warnings to the
+	 * given report file and use the given quote filter.
+	 *
+	 * @param report the report
+	 * @param filter the quote filter
+	 */
+	public FileEODQuoteImport(Report report, EODQuoteFilter filter) {
+		this.report = report;
+		this.filter = filter;
+		this.file = null;
+		this.fileName = null;
 
-        this.fileStream = null;
-        this.inputStream = null;
-        this.fileReader = null;
-        this.lineNumber = 0;
-        this.isNext = false;
-    }
+		this.fileStream = null;
+		this.inputStream = null;
+		this.fileReader = null;
+		this.lineNumber = 0;
+		this.isNext = false;
+	}
 
-    /**
-     * Open the given file to import.
-     *
-     * @param file the file to import
-     * @return <code>TRUE</code> if the file was successfully opened;\
-     *         <code>FALSE</code> otherwise.
-     */
+	/**
+	 * Open the given file to import.
+	 *
+	 * @param file the file to import
+	 * @return <code>TRUE</code> if the file was successfully opened;\
+	 *         <code>FALSE</code> otherwise.
+	 */
 
 	public boolean open(File file) {
-        boolean success = false;
+		boolean success = false;
 
-        assert fileStream == null;
-        
-        try {
-            fileStream = new FileInputStream(file);
-            inputStream = new InputStreamReader(fileStream);
-	    fileReader = new BufferedReader(inputStream);
-            fileName = file.getName();
+		assert fileStream == null;
 
-            lineNumber = 1;
-            isNext = true;
-            success = true;
+		try {
+			fileStream = new FileInputStream(file);
+			inputStream = new InputStreamReader(fileStream);
+			fileReader = new BufferedReader(inputStream);
+			fileName = file.getName();
 
-	} catch (IOException e) {
-            report.addError(fileName + ":" +
-                            Locale.getString("ERROR") + ": " +
-                            Locale.getString("ERROR_READING_FROM_FILE", fileName));
-            fileStream = null;
-            success = false;
-        }
+			lineNumber = 1;
+			isNext = true;
+			success = true;
 
-        return success;
-    }
+		} catch (IOException e) {
+			report.addError(fileName + ":" + Locale.getString("ERROR") + ": "
+					+ Locale.getString("ERROR_READING_FROM_FILE", fileName));
+			fileStream = null;
+			success = false;
+		}
 
-    /** 
-     * Import the next bundle quotes from the file.
-     *
-     * @return list of quotes
-     */
+		return success;
+	}
+
+	/**
+	 * Import the next bundle quotes from the file.
+	 *
+	 * @return list of quotes
+	 */
 
 	public List importNext() {
-        assert fileStream != null;
+		assert fileStream != null;
 
-        List quotes = new ArrayList();
+		List quotes = new ArrayList();
 
-	try {
-	    String line = fileReader.readLine();
-            
-	    while(line != null) {
-                try {
-                    EODQuote quote = filter.toEODQuote(line);
-                    quotes.add(quote);
-                    verify(quote);
-                }
-                catch(QuoteFormatException e) {
-                    report.addError(fileName + ":" +
-                                    Integer.toString(lineNumber) + ":" +
-                                    Locale.getString("ERROR") + ": " +
-                                    e.getMessage());
-                }
+		try {
+			String line = fileReader.readLine();
 
-                lineNumber++;
+			while (line != null) {
+				try {
+					EODQuote quote = filter.toEODQuote(line);
+					quotes.add(quote);
+					verify(quote);
+				} catch (QuoteFormatException e) {
+					report.addError(fileName + ":" + Integer.toString(lineNumber) + ":" + Locale.getString("ERROR")
+							+ ": " + e.getMessage());
+				}
 
-                if(quotes.size() >= MAX_QUOTE_COUNT)
-                    break;
-                
-                line = fileReader.readLine();
-	    }
-            
-            if(line == null)
-                isNext = false;
+				lineNumber++;
 
-	} catch (IOException e) {
-            report.addError(fileName + ":" +
-                            Locale.getString("ERROR") + ": " +
-                            Locale.getString("ERROR_READING_FROM_FILE", fileName));
-        }
+				if (quotes.size() >= MAX_QUOTE_COUNT)
+					break;
 
-        return quotes;
-    }
+				line = fileReader.readLine();
+			}
 
-    /**
-     * Return whether there are any more quotes in the file.
-     *
-     * @return <code>TRUE</code> if there are more quotes to import;
-     *         <code>FALSE</code> otherwise.
-     */
+			if (line == null)
+				isNext = false;
+
+		} catch (IOException e) {
+			report.addError(fileName + ":" + Locale.getString("ERROR") + ": "
+					+ Locale.getString("ERROR_READING_FROM_FILE", fileName));
+		}
+
+		return quotes;
+	}
+
+	/**
+	 * Return whether there are any more quotes in the file.
+	 *
+	 * @return <code>TRUE</code> if there are more quotes to import;
+	 *         <code>FALSE</code> otherwise.
+	 */
 
 	public boolean isNext() {
-        assert fileStream != null;
+		assert fileStream != null;
 
-        return isNext;
-    }
+		return isNext;
+	}
 
-    /**
-     * Close the file being imported.
-     */
+	/**
+	 * Close the file being imported.
+	 */
 
 	public void close() {
-        assert fileStream != null;
+		assert fileStream != null;
 
-        try {
-	    fileReader.close();
-	} catch (IOException e) {
-            report.addError(fileName + ":" +
-                            Locale.getString("ERROR") + ": " +
-                            Locale.getString("ERROR_READING_FROM_FILE", fileName));
-        }        
-        
-        fileStream = null;
-    }
+		try {
+			fileReader.close();
+		} catch (IOException e) {
+			report.addError(fileName + ":" + Locale.getString("ERROR") + ": "
+					+ Locale.getString("ERROR_READING_FROM_FILE", fileName));
+		}
 
-    /**
-     * Verify the quote is valid. Log any problems to the report and try to clean
-     * it up the best we can.
-     *
-     * @param quote the quote
-     */
-    private void verify(EODQuote quote) {
-        try {
-            quote.verify();
-        }
-        catch(QuoteFormatException e) {
-            List messages = e.getMessages();
+		fileStream = null;
+	}
 
-            for(Iterator iterator = messages.iterator(); iterator.hasNext();) {
-                String message = (String)iterator.next();
+	/**
+	 * Verify the quote is valid. Log any problems to the report and try to clean it
+	 * up the best we can.
+	 *
+	 * @param quote the quote
+	 */
+	private void verify(EODQuote quote) {
+		try {
+			quote.verify();
+		} catch (QuoteFormatException e) {
+			List messages = e.getMessages();
 
-                report.addWarning(fileName + ":" + 
-                                  Integer.toString(lineNumber) + ":" +
-                                  Locale.getString("WARNING") + ": " +
-                                  message);
-            }
-        }
-    }
+			for (Iterator iterator = messages.iterator(); iterator.hasNext();) {
+				String message = (String) iterator.next();
+
+				report.addWarning(fileName + ":" + Integer.toString(lineNumber) + ":" + Locale.getString("WARNING")
+						+ ": " + message);
+			}
+		}
+	}
 }

@@ -36,169 +36,155 @@ import nz.org.venice.util.Locale;
  */
 public class PointAndFigureGraphUI implements GraphUI {
 
-    // The graph's user interface
-    private JPanel panel;
-    private JTextField priceReversalTextField;
-    private JTextField boxPriceTextField;
+	// The graph's user interface
+	private JPanel panel;
+	private JTextField priceReversalTextField;
+	private JTextField boxPriceTextField;
 
-    // String name of settings
-    protected final static String PRICE_REVERSAL_SCALE = "price_reversal_scale";
-    protected final static String BOX_PRICE_SCALE = "box_price";
+	// String name of settings
+	protected final static String PRICE_REVERSAL_SCALE = "price_reversal_scale";
+	protected final static String BOX_PRICE_SCALE = "box_price";
 
-    // Limits
-    private final static double MINIMUM_PRICE_SCALE = 0.0001D;
+	// Limits
+	private final static double MINIMUM_PRICE_SCALE = 0.0001D;
 
-    // Default values - these are not constants because the default
-    // value will be set depending on the graph
-    private double defaultPriceReversalScale;
-    private double defaultBoxPriceScale;
+	// Default values - these are not constants because the default
+	// value will be set depending on the graph
+	private double defaultPriceReversalScale;
+	private double defaultBoxPriceScale;
 
-    /**
-     * Create a new Point and Figure user interface with the initial settings.
-     *
-     * @param settings the initial settings
-     * @param defaultPriceReversalScale default price scale based on data
-     */
-    public PointAndFigureGraphUI(HashMap settings, 
-				 double defaultPriceReversalScale,
-				 double defaultBoxPriceScale) {
-        this.defaultPriceReversalScale = defaultPriceReversalScale;
-	this.defaultBoxPriceScale = defaultBoxPriceScale;
-        buildPanel();
-        setSettings(settings);
-    }
+	/**
+	 * Create a new Point and Figure user interface with the initial settings.
+	 *
+	 * @param settings                  the initial settings
+	 * @param defaultPriceReversalScale default price scale based on data
+	 */
+	public PointAndFigureGraphUI(HashMap settings, double defaultPriceReversalScale, double defaultBoxPriceScale) {
+		this.defaultPriceReversalScale = defaultPriceReversalScale;
+		this.defaultBoxPriceScale = defaultBoxPriceScale;
+		buildPanel();
+		setSettings(settings);
+	}
 
-    /**
-     * Build the user interface JPanel.
-     */
-    private void buildPanel() {
-        panel = new JPanel();
-        GridBagLayout layout = new GridBagLayout();
-        GridBagConstraints c = new GridBagConstraints();
-        panel.setLayout(layout);
+	/**
+	 * Build the user interface JPanel.
+	 */
+	private void buildPanel() {
+		panel = new JPanel();
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		panel.setLayout(layout);
 
-        c.weightx = 1.0;
-        c.ipadx = 5;
-        c.anchor = GridBagConstraints.WEST;
+		c.weightx = 1.0;
+		c.ipadx = 5;
+		c.anchor = GridBagConstraints.WEST;
 
-        priceReversalTextField =
-            GridBagHelper.addTextRow(panel, Locale.getString("PRICE_REVERSAL_SCALE"), "",
-                                     layout, c, 8);
+		priceReversalTextField = GridBagHelper.addTextRow(panel, Locale.getString("PRICE_REVERSAL_SCALE"), "", layout,
+				c, 8);
 
-	boxPriceTextField =
-            GridBagHelper.addTextRow(panel, Locale.getString("BOX_PRICE_SCALE"), "",
-                                     layout, c, 8);
-		
-    }
+		boxPriceTextField = GridBagHelper.addTextRow(panel, Locale.getString("BOX_PRICE_SCALE"), "", layout, c, 8);
 
-    public String checkSettings() {
-	return checkSettings(getSettings());
-    }
+	}
 
-    public String checkSettings(HashMap settings) {
-        // Check price scale
-        String priceReversalScaleString = (String)settings.get(PRICE_REVERSAL_SCALE);
-	String boxPriceScaleString = (String)settings.get(BOX_PRICE_SCALE);
-        double priceReversalScale;
-	double boxPriceScale;
-	
+	public String checkSettings() {
+		return checkSettings(getSettings());
+	}
 
-        try {
-            priceReversalScale = Double.parseDouble(priceReversalScaleString);
-        }
-        catch(NumberFormatException e) {
-            return Locale.getString("ERROR_PARSING_NUMBER", priceReversalScaleString);
-        }
+	public String checkSettings(HashMap settings) {
+		// Check price scale
+		String priceReversalScaleString = (String) settings.get(PRICE_REVERSAL_SCALE);
+		String boxPriceScaleString = (String) settings.get(BOX_PRICE_SCALE);
+		double priceReversalScale;
+		double boxPriceScale;
 
-        try {
-            boxPriceScale = Double.parseDouble(boxPriceScaleString);
-        }
-        catch(NumberFormatException e) {
-            return Locale.getString("ERROR_PARSING_NUMBER", boxPriceScaleString);
-        }
+		try {
+			priceReversalScale = Double.parseDouble(priceReversalScaleString);
+		} catch (NumberFormatException e) {
+			return Locale.getString("ERROR_PARSING_NUMBER", priceReversalScaleString);
+		}
 
-        if (priceReversalScale < MINIMUM_PRICE_SCALE)
-            return Locale.getString("ERROR_PRICE_SCALE_TOO_SMALL");
+		try {
+			boxPriceScale = Double.parseDouble(boxPriceScaleString);
+		} catch (NumberFormatException e) {
+			return Locale.getString("ERROR_PARSING_NUMBER", boxPriceScaleString);
+		}
 
-        if (boxPriceScale < MINIMUM_PRICE_SCALE)
-            return Locale.getString("ERROR_PRICE_SCALE_TOO_SMALL");
+		if (priceReversalScale < MINIMUM_PRICE_SCALE)
+			return Locale.getString("ERROR_PRICE_SCALE_TOO_SMALL");
 
-        // Settings are OK
-        return null;
-    }
+		if (boxPriceScale < MINIMUM_PRICE_SCALE)
+			return Locale.getString("ERROR_PRICE_SCALE_TOO_SMALL");
 
-    public HashMap getSettings() {
-        HashMap settings = new HashMap();
-        settings.put(PRICE_REVERSAL_SCALE, priceReversalTextField.getText());
-	settings.put(BOX_PRICE_SCALE, boxPriceTextField.getText());
-        return settings;
-    }
+		// Settings are OK
+		return null;
+	}
 
-    public void setSettings(HashMap settings) {
-        priceReversalTextField.setText(Double.toString(getPriceReversalScale(settings,
-									     defaultPriceReversalScale)));
-        boxPriceTextField.setText(Double.toString(getBoxPriceScale(settings,
-								   defaultBoxPriceScale)));
-    }
+	public HashMap getSettings() {
+		HashMap settings = new HashMap();
+		settings.put(PRICE_REVERSAL_SCALE, priceReversalTextField.getText());
+		settings.put(BOX_PRICE_SCALE, boxPriceTextField.getText());
+		return settings;
+	}
 
-    public JPanel getPanel() {
-        return panel;
-    }
+	public void setSettings(HashMap settings) {
+		priceReversalTextField.setText(Double.toString(getPriceReversalScale(settings, defaultPriceReversalScale)));
+		boxPriceTextField.setText(Double.toString(getBoxPriceScale(settings, defaultBoxPriceScale)));
+	}
 
-    /**
-     * Retrieve the price scale from the settings hashmap. If the hashmap
-     * is empty, then return the default price scale.
-     *
-     * @param settings the settings
-     * @param defaultPriceReversalScale the default price scale
-     * @return the price scale
-     */
-    public static double getPriceReversalScale(HashMap settings, double defaultPriceReversalScale) {
-	
-	double priceReversalScale = defaultPriceReversalScale;
+	public JPanel getPanel() {
+		return panel;
+	}
 
-        String priceReversalScaleString = (String)settings.get(PRICE_REVERSAL_SCALE);
+	/**
+	 * Retrieve the price scale from the settings hashmap. If the hashmap is empty,
+	 * then return the default price scale.
+	 *
+	 * @param settings                  the settings
+	 * @param defaultPriceReversalScale the default price scale
+	 * @return the price scale
+	 */
+	public static double getPriceReversalScale(HashMap settings, double defaultPriceReversalScale) {
 
-        if(priceReversalScaleString != null) {
-            try {
-                priceReversalScale = Double.parseDouble(priceReversalScaleString);
-            }
-            catch(NumberFormatException e) {
-                // Value should already be checked
-                assert false;
-            }
-        }
+		double priceReversalScale = defaultPriceReversalScale;
 
-        return priceReversalScale;
-    }
+		String priceReversalScaleString = (String) settings.get(PRICE_REVERSAL_SCALE);
 
-    /**
-     * Retrieve the box price from the settings hashmap. If the hashmap
-     * is empty, then return the default box scale.
-     *
-     * @param settings the settings
-     * @param defaultBoxPrice the default price scale
-     * @return the box price
-     */
-    public static double getBoxPriceScale(HashMap settings, double defaultBoxPrice) {
-	
-	double boxPriceScale = defaultBoxPrice;
-	
-        String boxPriceScaleString = (String)settings.get(BOX_PRICE_SCALE);
+		if (priceReversalScaleString != null) {
+			try {
+				priceReversalScale = Double.parseDouble(priceReversalScaleString);
+			} catch (NumberFormatException e) {
+				// Value should already be checked
+				assert false;
+			}
+		}
 
+		return priceReversalScale;
+	}
 
-        if(boxPriceScaleString != null) {
-            try {
-                boxPriceScale = Double.parseDouble(boxPriceScaleString);
-            }
-            catch(NumberFormatException e) {
-                // Value should already be checked
-                assert false;
-            }
-        }
+	/**
+	 * Retrieve the box price from the settings hashmap. If the hashmap is empty,
+	 * then return the default box scale.
+	 *
+	 * @param settings        the settings
+	 * @param defaultBoxPrice the default price scale
+	 * @return the box price
+	 */
+	public static double getBoxPriceScale(HashMap settings, double defaultBoxPrice) {
 
-        return boxPriceScale;
-    }
+		double boxPriceScale = defaultBoxPrice;
 
+		String boxPriceScaleString = (String) settings.get(BOX_PRICE_SCALE);
+
+		if (boxPriceScaleString != null) {
+			try {
+				boxPriceScale = Double.parseDouble(boxPriceScaleString);
+			} catch (NumberFormatException e) {
+				// Value should already be checked
+				assert false;
+			}
+		}
+
+		return boxPriceScale;
+	}
 
 }

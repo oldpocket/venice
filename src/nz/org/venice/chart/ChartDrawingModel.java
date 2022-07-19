@@ -28,220 +28,208 @@ package nz.org.venice.chart;
 import java.util.HashMap;
 import java.util.Vector;
 
-public class ChartDrawingModel
-{
+public class ChartDrawingModel {
 
-    Vector points;
-    Vector lines;
-    HashMap text;
-    boolean dataExists;
-    
-    public ChartDrawingModel() {
-	points = new Vector();
-	lines = new Vector();
-	text = new HashMap();
+	Vector points;
+	Vector lines;
+	HashMap text;
+	boolean dataExists;
 
-	setDataExists();
-	
-    }
-    
-    
-    /**
-     *
-     * Creates a new straight line drawn on the chart.
-     * 
-     * @param  start The first point on the line.
-    */
-    public void createNewLine(Coordinate start) {
-	DrawnLine line = new DrawnLine();
-	line.setStart(start);
-	//So there's some defined end
-	line.setEnd(start);
-	lines.add(line);
+	public ChartDrawingModel() {
+		points = new Vector();
+		lines = new Vector();
+		text = new HashMap();
 
-	setDataExists();
-    }
-    
-    /**
-     *
-     * Return the last line drawn, or in the process of being
-     * drawn.
-     *
-     * @return A DrawnLine object (See DrawnLine.java)
-    */
-    public DrawnLine getLastLine() {
-	return (DrawnLine)lines.elementAt(lines.size() - 1);
-    }
-	
-    /**
-     * Return all the lines drawn on the chart.
-     *
-     * @return A Vector of DrawnLine objects 
-    */
-    public Vector getDrawnLines() {
-	return lines;
-    }
-    
+		setDataExists();
 
-    /**
-     * Return a specific line drawn on the chart
-     *
-     * @param  index  The index to the list of lines
-     * @return the index'th DrawnLine object drawn on the chart. 
-     */
-    public DrawnLine getDrawnLine(int index) {
-	return (index < lines.size()) 
-	    ? (DrawnLine)lines.elementAt(index)
-	    : null;
-
-    }
-
-    /**
-     *
-     * Remove the drawn line corresponding at a specific set of 
-     * start and end points
-     *
-     * @param start  The start point of the line
-     * @param end    The end point of the line
-    */
-    public void removeLine(Coordinate start, Coordinate end) {
-	int i;
-
-	i = findLine(start, end);
-	if (i != -1) {
-	    lines.remove(i);
 	}
 
-	setDataExists();
-    }
+	/**
+	 *
+	 * Creates a new straight line drawn on the chart.
+	 * 
+	 * @param start The first point on the line.
+	 */
+	public void createNewLine(Coordinate start) {
+		DrawnLine line = new DrawnLine();
+		line.setStart(start);
+		// So there's some defined end
+		line.setEnd(start);
+		lines.add(line);
 
-    /**
-     *
-     * Return the index of a line at a set of points if it exists 
-     * on the chart.
-     *
-     * @param start  The start point of a line
-     * @param end    The end point of a line
-     * @return The index in the list of lines drawn on the chart
-     *         if it exists, -1 otherwise.
-    */
-    private int findLine(Coordinate start, Coordinate end) {
-	int i;
-		
-	for (i = 0; i < lines.size(); i++) {
-	    DrawnLine line = (DrawnLine)lines.elementAt(i);
-	    if (line.compareTo(start, end)) {
-		return i;
-	    }
+		setDataExists();
 	}
-	return -1;
-    }
 
-    /**
-      
-     * Return the index of the point if it exists 
-     * on the chart.
-     *
-     * @param point  The point to search for
-     * @return The index in the list of points drawn on the chart
-     
-    */
-    private int findPoint(Coordinate point) {
-	int i;
-
-	for (i = 0; i < points.size(); i++) {
-	    Coordinate temp = (Coordinate)points.elementAt(i);
-	    if (temp.compareTo(point)) {
-		return i;
-	    }
+	/**
+	 *
+	 * Return the last line drawn, or in the process of being drawn.
+	 *
+	 * @return A DrawnLine object (See DrawnLine.java)
+	 */
+	public DrawnLine getLastLine() {
+		return (DrawnLine) lines.elementAt(lines.size() - 1);
 	}
-	return -1;
-    }
 
-    /**
-     *
-     * Place a point on the chart at a point
-     * 
-     * @param point The coordinate to place on the chart
-    */
-    public void setPoint(Coordinate point) {
-	points.add(point);
-	setDataExists();
-    }
-
-    /**
-     *
-     * Return the list of all points drawn on the chart
-     * 
-     * @return A vector of all points drawn on the chart
-    */
-    public Vector getDrawnPoints() {
-	return points;
-    }
-
-    
-    /**
-     *
-     * Remove the point drawn on the chart at this coordinate
-     * @param point The coordinate of the point to remove
-    */
-    public void removePoint(Coordinate point) {
-	int i;
-
-	i = findPoint(point);
-	if (i != -1) {
-	    points.remove(i);
+	/**
+	 * Return all the lines drawn on the chart.
+	 *
+	 * @return A Vector of DrawnLine objects
+	 */
+	public Vector getDrawnLines() {
+		return lines;
 	}
-	setDataExists();
-    }
 
-    /**
-     * Return all the text written on the chart
-     *
-     * @return A HashMap of all the text, keyed by coordinates.
-    */
-    public HashMap getText() {
-	return text;
-    }
+	/**
+	 * Return a specific line drawn on the chart
+	 *
+	 * @param index The index to the list of lines
+	 * @return the index'th DrawnLine object drawn on the chart.
+	 */
+	public DrawnLine getDrawnLine(int index) {
+		return (index < lines.size()) ? (DrawnLine) lines.elementAt(index) : null;
 
-    /**
-     * Put text on the chart at a specific point
-     * 
-     * @param point The coordinate on the chart of where the text is to placed
-     * @param str   The string to write on the chart.
-    */
-    public void setText(Coordinate point, String str) {
-	
-	text.put(point, str);	
-	setDataExists();
-    }
+	}
 
-    /**
-     * Remove the text at a specific point
-     *
-     * @param point The coordinate on the chart of where to delete the text
-    */
-    public void removeText(Coordinate point) {
-	text.remove(point);
-	setDataExists();
-    }
+	/**
+	 *
+	 * Remove the drawn line corresponding at a specific set of start and end points
+	 *
+	 * @param start The start point of the line
+	 * @param end   The end point of the line
+	 */
+	public void removeLine(Coordinate start, Coordinate end) {
+		int i;
 
-    public boolean dataExists() {
-	return dataExists;
-    }
+		i = findLine(start, end);
+		if (i != -1) {
+			lines.remove(i);
+		}
 
-    /* Determine if there are any drawn elements left on the chart
-       after a delete */
-    private void setDataExists() {
+		setDataExists();
+	}
 
-	dataExists = true;
-	if (lines.size() == 0 &&
-	    points.size() == 0 &&
-	    text.size() == 0) {
-	    dataExists = false;
-	}	    
-    }
+	/**
+	 *
+	 * Return the index of a line at a set of points if it exists on the chart.
+	 *
+	 * @param start The start point of a line
+	 * @param end   The end point of a line
+	 * @return The index in the list of lines drawn on the chart if it exists, -1
+	 *         otherwise.
+	 */
+	private int findLine(Coordinate start, Coordinate end) {
+		int i;
 
+		for (i = 0; i < lines.size(); i++) {
+			DrawnLine line = (DrawnLine) lines.elementAt(i);
+			if (line.compareTo(start, end)) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
+	/**
+	 * 
+	 * Return the index of the point if it exists on the chart.
+	 *
+	 * @param point The point to search for
+	 * @return The index in the list of points drawn on the chart
+	 * 
+	 */
+	private int findPoint(Coordinate point) {
+		int i;
+
+		for (i = 0; i < points.size(); i++) {
+			Coordinate temp = (Coordinate) points.elementAt(i);
+			if (temp.compareTo(point)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 *
+	 * Place a point on the chart at a point
+	 * 
+	 * @param point The coordinate to place on the chart
+	 */
+	public void setPoint(Coordinate point) {
+		points.add(point);
+		setDataExists();
+	}
+
+	/**
+	 *
+	 * Return the list of all points drawn on the chart
+	 * 
+	 * @return A vector of all points drawn on the chart
+	 */
+	public Vector getDrawnPoints() {
+		return points;
+	}
+
+	/**
+	 *
+	 * Remove the point drawn on the chart at this coordinate
+	 * 
+	 * @param point The coordinate of the point to remove
+	 */
+	public void removePoint(Coordinate point) {
+		int i;
+
+		i = findPoint(point);
+		if (i != -1) {
+			points.remove(i);
+		}
+		setDataExists();
+	}
+
+	/**
+	 * Return all the text written on the chart
+	 *
+	 * @return A HashMap of all the text, keyed by coordinates.
+	 */
+	public HashMap getText() {
+		return text;
+	}
+
+	/**
+	 * Put text on the chart at a specific point
+	 * 
+	 * @param point The coordinate on the chart of where the text is to placed
+	 * @param str   The string to write on the chart.
+	 */
+	public void setText(Coordinate point, String str) {
+
+		text.put(point, str);
+		setDataExists();
+	}
+
+	/**
+	 * Remove the text at a specific point
+	 *
+	 * @param point The coordinate on the chart of where to delete the text
+	 */
+	public void removeText(Coordinate point) {
+		text.remove(point);
+		setDataExists();
+	}
+
+	public boolean dataExists() {
+		return dataExists;
+	}
+
+	/*
+	 * Determine if there are any drawn elements left on the chart after a delete
+	 */
+	private void setDataExists() {
+
+		dataExists = true;
+		if (lines.size() == 0 && points.size() == 0 && text.size() == 0) {
+			dataExists = false;
+		}
+	}
 
 }

@@ -24,17 +24,20 @@ import javax.swing.JPanel;
 
 /**
  * Defines a user interface for a graph. Graphs often have user-definable
- * settings, such as the period of a moving average graph. Since
- * there are many types of graphs it makes sense standardising how the
- * user-definable settings are handled and how the user interface is
- * displayed to the user. Therefore each graph may have an associated
- * user interface which lets the user modify the graph's settings.
+ * settings, such as the period of a moving average graph. Since there are many
+ * types of graphs it makes sense standardising how the user-definable settings
+ * are handled and how the user interface is displayed to the user. Therefore
+ * each graph may have an associated user interface which lets the user modify
+ * the graph's settings.
  *
- * <p>Each implementation of this class is instantiated by the associated
- * graph. Therefore this interface has no set constructor as the constructor
- * can vary depending on the graph.
+ * <p>
+ * Each implementation of this class is instantiated by the associated graph.
+ * Therefore this interface has no set constructor as the constructor can vary
+ * depending on the graph.
  *
- * <p>This user interface will be displayed by the {@link nz.org.venice.chart.GraphSettingsDialog}.
+ * <p>
+ * This user interface will be displayed by the
+ * {@link nz.org.venice.chart.GraphSettingsDialog}.
  *
  * @author Andrew Leppard
  * @see AbstractGraph
@@ -44,41 +47,41 @@ import javax.swing.JPanel;
  */
 public interface GraphUI {
 
-    /**
-     * Return the current settings displayed in the user interface.
-     *
-     * @return current settings
-     */
-    public HashMap getSettings();
+	/**
+	 * Return the current settings displayed in the user interface.
+	 *
+	 * @return current settings
+	 */
+	public HashMap getSettings();
 
-    /**
-     * Check the current settings displayed in the user interface. Return
-     * an error message if the settings are invalid.
-     *
-     * @return the error message or <code>null</code> if the settings are valid
-     */
-    public String checkSettings();
+	/**
+	 * Check the current settings displayed in the user interface. Return an error
+	 * message if the settings are invalid.
+	 *
+	 * @return the error message or <code>null</code> if the settings are valid
+	 */
+	public String checkSettings();
 
-    /**
-     * Check previously set settings. Return
-     * an error message if the settings are invalid.
-     *
-     * @param settings Previously saved settings
-     * @return the error message or <code>null</code> if the settings are valid
-     */
-    public String checkSettings(HashMap settings);
+	/**
+	 * Check previously set settings. Return an error message if the settings are
+	 * invalid.
+	 *
+	 * @param settings Previously saved settings
+	 * @return the error message or <code>null</code> if the settings are valid
+	 */
+	public String checkSettings(HashMap settings);
 
-    /**
-     * Display the given settings in the user interface.
-     *
-     * @param settings the new settings
-     */
-    public void setSettings(HashMap settings);
+	/**
+	 * Display the given settings in the user interface.
+	 *
+	 * @param settings the new settings
+	 */
+	public void setSettings(HashMap settings);
 
-    /**
-     * Return the user interface.
-     *
-     * @return the user interface
-     */
-    public JPanel getPanel();
+	/**
+	 * Return the user interface.
+	 *
+	 * @return the user interface
+	 */
+	public JPanel getPanel();
 }

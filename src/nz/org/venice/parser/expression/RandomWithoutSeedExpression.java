@@ -32,43 +32,43 @@ import nz.org.venice.quote.Symbol;
  */
 public class RandomWithoutSeedExpression extends TerminalExpression {
 
-    private Random random;
+	private Random random;
 
-    /**
-     * Create a new random expression 
-     */
+	/**
+	 * Create a new random expression
+	 */
 
-    public RandomWithoutSeedExpression() {
-	super();
-        random = new Random();
-    }
+	public RandomWithoutSeedExpression() {
+		super();
+		random = new Random();
+	}
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
-	throws EvaluationException {
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-	return random.nextDouble();            	
-    }
+		return random.nextDouble();
+	}
 
-    /**
-     * Return the name of the expression. *
-     * @return random()
-     */
+	/**
+	 * Return the name of the expression. *
+	 * 
+	 * @return random()
+	 */
 
-    public String toString() {
-	return new String("random()");
-    }
-    
+	public String toString() {
+		return new String("random()");
+	}
 
-    /**
-     * Get the type of the expression
-     * 
-     * @return {@link #FLOAT_TYPE}
-     */
-    public int getType() {
-	return FLOAT_TYPE;
-    }
+	/**
+	 * Get the type of the expression
+	 * 
+	 * @return {@link #FLOAT_TYPE}
+	 */
+	public int getType() {
+		return FLOAT_TYPE;
+	}
 
-    public Object clone() {	
-        return new RandomWithoutSeedExpression();
-    }
+	public Object clone() {
+		return new RandomWithoutSeedExpression();
+	}
 }

@@ -43,218 +43,211 @@ import nz.org.venice.util.Locale;
  * @author Alberto Nacher
  */
 public class PreferencesXML {
-    
-    private JDesktopPane desktop = null;
-    
-    private String path = null;
-    
-    // The base in the prefs tree where all Venice settings are stored
-    private final static String base = "nz.org.venice";
 
-    // The user root from Venice's point of view
-    private static Preferences userRoot = Preferences.userRoot().node(base);
-    
-    /* XML Filter File. */
-    public class XMLFilter extends FileFilter {
+	private JDesktopPane desktop = null;
 
-        public static final String xml = "xml";
-        
-        //Accept all directories and xml files.
-        public boolean accept(File f) {
-            if (f.isDirectory()) {
-                return true;
-            }
+	private String path = null;
 
-            String extension = this.getExtension(f);
-            if (extension != null) {
-                if (extension.equals(XMLFilter.xml)) {
-                        return true;
-                } else {
-                    return false;
-                }
-            }
+	// The base in the prefs tree where all Venice settings are stored
+	private final static String base = "nz.org.venice";
 
-            return false;
-        }
+	// The user root from Venice's point of view
+	private static Preferences userRoot = Preferences.userRoot().node(base);
 
-        //The description of this filter
-        public String getDescription() {
-            return Locale.getString("XML_ONLY");
-        }
-        
-        /*
-         * Get the extension of a file.
-         */  
-        private String getExtension(File f) {
-            String ext = null;
-            String s = f.getName();
-            int i = s.lastIndexOf(".");
+	/* XML Filter File. */
+	public class XMLFilter extends FileFilter {
 
-            if (i > 0 &&  i < s.length() - 1) {
-                ext = s.substring(i+1).toLowerCase();
-            }
-            return ext;
-        }
-    }
+		public static final String xml = "xml";
 
-    /**
-     * Class that manage the import/export of preferences into/from an XML file.
-     *
-     * @param	desktop	the parent desktop.
-     */
-    public PreferencesXML(JDesktopPane desktop) {
-	this.desktop = desktop;
-    }
-    
-    public void importPreferences() {
-        // Get the path preferences file that the user wants to import
-        JFileChooser chooser;
-        String lastDirectory = loadImportPath();
+		// Accept all directories and xml files.
+		public boolean accept(File f) {
+			if (f.isDirectory()) {
+				return true;
+			}
 
-        if(lastDirectory != null)
-            chooser = new JFileChooser(lastDirectory);
-        else
-            chooser = new JFileChooser();
+			String extension = this.getExtension(f);
+			if (extension != null) {
+				if (extension.equals(XMLFilter.xml)) {
+					return true;
+				} else {
+					return false;
+				}
+			}
 
-        chooser.setMultiSelectionEnabled(false);
-        chooser.setFileFilter(new XMLFilter());
-        int action = chooser.showOpenDialog(desktop);
+			return false;
+		}
 
-        if(action == JFileChooser.APPROVE_OPTION) {
-            // Remember directory
-            lastDirectory = chooser.getCurrentDirectory().getAbsolutePath();
-            saveImportPath(lastDirectory);
+		// The description of this filter
+		public String getDescription() {
+			return Locale.getString("XML_ONLY");
+		}
 
-            File file = chooser.getSelectedFile();
+		/*
+		 * Get the extension of a file.
+		 */
+		private String getExtension(File f) {
+			String ext = null;
+			String s = f.getName();
+			int i = s.lastIndexOf(".");
 
-            // Save new preferences from the file
-            try {
-                InputStream inputStream = new BufferedInputStream(
-                    new FileInputStream(file));
-                importPreferences(inputStream);
-                inputStream.close();
-            } catch (IOException ex) {
-                JOptionPane.showInternalMessageDialog(desktop,
-                                                      Locale.getString("ERROR_READING_FROM_FILE"),
-                                                      Locale.getString("INVALID_PREFERENCES_ERROR"),
-                                                      JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) {
-                JOptionPane.showInternalMessageDialog(desktop,
-                                                      Locale.getString("INVALID_PREFERENCES_FORMAT_ERROR"),
-                                                      Locale.getString("INVALID_PREFERENCES_ERROR"),
-                                                      JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-	
-    public void exportPreferences() {
-        // Set the path preferences file that the user wants to export
-        JFileChooser chooser;
-        String lastDirectory = loadExportPath();
+			if (i > 0 && i < s.length() - 1) {
+				ext = s.substring(i + 1).toLowerCase();
+			}
+			return ext;
+		}
+	}
 
-        if(lastDirectory != null)
-            chooser = new JFileChooser(lastDirectory);
-        else
-            chooser = new JFileChooser();
+	/**
+	 * Class that manage the import/export of preferences into/from an XML file.
+	 *
+	 * @param desktop the parent desktop.
+	 */
+	public PreferencesXML(JDesktopPane desktop) {
+		this.desktop = desktop;
+	}
 
-        chooser.setMultiSelectionEnabled(false);
-        chooser.setFileFilter(new XMLFilter());
-        int action = chooser.showSaveDialog(desktop);
+	public void importPreferences() {
+		// Get the path preferences file that the user wants to import
+		JFileChooser chooser;
+		String lastDirectory = loadImportPath();
 
-        if(action == JFileChooser.APPROVE_OPTION) {
-            // Remember directory
-            lastDirectory = chooser.getCurrentDirectory().getAbsolutePath();
-            saveExportPath(lastDirectory);
+		if (lastDirectory != null)
+			chooser = new JFileChooser(lastDirectory);
+		else
+			chooser = new JFileChooser();
 
-            File file = chooser.getSelectedFile();
+		chooser.setMultiSelectionEnabled(false);
+		chooser.setFileFilter(new XMLFilter());
+		int action = chooser.showOpenDialog(desktop);
 
-            // Save file in the system
-            try {
-                OutputStream outputStream = new BufferedOutputStream(
-                    new FileOutputStream(file));
-                exportPreferences(outputStream);
-                outputStream.close();
-            } catch (IOException ex) {
-                JOptionPane.showInternalMessageDialog(desktop,
-                                                      Locale.getString("ERROR_WRITING_TO_FILE"),
-                                                      Locale.getString("INVALID_PREFERENCES_ERROR"),
-                                                      JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) {
-                JOptionPane.showInternalMessageDialog(desktop,
-                                                      Locale.getString("INVALID_PREFERENCES_FORMAT_ERROR"),
-                                                      Locale.getString("INVALID_PREFERENCES_ERROR"),
-                                                      JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-        
-    /**
-     * Get the preferences from the input XML stream
-     * @param inputStream the input XML stream
-     */
-    private static void importPreferences(InputStream inputStream)
-        throws IOException, InvalidPreferencesFormatException {
-            Preferences.importPreferences(inputStream);
-    }
+		if (action == JFileChooser.APPROVE_OPTION) {
+			// Remember directory
+			lastDirectory = chooser.getCurrentDirectory().getAbsolutePath();
+			saveImportPath(lastDirectory);
 
-    /**
-     * Set the preferences in the output XML stream
-     * @param outputStream the output XML stream
-     */
-    private static void exportPreferences(OutputStream outputStream)
-        throws IOException, BackingStoreException {
-            userRoot.exportSubtree(outputStream);
-    }
+			File file = chooser.getSelectedFile();
 
-    /**
-     * Load import path.
-     *
-     * @return import path.
-     */
-    private static String loadImportPath() {
-        Preferences prefs = getUserNode("/prefs");
-        String retValue = prefs.get("importPath", "");
-        return retValue;
-    }
+			// Save new preferences from the file
+			try {
+				InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+				importPreferences(inputStream);
+				inputStream.close();
+			} catch (IOException ex) {
+				JOptionPane.showInternalMessageDialog(desktop, Locale.getString("ERROR_READING_FROM_FILE"),
+						Locale.getString("INVALID_PREFERENCES_ERROR"), JOptionPane.ERROR_MESSAGE);
+			} catch (Exception ex) {
+				JOptionPane.showInternalMessageDialog(desktop, Locale.getString("INVALID_PREFERENCES_FORMAT_ERROR"),
+						Locale.getString("INVALID_PREFERENCES_ERROR"), JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
 
-    /**
-     * Load export path.
-     *
-     * @return export path.
-     */
-    private static String loadExportPath() {
-        Preferences prefs = getUserNode("/prefs");
-        String retValue = prefs.get("exportPath", "");
-        return retValue;
-    }
+	public void exportPreferences() {
+		// Set the path preferences file that the user wants to export
+		JFileChooser chooser;
+		String lastDirectory = loadExportPath();
 
-    /**
-     * Save import path.
-     *
-     * @param importPath the new import path.
-     */
-    private static void saveImportPath(String importPath) {
-	Preferences prefs = getUserNode("/prefs");
-	prefs.put("importPath", importPath);	
-    }
+		if (lastDirectory != null)
+			chooser = new JFileChooser(lastDirectory);
+		else
+			chooser = new JFileChooser();
 
-    /**
-     * Save export path.
-     *
-     * @param exportPath the new export path.
-     */
-    private static void saveExportPath(String exportPath) {
-	Preferences prefs = getUserNode("/prefs");
-	prefs.put("exportPath", exportPath);	
-    }
-    
-    /**
-     * Fetches the desired user node, based at the <code>base</code> branch
-     * @param node the path to the node to be fetched
-     */
-    private static Preferences getUserNode(String node) {
-        if (node.charAt(0) == '/') node = node.substring(1);
-        return userRoot.node(node);
-    }
+		chooser.setMultiSelectionEnabled(false);
+		chooser.setFileFilter(new XMLFilter());
+		int action = chooser.showSaveDialog(desktop);
+
+		if (action == JFileChooser.APPROVE_OPTION) {
+			// Remember directory
+			lastDirectory = chooser.getCurrentDirectory().getAbsolutePath();
+			saveExportPath(lastDirectory);
+
+			File file = chooser.getSelectedFile();
+
+			// Save file in the system
+			try {
+				OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file));
+				exportPreferences(outputStream);
+				outputStream.close();
+			} catch (IOException ex) {
+				JOptionPane.showInternalMessageDialog(desktop, Locale.getString("ERROR_WRITING_TO_FILE"),
+						Locale.getString("INVALID_PREFERENCES_ERROR"), JOptionPane.ERROR_MESSAGE);
+			} catch (Exception ex) {
+				JOptionPane.showInternalMessageDialog(desktop, Locale.getString("INVALID_PREFERENCES_FORMAT_ERROR"),
+						Locale.getString("INVALID_PREFERENCES_ERROR"), JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+
+	/**
+	 * Get the preferences from the input XML stream
+	 * 
+	 * @param inputStream the input XML stream
+	 */
+	private static void importPreferences(InputStream inputStream)
+			throws IOException, InvalidPreferencesFormatException {
+		Preferences.importPreferences(inputStream);
+	}
+
+	/**
+	 * Set the preferences in the output XML stream
+	 * 
+	 * @param outputStream the output XML stream
+	 */
+	private static void exportPreferences(OutputStream outputStream) throws IOException, BackingStoreException {
+		userRoot.exportSubtree(outputStream);
+	}
+
+	/**
+	 * Load import path.
+	 *
+	 * @return import path.
+	 */
+	private static String loadImportPath() {
+		Preferences prefs = getUserNode("/prefs");
+		String retValue = prefs.get("importPath", "");
+		return retValue;
+	}
+
+	/**
+	 * Load export path.
+	 *
+	 * @return export path.
+	 */
+	private static String loadExportPath() {
+		Preferences prefs = getUserNode("/prefs");
+		String retValue = prefs.get("exportPath", "");
+		return retValue;
+	}
+
+	/**
+	 * Save import path.
+	 *
+	 * @param importPath the new import path.
+	 */
+	private static void saveImportPath(String importPath) {
+		Preferences prefs = getUserNode("/prefs");
+		prefs.put("importPath", importPath);
+	}
+
+	/**
+	 * Save export path.
+	 *
+	 * @param exportPath the new export path.
+	 */
+	private static void saveExportPath(String exportPath) {
+		Preferences prefs = getUserNode("/prefs");
+		prefs.put("exportPath", exportPath);
+	}
+
+	/**
+	 * Fetches the desired user node, based at the <code>base</code> branch
+	 * 
+	 * @param node the path to the node to be fetched
+	 */
+	private static Preferences getUserNode(String node) {
+		if (node.charAt(0) == '/')
+			node = node.substring(1);
+		return userRoot.node(node);
+	}
 
 }

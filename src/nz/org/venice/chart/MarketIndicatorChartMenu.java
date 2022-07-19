@@ -36,44 +36,45 @@ import nz.org.venice.util.Locale;
  */
 public class MarketIndicatorChartMenu extends JMenu {
 
-    private Graph graph = null;
+	private Graph graph = null;
 
-    /**
-     * Create a new menu for the given market indicator graph.
-     *
-     * @param listener the chart module to listen for when the graph is removed.
-     */
-    public MarketIndicatorChartMenu(final ChartModule listener, Graph graph) {
-	super(graph.getName());
+	/**
+	 * Create a new menu for the given market indicator graph.
+	 *
+	 * @param listener the chart module to listen for when the graph is removed.
+	 */
+	public MarketIndicatorChartMenu(final ChartModule listener, Graph graph) {
+		super(graph.getName());
 
-        this.graph = graph;
+		this.graph = graph;
 
-       	// Create menu
-        JMenuItem removeMenuItem = new JMenuItem(Locale.getString("REMOVE"));
-	removeMenuItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    listener.removeAll(getName());
+		// Create menu
+		JMenuItem removeMenuItem = new JMenuItem(Locale.getString("REMOVE"));
+		removeMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				listener.removeAll(getName());
 
-                    // Only redraw if there are only graphs left
-                    if(listener.count() > 0)
-                        listener.redraw();
-                }});
+				// Only redraw if there are only graphs left
+				if (listener.count() > 0)
+					listener.redraw();
+			}
+		});
 
-        add(removeMenuItem);
-    }
+		add(removeMenuItem);
+	}
 
-    /**
-     * Return the graph name we are associated with.
-     *
-     * @return	the graph name
-     */
-    public String getName() {
-        // Under Java 1.5 beta if I don't check against graph being NULL I get
-        // a NULL pointer exception. I don't understand why. This whole module
-        // will be upgraded soon so I am not too concerned.
-        if(graph != null)
-            return graph.getName();
-        else
-            return "";
-    }
+	/**
+	 * Return the graph name we are associated with.
+	 *
+	 * @return the graph name
+	 */
+	public String getName() {
+		// Under Java 1.5 beta if I don't check against graph being NULL I get
+		// a NULL pointer exception. I don't understand why. This whole module
+		// will be upgraded soon so I am not too concerned.
+		if (graph != null)
+			return graph.getName();
+		else
+			return "";
+	}
 }

@@ -33,132 +33,127 @@ import javax.swing.JRadioButton;
 import nz.org.venice.util.Locale;
 
 /**
-  Preferences Page for where the user enables/disables alerts and where they 
-  should be stored.  
+ * Preferences Page for where the user enables/disables alerts and where they
+ * should be stored.
  */
 public class AlertDestinationPage extends JPanel implements PreferencesPage, ActionListener {
 
-    private JDesktopPane desktop;
-    private JRadioButton disableButton;
-    private JRadioButton fileButton;
-    private JRadioButton databaseButton;
+	private JDesktopPane desktop;
+	private JRadioButton disableButton;
+	private JRadioButton fileButton;
+	private JRadioButton databaseButton;
 
-    private String destination;
+	private String destination;
 
-    /**
-     * Create a new user interface preferences page.
-     *
-     * @param	desktop	the parent desktop.
-     */
-    public AlertDestinationPage(JDesktopPane desktop) {
-	this.desktop = desktop;	
-	destination = PreferencesManager.getAlertDestination();
+	/**
+	 * Create a new user interface preferences page.
+	 *
+	 * @param desktop the parent desktop.
+	 */
+	public AlertDestinationPage(JDesktopPane desktop) {
+		this.desktop = desktop;
+		destination = PreferencesManager.getAlertDestination();
 
-	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(createPanel());
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		add(createPanel());
 
-    }
-
-    private JPanel createPanel() {
-	JPanel mainPanel = new JPanel();
-	mainPanel.setLayout(new BorderLayout());
-	JPanel borderPanel = new JPanel();
-
-	ButtonGroup buttonGroup = new ButtonGroup();
-	disableButton = new JRadioButton(Locale.getString("ALERT_DISABLE_ALL"));
-	disableButton.setToolTipText(Locale.getString("ALERTSOURCE_DISABLE_BUTTON_TOOLTIP"));
-	fileButton = new JRadioButton(Locale.getString("FILE"));
-	fileButton.setToolTipText(Locale.getString("ALERTSOURCE_FILE_BUTTON_TOOLTIP"));
-	databaseButton = new JRadioButton(Locale.getString("DATABASE"));
-	databaseButton.setToolTipText(Locale.getString("ALERTSOURCE_DATABASE_BUTTON_TOOLTIP"));
-
-	disableButton.addActionListener(this);
-	fileButton.addActionListener(this);
-	databaseButton.addActionListener(this);
-
-	resetButtons();
-
-	buttonGroup.add(disableButton);
-	buttonGroup.add(fileButton);
-	buttonGroup.add(databaseButton);
-
-	borderPanel.add(disableButton);
-	borderPanel.add(fileButton);
-	borderPanel.add(databaseButton);
-
-        borderPanel.setLayout(new BoxLayout(borderPanel, BoxLayout.PAGE_AXIS));
-	
-	mainPanel.add(borderPanel, BorderLayout.NORTH);
-
-	return mainPanel;
-    }
-
-    private void resetButtons() {
-      if (destination.equals(Locale.getString("FILE")))
-	fileButton.setSelected(true);
-      else if (destination.equals(Locale.getString("DATABASE")))
-	databaseButton.setSelected(true);
-      else
-	{
-	    destination = Locale.getString("ALERT_DISABLE_ALL");
-	    disableButton.setSelected(true);
 	}
-    }
 
-    /**
-     * Return the window title.
-     *
-     * @return	the window title.
-     */
-    public String getTitle() {
-	return Locale.getString("ALERT_TITLE");
-    }
-    
-    /**
-     * Update the preferences file.
-     */
-    public void save() {
-	PreferencesManager.putAlertDestination(destination);
-    }
+	private JPanel createPanel() {
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new BorderLayout());
+		JPanel borderPanel = new JPanel();
 
-    /**
-     * Return displayed component for this page.
-     *
-     * @return the component to display.
-     */
-    public JComponent getComponent() {
-	return this;
-    }
+		ButtonGroup buttonGroup = new ButtonGroup();
+		disableButton = new JRadioButton(Locale.getString("ALERT_DISABLE_ALL"));
+		disableButton.setToolTipText(Locale.getString("ALERTSOURCE_DISABLE_BUTTON_TOOLTIP"));
+		fileButton = new JRadioButton(Locale.getString("FILE"));
+		fileButton.setToolTipText(Locale.getString("ALERTSOURCE_FILE_BUTTON_TOOLTIP"));
+		databaseButton = new JRadioButton(Locale.getString("DATABASE"));
+		databaseButton.setToolTipText(Locale.getString("ALERTSOURCE_DATABASE_BUTTON_TOOLTIP"));
 
-    public void actionPerformed(ActionEvent e) {
-	if (e.getSource() == disableButton) {
-	    destination = Locale.getString("ALERT_DISABLE_ALL");
-	} else if (e.getSource() == fileButton) {
-	    destination = Locale.getString("FILE");
-	} else if (e.getSource() == databaseButton) {
-	    //Check that the database is selected as a quote source.
-	    //Warn if not
+		disableButton.addActionListener(this);
+		fileButton.addActionListener(this);
+		databaseButton.addActionListener(this);
 
-	    boolean confirmed = true;
-	    if (PreferencesManager.getQuoteSource() != PreferencesManager.DATABASE) {
-		int confirmValue = 
-		JOptionPane.
-		    showInternalConfirmDialog(desktop, 
-					      Locale.
-					      getString("ALERT_QUOTE_SOURCE_MESSG"),
-					      Locale.getString("USE_DATABASE"),
-					      JOptionPane.OK_CANCEL_OPTION);
-		
-		if (confirmValue != JOptionPane.OK_OPTION) {
-		    confirmed = false;
-		    resetButtons();
-		}		
-	    }
-	    if (confirmed) {
-		destination = Locale.getString("DATABASE");
-	    } 
-	} else {
-	    assert false;
+		resetButtons();
+
+		buttonGroup.add(disableButton);
+		buttonGroup.add(fileButton);
+		buttonGroup.add(databaseButton);
+
+		borderPanel.add(disableButton);
+		borderPanel.add(fileButton);
+		borderPanel.add(databaseButton);
+
+		borderPanel.setLayout(new BoxLayout(borderPanel, BoxLayout.PAGE_AXIS));
+
+		mainPanel.add(borderPanel, BorderLayout.NORTH);
+
+		return mainPanel;
 	}
-    }
+
+	private void resetButtons() {
+		if (destination.equals(Locale.getString("FILE")))
+			fileButton.setSelected(true);
+		else if (destination.equals(Locale.getString("DATABASE")))
+			databaseButton.setSelected(true);
+		else {
+			destination = Locale.getString("ALERT_DISABLE_ALL");
+			disableButton.setSelected(true);
+		}
+	}
+
+	/**
+	 * Return the window title.
+	 *
+	 * @return the window title.
+	 */
+	public String getTitle() {
+		return Locale.getString("ALERT_TITLE");
+	}
+
+	/**
+	 * Update the preferences file.
+	 */
+	public void save() {
+		PreferencesManager.putAlertDestination(destination);
+	}
+
+	/**
+	 * Return displayed component for this page.
+	 *
+	 * @return the component to display.
+	 */
+	public JComponent getComponent() {
+		return this;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == disableButton) {
+			destination = Locale.getString("ALERT_DISABLE_ALL");
+		} else if (e.getSource() == fileButton) {
+			destination = Locale.getString("FILE");
+		} else if (e.getSource() == databaseButton) {
+			// Check that the database is selected as a quote source.
+			// Warn if not
+
+			boolean confirmed = true;
+			if (PreferencesManager.getQuoteSource() != PreferencesManager.DATABASE) {
+				int confirmValue = JOptionPane.showInternalConfirmDialog(desktop,
+						Locale.getString("ALERT_QUOTE_SOURCE_MESSG"), Locale.getString("USE_DATABASE"),
+						JOptionPane.OK_CANCEL_OPTION);
+
+				if (confirmValue != JOptionPane.OK_OPTION) {
+					confirmed = false;
+					resetButtons();
+				}
+			}
+			if (confirmed) {
+				destination = Locale.getString("DATABASE");
+			}
+		} else {
+			assert false;
+		}
+	}
 }

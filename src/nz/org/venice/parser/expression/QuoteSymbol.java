@@ -23,7 +23,7 @@ import nz.org.venice.quote.Symbol;
 
 //FIXME - Need a better name
 public interface QuoteSymbol {
-    public int getQuoteKind();
+	public int getQuoteKind();
 
-    public Symbol getSymbol() throws EvaluationException;    
+	public Symbol getSymbol() throws EvaluationException;
 }

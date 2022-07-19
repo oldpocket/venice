@@ -19,19 +19,18 @@
 package nz.org.venice.quote;
 
 /**
- * An exception which is raised when there is a problem parsing a 
- * symbol string.
+ * An exception which is raised when there is a problem parsing a symbol string.
  *
  * @author Andrew Leppard
  */
 public class SymbolFormatException extends Throwable {
 
-    /** 
-     * Create a new symbol format exception with the given error reason.
-     *
-     * @param message the reason why the string isn't a valid symbol
-     */
-    public SymbolFormatException(String message) {
-        super(message);
-    }
+	/**
+	 * Create a new symbol format exception with the given error reason.
+	 *
+	 * @param message the reason why the string isn't a valid symbol
+	 */
+	public SymbolFormatException(String message) {
+		super(message);
+	}
 }

@@ -45,7 +45,7 @@ public class SymbolMetadata {
 	 * 
 	 * @param symbol The symbol (e.g. 'ASX', or 'DAX')
 	 * @param name   The name of the index (e.g. Australian Stock Exchange)
-	 * @param index The optional location or top level index (ie NASDAQ, the ASX)
+	 * @param index  The optional location or top level index (ie NASDAQ, the ASX)
 	 */
 
 	public SymbolMetadata(Symbol symbol, String name, boolean index) {
@@ -54,10 +54,10 @@ public class SymbolMetadata {
 		this.index = index;
 	}
 
-	public SymbolMetadata(String symbolString, String name, boolean index) {	
+	public SymbolMetadata(String symbolString, String name, boolean index) {
 		Symbol newSymbol = null;
 		try {
-			newSymbol = Symbol.find(symbolString);	    
+			newSymbol = Symbol.find(symbolString);
 		} catch (SymbolFormatException sfe) {
 
 		} finally {
@@ -101,7 +101,5 @@ public class SymbolMetadata {
 	public String toString() {
 		return symbol.toString() + "," + name + "," + index;
 	}
-
-
 
 }

@@ -26,89 +26,88 @@ import java.util.Vector;
  */
 public class TokenStack extends Vector {
 
-    /**
-     * Create a new token stack.
-     */
-    public TokenStack() {
-	// nothing to do
-    }
-
-    // Get the token on the top of the stack
-    public Token get() {
-	if(size() > 0)
-	    return (Token)firstElement();
-	else
-	    return null;
-    }
-
-    /**
-     * Remove and return the token on the top of the stack.
-     *
-     * @return	the token on the top of the stack
-     */
-    public Token pop() {
-	if(size() > 0)
-	    return (Token)remove(0);
-	else
-	    return null;
-    }
-
-    /**
-     * Remove the token on the top of the stack and compare it with the
-     * given type.
-     *
-     * @param	tokenType	the expected token type on the stack.
-     * @return	<code>TRUE</code> if the token is of the same type.
-     */
-    public boolean pop(int tokenType) {
-	Token token = pop();
-	
-	if(token != null && tokenType == token.getType())
-	    return true;
-	else
-	    return false;
-    }
-
-    /**
-     * Compare the token on the top of the stack with the given type.
-     * The token will not be removed from the stack.
-     *
-     * @param	tokenType	token type to compare with
-     * @return	<code>1</code> if the token is of the same type; 
-     *		<code>0</code> otherwise
-     */
-    public boolean match(int tokenType) {
-	Token token = get();
-
-	if(token != null && token.getType() == tokenType)
-	    return true;
-	else
-	    return false;
-    }
-
-    public String toString() {
-	String rv = "";
-	String[] words = Token.wordsOfGondola();
-	
-	Iterator stackIterator = iterator();
-	while (stackIterator.hasNext()) {
-	    Token t = (Token)stackIterator.next();
-
-	    switch (t.getType()) {
-	    case Token.NUMBER_TOKEN:
-		rv += "num: " + t.getValue();
-		break;
-	    case Token.VARIABLE_TOKEN:
-		rv += "var: " + t.getVariableName();
-		break;
-	    case Token.STRING_TOKEN:
-		rv += "str: " + t.getStringValue();
-		break;
-	    default:
-		rv += words[t.getType()];
-	    }	    
+	/**
+	 * Create a new token stack.
+	 */
+	public TokenStack() {
+		// nothing to do
 	}
-	return rv;
-    }
+
+	// Get the token on the top of the stack
+	public Token get() {
+		if (size() > 0)
+			return (Token) firstElement();
+		else
+			return null;
+	}
+
+	/**
+	 * Remove and return the token on the top of the stack.
+	 *
+	 * @return the token on the top of the stack
+	 */
+	public Token pop() {
+		if (size() > 0)
+			return (Token) remove(0);
+		else
+			return null;
+	}
+
+	/**
+	 * Remove the token on the top of the stack and compare it with the given type.
+	 *
+	 * @param tokenType the expected token type on the stack.
+	 * @return <code>TRUE</code> if the token is of the same type.
+	 */
+	public boolean pop(int tokenType) {
+		Token token = pop();
+
+		if (token != null && tokenType == token.getType())
+			return true;
+		else
+			return false;
+	}
+
+	/**
+	 * Compare the token on the top of the stack with the given type. The token will
+	 * not be removed from the stack.
+	 *
+	 * @param tokenType token type to compare with
+	 * @return <code>1</code> if the token is of the same type; <code>0</code>
+	 *         otherwise
+	 */
+	public boolean match(int tokenType) {
+		Token token = get();
+
+		if (token != null && token.getType() == tokenType)
+			return true;
+		else
+			return false;
+	}
+
+	public String toString() {
+		String rv = "";
+		String[] words = Token.wordsOfGondola();
+
+		Iterator stackIterator = iterator();
+		while (stackIterator.hasNext()) {
+			Token t = (Token) stackIterator.next();
+
+			switch (t.getType()) {
+			case Token.NUMBER_TOKEN:
+				rv += "num: " + t.getValue();
+				break;
+			case Token.VARIABLE_TOKEN:
+				rv += "var: " + t.getVariableName();
+				break;
+			case Token.STRING_TOKEN:
+				rv += "str: " + t.getStringValue();
+				break;
+			default:
+				rv += words[t.getType()];
+			}
+		}
+		return rv;
+	}
 
 }

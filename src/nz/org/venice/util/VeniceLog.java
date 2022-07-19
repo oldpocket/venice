@@ -25,61 +25,60 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class VeniceLog
-{
+public class VeniceLog {
 
-    private static VeniceLog instance = null;
-    private FileWriter writer = null;
-    private BufferedWriter bwriter = null;
-    private boolean enabled = true;
+	private static VeniceLog instance = null;
+	private FileWriter writer = null;
+	private BufferedWriter bwriter = null;
+	private boolean enabled = true;
 
-    public static synchronized VeniceLog getInstance() {
-	if (instance == null) {
-	    instance = new VeniceLog();
+	public static synchronized VeniceLog getInstance() {
+		if (instance == null) {
+			instance = new VeniceLog();
+		}
+		return instance;
 	}
-	return instance;
-    }
 
-    private VeniceLog() {
-      try {
-          writer = new FileWriter("venice.log");
-          bwriter = new BufferedWriter(writer);
-          
-      } catch (IOException e) {
-          System.err.println("Couldn't open venice.log: " + e);	    
-      }
-    }
+	private VeniceLog() {
+		try {
+			writer = new FileWriter("venice.log");
+			bwriter = new BufferedWriter(writer);
 
-    public void log(String mesg) {
-	if (!enabled) {
-	    return;
+		} catch (IOException e) {
+			System.err.println("Couldn't open venice.log: " + e);
+		}
 	}
-	try {
-	    bwriter.write(mesg);
-	    bwriter.newLine();
-      bwriter.flush();
-	} catch (IOException e) {
-	    System.err.println("Couldn't write message: " + e);
-	}
-    }
 
-    public void close() {
-	if (!enabled) {
-	    return;
+	public void log(String mesg) {
+		if (!enabled) {
+			return;
+		}
+		try {
+			bwriter.write(mesg);
+			bwriter.newLine();
+			bwriter.flush();
+		} catch (IOException e) {
+			System.err.println("Couldn't write message: " + e);
+		}
 	}
-	try {
-	    bwriter.close();
-	} catch (IOException e) {
-	    
+
+	public void close() {
+		if (!enabled) {
+			return;
+		}
+		try {
+			bwriter.close();
+		} catch (IOException e) {
+
+		}
 	}
-    }
-    
-  protected void finalize() throws Throwable {
-      try {
-          this.close();
-      } finally {
-          super.finalize();
-      }
-  }   
-    
+
+	protected void finalize() throws Throwable {
+		try {
+			this.close();
+		} finally {
+			super.finalize();
+		}
+	}
+
 }

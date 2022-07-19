@@ -16,10 +16,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-
 package nz.org.venice.prefs.settings;
-
 
 import java.util.Iterator;
 import java.util.List;
@@ -42,66 +39,64 @@ import nz.org.venice.analyser.GPResultModule;
 import nz.org.venice.analyser.PaperTradeResultModule;
 import nz.org.venice.main.Module;
 
-
 public class AnalyserResultSettings extends AbstractSettings {
-        
-    private Vector results;
 
-    public AnalyserResultSettings(int type) {
-	super(Settings.ANALYSER, type);	
-    }
-        
-    /**
-     *
-     * Set the analyser results.
-     * 
-     * 
-     */
+	private Vector results;
 
-    /*
-      This method copies the list because 
-      the results don't get serialized just with
-      this.results = results.
-     */
+	public AnalyserResultSettings(int type) {
+		super(Settings.ANALYSER, type);
+	}
 
-    public void setResults(List results) {
-	this.results = new Vector();
-	Iterator iterator = results.iterator();
-	while (iterator.hasNext()) {
-	    this.results.add(iterator.next());
-	}	
-    }
+	/**
+	 *
+	 * Set the analyser results.
+	 * 
+	 * 
+	 */
 
-    /**
-     *
-     * Return the analyser results.
-     * 
-     * @return The analyser results saved.  
-     */
+	/*
+	 * This method copies the list because the results don't get serialized just
+	 * with this.results = results.
+	 */
 
-    public List getResults() {
-	return results;
-    }
+	public void setResults(List results) {
+		this.results = new Vector();
+		Iterator iterator = results.iterator();
+		while (iterator.hasNext()) {
+			this.results.add(iterator.next());
+		}
+	}
 
-    /**
-     *
-     * Return an analyser results module based on the analyser result settings. 
-     */
+	/**
+	 *
+	 * Return the analyser results.
+	 * 
+	 * @return The analyser results saved.
+	 */
 
-    public Module getModule(JDesktopPane desktop) {		
-	switch (getType()) {
-	case Settings.PAPERTRADERESULTS:	    
-	    return new PaperTradeResultModule(this);
-	
-	case Settings.GPRESULTS:	    
-	    return new GPResultModule(this);
-	
-	case Settings.GARESULTS:	    
-	    return new GAResultModule(this);
-	    
-	case Settings.ANNRESULTS:	    
-	    return new ANNResultModule(this);
-	}	
-	return null;
-    }
+	public List getResults() {
+		return results;
+	}
+
+	/**
+	 *
+	 * Return an analyser results module based on the analyser result settings.
+	 */
+
+	public Module getModule(JDesktopPane desktop) {
+		switch (getType()) {
+		case Settings.PAPERTRADERESULTS:
+			return new PaperTradeResultModule(this);
+
+		case Settings.GPRESULTS:
+			return new GPResultModule(this);
+
+		case Settings.GARESULTS:
+			return new GAResultModule(this);
+
+		case Settings.ANNRESULTS:
+			return new ANNResultModule(this);
+		}
+		return null;
+	}
 }

@@ -40,89 +40,85 @@ import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
 
 public class EODCustomGraphMenu extends JMenu implements ActionListener {
-    
-    private ChartModule listener;
-    private EODQuoteBundle quoteBundle;
-    private Symbol symbol;
-    private boolean index;
-    private HashMap settings, graphItemMap;
 
-    private final JMenu deleteMenu = new JMenu(Locale.getString("DELETE"));
+	private ChartModule listener;
+	private EODQuoteBundle quoteBundle;
+	private Symbol symbol;
+	private boolean index;
+	private HashMap settings, graphItemMap;
 
-    /**
-     * Create a new Custom sub-menu allowing the user to add or remove custom 
-     * graphs. There's no option to edit a custom graph as custom graphs 
-     * dont accept parameters.
-     *
-     * @param listener The parent ChartModule which manages graphs
-     * @param bundle The quote data
-     * @param symbol The symbol being graphed
-     * @param index  A flag specifiying if the chart is an indexChart
-     */
+	private final JMenu deleteMenu = new JMenu(Locale.getString("DELETE"));
 
-    public EODCustomGraphMenu(ChartModule listener, EODQuoteBundle bundle, Symbol symbol, boolean index) {
-	super(Locale.getString("CUSTOM"));
-	this.listener = listener;
-	quoteBundle = bundle;
-	this.symbol = symbol;
-	this.index = index;
-	settings = new HashMap();
-	graphItemMap = new HashMap();
-	
-	buildMenu();
-    }
+	/**
+	 * Create a new Custom sub-menu allowing the user to add or remove custom
+	 * graphs. There's no option to edit a custom graph as custom graphs dont accept
+	 * parameters.
+	 *
+	 * @param listener The parent ChartModule which manages graphs
+	 * @param bundle   The quote data
+	 * @param symbol   The symbol being graphed
+	 * @param index    A flag specifiying if the chart is an indexChart
+	 */
 
-    private void buildMenu() {
-	JMenuItem addItem = new JMenuItem(Locale.getString("ADD"));
-	
-	final EODCustomGraphMenu parent = this;
-	addItem.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-		    final Graph graph = GraphFactory.newGraph(Locale.getString("CUSTOM"), 
-							index,
-							quoteBundle,
-							symbol);
-						
-		    final CustomGraph customGraph = (CustomGraph)graph;
-		    final GraphUI graphUI = graph.getUI(settings);
-		    
-		    final GraphSettingsDialog dialog =
-			new GraphSettingsDialog(graphUI, graph.getName(), true);
+	public EODCustomGraphMenu(ChartModule listener, EODQuoteBundle bundle, Symbol symbol, boolean index) {
+		super(Locale.getString("CUSTOM"));
+		this.listener = listener;
+		quoteBundle = bundle;
+		this.symbol = symbol;
+		this.index = index;
+		settings = new HashMap();
+		graphItemMap = new HashMap();
 
-		    Thread thread = new Thread() {
-			    public void run() {
-				int buttonPressed = dialog.showDialog();
-				
-				if (buttonPressed == GraphSettingsDialog.ADD) {
-				    graph.setSettings(dialog.getSettings());
-				    if (graph.isPrimary()) {
-					listener.append(graph, 0);
-				    } else {
-					listener.append(graph);
-				    }
-				    listener.redraw();
+		buildMenu();
+	}
 
-				    final String label = customGraph.getExpressionLabel();
-				    JMenuItem newGraphItem = new JMenuItem(label);
-				    newGraphItem.addActionListener(parent);
-				    deleteMenu.add(newGraphItem);
-				    graphItemMap.put(newGraphItem, graph);
-				}
-			    }
-			};
-		    thread.start();
-		}
-	    });
-	this.add(addItem);
-	this.add(deleteMenu);
-    }
+	private void buildMenu() {
+		JMenuItem addItem = new JMenuItem(Locale.getString("ADD"));
 
-    public void actionPerformed(ActionEvent e) {
-	JMenuItem deletedItem = (JMenuItem)e.getSource();
-	Graph graph = (Graph)graphItemMap.get(deletedItem);
-	graphItemMap.remove(deletedItem);
-	deleteMenu.remove(deletedItem);
-	listener.remove(graph);
-	listener.redraw();
-    }
+		final EODCustomGraphMenu parent = this;
+		addItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final Graph graph = GraphFactory.newGraph(Locale.getString("CUSTOM"), index, quoteBundle, symbol);
+
+				final CustomGraph customGraph = (CustomGraph) graph;
+				final GraphUI graphUI = graph.getUI(settings);
+
+				final GraphSettingsDialog dialog = new GraphSettingsDialog(graphUI, graph.getName(), true);
+
+				Thread thread = new Thread() {
+					public void run() {
+						int buttonPressed = dialog.showDialog();
+
+						if (buttonPressed == GraphSettingsDialog.ADD) {
+							graph.setSettings(dialog.getSettings());
+							if (graph.isPrimary()) {
+								listener.append(graph, 0);
+							} else {
+								listener.append(graph);
+							}
+							listener.redraw();
+
+							final String label = customGraph.getExpressionLabel();
+							JMenuItem newGraphItem = new JMenuItem(label);
+							newGraphItem.addActionListener(parent);
+							deleteMenu.add(newGraphItem);
+							graphItemMap.put(newGraphItem, graph);
+						}
+					}
+				};
+				thread.start();
+			}
+		});
+		this.add(addItem);
+		this.add(deleteMenu);
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		JMenuItem deletedItem = (JMenuItem) e.getSource();
+		Graph graph = (Graph) graphItemMap.get(deletedItem);
+		graphItemMap.remove(deletedItem);
+		deleteMenu.remove(deletedItem);
+		listener.remove(graph);
+		listener.redraw();
+	}
 }

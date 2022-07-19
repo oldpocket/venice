@@ -64,16 +64,15 @@ import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.TradingDateFormatException;
 
 /**
- * The import quote module allows importing of quotes into Venice.
- * It provides an interface to allow the user to perform a variety
- * of quote imports. The actual importing is handled by other
- * classes.
+ * The import quote module allows importing of quotes into Venice. It provides
+ * an interface to allow the user to perform a variety of quote imports. The
+ * actual importing is handled by other classes.
  *
  * @author Andrew Leppard
  * @see DatabaseQuoteSource
  * @see ExportQuoteModule
  * @see FileEODQuoteImport
- * @see GenericWSEODQuoteImport 
+ * @see GenericWSEODQuoteImport
  */
 public class ImportQuoteModule extends JPanel implements Module {
 
@@ -104,8 +103,8 @@ public class ImportQuoteModule extends JPanel implements Module {
 
 	// Web site combo box entry indeces.
 	private final static int GOOGLE_SITE = 0; // finance.google.com
-	private final static int YAHOO_SITE  = 1; // finance.yahoo.com
-	private final static int FLOAT_SITE  = 2; // float.com.au
+	private final static int YAHOO_SITE = 1; // finance.yahoo.com
+	private final static int FLOAT_SITE = 2; // float.com.au
 
 	/**
 	 * Create a new import quote module.
@@ -145,7 +144,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 		{
 			fromFiles = new JRadioButton(Locale.getString("FILES"));
 
-			if(importFromSource.equals("files"))
+			if (importFromSource.equals("files"))
 				fromFiles.setSelected(true);
 			c.gridwidth = 1;
 			gridbag.setConstraints(fromFiles, c);
@@ -155,10 +154,10 @@ public class ImportQuoteModule extends JPanel implements Module {
 			List formats = EODQuoteFilterList.getInstance().getList();
 			String selectedFilter = p.get("fileFilter", "MetaStock");
 
-			for(Iterator iterator = formats.iterator(); iterator.hasNext();) {
-				EODQuoteFilter filter = (EODQuoteFilter)iterator.next();
+			for (Iterator iterator = formats.iterator(); iterator.hasNext();) {
+				EODQuoteFilter filter = (EODQuoteFilter) iterator.next();
 				formatComboBox.addItem(filter.getName());
-				if(filter.getName().equals(selectedFilter))
+				if (filter.getName().equals(selectedFilter))
 					formatComboBox.setSelectedItem(filter.getName());
 			}
 
@@ -174,7 +173,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 			String webSite = p.get("webSite", "yahoo");
 
 			fromInternet = new JRadioButton(Locale.getString("INTERNET"));
-			if(importFromSource.equals("internet"))
+			if (importFromSource.equals("internet"))
 				fromInternet.setSelected(true);
 			c.gridwidth = 1;
 			gridbag.setConstraints(fromInternet, c);
@@ -185,11 +184,11 @@ public class ImportQuoteModule extends JPanel implements Module {
 			webSiteComboBox.addItem(Locale.getString("YAHOO_DISPLAY_URL"));
 			webSiteComboBox.addItem(Locale.getString("FLOAT_DISPLAY_URL"));
 
-			if(webSite.equals("google"))
+			if (webSite.equals("google"))
 				webSiteComboBox.setSelectedIndex(GOOGLE_SITE);
-			else if(webSite.equals("yahoo"))
+			else if (webSite.equals("yahoo"))
 				webSiteComboBox.setSelectedIndex(YAHOO_SITE);
-			else if(webSite.equals("float"))
+			else if (webSite.equals("float"))
 				webSiteComboBox.setSelectedIndex(FLOAT_SITE);
 
 			webSiteComboBox.setToolTipText(Locale.getString("INTERNET_IMPORT_QUOTE_TOOLTIP"));
@@ -200,8 +199,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 
 			c.gridx = 1;
 			symbolList = GridBagHelper.addTextRow(titledPanel, Locale.getString("SYMBOLS"),
-					p.get("internetSymbolList", ""),
-					gridbag, c, 11);
+					p.get("internetSymbolList", ""), gridbag, c, 11);
 
 			symbolList.setToolTipText(Locale.getString("SYMBOL_FIELD_TOOLTIP"));
 
@@ -215,7 +213,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 
 			prefixOrSuffixTextField.setToolTipText(Locale.getString("SUFFIX_FIELD_TOOLTIP"));
 
-			if(c.gridx != -1)
+			if (c.gridx != -1)
 				c.gridx++;
 			c.gridwidth = GridBagConstraints.REMAINDER;
 			gridbag.setConstraints(prefixOrSuffixTextField, c);
@@ -225,25 +223,17 @@ public class ImportQuoteModule extends JPanel implements Module {
 			TradingDate today = new TradingDate();
 			TradingDate previous = today.previous(30);
 
-			startDateTextField = GridBagHelper.addTextRow(titledPanel,
-					Locale.getString("START_DATE"),
-					p.get("internetStartDate",
-							previous.toString("dd/mm/yyyy")),
-					gridbag, c, 11);
+			startDateTextField = GridBagHelper.addTextRow(titledPanel, Locale.getString("START_DATE"),
+					p.get("internetStartDate", previous.toString("dd/mm/yyyy")), gridbag, c, 11);
 
 			startDateTextField.setToolTipText(Locale.getString("START_DATE_FIELD_TOOLTIP"));
 
 			c.gridx = 1;
-			endDateTextField = GridBagHelper.addTextRow(titledPanel,
-					Locale.getString("END_DATE"),
-					p.get("internetEndDate",
-							today.toString("dd/mm/yyyy")),
-					gridbag, c, 11);
+			endDateTextField = GridBagHelper.addTextRow(titledPanel, Locale.getString("END_DATE"),
+					p.get("internetEndDate", today.toString("dd/mm/yyyy")), gridbag, c, 11);
 
 			endDateTextField.setToolTipText(Locale.getString("END_DATE_FIELD_TOOLTIP"));
 		}
-
-
 
 		// Put all "import from" radio buttons into group
 		ButtonGroup group = new ButtonGroup();
@@ -300,8 +290,8 @@ public class ImportQuoteModule extends JPanel implements Module {
 	}
 
 	/**
-	 * Enable/disable the appropriate widgets depending on which widgets
-	 * are checked.
+	 * Enable/disable the appropriate widgets depending on which widgets are
+	 * checked.
 	 */
 	private void checkDisabledStatus() {
 		// File format is only applicable if importing from files.
@@ -313,21 +303,18 @@ public class ImportQuoteModule extends JPanel implements Module {
 		endDateTextField.setEnabled(fromInternet.isSelected());
 
 		// Symbols are only applicable if importing from Yahoo or Google.
-		symbolList.setEnabled(fromInternet.isSelected() &&
-				(webSiteComboBox.getSelectedIndex() == GOOGLE_SITE ||
-				webSiteComboBox.getSelectedIndex() == YAHOO_SITE));
+		symbolList.setEnabled(fromInternet.isSelected() && (webSiteComboBox.getSelectedIndex() == GOOGLE_SITE
+				|| webSiteComboBox.getSelectedIndex() == YAHOO_SITE));
 
 		// Prefix or suffix is only applicable if importing from Yahoo or Google.
-		boolean prefixOrSuffixEnabled =
-				(fromInternet.isSelected() &&
-						(webSiteComboBox.getSelectedIndex() == GOOGLE_SITE ||
-						webSiteComboBox.getSelectedIndex() == YAHOO_SITE));
+		boolean prefixOrSuffixEnabled = (fromInternet.isSelected() && (webSiteComboBox.getSelectedIndex() == GOOGLE_SITE
+				|| webSiteComboBox.getSelectedIndex() == YAHOO_SITE));
 
 		prefixOrSuffixTextField.setEnabled(prefixOrSuffixEnabled);
 		if (prefixOrSuffixEnabled) {
 			// If we are downloading from Google it's a prefix, e.g. "ASX:".
 			// If we are downloading from Yahoo then it's a suffix, e.g. ".AX".
-			if(webSiteComboBox.getSelectedIndex() == GOOGLE_SITE)
+			if (webSiteComboBox.getSelectedIndex() == GOOGLE_SITE)
 				prefixOrSuffixLabel.setText(Locale.getString("ADD_PREFIX"));
 			else
 				prefixOrSuffixLabel.setText(Locale.getString("ADD_SUFFIX"));
@@ -345,14 +332,14 @@ public class ImportQuoteModule extends JPanel implements Module {
 		// prevent the application appearing to "lock up"
 		Thread thread = new Thread() {
 			public void run() {
-				if(fromFiles.isSelected())
+				if (fromFiles.isSelected())
 					importQuotesFromFiles();
 				else {
 					assert fromInternet.isSelected();
 					importQuotesFromInternet();
 				}
-				//Having imported new quotes, check if the new data
-				//triggers alerts.
+				// Having imported new quotes, check if the new data
+				// triggers alerts.
 				CommandManager.getInstance().triggeredAlerts();
 
 			}
@@ -367,7 +354,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 		Preferences p = PreferencesManager.getUserNode("/import_quotes");
 
 		// Import From
-		if(fromFiles.isSelected())
+		if (fromFiles.isSelected())
 			p.put("from", "files");
 		else
 			p.put("from", "internet");
@@ -375,13 +362,13 @@ public class ImportQuoteModule extends JPanel implements Module {
 		p.put("internetSymbolList", symbolList.getText());
 		p.put("internetStartDate", startDateTextField.getText());
 		p.put("internetEndDate", endDateTextField.getText());
-		p.put("fileFilter", (String)formatComboBox.getSelectedItem());
+		p.put("fileFilter", (String) formatComboBox.getSelectedItem());
 
-		if(webSiteComboBox.getSelectedIndex() == GOOGLE_SITE)
+		if (webSiteComboBox.getSelectedIndex() == GOOGLE_SITE)
 			p.put("webSite", "google");
-		else if(webSiteComboBox.getSelectedIndex() == YAHOO_SITE)
+		else if (webSiteComboBox.getSelectedIndex() == YAHOO_SITE)
 			p.put("webSite", "yahoo");
-		else if(webSiteComboBox.getSelectedIndex() == FLOAT_SITE)
+		else if (webSiteComboBox.getSelectedIndex() == FLOAT_SITE)
 			p.put("webSite", "float");
 		p.put("prefixOrSuffix", prefixOrSuffixTextField.getText());
 	}
@@ -390,7 +377,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 	 * Import quotes from files.
 	 */
 	private void importQuotesFromFiles() {
-		if(parseFileFields()) {
+		if (parseFileFields()) {
 			Report report = new Report();
 			int quotesImported = 0;
 
@@ -409,7 +396,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 			progress.show(Locale.getString("IMPORTING"));
 
 			// Import a file at a time
-			for(int i = 0; i < files.length; i++) {
+			for (int i = 0; i < files.length; i++) {
 				File file = files[i];
 
 				// Update progress dialog
@@ -419,7 +406,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 				quotesImported += importQuotesFromSingleFile(database, report, file);
 
 				// Stop if the user hit cancel
-				if(Thread.currentThread().isInterrupted())
+				if (Thread.currentThread().isInterrupted())
 					break;
 
 				progress.increment();
@@ -443,37 +430,35 @@ public class ImportQuoteModule extends JPanel implements Module {
 		int quotesImported = 0;
 		IFileEODQuoteImport importer = ((IFileEODQuoteFilter) filter).getImporter(report);
 
-		if(importer.open(file)) {
-			while(importer.isNext()) {
+		if (importer.open(file)) {
+			while (importer.isNext()) {
 				List quotes = importer.importNext();
 
 				// Import into database
-				if(quotes.size() > 0)
+				if (quotes.size() > 0)
 					quotesImported += database.importQuotes(quotes);
 			}
 
 			importer.close();
 		}
 
-		if(quotesImported > 0)
-			report.addMessage(file.getName() + ": " +
-					Locale.getString("IMPORTED_QUOTES",
-							quotesImported));
+		if (quotesImported > 0)
+			report.addMessage(file.getName() + ": " + Locale.getString("IMPORTED_QUOTES", quotesImported));
 		return quotesImported;
 	}
 
 	/**
 	 * Parse all the fields for file import.
 	 *
-	 * @return <code>true</code> if the fields were successfully parsed, <code>false</code>
-	 *         otherwise
+	 * @return <code>true</code> if the fields were successfully parsed,
+	 *         <code>false</code> otherwise
 	 */
 	private boolean parseFileFields() {
 		// Get files user wants to import
 		JFileChooser chooser;
 		String lastDirectory = PreferencesManager.getDirectoryLocation("importer");
 
-		if(lastDirectory != null)
+		if (lastDirectory != null)
 			chooser = new JFileChooser(lastDirectory);
 		else
 			chooser = new JFileChooser();
@@ -481,17 +466,17 @@ public class ImportQuoteModule extends JPanel implements Module {
 		chooser.setMultiSelectionEnabled(true);
 		int action = chooser.showOpenDialog(desktop);
 
-		if(action == JFileChooser.APPROVE_OPTION) {
+		if (action == JFileChooser.APPROVE_OPTION) {
 			// Remember directory
 			lastDirectory = chooser.getCurrentDirectory().getAbsolutePath();
-			PreferencesManager.putDirectoryLocation("importer",lastDirectory);
+			PreferencesManager.putDirectoryLocation("importer", lastDirectory);
 
 			files = chooser.getSelectedFiles();
 
 			// Cancel if no files were selected (one day = one file)
-			if(files.length != 0) {
+			if (files.length != 0) {
 				// Get quote filter format
-				String format = (String)formatComboBox.getSelectedItem();
+				String format = (String) formatComboBox.getSelectedItem();
 				filter = EODQuoteFilterList.getInstance().getFilter(format);
 				return true;
 			}
@@ -504,10 +489,10 @@ public class ImportQuoteModule extends JPanel implements Module {
 	 * Import quotes from the internet.
 	 */
 	private void importQuotesFromInternet() {
-		if(parseInternetFields()) {
-			if(webSiteComboBox.getSelectedIndex() == GOOGLE_SITE)
+		if (parseInternetFields()) {
+			if (webSiteComboBox.getSelectedIndex() == GOOGLE_SITE)
 				importQuotesFromGoogle();
-			else if(webSiteComboBox.getSelectedIndex() == YAHOO_SITE)
+			else if (webSiteComboBox.getSelectedIndex() == YAHOO_SITE)
 				importQuotesFromYahoo();
 			else
 				importQuotesFromFloat();
@@ -543,37 +528,35 @@ public class ImportQuoteModule extends JPanel implements Module {
 
 		// Import a symbol at a time
 		try {
-			for(Iterator iterator = symbols.iterator(); iterator.hasNext();) {
+			for (Iterator iterator = symbols.iterator(); iterator.hasNext();) {
 
-				Symbol symbol = (Symbol)iterator.next();
+				Symbol symbol = (Symbol) iterator.next();
 
 				// Update progress dialog
 				progress.setNote(Locale.getString("IMPORTING_SYMBOL", symbol.toString()));
 
 				// Load quotes from internet
-				List quotes =
-						GenericWSEODQuoteImport.importSymbol(report, symbol, suffix, startDate, endDate);
+				List quotes = GenericWSEODQuoteImport.importSymbol(report, symbol, suffix, startDate, endDate);
 
 				// Import into database
-				if(quotes.size() > 0) {
+				if (quotes.size() > 0) {
 
 					// remove the symbol argument
 					int symbolQuotesImported = database.importQuotes(quotes);
-					report.addMessage(Locale.getString("YAHOO_DISPLAY_URL") + ":" + symbol + ": " +
-							Locale.getString("IMPORTED_QUOTES",
-									symbolQuotesImported));
+					report.addMessage(Locale.getString("YAHOO_DISPLAY_URL") + ":" + symbol + ": "
+							+ Locale.getString("IMPORTED_QUOTES", symbolQuotesImported));
 					quotesImported += symbolQuotesImported;
 				}
 
 				// Stop if the user hit cancel
-				if(Thread.currentThread().isInterrupted())
+				if (Thread.currentThread().isInterrupted())
 					break;
 
 				progress.increment();
 			}
 		}
 
-		catch(ImportExportException e) {
+		catch (ImportExportException e) {
 			DesktopManager.showErrorMessage(e.getMessage());
 		}
 
@@ -611,37 +594,35 @@ public class ImportQuoteModule extends JPanel implements Module {
 
 		// Import a symbol at a time
 		try {
-			for(Iterator iterator = symbols.iterator(); iterator.hasNext();) {
+			for (Iterator iterator = symbols.iterator(); iterator.hasNext();) {
 
-				Symbol symbol = (Symbol)iterator.next();
+				Symbol symbol = (Symbol) iterator.next();
 
 				// Update progress dialog
 				progress.setNote(Locale.getString("IMPORTING_SYMBOL", symbol.toString()));
 
 				// Load quotes from internet
-				List quotes =
-						GoogleEODQuoteImport.importSymbol(report, symbol, prefix, startDate, endDate);
+				List quotes = GoogleEODQuoteImport.importSymbol(report, symbol, prefix, startDate, endDate);
 
 				// Import into database
-				if(quotes.size() > 0) {
+				if (quotes.size() > 0) {
 
 					// remove the symbol argument
 					int symbolQuotesImported = database.importQuotes(quotes);
-					report.addMessage(Locale.getString("GOOGLE_DISPLAY_URL") + ":" + symbol + ": " +
-							Locale.getString("IMPORTED_QUOTES",
-									symbolQuotesImported));
+					report.addMessage(Locale.getString("GOOGLE_DISPLAY_URL") + ":" + symbol + ": "
+							+ Locale.getString("IMPORTED_QUOTES", symbolQuotesImported));
 					quotesImported += symbolQuotesImported;
 				}
 
 				// Stop if the user hit cancel
-				if(Thread.currentThread().isInterrupted())
+				if (Thread.currentThread().isInterrupted())
 					break;
 
 				progress.increment();
 			}
 		}
 
-		catch(ImportExportException e) {
+		catch (ImportExportException e) {
 			DesktopManager.showErrorMessage(e.getMessage());
 		}
 
@@ -677,9 +658,9 @@ public class ImportQuoteModule extends JPanel implements Module {
 
 		// Import a date at a time
 		try {
-			for(Iterator iterator = dates.iterator(); iterator.hasNext();) {
+			for (Iterator iterator = dates.iterator(); iterator.hasNext();) {
 
-				TradingDate date = (TradingDate)iterator.next();
+				TradingDate date = (TradingDate) iterator.next();
 
 				// Update progress dialog
 				progress.setNote(Locale.getString("IMPORTING_DATE", date.toString()));
@@ -689,20 +670,19 @@ public class ImportQuoteModule extends JPanel implements Module {
 
 				// Import into database
 				int dateQuotesImported = database.importQuotes(quotes);
-				report.addMessage(Locale.getString("FLOAT_DISPLAY_URL") + ":" + date + ": " +
-						Locale.getString("IMPORTED_QUOTES",
-								dateQuotesImported));
+				report.addMessage(Locale.getString("FLOAT_DISPLAY_URL") + ":" + date + ": "
+						+ Locale.getString("IMPORTED_QUOTES", dateQuotesImported));
 				quotesImported += dateQuotesImported;
 
 				// Stop if the user hit cancel
-				if(Thread.currentThread().isInterrupted())
+				if (Thread.currentThread().isInterrupted())
 					break;
 
 				progress.increment();
 			}
 		}
 
-		catch(ImportExportException e) {
+		catch (ImportExportException e) {
 			DesktopManager.showErrorMessage(e.getMessage());
 		}
 
@@ -714,32 +694,26 @@ public class ImportQuoteModule extends JPanel implements Module {
 	/**
 	 * Parse all the fields for internet import.
 	 *
-	 * @return <code>true</code> if the fields were successfully parsed, <code>false</code>
-	 *         otherwise
+	 * @return <code>true</code> if the fields were successfully parsed,
+	 *         <code>false</code> otherwise
 	 */
 	private boolean parseInternetFields() {
 		// Parse symbol list and validate if we are downloading from Google or Yahoo.
 		// If we are downloading from float.com.au then we ignore this field.
-		if(webSiteComboBox.getSelectedIndex() == GOOGLE_SITE ||
-				webSiteComboBox.getSelectedIndex() == YAHOO_SITE) {
+		if (webSiteComboBox.getSelectedIndex() == GOOGLE_SITE || webSiteComboBox.getSelectedIndex() == YAHOO_SITE) {
 			try {
 				// Don't check that the symbols exist before import. After all
 				// they won't at the first import.
 				symbols = new ArrayList(Symbol.toSortedSet(symbolList.getText(), false));
-			}
-			catch(SymbolFormatException e) {
-				JOptionPane.showInternalMessageDialog(desktop,
-						e.getMessage(),
-						Locale.getString("INVALID_SYMBOL_LIST"),
+			} catch (SymbolFormatException e) {
+				JOptionPane.showInternalMessageDialog(desktop, e.getMessage(), Locale.getString("INVALID_SYMBOL_LIST"),
 						JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
 
-			if(symbols.size() == 0) {
-				JOptionPane.showInternalMessageDialog(desktop,
-						Locale.getString("MISSING_SYMBOLS"),
-						Locale.getString("INVALID_SYMBOL_LIST"),
-						JOptionPane.ERROR_MESSAGE);
+			if (symbols.size() == 0) {
+				JOptionPane.showInternalMessageDialog(desktop, Locale.getString("MISSING_SYMBOLS"),
+						Locale.getString("INVALID_SYMBOL_LIST"), JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
 
@@ -751,22 +725,16 @@ public class ImportQuoteModule extends JPanel implements Module {
 		try {
 			startDate = new TradingDate(startDateTextField.getText(), TradingDate.BRITISH);
 			endDate = new TradingDate(endDateTextField.getText(), TradingDate.BRITISH);
-		}
-		catch(TradingDateFormatException e) {
-			JOptionPane.showInternalMessageDialog(desktop,
-					Locale.getString("ERROR_PARSING_DATE",
-							e.getDate()),
-					Locale.getString("INVALID_DATE"),
-					JOptionPane.ERROR_MESSAGE);
+		} catch (TradingDateFormatException e) {
+			JOptionPane.showInternalMessageDialog(desktop, Locale.getString("ERROR_PARSING_DATE", e.getDate()),
+					Locale.getString("INVALID_DATE"), JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 
 		// Make sure the dates are in the correct order!
-		if(startDate.after(endDate)) {
-			JOptionPane.showInternalMessageDialog(desktop,
-					Locale.getString("DATE_RANGE_ERROR"),
-					Locale.getString("INVALID_DATE"),
-					JOptionPane.ERROR_MESSAGE);
+		if (startDate.after(endDate)) {
+			JOptionPane.showInternalMessageDialog(desktop, Locale.getString("DATE_RANGE_ERROR"),
+					Locale.getString("INVALID_DATE"), JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 
@@ -776,11 +744,11 @@ public class ImportQuoteModule extends JPanel implements Module {
 
 	/**
 	 * Display the import report to the user. Initially just show a simple dialog
-	 * which describes the number of quotes imported and if there were any
-	 * warnings or errors and allows the user to view the full report. Display
-	 * the full report to if the user wishes.
+	 * which describes the number of quotes imported and if there were any warnings
+	 * or errors and allows the user to view the full report. Display the full
+	 * report to if the user wishes.
 	 *
-	 * @param report the report to display
+	 * @param report         the report to display
 	 * @param quotesImported the number of quotes imported
 	 */
 	private void displayReport(final Report report, final int quotesImported) {
@@ -788,30 +756,22 @@ public class ImportQuoteModule extends JPanel implements Module {
 			public void run() {
 				String message = Locale.getString("IMPORTED_QUOTES", quotesImported);
 
-				if((report.getErrorCount() + report.getWarningCount()) > 0)
-					message = message.concat("\n" +
-							Locale.getString("IMPORTED_WARNINGS",
-									report.getErrorCount(),
-									report.getWarningCount()));
+				if ((report.getErrorCount() + report.getWarningCount()) > 0)
+					message = message.concat("\n"
+							+ Locale.getString("IMPORTED_WARNINGS", report.getErrorCount(), report.getWarningCount()));
 
 				// Give the user the option of viewing the import report
-				Object[] options = {Locale.getString("OK"), Locale.getString("VIEW_REPORT")};
-				int option =
-						JOptionPane.showInternalOptionDialog(desktop,
-								message,
-								Locale.getString("IMPORT_COMPLETE_TITLE"),
-								JOptionPane.DEFAULT_OPTION,
-								JOptionPane.INFORMATION_MESSAGE,
-								null,
-								options,
-								options[0]);
+				Object[] options = { Locale.getString("OK"), Locale.getString("VIEW_REPORT") };
+				int option = JOptionPane.showInternalOptionDialog(desktop, message,
+						Locale.getString("IMPORT_COMPLETE_TITLE"), JOptionPane.DEFAULT_OPTION,
+						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
-				if(option == 1) {
+				if (option == 1) {
 					Thread thread = new Thread(new Runnable() {
 						public void run() {
-							TextViewDialog.showTextDialog(report.getText(),
-									Locale.getString("IMPORT_REPORT"));
-						}});
+							TextViewDialog.showTextDialog(report.getText(), Locale.getString("IMPORT_REPORT"));
+						}
+					});
 					thread.start();
 				}
 
@@ -821,9 +781,9 @@ public class ImportQuoteModule extends JPanel implements Module {
 
 	/**
 	 * Return the database source to import to. We can only import to a database
-	 * source (either the internal or an external database). The only source
-	 * that is not a database is the samples source. If this is selected then
-	 * silently convert them over to the "Internal Database". This way Venice "just works".
+	 * source (either the internal or an external database). The only source that is
+	 * not a database is the samples source. If this is selected then silently
+	 * convert them over to the "Internal Database". This way Venice "just works".
 	 *
 	 * @return database quote source
 	 */
@@ -831,19 +791,19 @@ public class ImportQuoteModule extends JPanel implements Module {
 		// If the user is still using the "Samples" quotes, then convert them to
 		// "Internal Database".
 		int quoteSource = PreferencesManager.getQuoteSource();
-		if(quoteSource == PreferencesManager.SAMPLES) {
+		if (quoteSource == PreferencesManager.SAMPLES) {
 			PreferencesManager.putQuoteSource(PreferencesManager.INTERNAL);
 			QuoteSourceManager.flush();
 		}
 
 		// We know the quote source must be a database now
-		return (DatabaseQuoteSource)QuoteSourceManager.getSource();
+		return (DatabaseQuoteSource) QuoteSourceManager.getSource();
 	}
 
 	/**
 	 * Add a property change listener for module change events.
 	 *
-	 * @param	listener	listener
+	 * @param listener listener
 	 */
 	public void addModuleChangeListener(PropertyChangeListener listener) {
 		propertySupport.addPropertyChangeListener(listener);
@@ -852,7 +812,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 	/**
 	 * Remove a property change listener for module change events.
 	 *
-	 * @param	listener	listener
+	 * @param listener listener
 	 */
 	public void removeModuleChangeListener(PropertyChangeListener listener) {
 		propertySupport.removePropertyChangeListener(listener);
@@ -870,7 +830,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 	/**
 	 * Return menu bar for quote source preferences module.
 	 *
-	 * @return	the menu bar.
+	 * @return the menu bar.
 	 */
 	public JMenuBar getJMenuBar() {
 		return null;
@@ -879,7 +839,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 	/**
 	 * Return frame icon for quote source preferences module.
 	 *
-	 * @return	the frame icon.
+	 * @return the frame icon.
 	 */
 	public ImageIcon getFrameIcon() {
 		return null;
@@ -888,7 +848,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 	/**
 	 * Returns the window title.
 	 *
-	 * @return	the window title.
+	 * @return the window title.
 	 */
 	public String getTitle() {
 		return Locale.getString("IMPORT_TITLE");
@@ -897,16 +857,16 @@ public class ImportQuoteModule extends JPanel implements Module {
 	/**
 	 * Return whether the module should be enclosed in a scroll pane.
 	 *
-	 * @return	enclose module in scroll bar
+	 * @return enclose module in scroll bar
 	 */
 	public boolean encloseInScrollPane() {
 		return true;
 	}
 
 	/**
-	 * Called when window is closing. We handle the saving explicitly so
-	 * this is only called when the user clicks on the close button in the
-	 * top right hand of the window. Dont trigger a save event for this.
+	 * Called when window is closing. We handle the saving explicitly so this is
+	 * only called when the user clicks on the close button in the top right hand of
+	 * the window. Dont trigger a save event for this.
 	 */
 	public void save() {
 		// Same as hitting cancel - do not save anything

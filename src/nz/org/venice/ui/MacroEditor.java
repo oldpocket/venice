@@ -38,14 +38,13 @@ import nz.org.venice.util.Locale;
 /**
  * @author Dan Makovec venice@makovec.net
  *
- * TODO This is the XXXX
+ *         TODO This is the XXXX
  */
-public class MacroEditor extends JInternalFrame 
-						 implements java.awt.event.ActionListener {
+public class MacroEditor extends JInternalFrame implements java.awt.event.ActionListener {
 
-    /** Did the user click ok? */
-    private boolean is_ok;
-    
+	/** Did the user click ok? */
+	private boolean is_ok;
+
 	private JPanel jPanel = null;
 	private JPanel jPanel2 = null;
 	private JPanel jPanel3 = null;
@@ -58,54 +57,54 @@ public class MacroEditor extends JInternalFrame
 	private JPanel jPanel5 = null;
 	private JPanel jPanel1 = null;
 
-	
 	/** The stored macro being edited */
 	StoredMacro macro;
-	
+
 	/**
-	 * This method initializes 
+	 * This method initializes
 	 * 
 	 */
-    public MacroEditor(StoredMacro m) {
-        super();
-        this.macro = m;
+	public MacroEditor(StoredMacro m) {
+		super();
+		this.macro = m;
 		initialize();
 	}
+
 	/**
 	 * This method initializes this
 	 * 
 	 * @return void
 	 */
 	private void initialize() {
-	    this.setSize(350, 249);
-	    this.setMaximizable(true);
-	    this.setContentPane(getJPanel());
-	    this.is_ok = false;
-        setResizable(true);
-        setClosable(true);
-        setTitle(Locale.getString("EDITMACRO")+" "+this.macro.getName());
-        name_txt.setText(this.macro.getName());
-        file_txt.setText(this.macro.getFilename());
-        macro_txt.setText(this.macro.getCode());
-        setVisible(true);
-        DesktopManager.getDesktop().add(this);
-        if (this.macro.getCode().length() > 0)
-            jScrollPane.setPreferredSize(macro_txt.getPreferredScrollableViewportSize());
-	    pack();
-	    setLocation(DesktopManager.getDesktop().getWidth()/2 - this.getWidth()/2,
-            	DesktopManager.getDesktop().getHeight()/2 - this.getHeight()/2);
-        moveToFront();
+		this.setSize(350, 249);
+		this.setMaximizable(true);
+		this.setContentPane(getJPanel());
+		this.is_ok = false;
+		setResizable(true);
+		setClosable(true);
+		setTitle(Locale.getString("EDITMACRO") + " " + this.macro.getName());
+		name_txt.setText(this.macro.getName());
+		file_txt.setText(this.macro.getFilename());
+		macro_txt.setText(this.macro.getCode());
+		setVisible(true);
+		DesktopManager.getDesktop().add(this);
+		if (this.macro.getCode().length() > 0)
+			jScrollPane.setPreferredSize(macro_txt.getPreferredScrollableViewportSize());
+		pack();
+		setLocation(DesktopManager.getDesktop().getWidth() / 2 - this.getWidth() / 2,
+				DesktopManager.getDesktop().getHeight() / 2 - this.getHeight() / 2);
+		moveToFront();
 	}
-
 
 	public boolean isOk_clicked() {
-	    return this.is_ok;
+		return this.is_ok;
 	}
+
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			jPanel = new JPanel();
@@ -116,11 +115,12 @@ public class MacroEditor extends JInternalFrame
 		}
 		return jPanel;
 	}
+
 	/**
-	 * This method initializes jPanel2	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel2
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getJPanel2() {
 		if (jPanel2 == null) {
 			jPanel2 = new JPanel();
@@ -129,11 +129,12 @@ public class MacroEditor extends JInternalFrame
 		}
 		return jPanel2;
 	}
+
 	/**
-	 * This method initializes jPanel3	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * This method initializes jPanel3
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getJPanel3() {
 		if (jPanel3 == null) {
 			jPanel3 = new JPanel();
@@ -142,42 +143,45 @@ public class MacroEditor extends JInternalFrame
 		}
 		return jPanel3;
 	}
+
 	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getJTextField() {
 		if (name_txt == null) {
 			name_txt = new JTextField();
-			name_txt.addCaretListener(new javax.swing.event.CaretListener() { 
-				public void caretUpdate(javax.swing.event.CaretEvent e) {    
+			name_txt.addCaretListener(new javax.swing.event.CaretListener() {
+				public void caretUpdate(javax.swing.event.CaretEvent e) {
 					if (macro.getFilename().length() == 0 && name_txt.getText().length() > 0)
-					    file_txt.setText(((JTextField)e.getSource()).getText()+".py");
+						file_txt.setText(((JTextField) e.getSource()).getText() + ".py");
 					else if (macro.getFilename().length() == 0)
-					    file_txt.setText("");
-		        setTitle(Locale.getString("EDITMACRO")+" "+name_txt.getText());
+						file_txt.setText("");
+					setTitle(Locale.getString("EDITMACRO") + " " + name_txt.getText());
 				}
 			});
 		}
 		return name_txt;
 	}
+
 	/**
-	 * This method initializes jTextArea	
-	 * 	
-	 * @return javax.swing.JTextArea	
-	 */    
+	 * This method initializes jTextArea
+	 * 
+	 * @return javax.swing.JTextArea
+	 */
 	private JTextArea getJTextArea() {
 		if (macro_txt == null) {
 			macro_txt = new JTextArea();
 		}
 		return macro_txt;
 	}
+
 	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
+	 * This method initializes jButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
 	private JButton getJButton() {
 		if (ok_btn == null) {
 			ok_btn = new JButton();
@@ -186,11 +190,12 @@ public class MacroEditor extends JInternalFrame
 		}
 		return ok_btn;
 	}
+
 	/**
-	 * This method initializes jButton1	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */    
+	 * This method initializes jButton1
+	 * 
+	 * @return javax.swing.JButton
+	 */
 	private JButton getJButton1() {
 		if (cancel_btn == null) {
 			cancel_btn = new JButton();
@@ -199,53 +204,56 @@ public class MacroEditor extends JInternalFrame
 		}
 		return cancel_btn;
 	}
+
 	public void actionPerformed(java.awt.event.ActionEvent e) {
-	    if (e.getSource().equals(ok_btn)) {
-	        this.macro.setName(name_txt.getText());
-	        this.macro.setFilename(file_txt.getText());
-	        this.macro.setCode(macro_txt.getText());
-	        this.macro.save();
-	        this.is_ok = true;
-	    }
-	    try {
-	        this.setClosed(true);
-	    } catch (Exception ex) {}
+		if (e.getSource().equals(ok_btn)) {
+			this.macro.setName(name_txt.getText());
+			this.macro.setFilename(file_txt.getText());
+			this.macro.setCode(macro_txt.getText());
+			this.macro.save();
+			this.is_ok = true;
+		}
+		try {
+			this.setClosed(true);
+		} catch (Exception ex) {
+		}
 	}
-	    
+
 	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
-	 */    
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
 			jScrollPane.setName("jScrollPane");
 			jScrollPane.setViewportView(getJTextArea());
-			jScrollPane.setPreferredSize(new java.awt.Dimension(200,80));
+			jScrollPane.setPreferredSize(new java.awt.Dimension(200, 80));
 		}
 		return jScrollPane;
 	}
+
 	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */    
+	 * This method initializes jTextField
+	 * 
+	 * @return javax.swing.JTextField
+	 */
 	private JTextField getJTextField2() {
 		if (file_txt == null) {
 			file_txt = new JTextField();
 		}
 		return file_txt;
 	}
-		
-	/** 	
-	 * @return javax.swing.JPanel	
-	 */    
+
 	/**
-	 * This method initializes jPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */    
+	 * @return javax.swing.JPanel
+	 */
+	/**
+	 * This method initializes jPanel1
+	 * 
+	 * @return javax.swing.JPanel
+	 */
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
 			java.awt.GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
@@ -260,21 +268,21 @@ public class MacroEditor extends JInternalFrame
 			jLabel1.setText(Locale.getString("FILE"));
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.insets = new java.awt.Insets(9,3,9,2);
+			gridBagConstraints1.insets = new java.awt.Insets(9, 3, 9, 2);
 			gridBagConstraints2.gridx = 1;
 			gridBagConstraints2.gridy = 0;
 			gridBagConstraints2.weightx = 1.0;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints2.insets = new java.awt.Insets(5,3,5,2);
+			gridBagConstraints2.insets = new java.awt.Insets(5, 3, 5, 2);
 			gridBagConstraints3.gridx = 0;
 			gridBagConstraints3.gridy = 1;
-			gridBagConstraints3.insets = new java.awt.Insets(9,3,9,2);
+			gridBagConstraints3.insets = new java.awt.Insets(9, 3, 9, 2);
 			gridBagConstraints3.anchor = java.awt.GridBagConstraints.CENTER;
 			gridBagConstraints4.gridx = 1;
 			gridBagConstraints4.gridy = 1;
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints4.insets = new java.awt.Insets(5,3,5,2);
+			gridBagConstraints4.insets = new java.awt.Insets(5, 3, 5, 2);
 			jPanel1.add(jLabel, gridBagConstraints1);
 			jPanel1.add(getJTextField(), gridBagConstraints2);
 			jPanel1.add(jLabel1, gridBagConstraints3);
@@ -282,4 +290,4 @@ public class MacroEditor extends JInternalFrame
 		}
 		return jPanel1;
 	}
- }
+}

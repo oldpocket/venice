@@ -28,108 +28,104 @@ import nz.org.venice.quote.Symbol;
  * A representation of a function parameter definition.
  */
 public class DefineParameterExpression extends TerminalExpression {
-    
-    // The variable's name, type and constant status
-    private String name;
-    private int type;
-    
-    public DefineParameterExpression(String name, int type) {
-	super();
 
-        assert name != null && name.length() > 0;
+	// The variable's name, type and constant status
+	private String name;
+	private int type;
 
-        this.name = name;
-        this.type = type;
-    }
-    
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
-        throws EvaluationException {
+	public DefineParameterExpression(String name, int type) {
+		super();
 
-	/* If a variable with the same name as the parameter 
-	   is already defined, replace it with the parameter so that
-	   the parameter takes precedence. 
+		assert name != null && name.length() > 0;
 
-	   When evaluate is called, it is done in a function evaluation
-	   context, so the previous defined variables will persist on return
-	   from the function.
-	*/	   
-	if (!variables.contains(name)) {
-	    variables.add(name, type, false);
-	}
-		
-	//Retrieving the parameter value should happen in SetParameterExpression
-	return 0.0;
-    }
-
-    public boolean equals(Object object) {
-	if (!(object instanceof DefineParameterExpression)) {
-	    return false;
+		this.name = name;
+		this.type = type;
 	}
 
-	DefineParameterExpression expression = 
-	    (DefineParameterExpression)object;
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-	if (expression.getType() == type &&
-	    expression.getName().equals(name)) {
-	    return true;
-	} else {
-	    return false;
-	}
-    }
+		/*
+		 * If a variable with the same name as the parameter is already defined, replace
+		 * it with the parameter so that the parameter takes precedence.
+		 * 
+		 * When evaluate is called, it is done in a function evaluation context, so the
+		 * previous defined variables will persist on return from the function.
+		 */
+		if (!variables.contains(name)) {
+			variables.add(name, type, false);
+		}
 
-    public int hashCode() {
-	return name.hashCode() ^ (type * 37);
-    }
-
-    public String toString() {
-	String string = "";
-
-	// const INT myVariable = 5
-	switch(getType()) {
-	case BOOLEAN_TYPE:
-	    string = string.concat("boolean");
-	    break;
-	case INTEGER_TYPE:
-	    string = string.concat("int");
-	    break;
-	default:
-	    assert getType() == FLOAT_TYPE;
-	    string = string.concat("float");
+		// Retrieving the parameter value should happen in SetParameterExpression
+		return 0.0;
 	}
 
-	// const int MYVARIABLE = 5
-	string = string.concat(" ");
-	string = string.concat(name);
-	return string;
-    }
+	public boolean equals(Object object) {
+		if (!(object instanceof DefineParameterExpression)) {
+			return false;
+		}
 
-    /**
-     * @return The name of the parameter
-     */
-    public String getName() {
-        return name;
-    }
+		DefineParameterExpression expression = (DefineParameterExpression) object;
 
-    /**
-     * @return The type of the parameter
-     */
-    public int getType() {
-        return type;
-    }
-   
+		if (expression.getType() == type && expression.getName().equals(name)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    /**
-     * @return The type of the parameter 
-     */
-    public int checkType() throws TypeMismatchException {
-	return getType();	
-    }
+	public int hashCode() {
+		return name.hashCode() ^ (type * 37);
+	}
 
-    /**
-     * @return A clone of the DefineParameterExpression.
-     */
+	public String toString() {
+		String string = "";
 
-    public Object clone() {
-        return new DefineParameterExpression(getName(), getType()); 
-    }
+		// const INT myVariable = 5
+		switch (getType()) {
+		case BOOLEAN_TYPE:
+			string = string.concat("boolean");
+			break;
+		case INTEGER_TYPE:
+			string = string.concat("int");
+			break;
+		default:
+			assert getType() == FLOAT_TYPE;
+			string = string.concat("float");
+		}
+
+		// const int MYVARIABLE = 5
+		string = string.concat(" ");
+		string = string.concat(name);
+		return string;
+	}
+
+	/**
+	 * @return The name of the parameter
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @return The type of the parameter
+	 */
+	public int getType() {
+		return type;
+	}
+
+	/**
+	 * @return The type of the parameter
+	 */
+	public int checkType() throws TypeMismatchException {
+		return getType();
+	}
+
+	/**
+	 * @return A clone of the DefineParameterExpression.
+	 */
+
+	public Object clone() {
+		return new DefineParameterExpression(getName(), getType());
+	}
 }

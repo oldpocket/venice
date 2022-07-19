@@ -19,21 +19,21 @@
 package nz.org.venice.quote;
 
 import nz.org.venice.util.Report;
- 
+
 public class MetastockBinaryEODFilter implements IFileEODQuoteFilter {
-    public String getName() {
- 	return "MetaStock Binary";
-    }
- 
-    public EODQuote toEODQuote(String quoteLine) throws QuoteFormatException {
-        return null;
-    }
- 
-    public String toString(EODQuote quote) {
-        return null;
-    }
- 
-  public IFileEODQuoteImport getImporter(Report report) {
-      return new MetastockBinaryEODImport(report, this);
-  }
+	public String getName() {
+		return "MetaStock Binary";
+	}
+
+	public EODQuote toEODQuote(String quoteLine) throws QuoteFormatException {
+		return null;
+	}
+
+	public String toString(EODQuote quote) {
+		return null;
+	}
+
+	public IFileEODQuoteImport getImporter(Report report) {
+		return new MetastockBinaryEODImport(report, this);
+	}
 }

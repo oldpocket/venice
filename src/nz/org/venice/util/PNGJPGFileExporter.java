@@ -31,9 +31,11 @@ import java.io.IOException;
 
 public class PNGJPGFileExporter implements IImageExporter {
 	private String writerFormat;
+
 	public PNGJPGFileExporter(String writerFormat) {
 		this.writerFormat = writerFormat;
 	}
+
 	public void export(String parFilename, BufferedImage parImage) {
 		ImageExporterUI exportUI = new ImageExporterUI();
 		try {

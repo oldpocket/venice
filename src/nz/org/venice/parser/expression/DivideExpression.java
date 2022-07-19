@@ -31,56 +31,57 @@ import nz.org.venice.quote.Symbol;
  */
 public class DivideExpression extends ArithmeticExpression {
 
-    public DivideExpression(Expression left, Expression right) {
-	super(left, right);
-    }
-
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
-	throws EvaluationException {
-
-	double right = getChild(1).evaluate(variables, quoteBundle, symbol, day);
-
-	if(right != 0.0D)
-	    return getChild(0).evaluate(variables, quoteBundle, symbol, day) / right;
-	else {
-	    
-	    EvaluationException e = EvaluationException.DIVIDE_BY_ZERO_EXCEPTION;
-	    e.setMessage(this, "", right);
-	    throw e;
+	public DivideExpression(Expression left, Expression right) {
+		super(left, right);
 	}
-    }
 
-    public Expression simplify() {
-        // First perform arithmetic simplifications
-        Expression simplified = super.simplify();
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-        if(simplified.equals(this)) {
-            NumberExpression left = (simplified.getChild(0) instanceof NumberExpression? 
-                                     (NumberExpression)simplified.getChild(0) : null);
-            NumberExpression right = (simplified.getChild(1) instanceof NumberExpression? 
-                                      (NumberExpression)simplified.getChild(1) : null);
+		double right = getChild(1).evaluate(variables, quoteBundle, symbol, day);
 
-            // 0/a -> 0.
-            if(left != null && left.equals(0.0D))
-                return new NumberExpression(0.0D, simplified.getType());
+		if (right != 0.0D)
+			return getChild(0).evaluate(variables, quoteBundle, symbol, day) / right;
+		else {
 
-            // a/1 -> a.
-            else if(right != null && right.equals(1.0D))
-                return simplified.getChild(0);
-            
-            // a/a -> 1 (pragmatism over idealism)
-            else if(simplified.getChild(0).equals(simplified.getChild(1)))
-                return new NumberExpression(1.0D, simplified.getType());
-        }
-        return simplified;
-    }
+			EvaluationException e = EvaluationException.DIVIDE_BY_ZERO_EXCEPTION;
+			e.setMessage(this, "", right);
+			throw e;
+		}
+	}
 
-    public String toString() {
-	return super.toString("/");
-    }
+	public Expression simplify() {
+		// First perform arithmetic simplifications
+		Expression simplified = super.simplify();
 
-    public Object clone() {
-        return new DivideExpression((Expression)getChild(0).clone(), 
-                                    (Expression)getChild(1).clone());
-    }
+		if (simplified.equals(this)) {
+			NumberExpression left = (simplified.getChild(0) instanceof NumberExpression
+					? (NumberExpression) simplified.getChild(0)
+					: null);
+			NumberExpression right = (simplified.getChild(1) instanceof NumberExpression
+					? (NumberExpression) simplified.getChild(1)
+					: null);
+
+			// 0/a -> 0.
+			if (left != null && left.equals(0.0D))
+				return new NumberExpression(0.0D, simplified.getType());
+
+			// a/1 -> a.
+			else if (right != null && right.equals(1.0D))
+				return simplified.getChild(0);
+
+			// a/a -> 1 (pragmatism over idealism)
+			else if (simplified.getChild(0).equals(simplified.getChild(1)))
+				return new NumberExpression(1.0D, simplified.getType());
+		}
+		return simplified;
+	}
+
+	public String toString() {
+		return super.toString("/");
+	}
+
+	public Object clone() {
+		return new DivideExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone());
+	}
 }

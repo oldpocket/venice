@@ -26,7 +26,7 @@ import javax.swing.SwingUtilities;
 /**
  * 
  * A base class for Analysis windows and their inner Pages extending JPanel
- * adding showErrorMessage functionality using invokeLater to avoid threading 
+ * adding showErrorMessage functionality using invokeLater to avoid threading
  * issues when displaying errors.
  * 
  * TODO: Find a better name for this class
@@ -39,35 +39,33 @@ abstract public class Page extends JPanel {
 	 * Contains the reference to desktop
 	 */
 	protected JDesktopPane desktop;
-	
-	/**
-	 * Internal class to be used by invokeLater to display
-	 * an error message using JOptionPane.showInternalMessageDialog 
-	 */
-    class RunnableErrorMessage implements Runnable {
-    	private String content;
-    	private String title;
-    	
-    	public RunnableErrorMessage(String content, String title) {
-    		this.content = content;
-    		this.title = title;
-    	}
-    	public void run() {
-    		JOptionPane.showInternalMessageDialog(desktop, 
-                    this.content, 
-                    this.title,
-                    JOptionPane.ERROR_MESSAGE);	
-    	}
-    }
 
-    /**
-     * Display an error using invokeLater to avoid threading issues
-     * 
-     * @param content
-     * @param title
-     */
-    protected void showErrorMessage(String content, String title) {
-    	// Invokes on dispatch thread
-    	SwingUtilities.invokeLater(new RunnableErrorMessage(content,title));
-    }
+	/**
+	 * Internal class to be used by invokeLater to display an error message using
+	 * JOptionPane.showInternalMessageDialog
+	 */
+	class RunnableErrorMessage implements Runnable {
+		private String content;
+		private String title;
+
+		public RunnableErrorMessage(String content, String title) {
+			this.content = content;
+			this.title = title;
+		}
+
+		public void run() {
+			JOptionPane.showInternalMessageDialog(desktop, this.content, this.title, JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	/**
+	 * Display an error using invokeLater to avoid threading issues
+	 * 
+	 * @param content
+	 * @param title
+	 */
+	protected void showErrorMessage(String content, String title) {
+		// Invokes on dispatch thread
+		SwingUtilities.invokeLater(new RunnableErrorMessage(content, title));
+	}
 }

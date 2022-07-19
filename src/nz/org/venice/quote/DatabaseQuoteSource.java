@@ -38,10 +38,11 @@ import nz.org.venice.util.TradingDate;
 
 /**
  * Provides functionality to obtain stock quotes from a database. This class
- * implements the QuoteSource interface to allow users to obtain stock
- * quotes in the fastest possible manner.
+ * implements the QuoteSource interface to allow users to obtain stock quotes in
+ * the fastest possible manner.
  *
  * Example:
+ * 
  * <pre>
  *      EODQuoteRange quoteRange = new EODQuoteRange("CBA");
  *      EODQuoteBundle quoteBundle = new EODQuoteBundle(quoteRange);
@@ -59,8 +60,7 @@ import nz.org.venice.util.TradingDate;
  * @see EODQuoteRange
  * @see EODQuoteBundle
  */
-public class DatabaseQuoteSource implements QuoteSource
-{
+public class DatabaseQuoteSource implements QuoteSource {
 	private DatabaseManager manager = null;
 	private boolean checkedTables = false;
 
@@ -78,13 +78,11 @@ public class DatabaseQuoteSource implements QuoteSource
 	// DESTINATION_CURRENCY_COLUMN
 	private final static int EXCHANGE_RATE_COLUMN = 4;
 
-
-
 	/**
 	 * Creates a new quote source to connect to an external database.
 	 *
-	 * @param   manager   The DatabaseManager object which manages software,
-	 *                    username/host/port etc.
+	 * @param manager The DatabaseManager object which manages software,
+	 *                username/host/port etc.
 	 */
 	public DatabaseQuoteSource(DatabaseManager manager) {
 		this.manager = manager;
@@ -94,22 +92,20 @@ public class DatabaseQuoteSource implements QuoteSource
 	/**
 	 * Returns the company name associated with the given symbol.
 	 *
-	 * @param	symbol	the stock symbol.
-	 * @return	the company name.
+	 * @param symbol the stock symbol.
+	 * @return the company name.
 	 */
 	public String getSymbolName(Symbol symbol) {
 
 		String name = null;
 
-		if(manager.getConnection()) {        
+		if (manager.getConnection()) {
 			try {
 				Statement statement = manager.createStatement();
 
-				ResultSet RS = statement.executeQuery
-						("SELECT " + DatabaseManager.NAME_FIELD + " FROM " + 
-								DatabaseManager.LOOKUP_TABLE_NAME +
-								" WHERE " + DatabaseManager.SYMBOL_FIELD + " = '"
-								+ symbol + "'");
+				ResultSet RS = statement.executeQuery(
+						"SELECT " + DatabaseManager.NAME_FIELD + " FROM " + DatabaseManager.LOOKUP_TABLE_NAME
+								+ " WHERE " + DatabaseManager.SYMBOL_FIELD + " = '" + symbol + "'");
 
 				// Import SQL data into vector
 				RS.next();
@@ -120,8 +116,7 @@ public class DatabaseQuoteSource implements QuoteSource
 				// Clean up after ourselves
 				RS.close();
 				statement.close();
-			}
-			catch (SQLException E) {
+			} catch (SQLException E) {
 				// not a big deal if this fails
 			}
 		}
@@ -132,22 +127,19 @@ public class DatabaseQuoteSource implements QuoteSource
 	/**
 	 * Returns the symbol associated with the given company.
 	 *
-	 * @param	partialCompanyName a partial company name.
-	 * @return	the company symbol.
+	 * @param partialCompanyName a partial company name.
+	 * @return the company symbol.
 	 */
 	public Symbol getSymbol(String partialCompanyName) {
 
 		Symbol symbol = null;
 
-		if(manager.getConnection()) {
+		if (manager.getConnection()) {
 			try {
 
-				String query = "SELECT " + 
-						DatabaseManager.SYMBOL_FIELD + 
-						" FROM " + DatabaseManager.LOOKUP_TABLE_NAME + 
-						" WHERE LOCATE(" +
-						"UPPER('" + partialCompanyName + "'), " +
-						DatabaseManager.NAME_FIELD + ") != 0";
+				String query = "SELECT " + DatabaseManager.SYMBOL_FIELD + " FROM " + DatabaseManager.LOOKUP_TABLE_NAME
+						+ " WHERE LOCATE(" + "UPPER('" + partialCompanyName + "'), " + DatabaseManager.NAME_FIELD
+						+ ") != 0";
 
 				Statement statement = manager.createStatement();
 				ResultSet RS = statement.executeQuery(query);
@@ -158,16 +150,14 @@ public class DatabaseQuoteSource implements QuoteSource
 				// Get only entry which is the name
 				try {
 					symbol = Symbol.find(RS.getString(1));
-				}
-				catch(SymbolFormatException e) {
+				} catch (SymbolFormatException e) {
 					// Error in data. Ignore.
 				}
 
 				// Clean up after ourselves
 				RS.close();
 				statement.close();
-			}
-			catch (SQLException E) {
+			} catch (SQLException E) {
 				// not a big deal if this fails
 			}
 		}
@@ -178,13 +168,13 @@ public class DatabaseQuoteSource implements QuoteSource
 	/**
 	 * Returns whether we have any quotes for the given symbol.
 	 *
-	 * @param	symbol	the symbol we are searching for
-	 * @return	whether the symbol was found or not
+	 * @param symbol the symbol we are searching for
+	 * @return whether the symbol was found or not
 	 */
 	public boolean symbolExists(Symbol symbol) {
 		boolean symbolExists = false;
 
-		if(manager.getConnection()) {
+		if (manager.getConnection()) {
 			try {
 				Statement statement = manager.createStatement();
 
@@ -202,10 +192,8 @@ public class DatabaseQuoteSource implements QuoteSource
 				RS.close();
 				statement.close();
 
-			}
-			catch (SQLException e) {
-				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE",
-						e.getMessage()));
+			} catch (SQLException e) {
+				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
 			}
 		}
 
@@ -215,23 +203,22 @@ public class DatabaseQuoteSource implements QuoteSource
 	/**
 	 * Return the first date in the database that has any quotes.
 	 *
-	 * @return	oldest date with quotes
+	 * @return oldest date with quotes
 	 */
 	public TradingDate getFirstDate() {
 
 		// Do we have it buffered?
-		if(firstDate != null)
+		if (firstDate != null)
 			return firstDate;
 
 		java.util.Date date = null;
 
-		if(manager.getConnection()) {
+		if (manager.getConnection()) {
 			try {
 				Statement statement = manager.createStatement();
 
-				ResultSet RS = statement.executeQuery
-						("SELECT MIN(" + DatabaseManager.DATE_FIELD + ") FROM " +
-								DatabaseManager.SHARE_TABLE_NAME);
+				ResultSet RS = statement.executeQuery(
+						"SELECT MIN(" + DatabaseManager.DATE_FIELD + ") FROM " + DatabaseManager.SHARE_TABLE_NAME);
 
 				// Import SQL data into vector
 				RS.next();
@@ -242,26 +229,23 @@ public class DatabaseQuoteSource implements QuoteSource
 				// Clean up after ourselves
 				RS.close();
 				statement.close();
-			}
-			catch (SQLException e) {
-				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE",
-						e.getMessage()));
+			} catch (SQLException e) {
+				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
 			}
 		}
 
-		if(date != null) {
+		if (date != null) {
 			firstDate = new TradingDate(date);
 			return firstDate;
-		}
-		else {
+		} else {
 			showEmptyDatabaseError();
 			return null;
 		}
 	}
 
 	/**
-	 * Force the database to reset the first and last dates so that new data
-	 * can be displayed.
+	 * Force the database to reset the first and last dates so that new data can be
+	 * displayed.
 	 */
 	public synchronized void cacheExpiry() {
 		firstDate = null;
@@ -271,22 +255,21 @@ public class DatabaseQuoteSource implements QuoteSource
 	/**
 	 * Return the last date in the database that has any quotes.
 	 *
-	 * @return	newest date with quotes
+	 * @return newest date with quotes
 	 */
 	public TradingDate getLastDate() {
 		// Do we have it buffered?
-		if(lastDate != null)
+		if (lastDate != null)
 			return lastDate;
 
 		java.util.Date date = null;
 
-		if(manager.getConnection()) {
+		if (manager.getConnection()) {
 			try {
 				Statement statement = manager.createStatement();
 
-				ResultSet RS = statement.executeQuery
-						("SELECT MAX(" + DatabaseManager.DATE_FIELD + ") FROM " +
-								DatabaseManager.SHARE_TABLE_NAME);
+				ResultSet RS = statement.executeQuery(
+						"SELECT MAX(" + DatabaseManager.DATE_FIELD + ") FROM " + DatabaseManager.SHARE_TABLE_NAME);
 
 				// Import SQL data into vector
 				RS.next();
@@ -297,18 +280,15 @@ public class DatabaseQuoteSource implements QuoteSource
 				// Clean up after ourselves
 				RS.close();
 				statement.close();
-			}
-			catch (SQLException e) {
-				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE",
-						e.getMessage()));
+			} catch (SQLException e) {
+				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
 			}
 		}
 
-		if(date != null) {
+		if (date != null) {
 			lastDate = new TradingDate(date);
 			return lastDate;
-		}
-		else {
+		} else {
 			showEmptyDatabaseError();
 			return null;
 		}
@@ -317,8 +297,8 @@ public class DatabaseQuoteSource implements QuoteSource
 	/**
 	 * Is the given symbol a market index?
 	 *
-	 * @param	symbol to test
-	 * @return	yes or no
+	 * @param symbol to test
+	 * @return yes or no
 	 */
 	public boolean isMarketIndex(Symbol symbol) {
 		assert symbol != null;
@@ -329,24 +309,21 @@ public class DatabaseQuoteSource implements QuoteSource
 			return false;
 		}
 
-
-		/* Previous version; guaranteed for ASX, not for DAX or 
-	   anything else.
-	// HACK. It needs to keep a table which maintains a flag
-        // for whether a symbol is an index or not.
-
-	if(symbol.length() == 3 && symbol.charAt(0) == 'X')
-	    return true;
-	else
-	    return false;
-		 */	
+		/*
+		 * Previous version; guaranteed for ASX, not for DAX or anything else. // HACK.
+		 * It needs to keep a table which maintains a flag // for whether a symbol is an
+		 * index or not.
+		 * 
+		 * if(symbol.length() == 3 && symbol.charAt(0) == 'X') return true; else return
+		 * false;
+		 */
 	}
 
 	/**
 	 * Load the given quote range into the quote cache.
 	 *
-	 * @param	quoteRange	the range of quotes to load
-	 * @return  <code>TRUE</code> if the operation suceeded
+	 * @param quoteRange the range of quotes to load
+	 * @return <code>TRUE</code> if the operation suceeded
 	 * @see EODQuote
 	 * @see EODQuoteCache
 	 */
@@ -369,15 +346,15 @@ public class DatabaseQuoteSource implements QuoteSource
 	/**
 	 * This function takes an SQL query statement that should return a list of
 	 * quotes. This function executes the statement and stores the quotes into
-	 * database. 
+	 * database.
 	 *
 	 * @return <code>true</code> iff this function was successful.
 	 */
 	private boolean executeSQLString(ProgressDialog progress, String SQLString) {
 
-		if(manager.getConnection()) {
+		if (manager.getConnection()) {
 			try {
-				Statement statement = manager.createStatement();	
+				Statement statement = manager.createStatement();
 				Thread monitor = cancelOnInterrupt(statement);
 				Thread thread = Thread.currentThread();
 				ResultSet RS = statement.executeQuery(SQLString);
@@ -385,7 +362,7 @@ public class DatabaseQuoteSource implements QuoteSource
 				// Monitor thread is no longer needed
 				monitor.interrupt();
 
-				if(!thread.isInterrupted()) {
+				if (!thread.isInterrupted()) {
 					EODQuoteCache quoteCache = EODQuoteCache.getInstance();
 
 					while (RS.next()) {
@@ -397,20 +374,16 @@ public class DatabaseQuoteSource implements QuoteSource
 								RS.getFloat(DatabaseManager.DAY_OPEN_COLUMN),
 								RS.getFloat(DatabaseManager.DAY_CLOSE_COLUMN));
 					}
-				}                    
+				}
 
 				// Clean up after ourselves
 				RS.close();
 				statement.close();
 				return !thread.isInterrupted();
-			}
-			catch(SQLException e) {
-				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE",
-						e.getMessage()));
-			}
-			catch(SymbolFormatException e2) {
-				DesktopManager.showErrorMessage(Locale.getString("DATABASE_BADLY_FORMATTED_SYMBOL",
-						e2.getMessage()));
+			} catch (SQLException e) {
+				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
+			} catch (SymbolFormatException e2) {
+				DesktopManager.showErrorMessage(Locale.getString("DATABASE_BADLY_FORMATTED_SYMBOL", e2.getMessage()));
 			}
 		}
 
@@ -429,23 +402,21 @@ public class DatabaseQuoteSource implements QuoteSource
 			public void run() {
 				Thread currentThread = Thread.currentThread();
 
-				while(true) {
+				while (true) {
 
 					try {
 						Thread.sleep(1000); // 1s
-					}
-					catch(InterruptedException e) {
+					} catch (InterruptedException e) {
 						break;
 					}
 
-					if(currentThread.isInterrupted())
+					if (currentThread.isInterrupted())
 						break;
 
-					if(sqlThread.isInterrupted()) {
+					if (sqlThread.isInterrupted()) {
 						try {
 							statement.cancel();
-						}
-						catch(SQLException e) {
+						} catch (SQLException e) {
 							// It's not a big deal if we can't cancel it
 						}
 						break;
@@ -465,8 +436,7 @@ public class DatabaseQuoteSource implements QuoteSource
 		// 1. Create select line
 		//
 
-		String queryString = "SELECT * FROM " + 
-				DatabaseManager.SHARE_TABLE_NAME + " WHERE ";
+		String queryString = "SELECT * FROM " + DatabaseManager.SHARE_TABLE_NAME + " WHERE ";
 
 		//
 		// 2. Filter select by symbols we are looking for
@@ -474,53 +444,47 @@ public class DatabaseQuoteSource implements QuoteSource
 
 		String filterString = new String("");
 
-		if(quoteRange.getType() == EODQuoteRange.GIVEN_SYMBOLS) {
+		if (quoteRange.getType() == EODQuoteRange.GIVEN_SYMBOLS) {
 			List symbols = quoteRange.getAllSymbols();
 
-			if(symbols.size() == 1) {
-				Symbol symbol = (Symbol)symbols.get(0);
+			if (symbols.size() == 1) {
+				Symbol symbol = (Symbol) symbols.get(0);
 
-				filterString =
-						filterString.concat(DatabaseManager.SYMBOL_FIELD + 
-								" = '" + symbol + "' ");
-			}
-			else {
+				filterString = filterString.concat(DatabaseManager.SYMBOL_FIELD + " = '" + symbol + "' ");
+			} else {
 				assert symbols.size() > 1;
 
 				filterString = filterString.concat(DatabaseManager.SYMBOL_FIELD + " IN (");
 				Iterator iterator = symbols.iterator();
 
-				while(iterator.hasNext()) {
-					Symbol symbol = (Symbol)iterator.next();
+				while (iterator.hasNext()) {
+					Symbol symbol = (Symbol) iterator.next();
 
 					filterString = filterString.concat("'" + symbol + "'");
 
-					if(iterator.hasNext())
+					if (iterator.hasNext())
 						filterString = filterString.concat(", ");
 				}
 
 				filterString = filterString.concat(") ");
 			}
-		}
-		else if(quoteRange.getType() == EODQuoteRange.ALL_SYMBOLS) {
+		} else if (quoteRange.getType() == EODQuoteRange.ALL_SYMBOLS) {
 			// nothing to do
-		}
-		else if(quoteRange.getType() == EODQuoteRange.ALL_ORDINARIES) {
-			/* ToDo: check against the Market Index configuration and return what is not part of it.
-			filterString = filterString.concat("LENGTH(" + 
-					DatabaseManager.SYMBOL_FIELD + 
-					") = 3 AND " +
-					manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " != 'X' ");
+		} else if (quoteRange.getType() == EODQuoteRange.ALL_ORDINARIES) {
+			/*
+			 * ToDo: check against the Market Index configuration and return what is not
+			 * part of it. filterString = filterString.concat("LENGTH(" +
+			 * DatabaseManager.SYMBOL_FIELD + ") = 3 AND " +
+			 * manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " != 'X' ");
 			 */
-		}
-		else {
+		} else {
 			assert quoteRange.getType() == EODQuoteRange.MARKET_INDICES;
 
-			/* ToDo: need to check against the Market Index configuration and return only this list
-			filterString = filterString.concat("LENGTH(" + 
-					DatabaseManager.SYMBOL_FIELD + 
-					") = 3 AND " +
-					manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " = 'X' ");
+			/*
+			 * ToDo: need to check against the Market Index configuration and return only
+			 * this list filterString = filterString.concat("LENGTH(" +
+			 * DatabaseManager.SYMBOL_FIELD + ") = 3 AND " +
+			 * manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " = 'X' ");
 			 */
 		}
 
@@ -529,45 +493,31 @@ public class DatabaseQuoteSource implements QuoteSource
 		//
 
 		// No dates in quote range, mean load quotes for all dates in the database
-		if(quoteRange.getFirstDate() == null) {
+		if (quoteRange.getFirstDate() == null) {
 			// nothing to do
 		}
 
 		// If they are the same its only one day
-		else if(quoteRange.getFirstDate().equals(quoteRange.getLastDate())) {
-			if(filterString.length() > 0)
+		else if (quoteRange.getFirstDate().equals(quoteRange.getLastDate())) {
+			if (filterString.length() > 0)
 				filterString = filterString.concat("AND ");
 
-			filterString = filterString.concat(DatabaseManager.DATE_FIELD + 
-					" = '" +
-					manager.
-					toSQLDateString(quoteRange.
-							getFirstDate()) 
-					+ "' ");
+			filterString = filterString.concat(
+					DatabaseManager.DATE_FIELD + " = '" + manager.toSQLDateString(quoteRange.getFirstDate()) + "' ");
 		}
 
 		// Otherwise check within a range of dates
 		else {
-			if(filterString.length() > 0)
+			if (filterString.length() > 0)
 				filterString = filterString.concat("AND ");
 
-			filterString = filterString.concat(DatabaseManager.DATE_FIELD + 
-					" >= '" +
-					manager.
-					toSQLDateString(quoteRange.
-							getFirstDate()) +
-					"' AND " +
-					DatabaseManager.DATE_FIELD + 
-					" <= '" +
-					manager.
-					toSQLDateString(quoteRange.
-							getLastDate()) +
-					"' ");
+			filterString = filterString.concat(DatabaseManager.DATE_FIELD + " >= '"
+					+ manager.toSQLDateString(quoteRange.getFirstDate()) + "' AND " + DatabaseManager.DATE_FIELD
+					+ " <= '" + manager.toSQLDateString(quoteRange.getLastDate()) + "' ");
 		}
 
 		return queryString.concat(filterString);
 	}
-
 
 	/**
 	 * Import quotes into the database.
@@ -579,22 +529,22 @@ public class DatabaseQuoteSource implements QuoteSource
 		// TODO: This function should probably update the cached firstDate and lastDate.
 		int quotesImported = 0;
 
-		if(quotes.size() > 0 && manager.getConnection()) {
+		if (quotes.size() > 0 && manager.getConnection()) {
 
 			// Query the database to see which of these quotes is present
 			List existingQuotes = findMatchingQuotes(quotes);
 
 			// Remove duplicates
 			List newQuotes = new ArrayList();
-			for(Iterator iterator = quotes.iterator(); iterator.hasNext();) {
-				EODQuote quote = (EODQuote)iterator.next();
+			for (Iterator iterator = quotes.iterator(); iterator.hasNext();) {
+				EODQuote quote = (EODQuote) iterator.next();
 
-				if(!containsQuote(existingQuotes, quote))
+				if (!containsQuote(existingQuotes, quote))
 					newQuotes.add(quote);
 			}
 
-			if(newQuotes.size() > 0) {
-				if(manager.supportForSingleRowUpdatesOnly()) {
+			if (newQuotes.size() > 0) {
+				if (manager.supportForSingleRowUpdatesOnly()) {
 					quotesImported = importQuoteMultipleStatements(newQuotes);
 				} else {
 					quotesImported = importQuoteSingleStatement(newQuotes);
@@ -606,19 +556,20 @@ public class DatabaseQuoteSource implements QuoteSource
 	}
 
 	/**
-	 * Searches the list of quotes for the given quote. A match only
-	 * requires the symbol and date fields to match.
+	 * Searches the list of quotes for the given quote. A match only requires the
+	 * symbol and date fields to match.
 	 *
 	 * @param quotes the list of quotes to search
-	 * @param quote the quote to search for
-	 * @return <code>true</code> if the quote is in the list, <code>false</code> otherwise
+	 * @param quote  the quote to search for
+	 * @return <code>true</code> if the quote is in the list, <code>false</code>
+	 *         otherwise
 	 */
 	private boolean containsQuote(List quotes, EODQuote quote) {
-		for(Iterator iterator = quotes.iterator(); iterator.hasNext();) {
-			EODQuote containedQuote = (EODQuote)iterator.next();
+		for (Iterator iterator = quotes.iterator(); iterator.hasNext();) {
+			EODQuote containedQuote = (EODQuote) iterator.next();
 
-			if(containedQuote.getSymbol().equals(quote.getSymbol()) &&
-					containedQuote.getDate().equals(quote.getDate()))
+			if (containedQuote.getSymbol().equals(quote.getSymbol())
+					&& containedQuote.getDate().equals(quote.getDate()))
 				return true;
 		}
 
@@ -626,11 +577,10 @@ public class DatabaseQuoteSource implements QuoteSource
 	}
 
 	/**
-	 * Import quotes into the database using a separate insert statement for
-	 * each row. Use this function when the database does not support
-	 * multi-row inserts.
+	 * Import quotes into the database using a separate insert statement for each
+	 * row. Use this function when the database does not support multi-row inserts.
 	 *
-	 * @param	quotes list of quotes to import
+	 * @param quotes list of quotes to import
 	 * @return the number of quotes imported
 	 */
 	private int importQuoteMultipleStatements(List quotes) {
@@ -640,49 +590,31 @@ public class DatabaseQuoteSource implements QuoteSource
 		Iterator iterator = quotes.iterator();
 
 		try {
-			while(iterator.hasNext()) {
-				EODQuote quote = (EODQuote)iterator.next();
+			while (iterator.hasNext()) {
+				EODQuote quote = (EODQuote) iterator.next();
 
-				String insertQuery = new String("INSERT INTO " + 
-						DatabaseManager.SHARE_TABLE_NAME +
-						" VALUES (" +
-						"'" + manager.
-						toSQLDateString(quote
-								.getDate()) 
-						+ "', " +
-						"'" + quote.getSymbol()
-						+ "', " +
-						"'" + quote.getDayOpen()
-						+ "', " +
-						"'" + quote.getDayClose()
-						+ "', " +
-						"'" + quote.getDayHigh()
-						+ "', " +
-						"'" + quote.getDayLow()
-						+ "', " +
-						"'" + quote.getDayVolume()
-						+ "')");
+				String insertQuery = new String("INSERT INTO " + DatabaseManager.SHARE_TABLE_NAME + " VALUES (" + "'"
+						+ manager.toSQLDateString(quote.getDate()) + "', " + "'" + quote.getSymbol() + "', " + "'"
+						+ quote.getDayOpen() + "', " + "'" + quote.getDayClose() + "', " + "'" + quote.getDayHigh()
+						+ "', " + "'" + quote.getDayLow() + "', " + "'" + quote.getDayVolume() + "')");
 
 				// Now insert the quote into database
 				Statement statement = manager.createStatement();
 				statement.executeUpdate(insertQuery);
 				quotesImported++;
 			}
-		}
-		catch (SQLException e) {
-			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE",
-					e.getMessage()));
+		} catch (SQLException e) {
+			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
 		}
 
 		return quotesImported;
 	}
 
 	/**
-	 * Import quotes into the database using a single insert statement for
-	 * all rows. Use this function when the database supports
-	 * multi-row inserts.
+	 * Import quotes into the database using a single insert statement for all rows.
+	 * Use this function when the database supports multi-row inserts.
 	 *
-	 * @param	quotes list of quotes to import
+	 * @param quotes list of quotes to import
 	 * @return the number of quotes imported
 	 */
 	private int importQuoteSingleStatement(List quotes) {
@@ -691,37 +623,27 @@ public class DatabaseQuoteSource implements QuoteSource
 		boolean firstQuote = true;
 
 		// Build single query to insert stocks for a whole day into
-		for(Iterator iterator = quotes.iterator(); iterator.hasNext();) {
-			EODQuote quote = (EODQuote)iterator.next();
+		for (Iterator iterator = quotes.iterator(); iterator.hasNext();) {
+			EODQuote quote = (EODQuote) iterator.next();
 
-			if(firstQuote) {
-				insertString.append("INSERT INTO " + 
-						DatabaseManager.SHARE_TABLE_NAME +
-						" VALUES (");
+			if (firstQuote) {
+				insertString.append("INSERT INTO " + DatabaseManager.SHARE_TABLE_NAME + " VALUES (");
 				firstQuote = false;
-			}
-			else
+			} else
 				insertString.append(", (");
 
 			// Add new quote
-			insertString.append("'" + manager.toSQLDateString(quote.getDate()) 
-			+ "', " +
-			"'" + quote.getSymbol()                + "', " +
-			"'" + quote.getDayOpen()               + "', " +
-			"'" + quote.getDayClose()              + "', " +
-			"'" + quote.getDayHigh()               + "', " +
-			"'" + quote.getDayLow()                + "', " +
-			"'" + quote.getDayVolume()             + "')");
+			insertString.append("'" + manager.toSQLDateString(quote.getDate()) + "', " + "'" + quote.getSymbol() + "', "
+					+ "'" + quote.getDayOpen() + "', " + "'" + quote.getDayClose() + "', " + "'" + quote.getDayHigh()
+					+ "', " + "'" + quote.getDayLow() + "', " + "'" + quote.getDayVolume() + "')");
 		}
 
 		try {
 			Statement statement = manager.createStatement();
 			statement.executeUpdate(insertString.toString());
 			quotesImported = quotes.size();
-		}
-		catch (SQLException e) {
-			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE",
-					e.getMessage()));
+		} catch (SQLException e) {
+			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
 		}
 
 		return quotesImported;
@@ -736,7 +658,7 @@ public class DatabaseQuoteSource implements QuoteSource
 	public boolean containsDate(TradingDate date) {
 		boolean containsDate = false;
 
-		if(manager.getConnection()) {
+		if (manager.getConnection()) {
 			try {
 				Statement statement = manager.createStatement();
 
@@ -752,10 +674,8 @@ public class DatabaseQuoteSource implements QuoteSource
 				// Clean up after ourselves
 				RS.close();
 				statement.close();
-			}
-			catch (SQLException e) {
-				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE",
-						e.getMessage()));
+			} catch (SQLException e) {
+				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
 			}
 		}
 
@@ -765,12 +685,12 @@ public class DatabaseQuoteSource implements QuoteSource
 	/**
 	 * Return all the dates which we have quotes for. REALLY SLOW.
 	 *
-	 * @return	a list of dates
-	 */    
+	 * @return a list of dates
+	 */
 	public List getDates() {
 		List dates = new ArrayList();
 
-		if(manager.getConnection()) {
+		if (manager.getConnection()) {
 
 			// This might take a while
 			ProgressDialog progress = ProgressDialogManager.getProgressDialog();
@@ -781,20 +701,16 @@ public class DatabaseQuoteSource implements QuoteSource
 			try {
 				// Get dates
 				Statement statement = manager.createStatement();
-				ResultSet RS = statement.executeQuery
-						("SELECT DISTINCT(" + DatabaseManager.DATE_FIELD + 
-								") FROM " +
-								DatabaseManager.SHARE_TABLE_NAME);
+				ResultSet RS = statement.executeQuery(
+						"SELECT DISTINCT(" + DatabaseManager.DATE_FIELD + ") FROM " + DatabaseManager.SHARE_TABLE_NAME);
 
-				while(RS.next()) {
+				while (RS.next()) {
 					dates.add(new TradingDate(RS.getDate(1)));
 					progress.increment();
 				}
 
-			}
-			catch (SQLException e) {
-				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE",
-						e.getMessage()));
+			} catch (SQLException e) {
+				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
 			}
 
 			ProgressDialogManager.closeProgressDialog(progress);
@@ -804,15 +720,15 @@ public class DatabaseQuoteSource implements QuoteSource
 	}
 
 	/**
-	 * Return the advance/decline for the given date. This returns the number
-	 * of all ordinary stocks that rose (day close > day open) - the number of all
-	 * ordinary stocks that fell.
+	 * Return the advance/decline for the given date. This returns the number of all
+	 * ordinary stocks that rose (day close > day open) - the number of all ordinary
+	 * stocks that fell.
 	 *
 	 * @param date the date
 	 * @exception throws MissingQuoteException if the date wasn't in the source
 	 */
 	public int getAdvanceDecline(TradingDate date) throws MissingQuoteException {
-		if(!manager.getConnection())
+		if (!manager.getConnection())
 			return 0;
 
 		try {
@@ -822,27 +738,21 @@ public class DatabaseQuoteSource implements QuoteSource
 
 			Statement statement = manager.createStatement();
 
-			String query =
-					new String("SELECT COUNT(*) FROM " + 
-							DatabaseManager.SHARE_TABLE_NAME +
-							" WHERE " + DatabaseManager.DATE_FIELD + " = '" + 
-							manager.toSQLDateString(date) + "' AND " +
-							DatabaseManager.DAY_CLOSE_FIELD + " > " + 
-							DatabaseManager.DAY_OPEN_FIELD + " AND " +
-							manager.left(DatabaseManager.SYMBOL_FIELD ,1)  + 
-							" != '^' ");
+			String query = new String("SELECT COUNT(*) FROM " + DatabaseManager.SHARE_TABLE_NAME + " WHERE "
+					+ DatabaseManager.DATE_FIELD + " = '" + manager.toSQLDateString(date) + "' AND "
+					+ DatabaseManager.DAY_CLOSE_FIELD + " > " + DatabaseManager.DAY_OPEN_FIELD + " AND "
+					+ manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " != '^' ");
 
 			ResultSet RS = statement.executeQuery(query);
 			boolean isDatePresent = RS.next();
 			int advanceDecline = 0;
 
-			if(isDatePresent) {				
+			if (isDatePresent) {
 				advanceDecline = RS.getInt(1);
 				// Clean up after ourselves
 				RS.close();
 				statement.close();
-			}
-			else {
+			} else {
 				// Clean up after ourselves
 				RS.close();
 				statement.close();
@@ -856,25 +766,19 @@ public class DatabaseQuoteSource implements QuoteSource
 
 			statement = manager.createStatement();
 
-			query =
-					new String("SELECT COUNT(*) FROM " + 
-							DatabaseManager.SHARE_TABLE_NAME +
-							" WHERE " + DatabaseManager.DATE_FIELD + " = '" + 
-							manager.toSQLDateString(date) + "' AND " +
-							DatabaseManager.DAY_CLOSE_FIELD + " < " + 
-							DatabaseManager.DAY_OPEN_FIELD + " AND " +
-							manager.left(DatabaseManager.SYMBOL_FIELD, 1) + 
-							" != '^' ");
+			query = new String("SELECT COUNT(*) FROM " + DatabaseManager.SHARE_TABLE_NAME + " WHERE "
+					+ DatabaseManager.DATE_FIELD + " = '" + manager.toSQLDateString(date) + "' AND "
+					+ DatabaseManager.DAY_CLOSE_FIELD + " < " + DatabaseManager.DAY_OPEN_FIELD + " AND "
+					+ manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " != '^' ");
 			RS = statement.executeQuery(query);
 			isDatePresent = RS.next();
 
-			if(isDatePresent) {
+			if (isDatePresent) {
 				advanceDecline -= RS.getInt(1);
 				// Clean up after ourselves
 				RS.close();
 				statement.close();
-			}
-			else {
+			} else {
 				// Clean up after ourselves
 				RS.close();
 				statement.close();
@@ -884,18 +788,16 @@ public class DatabaseQuoteSource implements QuoteSource
 			}
 
 			return advanceDecline;
-		}
-		catch (SQLException e) {
-			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE",
-					e.getMessage()));
+		} catch (SQLException e) {
+			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
 			return 0;
 		}
 	}
 
 	/**
-	 * Return the advance/decline for the given date. This returns the number
-	 * of all ordinary stocks that rose (day close > day open) - the number of all
-	 * ordinary stocks that fell.
+	 * Return the advance/decline for the given date. This returns the number of all
+	 * ordinary stocks that rose (day close > day open) - the number of all ordinary
+	 * stocks that fell.
 	 *
 	 * @param firstDate the first date in the range
 	 * @param lastDate  the last date in the range
@@ -912,36 +814,32 @@ public class DatabaseQuoteSource implements QuoteSource
 		final int countIndex = 1;
 		final int dateIndex = 2;
 		Iterator queryIterator = queryTemplates.iterator();
-		//Replace the placeholders with the appropriate data for the
-		//Advance and Decline queries
+		// Replace the placeholders with the appropriate data for the
+		// Advance and Decline queries
 		while (queryIterator.hasNext()) {
-			String query = (String)queryIterator.next();
-			query = manager.replaceParameter(query, "share_table", 
-					DatabaseManager.SHARE_TABLE_NAME);	
-			query = manager.replaceParameter(query, "firstDate", 
-					manager.toSQLDateString(firstDate));
-			query = manager.replaceParameter(query, "lastDate", 
-					manager.toSQLDateString(lastDate));
+			String query = (String) queryIterator.next();
+			query = manager.replaceParameter(query, "share_table", DatabaseManager.SHARE_TABLE_NAME);
+			query = manager.replaceParameter(query, "firstDate", manager.toSQLDateString(firstDate));
+			query = manager.replaceParameter(query, "lastDate", manager.toSQLDateString(lastDate));
 
-			query = manager.replaceParameter(query, "symbol_first_char",
-					manager.left(DatabaseManager.SYMBOL_FIELD, 1));	    
+			query = manager.replaceParameter(query, "symbol_first_char", manager.left(DatabaseManager.SYMBOL_FIELD, 1));
 			queries.add(query);
 		}
 		try {
-			//Execute the constructed queries for Advance and Decline
+			// Execute the constructed queries for Advance and Decline
 			List results = manager.executeQueryTransaction(queryLabel, queries);
-			ResultSet advanceResults = (ResultSet)results.get(0);
-			ResultSet declineResults = (ResultSet)results.get(1);
+			ResultSet advanceResults = (ResultSet) results.get(0);
+			ResultSet declineResults = (ResultSet) results.get(1);
 
-			//We put the advance and decline results into separate maps
-			//and then combine them into the result rv where the key set
-			//are the dates from both advance and decline results.
+			// We put the advance and decline results into separate maps
+			// and then combine them into the result rv where the key set
+			// are the dates from both advance and decline results.
 
-			//This avoids the problem of aligning two date lists and
-			//potentially missing values
+			// This avoids the problem of aligning two date lists and
+			// potentially missing values
 			HashSet resultDates = new HashSet();
 			HashMap advancesMap = new HashMap();
-			HashMap declinesMap = new HashMap();	    
+			HashMap declinesMap = new HashMap();
 			while (advanceResults.next()) {
 				TradingDate keyDate = new TradingDate(advanceResults.getDate(dateIndex));
 				Integer count = new Integer(advanceResults.getInt(countIndex));
@@ -953,26 +851,26 @@ public class DatabaseQuoteSource implements QuoteSource
 
 				declinesMap.put(keyDate, count);
 			}
-			//Result dates could also be built while iterating over the
-			//advance and decline results. 
-			//No real reason except as a style preference	    
+			// Result dates could also be built while iterating over the
+			// advance and decline results.
+			// No real reason except as a style preference
 			resultDates.addAll(advancesMap.keySet());
 			resultDates.addAll(declinesMap.keySet());
 
-			//Having got a complete set of date sets, 
-			//construct the map of advance/declines keyed by date
-			//Where a result for a particular date exists in both
-			//advance and decline, the value calcluated is 
-			//advance - decline as expected. 
-			//When a date is missing in one or both sets, the count is 
-			//taken as 0.
+			// Having got a complete set of date sets,
+			// construct the map of advance/declines keyed by date
+			// Where a result for a particular date exists in both
+			// advance and decline, the value calcluated is
+			// advance - decline as expected.
+			// When a date is missing in one or both sets, the count is
+			// taken as 0.
 
 			Iterator dateIterator = resultDates.iterator();
 			while (dateIterator.hasNext()) {
-				TradingDate keyDate = (TradingDate)dateIterator.next();
+				TradingDate keyDate = (TradingDate) dateIterator.next();
 				int advanceDeclineValue = 0;
-				Integer advCount = (Integer)advancesMap.get(keyDate);
-				Integer decCount = (Integer)declinesMap.get(keyDate);
+				Integer advCount = (Integer) advancesMap.get(keyDate);
+				Integer decCount = (Integer) declinesMap.get(keyDate);
 
 				if (advCount != null) {
 					advanceDeclineValue += advCount.intValue();
@@ -982,23 +880,21 @@ public class DatabaseQuoteSource implements QuoteSource
 				}
 				rv.put(keyDate, new Integer(advanceDeclineValue));
 			}
-			//Clean up
+			// Clean up
 			manager.queryCleanup(queryLabel);
-			return rv;		    	    
+			return rv;
 		} catch (SQLException e) {
-			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE",
-					e.getMessage()));
+			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
 
 			return null;
-		} finally {	
+		} finally {
 		}
 	}
 
-
 	/**
-	 * Return the advance/decline for the given date. This returns the number
-	 * of all ordinary stocks that rose (day close > day open) - the number of all
-	 * ordinary stocks that fell.
+	 * Return the advance/decline for the given date. This returns the number of all
+	 * ordinary stocks that rose (day close > day open) - the number of all ordinary
+	 * stocks that fell.
 	 *
 	 * @param firstDate the first date in the range
 	 * @param lastDate  the last date in the range
@@ -1007,7 +903,7 @@ public class DatabaseQuoteSource implements QuoteSource
 	public HashMap getAdvanceDecline_oldversion(TradingDate firstDate, TradingDate lastDate)
 			throws MissingQuoteException {
 
-		if(!manager.getConnection())
+		if (!manager.getConnection())
 			return null;
 
 		try {
@@ -1017,38 +913,30 @@ public class DatabaseQuoteSource implements QuoteSource
 
 			Statement statement = manager.createStatement();
 
-			String query =
-					new String("SELECT COUNT(*), date FROM " + 
-							DatabaseManager.SHARE_TABLE_NAME +
-							" WHERE " + DatabaseManager.DATE_FIELD + 
-							" >= '" + manager.toSQLDateString(firstDate) + 
-							"' AND " + 
-							DatabaseManager.DATE_FIELD + " <= '" + 
-							manager.toSQLDateString(lastDate) + "' AND " + 
-							DatabaseManager.DAY_CLOSE_FIELD + " > " + 
-							DatabaseManager.DAY_OPEN_FIELD + " AND " +
-							manager.left(DatabaseManager.SYMBOL_FIELD ,1)  + 
-							" != '^' GROUP BY " + DatabaseManager.DATE_FIELD + 
-							" ORDER BY " + DatabaseManager.DATE_FIELD + " ASC ");
+			String query = new String("SELECT COUNT(*), date FROM " + DatabaseManager.SHARE_TABLE_NAME + " WHERE "
+					+ DatabaseManager.DATE_FIELD + " >= '" + manager.toSQLDateString(firstDate) + "' AND "
+					+ DatabaseManager.DATE_FIELD + " <= '" + manager.toSQLDateString(lastDate) + "' AND "
+					+ DatabaseManager.DAY_CLOSE_FIELD + " > " + DatabaseManager.DAY_OPEN_FIELD + " AND "
+					+ manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " != '^' GROUP BY " + DatabaseManager.DATE_FIELD
+					+ " ORDER BY " + DatabaseManager.DATE_FIELD + " ASC ");
 
 			ResultSet RS = statement.executeQuery(query);
 			boolean areDatesPresent = false;
 			HashMap advanceDeclineMap = new HashMap();
-			TradingDate firstDateFromQuery = (TradingDate)lastDate.clone();
+			TradingDate firstDateFromQuery = (TradingDate) lastDate.clone();
 
 			boolean firstRow = true;
 			while (RS.next()) {
 				areDatesPresent = true;
 				int advanceDecline = 0;
-				TradingDate keyDate = new TradingDate(RS.getDate(2));		
+				TradingDate keyDate = new TradingDate(RS.getDate(2));
 				advanceDeclineMap.put(keyDate, new Integer(RS.getInt(1)));
 
 				if (firstRow) {
 					firstRow = false;
 					firstDateFromQuery = keyDate;
-				} 
-			} 
-
+				}
+			}
 
 			// Clean up after ourselves
 			RS.close();
@@ -1064,44 +952,37 @@ public class DatabaseQuoteSource implements QuoteSource
 
 			statement = manager.createStatement();
 
-			query =
-					new String("SELECT COUNT(*), date FROM " + 
-							DatabaseManager.SHARE_TABLE_NAME +
-							" WHERE " + DatabaseManager.DATE_FIELD + " >= '" + 
-							manager.toSQLDateString(firstDate) + "' AND " + 
-							DatabaseManager.DATE_FIELD + " <= '" + 
-							manager.toSQLDateString(lastDate) + "' AND " + 
-							DatabaseManager.DAY_CLOSE_FIELD + " < " + 
-							DatabaseManager.DAY_OPEN_FIELD + " AND " +
-							manager.left(DatabaseManager.SYMBOL_FIELD, 1) + 
-							" != '^' GROUP BY " + DatabaseManager.DATE_FIELD + 
-							" ORDER BY " + DatabaseManager.DATE_FIELD + " ASC ");
+			query = new String("SELECT COUNT(*), date FROM " + DatabaseManager.SHARE_TABLE_NAME + " WHERE "
+					+ DatabaseManager.DATE_FIELD + " >= '" + manager.toSQLDateString(firstDate) + "' AND "
+					+ DatabaseManager.DATE_FIELD + " <= '" + manager.toSQLDateString(lastDate) + "' AND "
+					+ DatabaseManager.DAY_CLOSE_FIELD + " < " + DatabaseManager.DAY_OPEN_FIELD + " AND "
+					+ manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " != '^' GROUP BY " + DatabaseManager.DATE_FIELD
+					+ " ORDER BY " + DatabaseManager.DATE_FIELD + " ASC ");
 
 			RS = statement.executeQuery(query);
-			areDatesPresent = false; 
+			areDatesPresent = false;
 
 			firstRow = true;
-			firstDateFromQuery = (TradingDate)lastDate.clone();
+			firstDateFromQuery = (TradingDate) lastDate.clone();
 			while (RS.next()) {
 				areDatesPresent = true;
 				TradingDate keyDate = new TradingDate(RS.getDate(2));
-				Integer advanceVal = (Integer)(advanceDeclineMap.get(keyDate));
+				Integer advanceVal = (Integer) (advanceDeclineMap.get(keyDate));
 
 				int advanceValue = (advanceVal != null) ? advanceVal.intValue() : 0;
-				advanceDeclineMap.
-				put( keyDate, new Integer(advanceValue - RS.getInt(1)));		
+				advanceDeclineMap.put(keyDate, new Integer(advanceValue - RS.getInt(1)));
 				if (firstRow && !firstDateFromQuery.before(keyDate)) {
 					firstRow = false;
 					firstDateFromQuery = keyDate;
-				}      
+				}
 			}
 
-			//Backfill map with 0 for all dates 
-			//between firstDate and firstDateFromQuery	    
+			// Backfill map with 0 for all dates
+			// between firstDate and firstDateFromQuery
 
 			while (firstDate.before(firstDateFromQuery)) {
-				//Decrement the date first, otherwise the first
-				//data value will be zeroed.
+				// Decrement the date first, otherwise the first
+				// data value will be zeroed.
 				firstDateFromQuery = firstDateFromQuery.previous(1);
 				advanceDeclineMap.put(firstDateFromQuery, new Integer(0));
 			}
@@ -1116,30 +997,26 @@ public class DatabaseQuoteSource implements QuoteSource
 			}
 
 			return advanceDeclineMap;
-		}
-		catch (SQLException e) {
-			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE",
-					e.getMessage()));
+		} catch (SQLException e) {
+			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
 			return null;
 		}
 	}
 
-
-
 	/**
-	 * The database is very slow at taking an arbitrary list of symbol and date pairs
-	 * and finding whether they exist in the database. This is unfortuante because
-	 * we need this functionality so we don't try to import quotes that are already
-	 * in the database. If we try to import a quote that is already present, we
-	 * get a constraint violation error. We can't just ignore this error because
+	 * The database is very slow at taking an arbitrary list of symbol and date
+	 * pairs and finding whether they exist in the database. This is unfortuante
+	 * because we need this functionality so we don't try to import quotes that are
+	 * already in the database. If we try to import a quote that is already present,
+	 * we get a constraint violation error. We can't just ignore this error because
 	 * we can't tell errors apart and we don't want to ignore all import errors.
 	 * <p>
-	 * This function examines the list of quotes and optimises the query for returning
-	 * matching quotes. This basically works by seeing if all the quotes are on
-	 * the same date or have the same symbol.
+	 * This function examines the list of quotes and optimises the query for
+	 * returning matching quotes. This basically works by seeing if all the quotes
+	 * are on the same date or have the same symbol.
 	 * <p>
-	 * CAUTION: This function will return all matches, but it may return some false ones too.
-	 * The SQL query returned will only return the symbol and date fields.
+	 * CAUTION: This function will return all matches, but it may return some false
+	 * ones too. The SQL query returned will only return the symbol and date fields.
 	 * Don't call this function if the quote list is empty.
 	 *
 	 * @param quotes the quote list.
@@ -1157,59 +1034,51 @@ public class DatabaseQuoteSource implements QuoteSource
 		assert quotes.size() > 0;
 
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("SELECT " + DatabaseManager.SYMBOL_FIELD + "," + 
-				DatabaseManager.DATE_FIELD + " FROM " +
-				DatabaseManager.SHARE_TABLE_NAME + " WHERE ");
+		buffer.append("SELECT " + DatabaseManager.SYMBOL_FIELD + "," + DatabaseManager.DATE_FIELD + " FROM "
+				+ DatabaseManager.SHARE_TABLE_NAME + " WHERE ");
 
 		// Check if all the quotes have the same symbol or fall on the same date.
-		for(Iterator iterator = quotes.iterator(); iterator.hasNext();) {
-			EODQuote quote = (EODQuote)iterator.next();
+		for (Iterator iterator = quotes.iterator(); iterator.hasNext();) {
+			EODQuote quote = (EODQuote) iterator.next();
 
-			if(symbol == null || date == null) {
+			if (symbol == null || date == null) {
 				symbol = quote.getSymbol();
 				startDate = endDate = date = quote.getDate();
-			}
-			else {
-				if(!symbol.equals(quote.getSymbol()))
+			} else {
+				if (!symbol.equals(quote.getSymbol()))
 					sameSymbol = false;
-				if(!date.equals(quote.getDate()))
+				if (!date.equals(quote.getDate()))
 					sameDate = false;
 
 				// Keep a track of the date range in case we do a symbol query, as if
 				// they are importing a single symbol, we don't want to pull in every date
 				// to check!
-				if(quote.getDate().before(startDate))
+				if (quote.getDate().before(startDate))
 					startDate = quote.getDate();
-				if(quote.getDate().after(endDate))
+				if (quote.getDate().after(endDate))
 					endDate = quote.getDate();
 			}
 		}
 
 		// 1. All quotes have the same symbol.
-		if(sameSymbol)
-			buffer.append(DatabaseManager.SYMBOL_FIELD + " = '" + 
-					symbol.toString() + "' AND " +
-					DatabaseManager.DATE_FIELD + " >= '" + 
-					manager.toSQLDateString(startDate) + "' AND " +
-					DatabaseManager.DATE_FIELD + " <= '" + 
-					manager.toSQLDateString(endDate) + "' ");
+		if (sameSymbol)
+			buffer.append(DatabaseManager.SYMBOL_FIELD + " = '" + symbol.toString() + "' AND "
+					+ DatabaseManager.DATE_FIELD + " >= '" + manager.toSQLDateString(startDate) + "' AND "
+					+ DatabaseManager.DATE_FIELD + " <= '" + manager.toSQLDateString(endDate) + "' ");
 
 		// 2. All quotes are on the same date.
-		else if(sameDate)
-			buffer.append(DatabaseManager.DATE_FIELD + " = '" + 
-					manager.toSQLDateString(date) + "'");
+		else if (sameDate)
+			buffer.append(DatabaseManager.DATE_FIELD + " = '" + manager.toSQLDateString(date) + "'");
 
 		// 3. The quotes contain a mixture of symbols and dates. Bite the bullet
 		// and do a slow SQL query which checks each one individually.
 		else {
-			for(Iterator iterator = quotes.iterator(); iterator.hasNext();) {
-				EODQuote quote = (EODQuote)iterator.next();
-				buffer.append("(" + DatabaseManager.SYMBOL_FIELD + " = '" + 
-						quote.getSymbol() + "' AND " +
-						DatabaseManager.DATE_FIELD + " = '" + 
-						manager.toSQLDateString(quote.getDate()) + "')");
+			for (Iterator iterator = quotes.iterator(); iterator.hasNext();) {
+				EODQuote quote = (EODQuote) iterator.next();
+				buffer.append("(" + DatabaseManager.SYMBOL_FIELD + " = '" + quote.getSymbol() + "' AND "
+						+ DatabaseManager.DATE_FIELD + " = '" + manager.toSQLDateString(quote.getDate()) + "')");
 
-				if(iterator.hasNext())
+				if (iterator.hasNext())
 					buffer.append(" OR ");
 			}
 		}
@@ -1219,11 +1088,11 @@ public class DatabaseQuoteSource implements QuoteSource
 
 	/**
 	 * Return a list of all the quotes in the database that match the input list.
-	 * This function is used during import to find out which quotes are already
-	 * in the database.
+	 * This function is used during import to find out which quotes are already in
+	 * the database.
 	 * <p>
-	 * CAUTION: This function will return all matches, but it may return some false ones too.
-	 * The SQL query returned will only return the symbol and date fields.
+	 * CAUTION: This function will return all matches, but it may return some false
+	 * ones too. The SQL query returned will only return the symbol and date fields.
 	 *
 	 * @param quotes quotes to query
 	 * @return matching quotes
@@ -1231,7 +1100,7 @@ public class DatabaseQuoteSource implements QuoteSource
 	private List findMatchingQuotes(List quotes) {
 		List matchingQuotes = new ArrayList();
 
-		if(manager.getConnection() && quotes.size() > 0) {
+		if (manager.getConnection() && quotes.size() > 0) {
 			// Since this is part of import, don't bother with progress dialog
 			try {
 				// Construct query from list
@@ -1240,13 +1109,11 @@ public class DatabaseQuoteSource implements QuoteSource
 				ResultSet RS = statement.executeQuery(query);
 
 				// Retrieve matching quotes
-				while(RS.next()) {
+				while (RS.next()) {
 					try {
 						matchingQuotes.add(new EODQuote(Symbol.find(RS.getString(DatabaseManager.SYMBOL_FIELD)),
-								new TradingDate(RS.getDate(DatabaseManager.DATE_FIELD)),
-								0, 0.0, 0.0, 0.0, 0.0));
-					}
-					catch(SymbolFormatException e) {
+								new TradingDate(RS.getDate(DatabaseManager.DATE_FIELD)), 0, 0.0, 0.0, 0.0, 0.0));
+					} catch (SymbolFormatException e) {
 						// This can't happen because we are only matching already known
 						// valid symbols.
 						assert false;
@@ -1256,10 +1123,8 @@ public class DatabaseQuoteSource implements QuoteSource
 				// Clean up after ourselves
 				RS.close();
 				statement.close();
-			}
-			catch(SQLException e2) {
-				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE",
-						e2.getMessage()));
+			} catch (SQLException e2) {
+				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e2.getMessage()));
 			}
 		}
 
@@ -1267,19 +1132,15 @@ public class DatabaseQuoteSource implements QuoteSource
 	}
 
 	/**
-	 * This function shows an error message if there are no quotes in the
-	 * database. We generally only care about this when trying to get the
-	 * the current date or the lowest or highest. This method will also
-	 * interrupt the current thread. This way calling code only needs to
-	 * check for cancellation, rather than each individual fault.
+	 * This function shows an error message if there are no quotes in the database.
+	 * We generally only care about this when trying to get the the current date or
+	 * the lowest or highest. This method will also interrupt the current thread.
+	 * This way calling code only needs to check for cancellation, rather than each
+	 * individual fault.
 	 */
 	private void showEmptyDatabaseError() {
 		DesktopManager.showErrorMessage(Locale.getString("NO_QUOTES_FOUND"));
 	}
-
-
-
-
 
 	/**
 	 * Import currency exchange rates into the database.
@@ -1292,34 +1153,21 @@ public class DatabaseQuoteSource implements QuoteSource
 			Iterator iterator = exchangeRates.iterator();
 
 			try {
-				while(iterator.hasNext()) {
-					ExchangeRate exchangeRate = (ExchangeRate)iterator.next();
+				while (iterator.hasNext()) {
+					ExchangeRate exchangeRate = (ExchangeRate) iterator.next();
 					String sourceCurrencyCode = exchangeRate.getSourceCurrency().getCurrencyCode();
-					String destinationCurrencyCode =
-							exchangeRate.getDestinationCurrency().getCurrencyCode();
+					String destinationCurrencyCode = exchangeRate.getDestinationCurrency().getCurrencyCode();
 
-					String insertQuery =
-							new String("INSERT INTO " + 
-									DatabaseManager.EXCHANGE_TABLE_NAME + 
-									" VALUES (" +
-									"'" + manager.
-									toSQLDateString(exchangeRate.getDate()) 
-									+ "', " +
-									"'" + sourceCurrencyCode
-									+ "', " +
-									"'" + destinationCurrencyCode
-									+ "', " +
-									"'" + exchangeRate.getRate()
-									+ "')");
+					String insertQuery = new String("INSERT INTO " + DatabaseManager.EXCHANGE_TABLE_NAME + " VALUES ("
+							+ "'" + manager.toSQLDateString(exchangeRate.getDate()) + "', " + "'" + sourceCurrencyCode
+							+ "', " + "'" + destinationCurrencyCode + "', " + "'" + exchangeRate.getRate() + "')");
 
 					// Now insert the exchange rate into the dataqbase
 					Statement statement = manager.createStatement();
 					statement.executeUpdate(insertQuery);
 				}
-			}
-			catch (SQLException e) {
-				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE",
-						e.getMessage()));
+			} catch (SQLException e) {
+				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
 			}
 		}
 	}
@@ -1327,41 +1175,28 @@ public class DatabaseQuoteSource implements QuoteSource
 	public List getExchangeRates(Currency sourceCurrency, Currency destinationCurrency) {
 		List list = new ArrayList();
 
-		if(!manager.getConnection())
+		if (!manager.getConnection())
 			return list;
 
 		try {
 			Statement statement = manager.createStatement();
-			String query = new String("SELECT * FROM " + 
-					DatabaseManager.EXCHANGE_TABLE_NAME + 
-					" WHERE " +
-					DatabaseManager.SOURCE_CURRENCY_FIELD + " = '" +
-					sourceCurrency.getCurrencyCode() +
-					"' AND " +
-					DatabaseManager.DESTINATION_CURRENCY_FIELD + " ='" +
-					destinationCurrency.getCurrencyCode() + "'");
+			String query = new String("SELECT * FROM " + DatabaseManager.EXCHANGE_TABLE_NAME + " WHERE "
+					+ DatabaseManager.SOURCE_CURRENCY_FIELD + " = '" + sourceCurrency.getCurrencyCode() + "' AND "
+					+ DatabaseManager.DESTINATION_CURRENCY_FIELD + " ='" + destinationCurrency.getCurrencyCode() + "'");
 
 			ResultSet RS = statement.executeQuery(query);
 
 			while (RS.next())
-				list.add(new ExchangeRate(new TradingDate(RS.getDate(DatabaseManager.DATE_COLUMN)),
-						sourceCurrency,
-						destinationCurrency,
-						RS.getDouble(EXCHANGE_RATE_COLUMN)));
-		}
-		catch(SQLException e) {
-			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE",
-					e.getMessage()));
+				list.add(new ExchangeRate(new TradingDate(RS.getDate(DatabaseManager.DATE_COLUMN)), sourceCurrency,
+						destinationCurrency, RS.getDouble(EXCHANGE_RATE_COLUMN)));
+		} catch (SQLException e) {
+			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
 		}
 
 		return list;
 	}
 
-
-
 	public void shutdown() {
 		manager.shutdown();
 	}
 }
-
-

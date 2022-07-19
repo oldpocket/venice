@@ -16,8 +16,6 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-
 package nz.org.venice.prefs.settings;
 
 import java.util.HashMap;
@@ -56,379 +54,308 @@ import nz.org.venice.quote.Quote;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
 
-
 /**
- * This class represents Graph data which can be saved for the purposes
- *  of restoring the modules upon restart.
+ * This class represents Graph data which can be saved for the purposes of
+ * restoring the modules upon restart.
  * 
  * @author Mark Hummel
  * @see nz.org.venice.prefs.PreferencesManager
-*/
+ */
 
 public class GraphSettings extends AbstractSettings {
-    
-    
-    //Portfolio Graphs
-                                               
-    private static final String MARKET_VALUE = Locale.getString("MARKET_VALUE");
-    private static final String CASH_VALUE = Locale.getString("CASH_VALUE");
-    private static final String SHARE_VALUE = Locale.getString("SHARE_VALUE");
-    private static final String RETURN_VALUE = Locale.getString("RETURN_VALUE");
-    private static final String STOCKS_HELD = Locale.getString("STOCKS_HELD");
 
-    private HashMap settings;
-    private String title;
-    private int sourceType;    
-    private List settingsSymbolList;
+	// Portfolio Graphs
 
-    /**
-     *
-     * Create new GraphSettings. 
-     * 
-     * @param   key     The graph Settings Identifier
-     * @param   parent  The chart settings identifier
-     * @param   title   The title of the graph.
-       
-     */
+	private static final String MARKET_VALUE = Locale.getString("MARKET_VALUE");
+	private static final String CASH_VALUE = Locale.getString("CASH_VALUE");
+	private static final String SHARE_VALUE = Locale.getString("SHARE_VALUE");
+	private static final String RETURN_VALUE = Locale.getString("RETURN_VALUE");
+	private static final String STOCKS_HELD = Locale.getString("STOCKS_HELD");
 
-    public GraphSettings(String key, String parent, String title) {
-	super(Settings.CHART,Settings.GRAPHS, key);
-	this.title = title;
-    }
+	private HashMap settings;
+	private String title;
+	private int sourceType;
+	private List settingsSymbolList;
 
-    /**
-     *
-     * Create new GraphSettings. 
-     * 
-     */
+	/**
+	 *
+	 * Create new GraphSettings.
+	 * 
+	 * @param key    The graph Settings Identifier
+	 * @param parent The chart settings identifier
+	 * @param title  The title of the graph.
+	 * 
+	 */
 
-    public GraphSettings() {
-	super(Settings.CHART, Settings.GRAPHS);
-	
-    }
-    
-    /**
-     *
-     * Return the internal graph settings 
-     * 
-     * @return A hashMap representing a set of key-value pairs
-     */
-    
-    public HashMap getSettings() {
-	return settings;
-    }
-
-    /**
-     * 
-     * Set the internal graph settings. 
-     * 
-     * @param settings A hashmap representing the settings data  
-
-     */
-    public void setSettings(HashMap settings) {
-	this.settings = settings;
-    }
-
-   
-    /**
-     * Return the graph title
-     * 
-     * @return  The graph title
-     */
-    public String getTitle() {
-	return title;
-    }
-
-    /**
-     * 
-     * Set the graph title
-     * 
-     * @param   title The graph title  
-     */
-
-    public void setTitle(String title) {
-	this.title = title;
-    }
-
-    /**
-     * 
-     * Set the graph source type
-     * 
-     * @param   sourceType The graph source type  
-     */
-
-    public void setSourceType(int sourceType) {
-	this.sourceType = sourceType;
-    }
-
-    /**
-     * Return the graph source type
-     * 
-     * @return  The graph source type
-     */
-    public int getSourceType() {
-	return sourceType;
-    }
-
-    /** 
-     * Return the symbolList
-     * 
-     * @return  A list of symbols for this graph
-     */    
-    public List getSettingsSymbolList() {
-	return settingsSymbolList;
-    }
-
-    /**
-     * Set the symbollist
-     *
-     * @param settingsSymbolList  A list of symbols for this graph
-     */
-    public void setSettingsSymbolList(List settingsSymbolList) {
-	this.settingsSymbolList = settingsSymbolList;
-    }
-
-    //Graph settings are data of the chart module, so nothing is returned here
-    public Module getModule(JDesktopPane desktop) {
-	return null;
-    }
-
-    /**
-     * This is factory method which returns a graph represented by this 
-     * object's settings.
-     * 
-     * @return  A graph with these settings.
-     */
-
-    public Graph getGraph(EODQuoteBundle bundle) {
-	Graph newGraph = null;
-
-	if (title.equals(Locale.getString("BAR_CHART"))) {
-
-	    newGraph = new BarChartGraph(getSource(bundle, Quote.DAY_OPEN),
-					 getSource(bundle, Quote.DAY_LOW),
-					 getSource(bundle, Quote.DAY_HIGH),
-					 getSource(bundle, Quote.DAY_CLOSE));
-	    
-	}
-	
-	if (title.equals(Locale.getString("CANDLE_STICK"))) {
-	    newGraph = new CandleStickGraph(getSource(bundle, Quote.DAY_OPEN),
-					    getSource(bundle, Quote.DAY_LOW),
-					    getSource(bundle, Quote.DAY_HIGH),
-					    getSource(bundle, Quote.DAY_CLOSE));
-					    	    
+	public GraphSettings(String key, String parent, String title) {
+		super(Settings.CHART, Settings.GRAPHS, key);
+		this.title = title;
 	}
 
-	if (title.equals(Locale.getString("POINT_AND_FIGURE"))) {
-	    newGraph = new PointAndFigureGraph(getSource(bundle, Quote.DAY_CLOSE),
-					  settings);
+	/**
+	 *
+	 * Create new GraphSettings.
+	 * 
+	 */
+
+	public GraphSettings() {
+		super(Settings.CHART, Settings.GRAPHS);
+
 	}
 
-       
-	if (title.equals(Locale.getString("HIGH_LOW_BAR"))) {
-		newGraph = 
-		    new HighLowBarGraph(getSource(bundle, Quote.DAY_LOW),
-					getSource(bundle, Quote.DAY_HIGH),
+	/**
+	 *
+	 * Return the internal graph settings
+	 * 
+	 * @return A hashMap representing a set of key-value pairs
+	 */
+
+	public HashMap getSettings() {
+		return settings;
+	}
+
+	/**
+	 * 
+	 * Set the internal graph settings.
+	 * 
+	 * @param settings A hashmap representing the settings data
+	 * 
+	 */
+	public void setSettings(HashMap settings) {
+		this.settings = settings;
+	}
+
+	/**
+	 * Return the graph title
+	 * 
+	 * @return The graph title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * 
+	 * Set the graph title
+	 * 
+	 * @param title The graph title
+	 */
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	/**
+	 * 
+	 * Set the graph source type
+	 * 
+	 * @param sourceType The graph source type
+	 */
+
+	public void setSourceType(int sourceType) {
+		this.sourceType = sourceType;
+	}
+
+	/**
+	 * Return the graph source type
+	 * 
+	 * @return The graph source type
+	 */
+	public int getSourceType() {
+		return sourceType;
+	}
+
+	/**
+	 * Return the symbolList
+	 * 
+	 * @return A list of symbols for this graph
+	 */
+	public List getSettingsSymbolList() {
+		return settingsSymbolList;
+	}
+
+	/**
+	 * Set the symbollist
+	 *
+	 * @param settingsSymbolList A list of symbols for this graph
+	 */
+	public void setSettingsSymbolList(List settingsSymbolList) {
+		this.settingsSymbolList = settingsSymbolList;
+	}
+
+	// Graph settings are data of the chart module, so nothing is returned here
+	public Module getModule(JDesktopPane desktop) {
+		return null;
+	}
+
+	/**
+	 * This is factory method which returns a graph represented by this object's
+	 * settings.
+	 * 
+	 * @return A graph with these settings.
+	 */
+
+	public Graph getGraph(EODQuoteBundle bundle) {
+		Graph newGraph = null;
+
+		if (title.equals(Locale.getString("BAR_CHART"))) {
+
+			newGraph = new BarChartGraph(getSource(bundle, Quote.DAY_OPEN), getSource(bundle, Quote.DAY_LOW),
+					getSource(bundle, Quote.DAY_HIGH), getSource(bundle, Quote.DAY_CLOSE));
+
+		}
+
+		if (title.equals(Locale.getString("CANDLE_STICK"))) {
+			newGraph = new CandleStickGraph(getSource(bundle, Quote.DAY_OPEN), getSource(bundle, Quote.DAY_LOW),
+					getSource(bundle, Quote.DAY_HIGH), getSource(bundle, Quote.DAY_CLOSE));
+
+		}
+
+		if (title.equals(Locale.getString("POINT_AND_FIGURE"))) {
+			newGraph = new PointAndFigureGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+		}
+
+		if (title.equals(Locale.getString("HIGH_LOW_BAR"))) {
+			newGraph = new HighLowBarGraph(getSource(bundle, Quote.DAY_LOW), getSource(bundle, Quote.DAY_HIGH),
 					getSource(bundle, Quote.DAY_CLOSE));
-						
-	    }
 
-	if (title.equals(Locale.getString("LINE_CHART")) ||
-	    title.equals(Locale.getString("DAY_CLOSE"))) {
-	    newGraph = new LineGraph(getSource(bundle, Quote.DAY_CLOSE),
-				     title,
-				     true);
-					       
-	    
+		}
+
+		if (title.equals(Locale.getString("LINE_CHART")) || title.equals(Locale.getString("DAY_CLOSE"))) {
+			newGraph = new LineGraph(getSource(bundle, Quote.DAY_CLOSE), title, true);
+
+		}
+
+		if (title.equals(Locale.getString("DAY_OPEN"))) {
+			newGraph = new LineGraph(getSource(bundle, Quote.DAY_OPEN), title, true);
+
+		}
+
+		if (title.equals(Locale.getString("DAY_HIGH"))) {
+			newGraph = new LineGraph(getSource(bundle, Quote.DAY_HIGH), title, true);
+
+		}
+
+		if (title.equals(Locale.getString("DAY_LOW"))) {
+			newGraph = new LineGraph(getSource(bundle, Quote.DAY_LOW), title, true);
+
+		}
+
+		if (title.equals(Locale.getString("VOLUME"))) {
+			newGraph = new LineGraph(getSource(bundle, Quote.DAY_VOLUME), title, true);
+
+		}
+
+		if (title.equals(Locale.getString("SIMPLE_MOVING_AVERAGE"))) {
+			newGraph = new MovingAverageGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+		}
+
+		if (title.equals(Locale.getString("EXP_MOVING_AVERAGE"))) {
+			newGraph = new ExpMovingAverageGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+		}
+
+		if (title.equals(Locale.getString("BOLLINGER_BANDS"))) {
+			newGraph = new BollingerBandsGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+		}
+
+		if (title.equals(Locale.getString("MOMENTUM"))) {
+
+			newGraph = new MomentumGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+
+		}
+
+		if (title.equals(Locale.getString("MULT_MOVING_AVERAGE"))) {
+			newGraph = new MultipleMovingAverageGraph(getSource(bundle, Quote.DAY_CLOSE));
+		}
+
+		if (title.equals((Locale.getString("OBV")))) {
+
+			newGraph = new OBVGraph(getSource(bundle, Quote.DAY_OPEN), getSource(bundle, Quote.DAY_CLOSE),
+					getSource(bundle, Quote.DAY_VOLUME));
+		}
+
+		if (title.equals(Locale.getString("STANDARD_DEVIATION"))) {
+			newGraph = new StandardDeviationGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+
+		}
+
+		if (title.equals(Locale.getString("MACD"))) {
+			newGraph = new MACDGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+		}
+
+		if (title.equals(Locale.getString("RSI"))) {
+			newGraph = new RSIGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+		}
+
+		if (title.equals(Locale.getString("SUPPORT_AND_RESISTENCE"))) {
+			newGraph = new SupportAndResistenceGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+		}
+
+		if (title.equals(Locale.getString("FIBO_CHART"))) {
+			newGraph = new FiboGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+		}
+
+		if (title.equals(Locale.getString("CUSTOM"))) {
+			// Eventually, custom graph will be able to graph
+			// groups of symbols, so the problem of just getting the first symbol
+			// is temporary.
+			Symbol symbol = (Symbol) settingsSymbolList.get(0);
+			newGraph = new CustomGraph(getSource(bundle, Quote.DAY_CLOSE), symbol, bundle, settings);
+		}
+		if (title.equals(Locale.getString("KD"))) {
+			newGraph = new KDGraph(getSource(bundle, Quote.DAY_LOW), getSource(bundle, Quote.DAY_HIGH),
+					getSource(bundle, Quote.DAY_CLOSE), settings);
+		}
+		assert newGraph != null;
+
+		return newGraph;
+
 	}
 
-	
-	if (title.equals(Locale.getString("DAY_OPEN"))) {
-	    newGraph = new LineGraph(getSource(bundle, Quote.DAY_OPEN),
-				     title,
-				     true);
-					       	    
-	}
-	
-	if (title.equals(Locale.getString("DAY_HIGH"))) {
-	    newGraph = new LineGraph(getSource(bundle, Quote.DAY_HIGH),
-				     title,
-				     true);
-					       	    
-	}
+	public Graph getGraph(EODQuoteBundle bundle, Portfolio portfolio) {
 
-	if (title.equals(Locale.getString("DAY_LOW"))) {
-	    newGraph = new LineGraph(getSource(bundle, Quote.DAY_LOW),
-				     title,
-				     true);
-					       	    
-	}
+		Graph newGraph = null;
+		PortfolioGraphSource portfolioGraphSource;
 
-	if (title.equals(Locale.getString("VOLUME"))) {
-	    newGraph = new LineGraph(getSource(bundle, Quote.DAY_VOLUME),
-				     title,
-				     true);
-					       	    
-	}
+		if (title.equals(MARKET_VALUE)) {
+			portfolioGraphSource = new PortfolioGraphSource(portfolio, bundle, PortfolioGraphSource.MARKET_VALUE);
 
-		
-	if (title.equals(Locale.getString("SIMPLE_MOVING_AVERAGE"))) {
-	    newGraph = new 
-		MovingAverageGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+			newGraph = new LineGraph(portfolioGraphSource, Locale.getString("MARKET_VALUE"), true);
+
+		} else if (title.equals(RETURN_VALUE)) {
+			portfolioGraphSource = new PortfolioGraphSource(portfolio, bundle, PortfolioGraphSource.RETURN_VALUE);
+
+			newGraph = new LineGraph(portfolioGraphSource, RETURN_VALUE, true);
+		} else if (title.equals(CASH_VALUE)) {
+
+			portfolioGraphSource = new PortfolioGraphSource(portfolio, bundle, PortfolioGraphSource.CASH_VALUE);
+			newGraph = new LineGraph(portfolioGraphSource, CASH_VALUE, true);
+		} else if (title.equals(SHARE_VALUE)) {
+			portfolioGraphSource = new PortfolioGraphSource(portfolio, bundle, PortfolioGraphSource.SHARE_VALUE);
+			newGraph = new LineGraph(portfolioGraphSource, SHARE_VALUE, true);
+		} else if (title.equals(STOCKS_HELD)) {
+			portfolioGraphSource = new PortfolioGraphSource(portfolio, bundle, PortfolioGraphSource.STOCKS_HELD);
+			newGraph = new BarGraph(portfolioGraphSource, STOCKS_HELD, false);
+		} else {
+			// Graph is an account.
+			portfolioGraphSource = new PortfolioGraphSource(portfolio, bundle, title);
+			newGraph = new LineGraph(portfolioGraphSource, title, false);
+		}
+
+		return newGraph;
 	}
 
+	private GraphSource getSource(EODQuoteBundle bundle, int quoteType) {
 
-	if (title.equals(Locale.getString("EXP_MOVING_AVERAGE"))) {
-	    newGraph = new 
-		ExpMovingAverageGraph(getSource(bundle, Quote.DAY_CLOSE), settings);	    
+		switch (sourceType) {
+		case GraphSource.SYMBOL:
+		case GraphSource.PORTFOLIO:
+			assert (quoteType >= Quote.DAY_CLOSE || quoteType <= Quote.DAY_VOLUME);
+			return new OHLCVQuoteGraphSource(bundle, quoteType);
+		case GraphSource.INDEX:
+			return new OHLCVIndexQuoteGraphSource(bundle, quoteType);
+		default:
+			return null;
+		}
 	}
-
-	
-	
-
-	if (title.equals(Locale.getString("BOLLINGER_BANDS"))) {
-	    newGraph = new 
-		BollingerBandsGraph(getSource(bundle, Quote.DAY_CLOSE),
-				    settings);
-	}
-
-	if (title.equals(Locale.getString("MOMENTUM"))) {	    	    
-
-	    newGraph = new
-		MomentumGraph(getSource(bundle, Quote.DAY_CLOSE),
-			       settings);
-	    
-	}
-
-	if (title.equals(Locale.getString("MULT_MOVING_AVERAGE"))) {
-	    newGraph = new
-		MultipleMovingAverageGraph(getSource(bundle, Quote.DAY_CLOSE));
-	}
-
-	
-	if (title.equals((Locale.getString("OBV")))) {
-	    
-	    newGraph = new
-		OBVGraph(getSource(bundle, Quote.DAY_OPEN),
-			 getSource(bundle, Quote.DAY_CLOSE),
-			 getSource(bundle, Quote.DAY_VOLUME));	    
-	}
-
-	if (title.equals(Locale.getString("STANDARD_DEVIATION"))) {
-	    newGraph = new 
-		StandardDeviationGraph(getSource(bundle, Quote.DAY_CLOSE),
-				       settings);
-		
-	}
-	
-	if (title.equals(Locale.getString("MACD"))) {
-	    newGraph = new
-		MACDGraph(getSource(bundle, Quote.DAY_CLOSE),
-			  settings);
-	}
-
-	if (title.equals(Locale.getString("RSI"))) {
-	    newGraph = new
-		RSIGraph(getSource(bundle, Quote.DAY_CLOSE),
-			 settings);
-	}
-
-	if (title.equals(Locale.getString("SUPPORT_AND_RESISTENCE"))) {
-	    newGraph = new 
-		SupportAndResistenceGraph(getSource(bundle, Quote.DAY_CLOSE),
-					  settings);
-	}
-
-	if (title.equals(Locale.getString("FIBO_CHART"))) {
-	    newGraph = new 
-		FiboGraph(getSource(bundle, Quote.DAY_CLOSE),
-			  settings);
-	}
-	
-	if (title.equals(Locale.getString("CUSTOM"))) {
-	    //Eventually, custom graph will be able to graph
-	    //groups of symbols, so the problem of just getting the first symbol
-	    //is temporary.
-	    Symbol symbol = (Symbol)settingsSymbolList.get(0);
-	    newGraph = new
-		CustomGraph(getSource(bundle, Quote.DAY_CLOSE),
-			    symbol,
-			    bundle,
-			    settings);
-	}
-	if (title.equals(Locale.getString("KD"))) {
-	    newGraph = new
-		KDGraph(getSource(bundle, Quote.DAY_LOW),getSource(bundle, Quote.DAY_HIGH),getSource(bundle, Quote.DAY_CLOSE),
-			    settings);
-	}
-	assert newGraph != null;
-
-	return newGraph;
-
-    }
-
-    public Graph getGraph(EODQuoteBundle bundle, Portfolio portfolio) {
-	
-	Graph newGraph = null;	
-	PortfolioGraphSource portfolioGraphSource;
-	
-	
-	if (title.equals(MARKET_VALUE)) {
-	    portfolioGraphSource = new PortfolioGraphSource(portfolio, 
-							    bundle,
-							    PortfolioGraphSource.MARKET_VALUE);
-	    
-	    newGraph = new LineGraph(portfolioGraphSource, 
-				     Locale.getString("MARKET_VALUE"),
-				     true);
-	    
-	} else if (title.equals(RETURN_VALUE)) {
-	    portfolioGraphSource = new PortfolioGraphSource(portfolio, 
-							    bundle,
-							    PortfolioGraphSource.RETURN_VALUE);
-	    
-	    newGraph = new LineGraph(portfolioGraphSource, RETURN_VALUE, true);
-	} else if (title.equals(CASH_VALUE)) {
-	    
-	    portfolioGraphSource = new PortfolioGraphSource(portfolio, 
-							    bundle,
-							    PortfolioGraphSource.CASH_VALUE);
-	    newGraph = new LineGraph(portfolioGraphSource, CASH_VALUE, true);
-	} else if (title.equals(SHARE_VALUE)) {
-	    portfolioGraphSource = new PortfolioGraphSource(portfolio, 
-							    bundle,
-							    PortfolioGraphSource.SHARE_VALUE);
-	    newGraph = new LineGraph(portfolioGraphSource, SHARE_VALUE, true);
-	} else if (title.equals(STOCKS_HELD)) {
-	    portfolioGraphSource = new PortfolioGraphSource(portfolio, 
-							    bundle,
-							    PortfolioGraphSource.STOCKS_HELD);
-	    newGraph = new BarGraph(portfolioGraphSource, STOCKS_HELD, false);
-	} else {
-	    //Graph is an account.
-	    portfolioGraphSource = new PortfolioGraphSource(portfolio, 
-							    bundle,
-							    title);
-	    newGraph = new LineGraph(portfolioGraphSource, title, false);
-	}
-	
-	return newGraph;
-    }
-    
-    private GraphSource getSource(EODQuoteBundle bundle, int quoteType) {
-
-	switch (sourceType) {
-	case GraphSource.SYMBOL:
-	case GraphSource.PORTFOLIO:
-	    assert (quoteType >= Quote.DAY_CLOSE ||
-		    quoteType <= Quote.DAY_VOLUME);
-	    return new OHLCVQuoteGraphSource(bundle, quoteType);
-	case GraphSource.INDEX:
-	    return new OHLCVIndexQuoteGraphSource(bundle, quoteType);
-	default:
-	    return null;
-	}
-    }
 }
-

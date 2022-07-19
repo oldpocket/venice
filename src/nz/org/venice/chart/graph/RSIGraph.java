@@ -37,191 +37,159 @@ import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
 
 /**
- * Grpah of the RSI (Relative Strength Indicator). See {@link QuoteFunctions#rsi}
- * for more information about this indicator.
+ * Grpah of the RSI (Relative Strength Indicator). See
+ * {@link QuoteFunctions#rsi} for more information about this indicator.
  *
  * @author Andrew Leppard
  * @see RSIGraphUI
  */
 public class RSIGraph extends AbstractGraph {
 
-    // RSI values ready to graph
-    private Graphable RSI;
+	// RSI values ready to graph
+	private Graphable RSI;
 
-    /**
-     * Create a new RSI graph.
-     *
-     * @param	source	the source to create a standard deviation from
-     */
-    public RSIGraph(GraphSource source) {
-        super(source);
-        setSettings(new HashMap());
-    }
+	/**
+	 * Create a new RSI graph.
+	 *
+	 * @param source the source to create a standard deviation from
+	 */
+	public RSIGraph(GraphSource source) {
+		super(source);
+		setSettings(new HashMap());
+	}
 
-    /**
-     * Create a new RSI graph.
-     *
-     * @param	source	the source to create a standard deviation from
-     * @param   settings the settings for this graph
-     */
-    public RSIGraph(GraphSource source, HashMap settings) {
-        super(source);
-        setSettings(settings);
-    }
+	/**
+	 * Create a new RSI graph.
+	 *
+	 * @param source   the source to create a standard deviation from
+	 * @param settings the settings for this graph
+	 */
+	public RSIGraph(GraphSource source, HashMap settings) {
+		super(source);
+		setSettings(settings);
+	}
 
-    
-    public void render(Graphics g, Color colour, int xoffset, int yoffset,
-		       double horizontalScale, double verticalScale,
-		       double topLineValue, double bottomLineValue, List xRange, 
-		       boolean vertOrientation) {
-	
-        int overSold = RSIGraphUI.getOverSold(getSettings());
-        int overBought = RSIGraphUI.getOverBought(getSettings());
+	public void render(Graphics g, Color colour, int xoffset, int yoffset, double horizontalScale, double verticalScale,
+			double topLineValue, double bottomLineValue, List xRange, boolean vertOrientation) {
 
-	Color backgroundColour = PreferencesManager.getDefaultChartBackgroundColour();
-	
-	Color foregroundColour = 
-	    BasicChartUI.getComplementaryColour(backgroundColour);
+		int overSold = RSIGraphUI.getOverSold(getSettings());
+		int overBought = RSIGraphUI.getOverBought(getSettings());
 
-	g.setColor(foregroundColour);
+		Color backgroundColour = PreferencesManager.getDefaultChartBackgroundColour();
 
-        GraphTools.renderHorizontalLine(g, overSold, xoffset, yoffset, 
-					horizontalScale,
-					verticalScale, 
-					topLineValue, bottomLineValue, xRange, 
-					vertOrientation);
-	    
-        GraphTools.renderHorizontalLine(g, overBought, xoffset, yoffset, 
-					horizontalScale,
-					verticalScale, 
-					topLineValue, bottomLineValue, xRange, 
-					vertOrientation);
+		Color foregroundColour = BasicChartUI.getComplementaryColour(backgroundColour);
 
-	g.setColor(colour);
-	GraphTools.renderLine(g, RSI, xoffset, yoffset,
-			      horizontalScale,
-			      verticalScale, 
-			      topLineValue, bottomLineValue, xRange, 
-			      vertOrientation);
-    }
+		g.setColor(foregroundColour);
 
-    public String getToolTipText(Comparable x, int y, int yoffset,
-				 double verticalScale,
-				 double bottomLineValue)
-    {
-	return null; // we never give tool tip information
-    }
+		GraphTools.renderHorizontalLine(g, overSold, xoffset, yoffset, horizontalScale, verticalScale, topLineValue,
+				bottomLineValue, xRange, vertOrientation);
 
-    public double getHighestY(List x) {
-	return 100.0D;
-    }
+		GraphTools.renderHorizontalLine(g, overBought, xoffset, yoffset, horizontalScale, verticalScale, topLineValue,
+				bottomLineValue, xRange, vertOrientation);
 
-    public double getLowestY(List x) {
-	return 0.0D;
-    }
+		g.setColor(colour);
+		GraphTools.renderLine(g, RSI, xoffset, yoffset, horizontalScale, verticalScale, topLineValue, bottomLineValue,
+				xRange, vertOrientation);
+	}
 
-    // Override vertical axis
-    public double[] getAcceptableMajorDeltas() {
-        double[] major = {0.1D,
-                          0.5D,
-                          1D,
-                          10D,
-                          100D};
+	public String getToolTipText(Comparable x, int y, int yoffset, double verticalScale, double bottomLineValue) {
+		return null; // we never give tool tip information
+	}
 
-	return major;
-    }
+	public double getHighestY(List x) {
+		return 100.0D;
+	}
 
-    // Override vertical axis
-    public double[] getAcceptableMinorDeltas() {
-	double[] minor = {1D,
-                          2D,
-                          3D,
-                          4D,
-                          5D,
-                          6D,
-                          7D,
-                          8D,
-                          9D};
-	return minor;
-    }
+	public double getLowestY(List x) {
+		return 0.0D;
+	}
 
-    // Override vertical axis
-    public String getYLabel(double value) {
-	return Double.toString(value);
-    }
+	// Override vertical axis
+	public double[] getAcceptableMajorDeltas() {
+		double[] major = { 0.1D, 0.5D, 1D, 10D, 100D };
 
-    /**
-     * Create a new RSI based on the given data source.
-     *
-     * @param	source	the input graph source
-     * @param	period	the desired period of the RSI
-     * @return	the RSI graphable
-     */
-    public static Graphable createRSI(Graphable source, int period, boolean smoothing) {
-	Graphable RSI = new Graphable();
-        TradingDate date = (TradingDate)source.getStartX();
-        GraphableQuoteFunctionSource quoteFunctionSource 
-            = new GraphableQuoteFunctionSource(source, date, period + 1);
+		return major;
+	}
 
-	RSIData previousData = null;
-        for(Iterator iterator = source.iterator(); iterator.hasNext();) {
-            date = (TradingDate)iterator.next();
-            quoteFunctionSource.setDate(date);
-	    
-            try {
-		double rsi = 0.0;
-		if (smoothing) {		    
-		    RSIData rsiData = QuoteFunctions.smoothRSI(quoteFunctionSource, period + 1, previousData);
-		    previousData = rsiData;
-		    rsi = rsiData.rsi;
-		} else {
-		    rsi = QuoteFunctions.rsi(quoteFunctionSource, period + 1);		
-		}		
-                RSI.putY(date, new Double(rsi));
-            }
-            catch(EvaluationException e) {
-                // This can't happen since our source does not throw this exception
-                assert false;
-            }
-        }
+	// Override vertical axis
+	public double[] getAcceptableMinorDeltas() {
+		double[] minor = { 1D, 2D, 3D, 4D, 5D, 6D, 7D, 8D, 9D };
+		return minor;
+	}
 
-        return RSI;
-    }
+	// Override vertical axis
+	public String getYLabel(double value) {
+		return Double.toString(value);
+	}
 
-    /**
-     * Return the name of this graph.
-     *
-     * @return <code>RSI</code>
-     */
-    public String getName() {
-        return Locale.getString("RSI");
-    }
+	/**
+	 * Create a new RSI based on the given data source.
+	 *
+	 * @param source the input graph source
+	 * @param period the desired period of the RSI
+	 * @return the RSI graphable
+	 */
+	public static Graphable createRSI(Graphable source, int period, boolean smoothing) {
+		Graphable RSI = new Graphable();
+		TradingDate date = (TradingDate) source.getStartX();
+		GraphableQuoteFunctionSource quoteFunctionSource = new GraphableQuoteFunctionSource(source, date, period + 1);
 
-    public boolean isPrimary() {
-        return false;
-    }
+		RSIData previousData = null;
+		for (Iterator iterator = source.iterator(); iterator.hasNext();) {
+			date = (TradingDate) iterator.next();
+			quoteFunctionSource.setDate(date);
 
-    public void setSettings(HashMap settings) {
-        super.setSettings(settings);
+			try {
+				double rsi = 0.0;
+				if (smoothing) {
+					RSIData rsiData = QuoteFunctions.smoothRSI(quoteFunctionSource, period + 1, previousData);
+					previousData = rsiData;
+					rsi = rsiData.rsi;
+				} else {
+					rsi = QuoteFunctions.rsi(quoteFunctionSource, period + 1);
+				}
+				RSI.putY(date, new Double(rsi));
+			} catch (EvaluationException e) {
+				// This can't happen since our source does not throw this exception
+				assert false;
+			}
+		}
 
-        // Retrieve values from hashmap        
-	int period = RSIGraphUI.getPeriod(settings);
-	boolean smoothFlag = RSIGraphUI.getSmoothFlag(settings);
+		return RSI;
+	}
 
-	// create RSI
-	RSI = createRSI(getSource().getGraphable(), period, smoothFlag); 
-			
-    }
+	/**
+	 * Return the name of this graph.
+	 *
+	 * @return <code>RSI</code>
+	 */
+	public String getName() {
+		return Locale.getString("RSI");
+	}
 
-    /**
-     * Return the graph's user interface.
-     *
-     * @param settings the initial settings
-     * @return user interface
-     */
-    public GraphUI getUI(HashMap settings) {
-        return new RSIGraphUI(settings);
-    }
+	public boolean isPrimary() {
+		return false;
+	}
+
+	public void setSettings(HashMap settings) {
+		super.setSettings(settings);
+
+		// Retrieve values from hashmap
+		int period = RSIGraphUI.getPeriod(settings);
+		boolean smoothFlag = RSIGraphUI.getSmoothFlag(settings);
+
+		// create RSI
+		RSI = createRSI(getSource().getGraphable(), period, smoothFlag);
+
+	}
+
+	/**
+	 * Return the graph's user interface.
+	 *
+	 * @param settings the initial settings
+	 * @return user interface
+	 */
+	public GraphUI getUI(HashMap settings) {
+		return new RSIGraphUI(settings);
+	}
 }
-
-

@@ -19,80 +19,82 @@
 package nz.org.venice.parser;
 
 /**
- * A collection of the implicit variables which is always available in an expression evaluation.
- * @author  Mark Hummel
+ * A collection of the implicit variables which is always available in an
+ * expression evaluation.
+ * 
+ * @author Mark Hummel
  */
 public class ImplicitVariables {
-    
-    //Singleon instance of this class
-    private static ImplicitVariables instance = null;
-    private Variables referenceVars;
 
-    private ImplicitVariables() {
-	referenceVars = new Variables();	
-	//A bit wasteful but preferable to copying the same chunk of code
-	//multiple times throughout the analyser code.
-	//Could probably just have a list of implicit names and check that
-	init(referenceVars, true);		
-    }
-    
-    /**
-     * Return the static ImplcitVariables instance for this application 
-     */
-    public static synchronized ImplicitVariables getInstance() {
-	if (instance == null) {
-	    instance = new ImplicitVariables();
-	}
-	return instance;
-    }
-   
-    private void init(Variables variables, boolean ordered) {
-	
-	if (ordered && !variables.contains("order")) {
-	    variables.add("order", Expression.INTEGER_TYPE, Variable.CONSTANT);
-	}
-	
-	if (!variables.contains("held")) {
-	    variables.add("held", Expression.INTEGER_TYPE, Variable.CONSTANT);
-	}
-	
-	if (!variables.contains("daysfromstart")) {
-	    variables.add("daysfromstart", Expression.INTEGER_TYPE, Variable.CONSTANT);
-	}
-	if (!variables.contains("transactions")) {
-	    variables.add("transactions", Expression.INTEGER_TYPE, Variable.CONSTANT);
-	}
-	if (!variables.contains("capital")) {
-	    variables.add("capital", Expression.FLOAT_TYPE, Variable.CONSTANT);
-	}
-	if (!variables.contains("stockcapital")) {
-	    variables.add("stockcapital", Expression.FLOAT_TYPE, Variable.CONSTANT);
+	// Singleon instance of this class
+	private static ImplicitVariables instance = null;
+	private Variables referenceVars;
+
+	private ImplicitVariables() {
+		referenceVars = new Variables();
+		// A bit wasteful but preferable to copying the same chunk of code
+		// multiple times throughout the analyser code.
+		// Could probably just have a list of implicit names and check that
+		init(referenceVars, true);
 	}
 
-	if (!variables.contains("daysfromlasttransaction")) {
-	    variables.add("daysfromlasttransaction", Expression.INTEGER_TYPE, Variable.CONSTANT);
+	/**
+	 * Return the static ImplcitVariables instance for this application
+	 */
+	public static synchronized ImplicitVariables getInstance() {
+		if (instance == null) {
+			instance = new ImplicitVariables();
+		}
+		return instance;
 	}
-    }
-    
-    /**
-     * Add the implicit variables into the set of variables provided.
-     *
-     * @param variables   The set of variables which will have the implcit 
-     *                     variables added
-     * @param ordered    Whether or not to add the order implicit variable
-     */
-    public void setup(Variables variables, boolean ordered) {		
-	init(variables, ordered);	
-    }
 
-    /**
-     * Used for checking the user defined variables don't clash with 
-     * the implicit variables.
-     * 
-     * @return true if the variable being added is an implicit one 
-     */
-    public boolean contains(String name) {
-	return referenceVars.contains(name);
-    }
-    
+	private void init(Variables variables, boolean ordered) {
+
+		if (ordered && !variables.contains("order")) {
+			variables.add("order", Expression.INTEGER_TYPE, Variable.CONSTANT);
+		}
+
+		if (!variables.contains("held")) {
+			variables.add("held", Expression.INTEGER_TYPE, Variable.CONSTANT);
+		}
+
+		if (!variables.contains("daysfromstart")) {
+			variables.add("daysfromstart", Expression.INTEGER_TYPE, Variable.CONSTANT);
+		}
+		if (!variables.contains("transactions")) {
+			variables.add("transactions", Expression.INTEGER_TYPE, Variable.CONSTANT);
+		}
+		if (!variables.contains("capital")) {
+			variables.add("capital", Expression.FLOAT_TYPE, Variable.CONSTANT);
+		}
+		if (!variables.contains("stockcapital")) {
+			variables.add("stockcapital", Expression.FLOAT_TYPE, Variable.CONSTANT);
+		}
+
+		if (!variables.contains("daysfromlasttransaction")) {
+			variables.add("daysfromlasttransaction", Expression.INTEGER_TYPE, Variable.CONSTANT);
+		}
+	}
+
+	/**
+	 * Add the implicit variables into the set of variables provided.
+	 *
+	 * @param variables The set of variables which will have the implcit variables
+	 *                  added
+	 * @param ordered   Whether or not to add the order implicit variable
+	 */
+	public void setup(Variables variables, boolean ordered) {
+		init(variables, ordered);
+	}
+
+	/**
+	 * Used for checking the user defined variables don't clash with the implicit
+	 * variables.
+	 * 
+	 * @return true if the variable being added is an implicit one
+	 */
+	public boolean contains(String name) {
+		return referenceVars.contains(name);
+	}
+
 }

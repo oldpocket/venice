@@ -24,268 +24,270 @@ import java.util.ResourceBundle;
 import nz.org.venice.prefs.PreferencesManager;
 
 /**
- * This class implements internationalisation support for Venice. Each text message
- * displayed by Venice is represented by a string symbol (e.g. "OPEN") which describes
- * the error message being displayed. This symbol is then matched to a
- * internationalistaion file which will then retrieve the local language version of
- * that error message.
+ * This class implements internationalisation support for Venice. Each text
+ * message displayed by Venice is represented by a string symbol (e.g. "OPEN")
+ * which describes the error message being displayed. This symbol is then
+ * matched to a internationalistaion file which will then retrieve the local
+ * language version of that error message.
  * <p>
- * If a match could not be found in the current language, it will try to match the
- * symbol in the english (default) language. If it could not find a match there,
- * it will display the string <code>Locale.UNKNOWN</code>.
+ * If a match could not be found in the current language, it will try to match
+ * the symbol in the english (default) language. If it could not find a match
+ * there, it will display the string <code>Locale.UNKNOWN</code>.
  * <p>
  * The internationalisation files are kept in src/nz/org/venice/util/locale/.
  * <p>
+ * 
  * @author Andrew Leppard
  * @see java.util.ResourceBundle
  */
 public class Locale {
-    private static java.util.Locale locale = null;
+	private static java.util.Locale locale = null;
 
-    // This is the string we use if we can't find a matching entry in
-    // any of the resource bundles.
-    private final static String UNKNOWN = "???";
+	// This is the string we use if we can't find a matching entry in
+	// any of the resource bundles.
+	private final static String UNKNOWN = "???";
 
-    private static ResourceBundle primaryResourceBundle = null;
-    private static ResourceBundle secondaryResourceBundle = null;
+	private static ResourceBundle primaryResourceBundle = null;
+	private static ResourceBundle secondaryResourceBundle = null;
 
-    private static boolean resourceBundlesLoaded = false;
+	private static boolean resourceBundlesLoaded = false;
 
-    private Locale() {
-        // This class is never instantiated
-        assert false;
-    }
-
-    private static synchronized void loadResourceBundles() {
-	if(!resourceBundlesLoaded) {
-	    // First get the user's preferred language
-	    try {
-                // input parameter should be one of the constants
-                // defined at the top of the class.
-                // Each of them represent one of MoV acceptable localization.
-		if (locale == null)
-                    primaryResourceBundle = ResourceBundle.getBundle("nz.org.venice.util.locale.venice");
-                else
-                    primaryResourceBundle = ResourceBundle.getBundle("nz.org.venice.util.locale.venice", locale);
-                locale = primaryResourceBundle.getLocale();
-      	    }
-	    catch(Exception e) {
-		// It's OK if we couldn't load the user's preferred locale
-	    }
-
-	    // Also load English as a fallback if the preferred language hasn't
-	    // been fully translated.
-	    try {
-		secondaryResourceBundle = ResourceBundle.getBundle("nz.org.venice.util.locale.venice",
-								   java.util.Locale.ENGLISH);
-	    }
-	    catch(Exception e) {
-		// This should have worked.
-		System.err.println(e);
+	private Locale() {
+		// This class is never instantiated
 		assert false;
-	    }
-
-	    resourceBundlesLoaded = true;
 	}
-    }
 
-    /**
-     * Set the localization as got from saved preferences.
-     * If no preference is set for the language it get the current system language.
-     */
-    public static void setLocale() {
-        // Set locale to system default
-        locale = java.util.Locale.getDefault();
+	private static synchronized void loadResourceBundles() {
+		if (!resourceBundlesLoaded) {
+			// First get the user's preferred language
+			try {
+				// input parameter should be one of the constants
+				// defined at the top of the class.
+				// Each of them represent one of MoV acceptable localization.
+				if (locale == null)
+					primaryResourceBundle = ResourceBundle.getBundle("nz.org.venice.util.locale.venice");
+				else
+					primaryResourceBundle = ResourceBundle.getBundle("nz.org.venice.util.locale.venice", locale);
+				locale = primaryResourceBundle.getLocale();
+			} catch (Exception e) {
+				// It's OK if we couldn't load the user's preferred locale
+			}
 
-        // Override if there is a preference setting for another language
-        String languageCode = PreferencesManager.getLanguageCode();
+			// Also load English as a fallback if the preferred language hasn't
+			// been fully translated.
+			try {
+				secondaryResourceBundle = ResourceBundle.getBundle("nz.org.venice.util.locale.venice",
+						java.util.Locale.ENGLISH);
+			} catch (Exception e) {
+				// This should have worked.
+				System.err.println(e);
+				assert false;
+			}
 
-        if(languageCode != null) {
-            java.util.Locale[] locales = LocaleConstants.locales;
+			resourceBundlesLoaded = true;
+		}
+	}
 
-            for (int i = 0; i < locales.length; i++) {
-                if (languageCode.equals(locales[i].getISO3Language())) {
-                    locale = locales[i];
-                    break;
-                }
-            }
-        }
+	/**
+	 * Set the localization as got from saved preferences. If no preference is set
+	 * for the language it get the current system language.
+	 */
+	public static void setLocale() {
+		// Set locale to system default
+		locale = java.util.Locale.getDefault();
 
-        resourceBundlesLoaded = false;
-        loadResourceBundles();
-    }
+		// Override if there is a preference setting for another language
+		String languageCode = PreferencesManager.getLanguageCode();
 
-    /**
-     * Get the localization.
-     *
-     * @return the current localization
-     */
-    public static java.util.Locale getLocale() {
-	return locale;
-    }
+		if (languageCode != null) {
+			java.util.Locale[] locales = LocaleConstants.locales;
 
-    /**
-     * Return the current language translation of the text associated
-     * with the given key.
-     *
-     * @param key a key which represents a line of text
-     * @return the text
-     */
-    public static String getString(String key) {
-	String string = null;
+			for (int i = 0; i < locales.length; i++) {
+				if (languageCode.equals(locales[i].getISO3Language())) {
+					locale = locales[i];
+					break;
+				}
+			}
+		}
 
-	loadResourceBundles();
+		resourceBundlesLoaded = false;
+		loadResourceBundles();
+	}
 
-	if(primaryResourceBundle != null)
-	    try {
-		string = primaryResourceBundle.getString(key);
-	    }
-	    catch(MissingResourceException e) {
-		// try secondary (english) text
-	    }
+	/**
+	 * Get the localization.
+	 *
+	 * @return the current localization
+	 */
+	public static java.util.Locale getLocale() {
+		return locale;
+	}
 
-	if(string == null && secondaryResourceBundle != null)
-	    try {
-		string = secondaryResourceBundle.getString(key);
-	    }
-	    catch(MissingResourceException e) {
-		// use ???
-	    }
+	/**
+	 * Return the current language translation of the text associated with the given
+	 * key.
+	 *
+	 * @param key a key which represents a line of text
+	 * @return the text
+	 */
+	public static String getString(String key) {
+		String string = null;
 
-	if(string == null)
-	    string = UNKNOWN;
+		loadResourceBundles();
 
-	return string;
-    }
+		if (primaryResourceBundle != null)
+			try {
+				string = primaryResourceBundle.getString(key);
+			} catch (MissingResourceException e) {
+				// try secondary (english) text
+			}
 
-    /**
-     * Return the current language translation of the text associated
-     * with the given key. Insert the given argument into the text
-     * translation. For example if the text object in the internationalisation
-     * file looks like:
-     *
-     * <pre>Generation %1</pre>
-     *
-     * The first argument will replace <code>%1</code>.
-     *
-     * @param key a key which represents a line of text
-     * @param arg1 the first argument
-     * @return the text
-     */
-    public static String getString(String key, String arg1) {
-	String string = getString(key);
+		if (string == null && secondaryResourceBundle != null)
+			try {
+				string = secondaryResourceBundle.getString(key);
+			} catch (MissingResourceException e) {
+				// use ???
+			}
 
-	return Find.replace(string, "%1", arg1);
-    }
+		if (string == null)
+			string = UNKNOWN;
 
-    /**
-     * Return the current language translation of the text associated
-     * with the given key. Insert the given arguments into the text
-     * translation. For example if the text object in the internationalisation
-     * file looks like:
-     *
-     * <pre>Generation %1 of %2</pre>
-     *
-     * The first argument will replace <code>%1</code> and the second
-     * argument will replace <code>%2</code>.
-     *
-     * @param key a key which represents a line of text
-     * @param arg1 the first argument
-     * @param arg2 the second argument
-     * @return the text
-     */
-    public static String getString(String key, String arg1, String arg2) {
-	String string = getString(key);
+		return string;
+	}
 
-	string = Find.replace(string, "%1", arg1);
-	return Find.replace(string, "%2", arg2);
-    }
+	/**
+	 * Return the current language translation of the text associated with the given
+	 * key. Insert the given argument into the text translation. For example if the
+	 * text object in the internationalisation file looks like:
+	 *
+	 * <pre>
+	 * Generation % 1
+	 * </pre>
+	 *
+	 * The first argument will replace <code>%1</code>.
+	 *
+	 * @param key  a key which represents a line of text
+	 * @param arg1 the first argument
+	 * @return the text
+	 */
+	public static String getString(String key, String arg1) {
+		String string = getString(key);
 
-    /**
-     * Return the current language translation of the text associated
-     * with the given key. Insert the given arguments into the text
-     * translation. For example if the text object in the internationalisation
-     * file looks like:
-     *
-     * <pre>%1 of %2 (%3%)</pre>
-     *
-     * The first argument will replace <code>%1</code> and the second
-     * argument will replace <code>%2</code> and the third argument
-     * will replace <code>%3</code>.
-     *
-     * @param key a key which represents a line of text
-     * @param arg1 the first argument
-     * @param arg2 the second argument
-     * @param arg3 the third argument
-     * @return the text
-     */
-    public static String getString(String key, String arg1, String arg2, String arg3) {
-	String string = getString(key);
+		return Find.replace(string, "%1", arg1);
+	}
 
-	string = Find.replace(string, "%1", arg1);
-	string = Find.replace(string, "%2", arg2);
-	return Find.replace(string, "%3", arg3);
-    }
+	/**
+	 * Return the current language translation of the text associated with the given
+	 * key. Insert the given arguments into the text translation. For example if the
+	 * text object in the internationalisation file looks like:
+	 *
+	 * <pre>
+	 * Generation %1 of %2
+	 * </pre>
+	 *
+	 * The first argument will replace <code>%1</code> and the second argument will
+	 * replace <code>%2</code>.
+	 *
+	 * @param key  a key which represents a line of text
+	 * @param arg1 the first argument
+	 * @param arg2 the second argument
+	 * @return the text
+	 */
+	public static String getString(String key, String arg1, String arg2) {
+		String string = getString(key);
 
-    /**
-     * Return the current language translation of the text associated
-     * with the given key. Insert the given argument into the text
-     * translation. For example if the text object in the internationalisation
-     * file looks like:
-     *
-     * <pre>Generation %1</pre>
-     *
-     * The first argument will replace <code>%1</code>.
-     *
-     * @param key a key which represents a line of text
-     * @param arg1 the first argument
-     * @return the text
-     */
-    public static String getString(String key, int arg1) {
-	return getString(key, Integer.toString(arg1));
-    }
+		string = Find.replace(string, "%1", arg1);
+		return Find.replace(string, "%2", arg2);
+	}
 
-    /**
-     * Return the current language translation of the text associated
-     * with the given key. Insert the given arguments into the text
-     * translation. For example if the text object in the internationalisation
-     * file looks like:
-     *
-     * <pre>Generation %1 of %2</pre>
-     *
-     * The first argument will replace <code>%1</code> and the second
-     * argument will replace <code>%2</code>.
-     *
-     * @param key a key which represents a line of text
-     * @param arg1 the first argument
-     * @param arg2 the second argument
-     * @return the text
-     */
-    public static String getString(String key, int arg1, int arg2) {
-	return getString(key, Integer.toString(arg1), Integer.toString(arg2));
-    }
+	/**
+	 * Return the current language translation of the text associated with the given
+	 * key. Insert the given arguments into the text translation. For example if the
+	 * text object in the internationalisation file looks like:
+	 *
+	 * <pre>
+	 * %1 of %2 (%3%)
+	 * </pre>
+	 *
+	 * The first argument will replace <code>%1</code> and the second argument will
+	 * replace <code>%2</code> and the third argument will replace <code>%3</code>.
+	 *
+	 * @param key  a key which represents a line of text
+	 * @param arg1 the first argument
+	 * @param arg2 the second argument
+	 * @param arg3 the third argument
+	 * @return the text
+	 */
+	public static String getString(String key, String arg1, String arg2, String arg3) {
+		String string = getString(key);
 
-    public static String getString(String key, int arg1, int arg2, int arg3) {
-	return getString(key, Integer.toString(arg1), Integer.toString(arg2), Integer.toString(arg3));
-    }
+		string = Find.replace(string, "%1", arg1);
+		string = Find.replace(string, "%2", arg2);
+		return Find.replace(string, "%3", arg3);
+	}
 
-    /**
-     * Return the current language translation of the text associated
-     * with the given key. Insert the given arguments into the text
-     * translation. For example if the text object in the internationalisation
-     * file looks like:
-     *
-     * <pre>Generation %1 of %2</pre>
-     *
-     * The first argument will replace <code>%1</code> and the second
-     * argument will replace <code>%2</code>.
-     *
-     * @param key a key which represents a line of text
-     * @param arg1 the first argument
-     * @param arg2 the second argument
-     * @return the text
-     */
-    public static String getString(String key, double arg1, double arg2) {
-	return getString(key, Double.toString(arg1), Double.toString(arg2));
-    }
+	/**
+	 * Return the current language translation of the text associated with the given
+	 * key. Insert the given argument into the text translation. For example if the
+	 * text object in the internationalisation file looks like:
+	 *
+	 * <pre>
+	 * Generation % 1
+	 * </pre>
+	 *
+	 * The first argument will replace <code>%1</code>.
+	 *
+	 * @param key  a key which represents a line of text
+	 * @param arg1 the first argument
+	 * @return the text
+	 */
+	public static String getString(String key, int arg1) {
+		return getString(key, Integer.toString(arg1));
+	}
+
+	/**
+	 * Return the current language translation of the text associated with the given
+	 * key. Insert the given arguments into the text translation. For example if the
+	 * text object in the internationalisation file looks like:
+	 *
+	 * <pre>
+	 * Generation %1 of %2
+	 * </pre>
+	 *
+	 * The first argument will replace <code>%1</code> and the second argument will
+	 * replace <code>%2</code>.
+	 *
+	 * @param key  a key which represents a line of text
+	 * @param arg1 the first argument
+	 * @param arg2 the second argument
+	 * @return the text
+	 */
+	public static String getString(String key, int arg1, int arg2) {
+		return getString(key, Integer.toString(arg1), Integer.toString(arg2));
+	}
+
+	public static String getString(String key, int arg1, int arg2, int arg3) {
+		return getString(key, Integer.toString(arg1), Integer.toString(arg2), Integer.toString(arg3));
+	}
+
+	/**
+	 * Return the current language translation of the text associated with the given
+	 * key. Insert the given arguments into the text translation. For example if the
+	 * text object in the internationalisation file looks like:
+	 *
+	 * <pre>
+	 * Generation %1 of %2
+	 * </pre>
+	 *
+	 * The first argument will replace <code>%1</code> and the second argument will
+	 * replace <code>%2</code>.
+	 *
+	 * @param key  a key which represents a line of text
+	 * @param arg1 the first argument
+	 * @param arg2 the second argument
+	 * @return the text
+	 */
+	public static String getString(String key, double arg1, double arg2) {
+		return getString(key, Double.toString(arg1), Double.toString(arg2));
+	}
 }

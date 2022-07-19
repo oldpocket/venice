@@ -22,108 +22,106 @@ import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.TradingDate;
 
 /**
- * Representation of a single stock holding in a share account. 
+ * Representation of a single stock holding in a share account.
  *
  * @author Andrew Leppard
  * @see ShareAccount
  */
 public class StockHolding {
 
-    // Stock held
-    private Symbol symbol;
+	// Stock held
+	private Symbol symbol;
 
-    // Number of shares of stock
-    private int shares;
-    
-    // Date shares were purchased
-    private TradingDate date;
+	// Number of shares of stock
+	private int shares;
 
-    // Average cost per share
-    private double cost;
+	// Date shares were purchased
+	private TradingDate date;
 
-    /**
-     * Create a new stock holding
-     *
-     * @param	symbol	the stock to own
-     * @param	shares	the number of shares of that stock
-     * @param   cost    average cost per share
-     * @param   date    the date the shares were purchased
-     */
-    public StockHolding(Symbol symbol, int shares, double cost, TradingDate date) {
-	this.symbol = symbol;
-	this.shares = shares;
-        this.cost = cost;
-        this.date = date;
-    }
+	// Average cost per share
+	private double cost;
 
-    /**
-     * Increase ownership of stock.
-     *
-     * @param	shares	number of new shares to accumulate
-     * @param   cost    average cost of shares
-     */
-    public void accumulate(int shares, double cost) {
-        this.cost = (this.shares * this.cost + shares * cost) / (this.shares + shares);
-	this.shares += shares;
-    }
+	/**
+	 * Create a new stock holding
+	 *
+	 * @param symbol the stock to own
+	 * @param shares the number of shares of that stock
+	 * @param cost   average cost per share
+	 * @param date   the date the shares were purchased
+	 */
+	public StockHolding(Symbol symbol, int shares, double cost, TradingDate date) {
+		this.symbol = symbol;
+		this.shares = shares;
+		this.cost = cost;
+		this.date = date;
+	}
 
-    /**
-     * Decrease ownership of stock.
-     *
-     * @param	shares	number of shares to reduce
-     */
-    public void reduce(int shares) {
-	this.shares -= shares;
-    }
+	/**
+	 * Increase ownership of stock.
+	 *
+	 * @param shares number of new shares to accumulate
+	 * @param cost   average cost of shares
+	 */
+	public void accumulate(int shares, double cost) {
+		this.cost = (this.shares * this.cost + shares * cost) / (this.shares + shares);
+		this.shares += shares;
+	}
 
-    /**
-     * Get symbol of stock held.
-     *
-     * @return	symbol
-     */
-    public Symbol getSymbol() {
-	return symbol;
-    }
+	/**
+	 * Decrease ownership of stock.
+	 *
+	 * @param shares number of shares to reduce
+	 */
+	public void reduce(int shares) {
+		this.shares -= shares;
+	}
 
-    /**
-     * Get number of shares held.
-     *
-     * @return	number of shares
-     */
-    public int getShares() {
-	return shares;
-    }
+	/**
+	 * Get symbol of stock held.
+	 *
+	 * @return symbol
+	 */
+	public Symbol getSymbol() {
+		return symbol;
+	}
 
-    /**
-     * Get average cost per share
-     *
-     * @return	average cost per share
-     */
-    public double getCost() {
-	return cost;
-    }
+	/**
+	 * Get number of shares held.
+	 *
+	 * @return number of shares
+	 */
+	public int getShares() {
+		return shares;
+	}
 
-    /**
-     * Get the initial date that at least part of these shares was purchased
-     * on.
-     *
-     * @return date
-     */
-    public TradingDate getDate() {
-        return date;
-    }
+	/**
+	 * Get average cost per share
+	 *
+	 * @return average cost per share
+	 */
+	public double getCost() {
+		return cost;
+	}
 
-    /**
-     * Compares this stock holding to another.
-     *
-     * @param object another stock holding
-     * @return <code>true</code> if the stock holdings are equal; <code>false</code> otherwise
-     */
-    public boolean equals(Object object) {
-        StockHolding holding = (StockHolding)object;
-        return(holding.getSymbol().equals(getSymbol()) &&
-               holding.getShares() == getShares() &&
-               holding.getCost() == getCost() &&
-               holding.getDate().equals(getDate()));
-    }
+	/**
+	 * Get the initial date that at least part of these shares was purchased on.
+	 *
+	 * @return date
+	 */
+	public TradingDate getDate() {
+		return date;
+	}
+
+	/**
+	 * Compares this stock holding to another.
+	 *
+	 * @param object another stock holding
+	 * @return <code>true</code> if the stock holdings are equal; <code>false</code>
+	 *         otherwise
+	 */
+	public boolean equals(Object object) {
+		StockHolding holding = (StockHolding) object;
+		return (holding.getSymbol().equals(getSymbol()) && holding.getShares() == getShares()
+				&& holding.getCost() == getCost() && holding.getDate().equals(getDate()));
+	}
 }

@@ -23,97 +23,95 @@ import java.text.NumberFormat;
 import nz.org.venice.prefs.PreferencesManager;
 
 /**
- * Representation of a quote value for display in a table. This class is
- * used by the {@link AbstractTable} class to identify the value type so that
- * it can render the value correctly. A quote value might be the day open,
- * day close, day high etc of the quote.
+ * Representation of a quote value for display in a table. This class is used by
+ * the {@link AbstractTable} class to identify the value type so that it can
+ * render the value correctly. A quote value might be the day open, day close,
+ * day high etc of the quote.
  *
  * @author Andrew Leppard
  */
 public class QuoteFormat implements Comparable {
 
-    // The quote value.
-    private double quote;
+	// The quote value.
+	private double quote;
 
-    // Use NumberFormat to format the value.
-    private static NumberFormat format = null;
+	// Use NumberFormat to format the value.
+	private static NumberFormat format = null;
 
-    /**
-     * Create a new quote value format object.
-     *
-     * @param quote the quote value.
-     */
-    public QuoteFormat(double quote) {
-        this.quote = quote;
-    }
+	/**
+	 * Create a new quote value format object.
+	 *
+	 * @param quote the quote value.
+	 */
+	public QuoteFormat(double quote) {
+		this.quote = quote;
+	}
 
-    /**
-     * Convert from a quote (in dollars) to string. 
-     *
-     * @param	quote	the quote
-     * @return	the quote string
-     */
-    public static String quoteToString(double quote) {
-        return getNumberFormat().format(quote);
-    }
+	/**
+	 * Convert from a quote (in dollars) to string.
+	 *
+	 * @param quote the quote
+	 * @return the quote string
+	 */
+	public static String quoteToString(double quote) {
+		return getNumberFormat().format(quote);
+	}
 
-    /**
-     * Create a string representation of the quote value.
-     *
-     * @return string representation of the quote value.
-     */
-    public String toString() {
-        return quoteToString(getQuote());
-    }
+	/**
+	 * Create a string representation of the quote value.
+	 *
+	 * @return string representation of the quote value.
+	 */
+	public String toString() {
+		return quoteToString(getQuote());
+	}
 
-    /**
-     * Return the quote value.
-     *
-     * @return the quote value.
-     */
-    public double getQuote() {
-        return quote;
-    }
+	/**
+	 * Return the quote value.
+	 *
+	 * @return the quote value.
+	 */
+	public double getQuote() {
+		return quote;
+	}
 
-    /**
-     * Compare two quote values.
-     *
-     * @param object object to compare to
-     * @return	the value <code>0</code> if the objects are equal;
-     * <code>1</code> if this object is after the specified
-     * object or
-     * <code>-1</code> if this object is before the specified
-     * object
-     */
-    public int compareTo(Object object) {
-        QuoteFormat format = (QuoteFormat)object;
+	/**
+	 * Compare two quote values.
+	 *
+	 * @param object object to compare to
+	 * @return the value <code>0</code> if the objects are equal; <code>1</code> if
+	 *         this object is after the specified object or <code>-1</code> if this
+	 *         object is before the specified object
+	 */
+	public int compareTo(Object object) {
+		QuoteFormat format = (QuoteFormat) object;
 
-        if(getQuote() < format.getQuote())
-            return -1;
-        if(getQuote() > format.getQuote())
-            return 1;
-        else
-            return 0;
-    }
+		if (getQuote() < format.getQuote())
+			return -1;
+		if (getQuote() > format.getQuote())
+			return 1;
+		else
+			return 0;
+	}
 
-    /**
-     * Get number format object for this class.
-     *
-     * @return the number format.
-     */
-    private static NumberFormat getNumberFormat() {
-        // Synchronisation cannot cause issues here. So this code
-        // isn't synchronised.
-        if(format == null) {
-            format = NumberFormat.getInstance();
-            format.setMinimumIntegerDigits(1);
-            int minDecimalDigits = PreferencesManager.getMinDecimalDigits();
-            int maxDecimalDigits = PreferencesManager.getMaxDecimalDigits();
-            format.setMinimumFractionDigits(minDecimalDigits);
-            format.setMaximumFractionDigits(maxDecimalDigits);
-        }
+	/**
+	 * Get number format object for this class.
+	 *
+	 * @return the number format.
+	 */
+	private static NumberFormat getNumberFormat() {
+		// Synchronisation cannot cause issues here. So this code
+		// isn't synchronised.
+		if (format == null) {
+			format = NumberFormat.getInstance();
+			format.setMinimumIntegerDigits(1);
+			int minDecimalDigits = PreferencesManager.getMinDecimalDigits();
+			int maxDecimalDigits = PreferencesManager.getMaxDecimalDigits();
+			format.setMinimumFractionDigits(minDecimalDigits);
+			format.setMaximumFractionDigits(maxDecimalDigits);
+		}
 
-        return format;
-    }
-    
+		return format;
+	}
+
 }

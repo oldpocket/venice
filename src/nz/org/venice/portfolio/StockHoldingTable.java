@@ -49,308 +49,272 @@ import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
 
 /**
- * Display stock holdings in a swing table for a ShareAccount. This table
- * will display a row for each stock held, givings its symbol, number of
- * shares held, current day close value, current market value and its
- * change in today's trading.
+ * Display stock holdings in a swing table for a ShareAccount. This table will
+ * display a row for each stock held, givings its symbol, number of shares held,
+ * current day close value, current market value and its change in today's
+ * trading.
  *
  * @author Andrew Leppard
  * @see ShareAccount
  */
 public class StockHoldingTable extends AbstractTable {
-    private static final int SYMBOL_COLUMN = 0;
-    private static final int SHARES_COLUMN = 1;
-    private static final int AVERAGE_COST_COLUMN = 2;
-    private static final int MARKET_PRICE_COLUMN = 3;
-    private static final int MARKET_VALUE_COLUMN = 4;
-    private static final int POINT_CHANGE_COLUMN = 5;
-    private static final int PERCENT_CHANGE_COLUMN = 6;
-    private static final int PERCENT_RETURN_COLUMN = 7;
+	private static final int SYMBOL_COLUMN = 0;
+	private static final int SHARES_COLUMN = 1;
+	private static final int AVERAGE_COST_COLUMN = 2;
+	private static final int MARKET_PRICE_COLUMN = 3;
+	private static final int MARKET_VALUE_COLUMN = 4;
+	private static final int POINT_CHANGE_COLUMN = 5;
+	private static final int PERCENT_CHANGE_COLUMN = 6;
+	private static final int PERCENT_RETURN_COLUMN = 7;
 
-    private JMenu showColumnsMenu;
-    private Model model;
+	private JMenu showColumnsMenu;
+	private Model model;
 
-    class Model extends AbstractTableModel {
-	private EODQuoteBundle quoteBundle;
-        private Currency currency;
-	private HashMap stockHoldings;
-	private Object[] symbols;
-	private TradingDate date;
+	class Model extends AbstractTableModel {
+		private EODQuoteBundle quoteBundle;
+		private Currency currency;
+		private HashMap stockHoldings;
+		private Object[] symbols;
+		private TradingDate date;
 
-	public Model(List columns, ShareAccount shareAccount, EODQuoteBundle quoteBundle) {
-            super(columns);
+		public Model(List columns, ShareAccount shareAccount, EODQuoteBundle quoteBundle) {
+			super(columns);
 
-	    this.stockHoldings = shareAccount.getStockHoldings();
-            this.currency = shareAccount.getCurrency();
-	    this.quoteBundle = quoteBundle;
+			this.stockHoldings = shareAccount.getStockHoldings();
+			this.currency = shareAccount.getCurrency();
+			this.quoteBundle = quoteBundle;
 
-	    symbols = stockHoldings.keySet().toArray();
+			symbols = stockHoldings.keySet().toArray();
 
-            // Display the latest quote dates in the bundle. The bundle
-            // should contain two days of quotes - yesterday's are used
-            // to properly calculate the change.
-	    date = quoteBundle.getLastDate();
+			// Display the latest quote dates in the bundle. The bundle
+			// should contain two days of quotes - yesterday's are used
+			// to properly calculate the change.
+			date = quoteBundle.getLastDate();
+		}
+
+		public int getRowCount() {
+			return symbols.length;
+		}
+
+		public Object getValueAt(int row, int column) {
+			if (row >= getRowCount())
+				return "";
+
+			Symbol symbol = (Symbol) symbols[row];
+
+			StockHolding stockHolding = (StockHolding) stockHoldings.get(symbol);
+
+			// Shouldnt happen
+			if (stockHolding == null) {
+				assert false;
+				return "";
+			}
+
+			switch (column) {
+			case (SYMBOL_COLUMN):
+				return symbol;
+
+			case (SHARES_COLUMN):
+				return new Integer(stockHolding.getShares());
+
+			case (AVERAGE_COST_COLUMN):
+				return new QuoteFormat(stockHolding.getCost());
+
+			case (MARKET_PRICE_COLUMN):
+				try {
+					return new QuoteFormat(quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date));
+				} catch (MissingQuoteException e) {
+					return new QuoteFormat(0.0D);
+				}
+
+			case (MARKET_VALUE_COLUMN):
+				try {
+					return new Money(currency,
+							quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date) * stockHolding.getShares());
+				} catch (MissingQuoteException e) {
+					return new Money(currency, 0.0D);
+				}
+
+			case (PERCENT_RETURN_COLUMN):
+				try {
+					return new ChangeFormat(stockHolding.getCost(),
+							quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date));
+				} catch (MissingQuoteException e) {
+					return new ChangeFormat(1.0D, 1.0D);
+				}
+
+			case (POINT_CHANGE_COLUMN):
+				try {
+					// Change is calculated by the percent gain between
+					// yesterday's day close and today's day close. If we don't
+					// have yesterday's day close available, we just use today's
+					// day open. These first two should always work.
+					double finalQuote = quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date);
+					double initialQuote = quoteBundle.getQuote(symbol, Quote.DAY_OPEN, date);
+
+					// There might not be any quotes for yesterday, so don't throw an
+					// assert if we can't get any.
+					try {
+						initialQuote = quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date.previous(1));
+					} catch (MissingQuoteException e) {
+						// No big deal - we default to day open
+					}
+
+					return new PointChangeFormat(initialQuote, finalQuote,
+							QuoteSourceManager.getSource().isMarketIndex(symbol));
+
+				} catch (MissingQuoteException e) {
+					return new PointChangeFormat(1.0D, 1.0D);
+				}
+
+			case (PERCENT_CHANGE_COLUMN):
+				try {
+					// Change is calculated by the percent gain between
+					// yesterday's day close and today's day close. If we don't
+					// have yesterday's day close available, we just use today's
+					// day open. These first two should always work.
+					double finalQuote = quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date);
+					double initialQuote = quoteBundle.getQuote(symbol, Quote.DAY_OPEN, date);
+
+					// There might not be any quotes for yesterday, so don't throw an
+					// assert if we can't get any.
+					try {
+						initialQuote = quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date.previous(1));
+					} catch (MissingQuoteException e) {
+						// No big deal - we default to day open
+					}
+
+					return new ChangeFormat(initialQuote, finalQuote);
+				} catch (MissingQuoteException e) {
+					return new ChangeFormat(1.0D, 1.0D);
+				}
+
+			}
+			assert false;
+			return null;
+		}
 	}
-	
-	public int getRowCount() {
-	    return symbols.length;
+
+	/**
+	 * Create a new stock holding table.
+	 *
+	 * @param shareAccount the share account to table
+	 * @param quoteBundle  the quote bundle
+	 */
+	public StockHoldingTable(ShareAccount shareAccount, EODQuoteBundle quoteBundle) {
+		List columns = new ArrayList();
+		columns.add(new Column(SYMBOL_COLUMN, Locale.getString("SYMBOL"), Locale.getString("SYMBOL_COLUMN_HEADER"),
+				Symbol.class, Column.VISIBLE));
+		columns.add(new Column(SHARES_COLUMN, Locale.getString("SHARES"), Locale.getString("SHARES_COLUMN_HEADER"),
+				Integer.class, Column.VISIBLE));
+		columns.add(new Column(AVERAGE_COST_COLUMN, Locale.getString("AVERAGE_COST"),
+				Locale.getString("AVERAGE_COST_COLUMN_HEADER"), QuoteFormat.class, Column.HIDDEN));
+		columns.add(new Column(MARKET_PRICE_COLUMN, Locale.getString("MARKET_PRICE"),
+				Locale.getString("MARKET_PRICE_COLUMN_HEADER"), QuoteFormat.class, Column.VISIBLE));
+		columns.add(new Column(MARKET_VALUE_COLUMN, Locale.getString("MARKET_VALUE"),
+				Locale.getString("MARKET_VALUE_COLUMN_HEADER"), Money.class, Column.VISIBLE));
+		columns.add(new Column(POINT_CHANGE_COLUMN, Locale.getString("POINT_CHANGE"),
+				Locale.getString("POINT_CHANGE_COLUMN_HEADER"), PointChangeFormat.class, Column.HIDDEN));
+		columns.add(new Column(PERCENT_CHANGE_COLUMN, Locale.getString("PERCENT_CHANGE"),
+				Locale.getString("PERCENT_CHANGE_COLUMN_HEADER"), ChangeFormat.class, Column.VISIBLE));
+		columns.add(new Column(PERCENT_RETURN_COLUMN, Locale.getString("PERCENT_RETURN"),
+				Locale.getString("PERCENT_RETURN_COLUMN_HEADER"), ChangeFormat.class, Column.HIDDEN));
+
+		model = new Model(columns, shareAccount, quoteBundle);
+		setModel(model);
+
+		// If the user double clicks on a row then graph the stock
+		addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent event) {
+				handleMouseClicked(event);
+			}
+		});
+
+		showColumns(model);
+		showColumnsMenu = createShowColumnMenu(model);
 	}
 
-	public Object getValueAt(int row, int column) {
-	    if(row >= getRowCount())
-		return "";
-	
-	    Symbol symbol = (Symbol)symbols[row];
-	
-	    StockHolding stockHolding =
-		(StockHolding)stockHoldings.get(symbol);
+	// If the user double clicks on a stock with the LMB, graph the stock.
+	// If the user right clicks over the table, open up a popup menu.
+	private void handleMouseClicked(MouseEvent event) {
+		Point point = event.getPoint();
 
-	    // Shouldnt happen
-	    if(stockHolding == null) {
-                assert false;
-		return "";
-            }
+		// Right click on the table - raise menu
+		if (event.getButton() == MouseEvent.BUTTON3) {
+			JPopupMenu menu = new JPopupMenu();
 
-            switch(column) {
-            case(SYMBOL_COLUMN):
-                return symbol;
+			// Show Columns Menu
+			{
+				menu.add(showColumnsMenu);
+			}
 
-            case(SHARES_COLUMN):
-                return new Integer(stockHolding.getShares());
+			menu.addSeparator();
 
-            case(AVERAGE_COST_COLUMN):
-                return new QuoteFormat(stockHolding.getCost());
+			// Graph
+			{
+				JMenuItem popupGraphSymbols = new JMenuItem(Locale.getString("GRAPH"));
+				popupGraphSymbols.addActionListener(new ActionListener() {
+					public void actionPerformed(final ActionEvent e) {
+						int[] selectedRows = getSelectedRows();
+						List symbols = new ArrayList();
 
-            case(MARKET_PRICE_COLUMN):
-                try {
-                    return new QuoteFormat(quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date));
-                }
-                catch(MissingQuoteException e) {
-                    return new QuoteFormat(0.0D);
-                }
+						for (int i = 0; i < selectedRows.length; i++) {
+							int row = getSortedRow(selectedRows[i]);
 
-            case(MARKET_VALUE_COLUMN):
-                try {
-                    return new Money(currency,
-                                     quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date) *
-                                     stockHolding.getShares());
-                }
-                catch(MissingQuoteException e) {
-                    return new Money(currency, 0.0D);
-                }
+							Symbol symbol = (Symbol) getModel().getValueAt(row, SYMBOL_COLUMN);
 
-            case(PERCENT_RETURN_COLUMN):
-                try {
-                    return new ChangeFormat(stockHolding.getCost(),
-                                            quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date));
-                }
-                catch(MissingQuoteException e) {
-                    return new ChangeFormat(1.0D, 1.0D);
-                }
+							symbols.add(symbol);
+						}
 
-            case(POINT_CHANGE_COLUMN):
-                try {
-                    // Change is calculated by the percent gain between
-                    // yesterday's day close and today's day close. If we don't
-                    // have yesterday's day close available, we just use today's
-                    // day open. These first two should always work.
-                    double finalQuote = quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date);
-                    double initialQuote = quoteBundle.getQuote(symbol, Quote.DAY_OPEN, date);
+						// Graph the highlighted symbols
+						CommandManager.getInstance().graphStockBySymbol(symbols);
+					}
+				});
 
-                    // There might not be any quotes for yesterday, so don't throw an
-                    // assert if we can't get any.
-                    try {
-                        initialQuote =
-                            quoteBundle.getQuote(symbol,
-                                                 Quote.DAY_CLOSE,
-                                                 date.previous(1));
-                    }
-                    catch(MissingQuoteException e) {
-                        // No big deal - we default to day open
-                    }
+				popupGraphSymbols.setEnabled(getSelectedRowCount() > 0);
+				menu.add(popupGraphSymbols);
+			}
 
-                    return new PointChangeFormat(initialQuote, 
-						 finalQuote,
-						 QuoteSourceManager.getSource().
-						 isMarketIndex(symbol));
-		    
-                }
-                catch(MissingQuoteException e) {
-                    return new PointChangeFormat(1.0D, 1.0D);
-                }
+			// Table
+			{
+				JMenuItem popupTableSymbols = new JMenuItem(Locale.getString("TABLE"));
+				popupTableSymbols.addActionListener(new ActionListener() {
+					public void actionPerformed(final ActionEvent e) {
+						int[] selectedRows = getSelectedRows();
+						List symbols = new ArrayList();
 
-            case(PERCENT_CHANGE_COLUMN):
-                try {
-                    // Change is calculated by the percent gain between
-                    // yesterday's day close and today's day close. If we don't
-                    // have yesterday's day close available, we just use today's
-                    // day open. These first two should always work.
-                    double finalQuote = quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date);
-                    double initialQuote = quoteBundle.getQuote(symbol, Quote.DAY_OPEN, date);
+						for (int i = 0; i < selectedRows.length; i++) {
+							int row = getSortedRow(selectedRows[i]);
 
-                    // There might not be any quotes for yesterday, so don't throw an
-                    // assert if we can't get any.
-                    try {
-                        initialQuote =
-                            quoteBundle.getQuote(symbol,
-                                                 Quote.DAY_CLOSE,
-                                                 date.previous(1));
-                    }
-                    catch(MissingQuoteException e) {
-                        // No big deal - we default to day open
-                    }
+							Symbol symbol = (Symbol) getModel().getValueAt(row, SYMBOL_COLUMN);
 
-                    return new ChangeFormat(initialQuote, finalQuote);
-                }
-                catch(MissingQuoteException e) {
-                    return new ChangeFormat(1.0D, 1.0D);
-                }
+							symbols.add(symbol);
+						}
 
-            }
-            assert false;
-	    return null;
+						// Table the highlighted symbols
+						CommandManager.getInstance().tableStocks(symbols);
+					}
+				});
+
+				popupTableSymbols.setEnabled(getSelectedRowCount() > 0);
+				menu.add(popupTableSymbols);
+			}
+
+			menu.show(this, point.x, point.y);
+		}
+
+		// Left double click on the table - graph stock
+		else if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 2) {
+
+			int row = rowAtPoint(point);
+
+			// Get symbol at row
+			Symbol symbol = (Symbol) getModel().getValueAt(row, SYMBOL_COLUMN);
+
+			List symbols = new ArrayList();
+			symbols.add(symbol);
+
+			CommandManager.getInstance().graphStockBySymbol(symbols);
+		}
 	}
-    }
-
-    /**
-     * Create a new stock holding table.
-     *
-     * @param	shareAccount	the share account to table
-     * @param	quoteBundle	the quote bundle
-     */
-    public StockHoldingTable(ShareAccount shareAccount, EODQuoteBundle quoteBundle) {
-        List columns = new ArrayList();
-        columns.add(new Column(SYMBOL_COLUMN,
-			       Locale.getString("SYMBOL"),
-			       Locale.getString("SYMBOL_COLUMN_HEADER"),
-                               Symbol.class, Column.VISIBLE));
-        columns.add(new Column(SHARES_COLUMN,
-			       Locale.getString("SHARES"),
-			       Locale.getString("SHARES_COLUMN_HEADER"),
-                               Integer.class, Column.VISIBLE));
-        columns.add(new Column(AVERAGE_COST_COLUMN,
-			       Locale.getString("AVERAGE_COST"),
-			       Locale.getString("AVERAGE_COST_COLUMN_HEADER"),
-                               QuoteFormat.class, Column.HIDDEN));
-        columns.add(new Column(MARKET_PRICE_COLUMN,
-			       Locale.getString("MARKET_PRICE"),
-			       Locale.getString("MARKET_PRICE_COLUMN_HEADER"),
-                               QuoteFormat.class, Column.VISIBLE));
-        columns.add(new Column(MARKET_VALUE_COLUMN,
-			       Locale.getString("MARKET_VALUE"),
-			       Locale.getString("MARKET_VALUE_COLUMN_HEADER"),
-                               Money.class, Column.VISIBLE));
-        columns.add(new Column(POINT_CHANGE_COLUMN,
-			       Locale.getString("POINT_CHANGE"),
-			       Locale.getString("POINT_CHANGE_COLUMN_HEADER"),
-                               PointChangeFormat.class, Column.HIDDEN));
-        columns.add(new Column(PERCENT_CHANGE_COLUMN,
-			       Locale.getString("PERCENT_CHANGE"),
-			       Locale.getString("PERCENT_CHANGE_COLUMN_HEADER"),
-                               ChangeFormat.class, Column.VISIBLE));
-        columns.add(new Column(PERCENT_RETURN_COLUMN,
-			       Locale.getString("PERCENT_RETURN"),
-			       Locale.getString("PERCENT_RETURN_COLUMN_HEADER"),
-                               ChangeFormat.class, Column.HIDDEN));
-
-        model = new Model(columns, shareAccount, quoteBundle);
-	setModel(model);
-
-	// If the user double clicks on a row then graph the stock
-	addMouseListener(new MouseAdapter() {
-		public void mouseClicked(MouseEvent event) {
-                    handleMouseClicked(event);
-                }
-            });
-
-        showColumns(model);
-        showColumnsMenu = createShowColumnMenu(model);
-    }
-
-    // If the user double clicks on a stock with the LMB, graph the stock.
-    // If the user right clicks over the table, open up a popup menu.
-    private void handleMouseClicked(MouseEvent event) {
-        Point point = event.getPoint();
-
-        // Right click on the table - raise menu
-        if(event.getButton() == MouseEvent.BUTTON3) {
-            JPopupMenu menu = new JPopupMenu();
-
-            // Show Columns Menu
-            {
-                menu.add(showColumnsMenu);
-            }
-
-            menu.addSeparator();
-
-            // Graph
-            {
-                JMenuItem popupGraphSymbols = new JMenuItem(Locale.getString("GRAPH"));
-                popupGraphSymbols.addActionListener(new ActionListener() {
-                        public void actionPerformed(final ActionEvent e) {
-                            int[] selectedRows = getSelectedRows();
-                            List symbols = new ArrayList();
-
-                            for(int i = 0; i < selectedRows.length; i++) {
-                                int row = getSortedRow(selectedRows[i]);
-
-                                Symbol symbol =
-                                    (Symbol)getModel().getValueAt(row, SYMBOL_COLUMN);
-
-                                symbols.add(symbol);
-                            }
-
-                            // Graph the highlighted symbols
-                            CommandManager.getInstance().graphStockBySymbol(symbols);
-                        }
-                    });
-
-                popupGraphSymbols.setEnabled(getSelectedRowCount() > 0);
-                menu.add(popupGraphSymbols);
-            }
-
-            // Table
-            {
-                JMenuItem popupTableSymbols = new JMenuItem(Locale.getString("TABLE"));
-                popupTableSymbols.addActionListener(new ActionListener() {
-                        public void actionPerformed(final ActionEvent e) {
-                            int[] selectedRows = getSelectedRows();
-                            List symbols = new ArrayList();
-
-                            for(int i = 0; i < selectedRows.length; i++) {
-                                int row = getSortedRow(selectedRows[i]);
-
-                                Symbol symbol =
-                                    (Symbol)getModel().getValueAt(row, SYMBOL_COLUMN);
-
-                                symbols.add(symbol);
-                            }
-
-                            // Table the highlighted symbols
-                            CommandManager.getInstance().tableStocks(symbols);
-                        }
-                    });
-
-                popupTableSymbols.setEnabled(getSelectedRowCount() > 0);
-                menu.add(popupTableSymbols);
-            }
-
-            menu.show(this, point.x, point.y);
-        }
-
-        // Left double click on the table - graph stock
-        else if(event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 2) {
-
-            int row = rowAtPoint(point);
-			
-            // Get symbol at row
-            Symbol symbol =
-                (Symbol)getModel().getValueAt(row, SYMBOL_COLUMN);
-
-            List symbols = new ArrayList();
-            symbols.add(symbol);
-
-            CommandManager.getInstance().graphStockBySymbol(symbols);
-        }
-    }
 }

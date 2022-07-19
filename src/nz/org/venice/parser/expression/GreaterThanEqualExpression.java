@@ -30,40 +30,38 @@ import nz.org.venice.quote.Symbol;
  */
 public class GreaterThanEqualExpression extends ComparisionExpression {
 
-    public GreaterThanEqualExpression(Expression left, Expression right) {
-	super(left, right);
-    }
+	public GreaterThanEqualExpression(Expression left, Expression right) {
+		super(left, right);
+	}
 
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
-	throws EvaluationException {
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-	if(getChild(0).evaluate(variables, quoteBundle, symbol, day) >=
-	   getChild(1).evaluate(variables, quoteBundle, symbol, day))
-	    return TRUE;
-	else
-	    return FALSE;
-    }
+		if (getChild(0).evaluate(variables, quoteBundle, symbol, day) >= getChild(1).evaluate(variables, quoteBundle,
+				symbol, day))
+			return TRUE;
+		else
+			return FALSE;
+	}
 
-    public Expression simplify() {
-        // First perform comparision simplifications
-        Expression simplified = super.simplify();
+	public Expression simplify() {
+		// First perform comparision simplifications
+		Expression simplified = super.simplify();
 
-        // If we haven't simplified the whole expression away and
-        // the left and right arguments are the same expression
-        // then the comparision must be true.
-        if(simplified.equals(this) && simplified.getChild(0).equals(simplified.getChild(1)))
-            return new NumberExpression(true);
-        else
-            return simplified;
-    }
+		// If we haven't simplified the whole expression away and
+		// the left and right arguments are the same expression
+		// then the comparision must be true.
+		if (simplified.equals(this) && simplified.getChild(0).equals(simplified.getChild(1)))
+			return new NumberExpression(true);
+		else
+			return simplified;
+	}
 
-    public String toString() {
-	return super.toString(">=");
-    }
+	public String toString() {
+		return super.toString(">=");
+	}
 
-    public Object clone() {
-        return new GreaterThanEqualExpression((Expression)getChild(0).clone(), 
-                                              (Expression)getChild(1).clone());
-    }
+	public Object clone() {
+		return new GreaterThanEqualExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone());
+	}
 }
-

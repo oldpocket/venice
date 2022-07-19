@@ -30,9 +30,8 @@ import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
 
 /**
- * Provides a <code>EODQuoteBundle</code> graph source. This class
- * allows graph sources for day Open, High, Low, Close and
- * Volume (OHLCV).
+ * Provides a <code>EODQuoteBundle</code> graph source. This class allows graph
+ * sources for day Open, High, Low, Close and Volume (OHLCV).
  *
  * @author Andrew Leppard
  */
@@ -46,13 +45,12 @@ public class OHLCVQuoteGraphSource implements GraphSource {
 	private Graphable graphable;
 
 	/**
-	 * Create a new graph source from the quote bundle with the given
-	 * quote type.
+	 * Create a new graph source from the quote bundle with the given quote type.
 	 *
-	 * @param	quoteBundle the quote bundle containing stock quotes
-	 * @param	quote	the quote kind, one of: {@link Quote#DAY_OPEN},
-	 * {@link Quote#DAY_CLOSE}, {@link Quote#DAY_HIGH} or
-	 * {@link Quote#DAY_LOW}
+	 * @param quoteBundle the quote bundle containing stock quotes
+	 * @param quote       the quote kind, one of: {@link Quote#DAY_OPEN},
+	 *                    {@link Quote#DAY_CLOSE}, {@link Quote#DAY_HIGH} or
+	 *                    {@link Quote#DAY_LOW}
 	 */
 	public OHLCVQuoteGraphSource(EODQuoteBundle quoteBundle, int quote) {
 		this.quote = quote;
@@ -65,18 +63,16 @@ public class OHLCVQuoteGraphSource implements GraphSource {
 		graphable = new Graphable();
 		Double value;
 
-		for(TradingDate date = quoteBundle.getFirstDate();
-				date.compareTo(quoteBundle.getLastDate()) <= 0;
-				date = date.next(1)) {
+		for (TradingDate date = quoteBundle.getFirstDate(); date.compareTo(quoteBundle.getLastDate()) <= 0; date = date
+				.next(1)) {
 
 			try {
 				value = new Double(quoteBundle.getQuote(symbol, quote, date));
-				graphable.putY((Comparable)date, value);
-			}
-			catch(MissingQuoteException e) {
+				graphable.putY((Comparable) date, value);
+			} catch (MissingQuoteException e) {
 				// ignore
 			}
-		}	
+		}
 
 		// Make sure we contain at least one value!
 		assert graphable.getXRange().size() > 0;
@@ -94,20 +90,20 @@ public class OHLCVQuoteGraphSource implements GraphSource {
 		return GraphSource.SYMBOL;
 	}
 
-	//FIXME For some reason, adjustments aren't reversible, 
-	//ie split 2 for 1 from some date. Reverse Split 1 for 2 from same date
-	//doesn't work.
+	// FIXME For some reason, adjustments aren't reversible,
+	// ie split 2 for 1 from some date. Reverse Split 1 for 2 from same date
+	// doesn't work.
 
 	public void adjust(int type, double value, Comparable startPoint, boolean forward) {
 		double newValue = 0.0;
 
 		if (forward) {
-			Comparable last = graphable.getEndX();	    
+			Comparable last = graphable.getEndX();
 			Iterator iterator = graphable.iterator();
-			//Advance the iterator until we're at the offset point
+			// Advance the iterator until we're at the offset point
 
 			while (iterator.hasNext()) {
-				Comparable X = (Comparable)iterator.next();
+				Comparable X = (Comparable) iterator.next();
 
 				if (X.compareTo(startPoint) < 0) {
 					continue;
@@ -117,18 +113,18 @@ public class OHLCVQuoteGraphSource implements GraphSource {
 				newValue = getNewValue(type, prevValue.doubleValue(), value);
 
 				graphable.putY(X, new Double(newValue));
-			}	    
+			}
 		} else {
-			Comparable last = graphable.getStartX();	    
+			Comparable last = graphable.getStartX();
 			Iterator iterator = graphable.iterator();
 
 			while (iterator.hasNext()) {
-				Comparable X = (Comparable)iterator.next();
+				Comparable X = (Comparable) iterator.next();
 
-				//Past the date point of adjustment - leave rest of data alone.
+				// Past the date point of adjustment - leave rest of data alone.
 				if (X.compareTo(startPoint) > 0) {
 					break;
-				}		
+				}
 
 				Double prevValue = graphable.getY(X);
 				newValue = getNewValue(type, prevValue.doubleValue(), value);
@@ -146,10 +142,10 @@ public class OHLCVQuoteGraphSource implements GraphSource {
 			assert operand != 0;
 			rv = oldValue / operand;
 			break;
-		case Adjustment.ADJUST_DIVIDEND:	     
+		case Adjustment.ADJUST_DIVIDEND:
 			rv = oldValue + operand;
-			//Don't adjust into negative territory
-			if (rv <  0.0) {
+			// Don't adjust into negative territory
+			if (rv < 0.0) {
 				rv = 0.0;
 			}
 			break;
@@ -159,112 +155,77 @@ public class OHLCVQuoteGraphSource implements GraphSource {
 		return rv;
 	}
 
-
 	public String getToolTipText(Comparable x) {
 		// In OHLCV graphs the x axis is in dates
-		TradingDate date = (TradingDate)x;
+		TradingDate date = (TradingDate) x;
 
-		try {	
-			if(quote == Quote.DAY_VOLUME) {
-				return
-						new String("<html>" +
-								symbol +
-								", " +
-								date.toLongString() +
-								"<p>" +
-								Math.round(quoteBundle.
-										getQuote(symbol,
-												Quote.DAY_VOLUME,
-												date)) +
-								"</html>");
-			}
-			else {
+		try {
+			if (quote == Quote.DAY_VOLUME) {
+				return new String("<html>" + symbol + ", " + date.toLongString() + "<p>"
+						+ Math.round(quoteBundle.getQuote(symbol, Quote.DAY_VOLUME, date)) + "</html>");
+			} else {
 				double dayLow = quoteBundle.getQuote(symbol, Quote.DAY_LOW, date);
 				double dayHigh = quoteBundle.getQuote(symbol, Quote.DAY_HIGH, date);
 				double dayOpen = quoteBundle.getQuote(symbol, Quote.DAY_OPEN, date);
 				double dayClose = quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date);
 
-				return
-						new String("<html>" +
-								symbol +
-								", " +
-								date.toLongString() +
-								"<p>" +
-								"<font color=red>" +
-								QuoteFormat.quoteToString(dayLow) +
-								" </font>" +
-								"<font color=green>" +
-								QuoteFormat.quoteToString(dayHigh) +
-								" </font>" +
-								QuoteFormat.quoteToString(dayOpen) +
-								" " +
-								QuoteFormat.quoteToString(dayClose) +
-								"</html>");
+				return new String("<html>" + symbol + ", " + date.toLongString() + "<p>" + "<font color=red>"
+						+ QuoteFormat.quoteToString(dayLow) + " </font>" + "<font color=green>"
+						+ QuoteFormat.quoteToString(dayHigh) + " </font>" + QuoteFormat.quoteToString(dayOpen) + " "
+						+ QuoteFormat.quoteToString(dayClose) + "</html>");
 			}
-		}
-		catch(MissingQuoteException e) {
+		} catch (MissingQuoteException e) {
 			return null;
 		}
 	}
 
 	public String getYLabel(double value) {
-		if(quote == Quote.DAY_VOLUME) {
+		if (quote == Quote.DAY_VOLUME) {
 			final double BILLION = 1000000000D;
 			final double MILLION = 1000000D;
 			String extension = "";
 
-			if(Math.abs(value) >= BILLION) {
+			if (Math.abs(value) >= BILLION) {
 				value /= BILLION;
 				extension = "B";
-			}
-			else if(Math.abs(value) >= MILLION) {
+			} else if (Math.abs(value) >= MILLION) {
 				value /= MILLION;
 				extension = "M";
 			}
 
-			return Integer.toString((int)value) + extension;
-		}
-		else {
+			return Integer.toString((int) value) + extension;
+		} else {
 			return Money.toString(value);
 		}
 	}
 
 	public double[] getAcceptableMajorDeltas() {
 
-		if(quote == Quote.DAY_VOLUME) {
-			double[] major = {10D,
-					100D,
-					1000D, // 1T
-					10000D,
-					100000D,
-					1000000D, // 1M
-					10000000D,
-					100000000D,
-					1000000000D, // 1B
-					10000000000D};
+		if (quote == Quote.DAY_VOLUME) {
+			double[] major = { 10D, 100D, 1000D, // 1T
+					10000D, 100000D, 1000000D, // 1M
+					10000000D, 100000000D, 1000000000D, // 1B
+					10000000000D };
 			return major;
-		}
-		else {
-			double[] major = {0.001D, // 0.1c
+		} else {
+			double[] major = { 0.001D, // 0.1c
 					0.01D, // 1c
 					0.1D, // 10c
 					1.0D, // $1
 					10.0D, // $10
 					100.0D, // $100
-					1000.0D}; // $1000
-			return major;	
+					1000.0D }; // $1000
+			return major;
 		}
 	}
 
 	public double[] getAcceptableMinorDeltas() {
-		if(quote == Quote.DAY_VOLUME) {
-			double[] minor = {1D, 1.5D, 2D, 2.5D, 3D, 4D, 5D, 6D, 8D};
+		if (quote == Quote.DAY_VOLUME) {
+			double[] minor = { 1D, 1.5D, 2D, 2.5D, 3D, 4D, 5D, 6D, 8D };
 			return minor;
-		}
-		else {
-			double[] minor = {1D, 1.1D, 1.25D, 1.3333D, 1.5D, 2D, 2.25D,
-					2.5D, 3D, 3.3333D, 4D, 5D, 6D, 6.5D, 7D, 7.5D,
-					8D, 9D};
+		} else {
+			double[] minor = { 1D, 1.1D, 1.25D, 1.3333D, 1.5D, 2D, 2.25D, 2.5D, 3D, 3.3333D, 4D, 5D, 6D, 6.5D, 7D, 7.5D,
+					8D, 9D };
 			return minor;
 		}
 	}

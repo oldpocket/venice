@@ -16,10 +16,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-
 package nz.org.venice.prefs.settings;
-
 
 /**
  * This class represents quote module data which can restore Quote modules upon restart. 
@@ -38,70 +35,69 @@ import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.table.QuoteModule;
 
 public class QuoteModuleSettings extends AbstractSettings {
-    
-    private EODQuoteBundle quoteBundle;
-    private boolean singleDate;
 
-    /**
-     *
-     * QuoteModuleSettings default constructor
-     */
-    
-    public QuoteModuleSettings() {
-	super(Settings.TABLE, Settings.QUOTEMODULE);	
-    }
+	private EODQuoteBundle quoteBundle;
+	private boolean singleDate;
 
-    /**
-     * 
-     * Set the quoteBundle for these Settings
-     * 
-     * @param quoteBundle  The quoteBundle of a QuoteModule
-     */
-    
-    public void setQuoteBundle(EODQuoteBundle quoteBundle) {
-	this.quoteBundle = quoteBundle;
-    }
+	/**
+	 *
+	 * QuoteModuleSettings default constructor
+	 */
 
-    /**
-     * 
-     * Return the quoteBundle of these Settings
-     * 
-     * @return A quoteBundle of a QuoteModule
-     */
-    public EODQuoteBundle getQuoteBundle() {
-	return quoteBundle;
-    }
+	public QuoteModuleSettings() {
+		super(Settings.TABLE, Settings.QUOTEMODULE);
+	}
 
-    /**
-     * 
-     * Return the singleDate flag
-     * 
-     * @return The singleDate flag
-     */
-   
-    public boolean getSingleDate() {
-	return singleDate;
-    }
-    
+	/**
+	 * 
+	 * Set the quoteBundle for these Settings
+	 * 
+	 * @param quoteBundle The quoteBundle of a QuoteModule
+	 */
 
-    /**
-     * 
-     * Set the singleDate flag
-     * 
-     * @param singleDate  Wether the quoteModule consists of a single date
-     */
-    public void setSingleDate(boolean singleDate) {
-	this.singleDate = singleDate;
-    }    
-    
-    /**
-     * 
-     * Return a QuoteModule based on these settings
-     * 
-     * @return A QuoteModule
-     */
-    public Module getModule(JDesktopPane desktop) {	
-	return new QuoteModule(quoteBundle, singleDate);		
-    }
+	public void setQuoteBundle(EODQuoteBundle quoteBundle) {
+		this.quoteBundle = quoteBundle;
+	}
+
+	/**
+	 * 
+	 * Return the quoteBundle of these Settings
+	 * 
+	 * @return A quoteBundle of a QuoteModule
+	 */
+	public EODQuoteBundle getQuoteBundle() {
+		return quoteBundle;
+	}
+
+	/**
+	 * 
+	 * Return the singleDate flag
+	 * 
+	 * @return The singleDate flag
+	 */
+
+	public boolean getSingleDate() {
+		return singleDate;
+	}
+
+	/**
+	 * 
+	 * Set the singleDate flag
+	 * 
+	 * @param singleDate Wether the quoteModule consists of a single date
+	 */
+	public void setSingleDate(boolean singleDate) {
+		this.singleDate = singleDate;
+	}
+
+	/**
+	 * 
+	 * Return a QuoteModule based on these settings
+	 * 
+	 * @return A QuoteModule
+	 */
+	public Module getModule(JDesktopPane desktop) {
+		return new QuoteModule(quoteBundle, singleDate);
+	}
 
 }

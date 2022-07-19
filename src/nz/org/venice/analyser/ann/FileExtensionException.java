@@ -19,14 +19,14 @@
 package nz.org.venice.analyser.ann;
 
 /**
- * An exception which is thrown when the user try to load or to save a file
- * with wrong extension.
+ * An exception which is thrown when the user try to load or to save a file with
+ * wrong extension.
  *
  * @author Alberto Nacher
  */
 public class FileExtensionException extends Exception {
-    
-    /** Creates a new instance of FileExtensionException */
-    public FileExtensionException() {
-    }
+
+	/** Creates a new instance of FileExtensionException */
+	public FileExtensionException() {
+	}
 }

@@ -19,8 +19,8 @@
 package nz.org.venice.alert;
 
 /**
- * Provides an interface to set, modify and delete alerts. Allows AlertModule  
- * to do the updates regardless of where the alerts are stored.
+ * Provides an interface to set, modify and delete alerts. Allows AlertModule to
+ * do the updates regardless of where the alerts are stored.
  *
  * @author Mark Hummel
  * @see Alert
@@ -30,65 +30,64 @@ package nz.org.venice.alert;
 
 public interface AlertWriter {
 
-    
-    /**
-     * 
-     * Set the alert. 
-     * @param alert    The alert to add
-     */    
-    public void set(OHLCVAlert alert);
+	/**
+	 * 
+	 * Set the alert.
+	 * 
+	 * @param alert The alert to add
+	 */
+	public void set(OHLCVAlert alert);
 
+	/**
+	 * 
+	 * Set the alert.
+	 * 
+	 * @param alert The alert to add
+	 */
+	public void set(GondolaAlert alert);
 
-    /**
-     * 
-     * Set the alert. 
-     * @param alert    The alert to add
-     */    
-    public void set(GondolaAlert alert);
+	/**
+	 *
+	 * Update the alert and make it a OHLCVAlert.
+	 * 
+	 * @param alert    The alert to modify
+	 * @param newAlert The alert settings to use for modification
+	 */
 
-    /**
-     *
-     * Update the alert and make it a OHLCVAlert.
-     * 
-     * @param alert      The alert to modify
-     * @param newAlert   The alert settings to use for modification
-     */
+	public void update(Alert alert, OHLCVAlert newAlert);
 
-    public void update(Alert alert, OHLCVAlert newAlert);
+	/**
+	 *
+	 * Update the alert and make it a GondolaAlert.
+	 * 
+	 * @param alert    The alert to modify
+	 * @param newAlert The alert settings to use for modification
+	 */
 
-    /**
-     *
-     * Update the alert and make it a GondolaAlert.
-     * 
-     * @param alert      The alert to modify
-     * @param newAlert   The alert settings to use for modification
-     */
+	public void update(Alert alert, GondolaAlert newAlert);
 
-    public void update(Alert alert, GondolaAlert newAlert);
-               
-    /**
-     * Remove a specific alert.
-     * 
-     * @param alert      Tne alert to remove.
-     */
-    
-    public void remove(Alert alert);
+	/**
+	 * Remove a specific alert.
+	 * 
+	 * @param alert Tne alert to remove.
+	 */
 
+	public void remove(Alert alert);
 
-    /**
-     *
-     * Enable an alert.
-     *
-     * @param alert The alert to enable.
-     */
-    public void enable(Alert alert);
+	/**
+	 *
+	 * Enable an alert.
+	 *
+	 * @param alert The alert to enable.
+	 */
+	public void enable(Alert alert);
 
-    /**
-     *
-     * Enable an alert.
-     *
-     * @param alert The alert to disable.
-     */
-    public void disable(Alert alert);
-  
+	/**
+	 *
+	 * Enable an alert.
+	 *
+	 * @param alert The alert to disable.
+	 */
+	public void disable(Alert alert);
+
 }

@@ -30,135 +30,125 @@ import nz.org.venice.util.TradingDate;
  */
 public class CashAccount extends AbstractAccount implements Cloneable {
 
-    // Amount of cash available
-    private Money capital;
+	// Amount of cash available
+	private Money capital;
 
-    // Currency of the cash account.
-    private Currency currency;
+	// Currency of the cash account.
+	private Currency currency;
 
-    // Name of cash account
-    private String name;
+	// Name of cash account
+	private String name;
 
-    /**
-     * Create a new cash account with the given currency.
-     *
-     * @param	name	 the name of the new cash account
-     * @param   currency the currency of the cash account
-     */
-    public CashAccount(String name, Currency currency) {
-	this.name = name;
-        this.currency = currency;
-	this.capital = new Money(currency, 0.0D);
-    }
-
-    /**
-     * Create a new cash account with the default currency.
-     *
-     * @param	name	 the name of the new cash account
-     */
-    public CashAccount(String name) {
-        this(name, Currency.getDefaultCurrency());
-    }
-
-    public void transaction(Transaction transaction) {
-	int type = transaction.getType();
-
-	// Update value of account
-	if(type == Transaction.WITHDRAWAL ||
-	   type == Transaction.FEE) {
-            assert transaction.getAmount().getCurrency().equals(currency);
-	    capital = capital.subtract(transaction.getAmount());
+	/**
+	 * Create a new cash account with the given currency.
+	 *
+	 * @param name     the name of the new cash account
+	 * @param currency the currency of the cash account
+	 */
+	public CashAccount(String name, Currency currency) {
+		this.name = name;
+		this.currency = currency;
+		this.capital = new Money(currency, 0.0D);
 	}
-	else if(type == Transaction.DEPOSIT ||
-		type == Transaction.INTEREST ||
-		type == Transaction.DIVIDEND) {
-            assert transaction.getAmount().getCurrency().equals(currency);
-	    capital = capital.add(transaction.getAmount());
+
+	/**
+	 * Create a new cash account with the default currency.
+	 *
+	 * @param name the name of the new cash account
+	 */
+	public CashAccount(String name) {
+		this(name, Currency.getDefaultCurrency());
 	}
-	else if(type == Transaction.ACCUMULATE) {
-            assert transaction.getAmount().getCurrency().equals(currency);
-            assert transaction.getTradeCost().getCurrency().equals(currency);
-	    capital = capital.subtract(transaction.getAmount());
-            capital = capital.subtract(transaction.getTradeCost());
+
+	public void transaction(Transaction transaction) {
+		int type = transaction.getType();
+
+		// Update value of account
+		if (type == Transaction.WITHDRAWAL || type == Transaction.FEE) {
+			assert transaction.getAmount().getCurrency().equals(currency);
+			capital = capital.subtract(transaction.getAmount());
+		} else if (type == Transaction.DEPOSIT || type == Transaction.INTEREST || type == Transaction.DIVIDEND) {
+			assert transaction.getAmount().getCurrency().equals(currency);
+			capital = capital.add(transaction.getAmount());
+		} else if (type == Transaction.ACCUMULATE) {
+			assert transaction.getAmount().getCurrency().equals(currency);
+			assert transaction.getTradeCost().getCurrency().equals(currency);
+			capital = capital.subtract(transaction.getAmount());
+			capital = capital.subtract(transaction.getTradeCost());
+		} else if (type == Transaction.REDUCE) {
+			assert transaction.getAmount().getCurrency().equals(currency);
+			assert transaction.getTradeCost().getCurrency().equals(currency);
+			capital = capital.add(transaction.getAmount());
+			capital = capital.subtract(transaction.getTradeCost());
+		} else if (type == Transaction.TRANSFER) {
+			assert transaction.getAmount().getCurrency().equals(currency);
+
+			// Are we transfering to or from this account?
+			if (transaction.getCashAccount() == this) {
+				capital = capital.subtract(transaction.getAmount()); // from
+			} else {
+				capital = capital.add(transaction.getAmount()); // to
+			}
+		}
 	}
-	else if(type == Transaction.REDUCE) {
-            assert transaction.getAmount().getCurrency().equals(currency);
-            assert transaction.getTradeCost().getCurrency().equals(currency);
-	    capital = capital.add(transaction.getAmount());
-            capital = capital.subtract(transaction.getTradeCost());
+
+	/**
+	 * Create a clone of this account.
+	 *
+	 * @return the clone
+	 */
+	public Object clone() {
+		CashAccount clonedCashAccount = new CashAccount(getName(), getCurrency());
+
+		return clonedCashAccount;
 	}
-	else if(type == Transaction.TRANSFER) {
-            assert transaction.getAmount().getCurrency().equals(currency);
 
-	    // Are we transfering to or from this account?
-	    if(transaction.getCashAccount() == this) {
-		capital = capital.subtract(transaction.getAmount()); // from
-	    }
-	    else {
-		capital = capital.add(transaction.getAmount()); // to
-	    }
+	/**
+	 * Compares this cash account to another.
+	 *
+	 * @param object another cash account
+	 * @return <code>true</code> if the cash accounts are equal; <code>false</code>
+	 *         otherwise
+	 */
+	public boolean equals(Object object) {
+		if (object instanceof CashAccount) {
+			CashAccount account = (CashAccount) object;
+
+			return (account.getName().equals(getName()) && account.getCurrency().equals(getCurrency())
+					&& account.getValue().equals(getValue()));
+		} else
+			return false;
 	}
-    }
 
-    /**
-     * Create a clone of this account.
-     *
-     * @return the clone
-     */
-    public Object clone() {
-	CashAccount clonedCashAccount = new CashAccount(getName(), getCurrency());
+	public String getName() {
+		return name;
+	}
 
-	return clonedCashAccount;
-    }
+	public Money getValue(EODQuoteBundle quoteBundle, int dateOffset) {
+		return capital;
+	}
 
-    /**
-     * Compares this cash account to another.
-     *
-     * @param object another cash account
-     * @return <code>true</code> if the cash accounts are equal; <code>false</code> otherwise
-     */
-    public boolean equals(Object object) {
-        if(object instanceof CashAccount) {
-            CashAccount account = (CashAccount)object;
+	public Money getValue(EODQuoteBundle quoteBundle, TradingDate date) {
+		return capital;
+	}
 
-            return(account.getName().equals(getName()) &&
-                   account.getCurrency().equals(getCurrency()) &&
-                   account.getValue().equals(getValue()));
-        }
-        else
-            return false;
-    }
+	/**
+	 * Return the value of this account. Since the value does not depend on any
+	 * stock price, the cache and date can be omitted.
+	 */
+	public Money getValue() {
+		return capital;
+	}
 
-    public String getName() {
-	return name;
-    }
+	public Currency getCurrency() {
+		return currency;
+	}
 
-    public Money getValue(EODQuoteBundle quoteBundle, int dateOffset) {
-	return capital;
-    }
+	public void removeAllTransactions() {
+		capital = new Money(currency, 0.0D);
+	}
 
-    public Money getValue(EODQuoteBundle quoteBundle, TradingDate date) {
-	return capital;
-    }
-
-    /**
-     * Return the value of this account. Since the value does not
-     * depend on any stock price, the cache and date can be
-     * omitted.
-     */
-    public Money getValue() {
-	return capital;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void removeAllTransactions() {
-	capital = new Money(currency, 0.0D);
-    }
-
-    public int getType() {
-	return Account.CASH_ACCOUNT;
-    }
+	public int getType() {
+		return Account.CASH_ACCOUNT;
+	}
 }

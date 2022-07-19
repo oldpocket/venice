@@ -35,8 +35,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
-
-
 /**
  * This classes writes Symbol Metadata as XML.
  * 
@@ -46,67 +44,64 @@ import org.w3c.dom.Text;
  */
 
 public class SymbolMetadataWriter {
-    private SymbolMetadataWriter() {
+	private SymbolMetadataWriter() {
 
-    }
+	}
 
-    /**
-     * Write the symbol metadata to the output stream in XML format.
-     *
-     * @param symbolMetadata the symbol metadata to write
-     * @param stream      the output stream to write the watch screen.
-     */
-    public static void write(List symbolMetadata, OutputStream stream) {
-        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-	
+	/**
+	 * Write the symbol metadata to the output stream in XML format.
+	 *
+	 * @param symbolMetadata the symbol metadata to write
+	 * @param stream         the output stream to write the watch screen.
+	 */
+	public static void write(List symbolMetadata, OutputStream stream) {
+		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 
-        try {
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            Document document = builder.newDocument();
+		try {
+			DocumentBuilder builder = builderFactory.newDocumentBuilder();
+			Document document = builder.newDocument();
 
-            Element dataElement = (Element)document.createElement("symbolsMetadata");
-	    Iterator iterator = symbolMetadata.iterator();
-	    while (iterator.hasNext()) {
-		SymbolMetadata data = (SymbolMetadata)iterator.next();
-		
-		Element childElement = (Element)document.createElement("symbolMetadata");
-		Element symbolElement = (Element)document.createElement("symbol");
-		Element nameElement = (Element)document.createElement("name");
-		Element indexElement = (Element)document.createElement("isIndex");
-		setValue(document, symbolElement, data.getSymbol().toString());
-		setValue(document, nameElement, data.getName().toString());
-		setValue(document, indexElement, new Boolean(data.isIndex()));
+			Element dataElement = (Element) document.createElement("symbolsMetadata");
+			Iterator iterator = symbolMetadata.iterator();
+			while (iterator.hasNext()) {
+				SymbolMetadata data = (SymbolMetadata) iterator.next();
 
-		childElement.appendChild(symbolElement);
-		childElement.appendChild(nameElement);
-		childElement.appendChild(indexElement);
+				Element childElement = (Element) document.createElement("symbolMetadata");
+				Element symbolElement = (Element) document.createElement("symbol");
+				Element nameElement = (Element) document.createElement("name");
+				Element indexElement = (Element) document.createElement("isIndex");
+				setValue(document, symbolElement, data.getSymbol().toString());
+				setValue(document, nameElement, data.getName().toString());
+				setValue(document, indexElement, new Boolean(data.isIndex()));
 
-		dataElement.appendChild(childElement);
-            }
+				childElement.appendChild(symbolElement);
+				childElement.appendChild(nameElement);
+				childElement.appendChild(indexElement);
 
-	    document.appendChild(dataElement);
+				dataElement.appendChild(childElement);
+			}
 
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
+			document.appendChild(dataElement);
 
-            DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(stream);
-            transformer.transform(source, result);
-	    
-        }
-        catch(ParserConfigurationException e) {
-            // This should not occur
-            assert false;
-        }
-        catch(TransformerException e) {
-            // This should not occur
-            assert false;
-        }
-    }
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
 
-    private static void setValue(Document document, Element e, Object value) {
-	Text valueText = document.createTextNode(value.toString());	
-	e.appendChild(valueText);
-    }
+			DOMSource source = new DOMSource(document);
+			StreamResult result = new StreamResult(stream);
+			transformer.transform(source, result);
+
+		} catch (ParserConfigurationException e) {
+			// This should not occur
+			assert false;
+		} catch (TransformerException e) {
+			// This should not occur
+			assert false;
+		}
+	}
+
+	private static void setValue(Document document, Element e, Object value) {
+		Text valueText = document.createTextNode(value.toString());
+		e.appendChild(valueText);
+	}
 
 }

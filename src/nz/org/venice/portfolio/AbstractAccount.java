@@ -25,22 +25,22 @@ package nz.org.venice.portfolio;
  */
 public abstract class AbstractAccount implements Account, Comparable {
 
-    /**
-     * Create a new account.
-     */
-    public AbstractAccount() {
-        // nothing to do
-    }
+	/**
+	 * Create a new account.
+	 */
+	public AbstractAccount() {
+		// nothing to do
+	}
 
-    /**
-     * Compare this account to another account and sort by name.
-     *
-     * @param object other account
-     * @return a negative integer, zero, or a positive integer as this object 
-     *         is less than, equal to, or greater than the specified object.
-     */
-    public int compareTo(Object object) {
-        Account account = (Account)object;
-        return getName().compareTo(account.getName());
-    }
+	/**
+	 * Compare this account to another account and sort by name.
+	 *
+	 * @param object other account
+	 * @return a negative integer, zero, or a positive integer as this object is
+	 *         less than, equal to, or greater than the specified object.
+	 */
+	public int compareTo(Object object) {
+		Account account = (Account) object;
+		return getName().compareTo(account.getName());
+	}
 }

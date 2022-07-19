@@ -21,107 +21,107 @@ package nz.org.venice.ui;
 import java.text.NumberFormat;
 
 /**
- * Representation of a quote's point change for display in a table. This class is
- * used by the {@link AbstractTable} class to identify the value type so that it can
- * render the value correctly. If the day close of a stock today is 30.0 and the day
- * close of the stock yesterday was 29.0, then today's point change is +1.
+ * Representation of a quote's point change for display in a table. This class
+ * is used by the {@link AbstractTable} class to identify the value type so that
+ * it can render the value correctly. If the day close of a stock today is 30.0
+ * and the day close of the stock yesterday was 29.0, then today's point change
+ * is +1.
  *
  * @author Andrew Leppard
  */
 public class PointChangeFormat implements Comparable {
 
-    // The point change.
-    private double change;
+	// The point change.
+	private double change;
 
-    // Use NumberFormat to format the value.
-    private static NumberFormat format;
+	// Use NumberFormat to format the value.
+	private static NumberFormat format;
 
-    /**
-     * Create a new point change format object.
-     *
-     * @param change the point change.
-     */
-    public PointChangeFormat(double change) {
-	this.change = change;
-    }
+	/**
+	 * Create a new point change format object.
+	 *
+	 * @param change the point change.
+	 */
+	public PointChangeFormat(double change) {
+		this.change = change;
+	}
 
-    /**
-     * Create a new point change format object.
-     *
-     * @param initialValue the initial quote value
-     * @param finalValue the final quote value
-     */
-    public PointChangeFormat(double initialValue, double finalValue) {
-        change = (finalValue - initialValue) * 100;
-    }
+	/**
+	 * Create a new point change format object.
+	 *
+	 * @param initialValue the initial quote value
+	 * @param finalValue   the final quote value
+	 */
+	public PointChangeFormat(double initialValue, double finalValue) {
+		change = (finalValue - initialValue) * 100;
+	}
 
-    /**
-     * Create a new point change format object.
-     *
-     * @param initialValue the initial quote value
-     * @param finalValue the final quote value
-     * @param isIndex if the source of the change is an index.
-     */
-    public PointChangeFormat(double initialValue, double finalValue, boolean isIndex) {
-	double diff = finalValue - initialValue;
-	change = (isIndex) ? diff : diff * 100;	
-    }
+	/**
+	 * Create a new point change format object.
+	 *
+	 * @param initialValue the initial quote value
+	 * @param finalValue   the final quote value
+	 * @param isIndex      if the source of the change is an index.
+	 */
+	public PointChangeFormat(double initialValue, double finalValue, boolean isIndex) {
+		double diff = finalValue - initialValue;
+		change = (isIndex) ? diff : diff * 100;
+	}
 
-    /**
-     * Return the point change.
-     *
-     * @return the point change.
-     */
-    public double getPointChange() {
-	return change;
-    }
+	/**
+	 * Return the point change.
+	 *
+	 * @return the point change.
+	 */
+	public double getPointChange() {
+		return change;
+	}
 
-    /**
-     * Create a string representation of the point change.
-     *
-     * @return string representation of the point change.
-     */
-    public String toString() {
-        return getNumberFormat().format(getPointChange());
-    }
+	/**
+	 * Create a string representation of the point change.
+	 *
+	 * @return string representation of the point change.
+	 */
+	public String toString() {
+		return getNumberFormat().format(getPointChange());
+	}
 
-    /**
-     * Compare two change objects.
-     *
-     * @param	object	change object to compare to
-     * @return	the value <code>0</code> if the change objects are equal;
-     * <code>1</code> if this change object is after the specified change
-     * object or
-     * <code>-1</code> if this change object is before the specified change
-     * object
-     */
-    public int compareTo(Object object) {
+	/**
+	 * Compare two change objects.
+	 *
+	 * @param object change object to compare to
+	 * @return the value <code>0</code> if the change objects are equal;
+	 *         <code>1</code> if this change object is after the specified change
+	 *         object or <code>-1</code> if this change object is before the
+	 *         specified change object
+	 */
+	public int compareTo(Object object) {
 
-	PointChangeFormat change = (PointChangeFormat)object;
+		PointChangeFormat change = (PointChangeFormat) object;
 
-	if(getPointChange() < change.getPointChange())
-	    return -1;
-	if(getPointChange() > change.getPointChange())
-	    return 1;
+		if (getPointChange() < change.getPointChange())
+			return -1;
+		if (getPointChange() > change.getPointChange())
+			return 1;
 
-	return 0;
-    }	
+		return 0;
+	}
 
-    /**
-     * Get number format object for this class.
-     *
-     * @return the number format.
-     */
-    private static NumberFormat getNumberFormat() {
-        // Synchronisation cannot cause issues here. So this code
-        // isn't synchronised.
-        if(format == null) {
-            format = NumberFormat.getInstance();
-            format.setMinimumIntegerDigits(1);
-            format.setMinimumFractionDigits(0);
-            format.setMaximumFractionDigits(1);
-        }
+	/**
+	 * Get number format object for this class.
+	 *
+	 * @return the number format.
+	 */
+	private static NumberFormat getNumberFormat() {
+		// Synchronisation cannot cause issues here. So this code
+		// isn't synchronised.
+		if (format == null) {
+			format = NumberFormat.getInstance();
+			format.setMinimumIntegerDigits(1);
+			format.setMinimumFractionDigits(0);
+			format.setMaximumFractionDigits(1);
+		}
 
-        return format;
-    }
+		return format;
+	}
 }

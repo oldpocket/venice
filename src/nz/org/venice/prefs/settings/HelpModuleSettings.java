@@ -16,10 +16,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-
 package nz.org.venice.prefs.settings;
-
 
 import java.util.Stack;
 
@@ -39,82 +36,81 @@ import nz.org.venice.help.HelpModule;
 import nz.org.venice.main.Module;
 
 public class HelpModuleSettings extends AbstractSettings {
-    
 
-    private int positionInStack; 
-    private Stack visitedPages;
+	private int positionInStack;
+	private Stack visitedPages;
 
-    /**
-     * Default HelpModuleSettings constructor
-     */
+	/**
+	 * Default HelpModuleSettings constructor
+	 */
 
-    public HelpModuleSettings() {
-	super(Settings.TABLE, Settings.HELPMODULE);
-    }
+	public HelpModuleSettings() {
+		super(Settings.TABLE, Settings.HELPMODULE);
+	}
 
-    /**
-     * Create a HelpModuleSettings object using title as key
-     * 
-     * @param  title  The title of the HelpModule
-     */
+	/**
+	 * Create a HelpModuleSettings object using title as key
+	 * 
+	 * @param title The title of the HelpModule
+	 */
 
-    public HelpModuleSettings(String title) {
-	super(Settings.TABLE, Settings.HELPMODULE);
-	super.setTitle(title);
-    }
+	public HelpModuleSettings(String title) {
+		super(Settings.TABLE, Settings.HELPMODULE);
+		super.setTitle(title);
+	}
 
-    /**
-     * 
-     * Return a stack of visitedPages
-     * 
-     * @return A stack representing help pages visited
-     */
+	/**
+	 * 
+	 * Return a stack of visitedPages
+	 * 
+	 * @return A stack representing help pages visited
+	 */
 
-    public Stack getVisitedPages() {
-	return visitedPages;
-    }
+	public Stack getVisitedPages() {
+		return visitedPages;
+	}
 
-    /**
-     * Set the stack of help pages visited.
-     * 
-     * @param visitedPages  A stack
-     */
+	/**
+	 * Set the stack of help pages visited.
+	 * 
+	 * @param visitedPages A stack
+	 */
 
-    public void setVisitedPages(Stack visitedPages) {
-	this.visitedPages = visitedPages;
-    }
+	public void setVisitedPages(Stack visitedPages) {
+		this.visitedPages = visitedPages;
+	}
 
-    /**
-     * 
-     * Return the position in  a stack of visited pages
-     * 
-     * @return  The position in the stack
-     */
+	/**
+	 * 
+	 * Return the position in a stack of visited pages
+	 * 
+	 * @return The position in the stack
+	 */
 
-    public int getPositionInStack() {
-	return positionInStack;
-    }
+	public int getPositionInStack() {
+		return positionInStack;
+	}
 
-    /**
-     *
-     * Set the position in a stack of visited pages
-     * 
-     * @param positionInStack  An index to the stack
-     */
+	/**
+	 *
+	 * Set the position in a stack of visited pages
+	 * 
+	 * @param positionInStack An index to the stack
+	 */
 
-    public void setPositionInStack(int positionInStack) {
-	this.positionInStack = positionInStack;
-    }
+	public void setPositionInStack(int positionInStack) {
+		this.positionInStack = positionInStack;
+	}
 
-    /**
-     * 
-     * Return a HelpModule based on this Settings object
-     * 
-     * @param  desktop   The Venice desktop
-     * @return A HelpModule
-     */
+	/**
+	 * 
+	 * Return a HelpModule based on this Settings object
+	 * 
+	 * @param desktop The Venice desktop
+	 * @return A HelpModule
+	 */
 
-    public Module getModule(JDesktopPane desktop) {	
-	return new HelpModule(desktop, this);
-    }
+	public Module getModule(JDesktopPane desktop) {
+		return new HelpModule(desktop, this);
+	}
 }

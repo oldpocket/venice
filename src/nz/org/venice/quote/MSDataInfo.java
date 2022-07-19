@@ -31,49 +31,71 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 class MSDataInfo {
-    /**
+	/**
 	 * 
 	 */
-    private int fileNum;
-    private int numFields;
-    private String stockSymbol;
-    private String stockName;
-    private String timeFrame;
-    private String firstDate;
-    private String lastDate;
+	private int fileNum;
+	private int numFields;
+	private String stockSymbol;
+	private String stockName;
+	private String timeFrame;
+	private String firstDate;
+	private String lastDate;
 
-    public int getFileNum() { return this.fileNum; }
-    public int getNumFields() { return this.numFields; }
-    public String getStockSymbol() { return this.stockSymbol; }
-    public String getStockName() { return this.stockName; }
-    public String getTimeFrame() { return this.timeFrame; }
-    public String getFirstDate() { return this.firstDate; }
-    public String getLastDate() { return this.lastDate; }
-    
-    public MSDataInfo(RandomAccessFile file) throws IOException {
+	public int getFileNum() {
+		return this.fileNum;
+	}
+
+	public int getNumFields() {
+		return this.numFields;
+	}
+
+	public String getStockSymbol() {
+		return this.stockSymbol;
+	}
+
+	public String getStockName() {
+		return this.stockName;
+	}
+
+	public String getTimeFrame() {
+		return this.timeFrame;
+	}
+
+	public String getFirstDate() {
+		return this.firstDate;
+	}
+
+	public String getLastDate() {
+		return this.lastDate;
+	}
+
+	public MSDataInfo(RandomAccessFile file) throws IOException {
 		byte[] b;
-        file.skipBytes(2);
-        this.fileNum = file.readByte();
-        file.skipBytes(3);
-        this.numFields = file.readByte();
-        file.skipBytes(4);
-        b = new byte[14];
-        file.read(b);
-        this.stockSymbol = new String(b).trim();
-        file.skipBytes(7);
-        b = new byte[16];
-        file.read(b);
-        this.stockName = new String(b).trim();
-        file.skipBytes(12);
-        this.timeFrame = new String(new byte[] {file.readByte()});
-        file.skipBytes(3);
-        b = new byte[4];
-        file.read(b);
-        this.firstDate = MetastockBinaryEODImport.floatToBritishDate(ByteBuffer.wrap(b).order(ByteOrder.LITTLE_ENDIAN).getFloat());
-        file.skipBytes(4);
-        b = new byte[4];
-        file.read(b);
-        this.lastDate = MetastockBinaryEODImport.floatToBritishDate(ByteBuffer.wrap(b).order(ByteOrder.LITTLE_ENDIAN).getFloat());
-        file.skipBytes(116);
-    }
+		file.skipBytes(2);
+		this.fileNum = file.readByte();
+		file.skipBytes(3);
+		this.numFields = file.readByte();
+		file.skipBytes(4);
+		b = new byte[14];
+		file.read(b);
+		this.stockSymbol = new String(b).trim();
+		file.skipBytes(7);
+		b = new byte[16];
+		file.read(b);
+		this.stockName = new String(b).trim();
+		file.skipBytes(12);
+		this.timeFrame = new String(new byte[] { file.readByte() });
+		file.skipBytes(3);
+		b = new byte[4];
+		file.read(b);
+		this.firstDate = MetastockBinaryEODImport
+				.floatToBritishDate(ByteBuffer.wrap(b).order(ByteOrder.LITTLE_ENDIAN).getFloat());
+		file.skipBytes(4);
+		b = new byte[4];
+		file.read(b);
+		this.lastDate = MetastockBinaryEODImport
+				.floatToBritishDate(ByteBuffer.wrap(b).order(ByteOrder.LITTLE_ENDIAN).getFloat());
+		file.skipBytes(116);
+	}
 }

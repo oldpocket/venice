@@ -36,285 +36,249 @@ import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.util.Locale;
 
 /**
- * An analysis tool page that lets the user enter basic Genetic
- * Programming configuration parameters. This page is used only
- * by the {@link GPModule}. The page contains the following user fields:
+ * An analysis tool page that lets the user enter basic Genetic Programming
+ * configuration parameters. This page is used only by the {@link GPModule}. The
+ * page contains the following user fields:
  *
- * <ul><li>Generations</li>
- *     <li>Population</li>
- *     <li>Breeding Population</li>
- *     <li>Display Population</li>
- *     <li>Window Size</li>
+ * <ul>
+ * <li>Generations</li>
+ * <li>Population</li>
+ * <li>Breeding Population</li>
+ * <li>Display Population</li>
+ * <li>Window Size</li>
  * </ul>
  *
- * The generations field describes the number of generations the
- * GP will run for. The population field describes the number of
- * individuals that will be randomly generated (or breed) for
- * that generation. The first generation may generate more random
- * individuals than this value, it will generate enough individuals
- * so that the minimum breeding population has been reached.
+ * The generations field describes the number of generations the GP will run
+ * for. The population field describes the number of individuals that will be
+ * randomly generated (or breed) for that generation. The first generation may
+ * generate more random individuals than this value, it will generate enough
+ * individuals so that the minimum breeding population has been reached.
  * <p>
- * The breeding population field describes the number of individuals
- * that will breed, i.e. will contribute parts of their buy/sell
- * rules to the next generation. The display population field describes
- * the number of top individuals that should be displayed in the results
- * table.
+ * The breeding population field describes the number of individuals that will
+ * breed, i.e. will contribute parts of their buy/sell rules to the next
+ * generation. The display population field describes the number of top
+ * individuals that should be displayed in the results table.
  * <p>
- * The window size field describes the number of quote days that
- * the buy/sell rules can access. When equations are evaluating buy or
- * sell decisions, they can only access this many quote days into the
- * past.
+ * The window size field describes the number of quote days that the buy/sell
+ * rules can access. When equations are evaluating buy or sell decisions, they
+ * can only access this many quote days into the past.
  *
  * @author Andrew Leppard
  */
 public class GPPage extends Page implements AnalyserPage {
 
-    // Swing components
-    private JTextField generationsTextField;
-    private JTextField windowTextField;
-    private JTextField populationTextField;
-    private JTextField breedingPopulationTextField;
-    private JTextField displayPopulationTextField;
+	// Swing components
+	private JTextField generationsTextField;
+	private JTextField windowTextField;
+	private JTextField populationTextField;
+	private JTextField breedingPopulationTextField;
+	private JTextField displayPopulationTextField;
 
-    // Parsed input
-    private int generations;
-    private int window;
-    private int population;
-    private int breedingPopulation;
-    private int displayPopulation;
+	// Parsed input
+	private int generations;
+	private int window;
+	private int population;
+	private int breedingPopulation;
+	private int displayPopulation;
 
-    /** Minimum number of quote days an equation can see. */
-    private final static int MINIMUM_WINDOW_SIZE = 3;
+	/** Minimum number of quote days an equation can see. */
+	private final static int MINIMUM_WINDOW_SIZE = 3;
 
-    /**
-     * Construct a new genetic programming parameters page.
-     *
-     * @param desktop the desktop
-     */
-    public GPPage(JDesktopPane desktop) {
-        this.desktop = desktop;
-        layoutPage();
-    }
-
-    public void load(String key) {
-        // Load last GUI settings from preferences
-	HashMap settings =
-            PreferencesManager.getAnalyserPageSettings(key + getClass().getName());
-
-	Iterator iterator = settings.keySet().iterator();
-
-	while(iterator.hasNext()) {
-	    String setting = (String)iterator.next();
-	    String value = (String)settings.get((Object)setting);
-
-            if(setting.equals("generations"))
-                generationsTextField.setText(value);
-            else if(setting.equals("window"))
-                windowTextField.setText(value);
-            else if(setting.equals("population"))
-                populationTextField.setText(value);
-            else if(setting.equals("breeding_population"))
-                breedingPopulationTextField.setText(value);
-            else if(setting.equals("display_population"))
-                displayPopulationTextField.setText(value);
-        }
-    }
-
-    public void save(String key) {
-        HashMap settings = new HashMap();
-
-	settings.put("generations", generationsTextField.getText());
-	settings.put("window", windowTextField.getText());
-	settings.put("population", populationTextField.getText());
-	settings.put("breeding_population", breedingPopulationTextField.getText());
-	settings.put("display_population", displayPopulationTextField.getText());
-
-        PreferencesManager.putAnalyserPageSettings(key + getClass().getName(),
-                                                   settings);
-    }
-
-    public boolean parse() {
-        generations = 0;
-        population = 0;
-        breedingPopulation = 0;
-        displayPopulation = 0;
-        window = 0;
-
-        try {
-	    if(!generationsTextField.getText().equals(""))
-		generations =
-		    Integer.parseInt(generationsTextField.getText());
-
-	    if(!windowTextField.getText().equals(""))
-		window =
-		    Integer.parseInt(windowTextField.getText());
-
-	    if(!populationTextField.getText().equals(""))
-		population =
-		    Integer.parseInt(populationTextField.getText());
-	    	
-	    if(!breedingPopulationTextField.getText().equals(""))
-		breedingPopulation =
-		    Integer.parseInt(breedingPopulationTextField.getText());
-
-	    if(!displayPopulationTextField.getText().equals(""))
-		displayPopulation =
-		    Integer.parseInt(displayPopulationTextField.getText());
-	}
-	catch(NumberFormatException e) {
-            showErrorMessage(
-            		Locale.getString("ERROR_PARSING_NUMBER",e.getMessage()),
-                    Locale.getString("INVALID_GP_ERROR"));
-	    return false;
+	/**
+	 * Construct a new genetic programming parameters page.
+	 *
+	 * @param desktop the desktop
+	 */
+	public GPPage(JDesktopPane desktop) {
+		this.desktop = desktop;
+		layoutPage();
 	}
 
-        if(displayPopulation > breedingPopulation) {
-        	showErrorMessage(
-            		Locale.getString("DISPLAY_POPULATION_ERROR"),
-                    Locale.getString("INVALID_GP_ERROR"));
-	    return false;
-        }
+	public void load(String key) {
+		// Load last GUI settings from preferences
+		HashMap settings = PreferencesManager.getAnalyserPageSettings(key + getClass().getName());
 
-        if(generations <= 0) {
-        	showErrorMessage(
-            		Locale.getString("NO_GENERATION_ERROR"),
-                    Locale.getString("INVALID_GP_ERROR"));
-	    return false;
-        }
+		Iterator iterator = settings.keySet().iterator();
 
-        if(window < MINIMUM_WINDOW_SIZE) {
-        	showErrorMessage(
-            		Locale.getString("WINDOW_SIZE_ERROR", MINIMUM_WINDOW_SIZE),
-                    Locale.getString("INVALID_GP_ERROR"));
-            return false;
-        }
+		while (iterator.hasNext()) {
+			String setting = (String) iterator.next();
+			String value = (String) settings.get((Object) setting);
 
-        if(population <= 0) {
-        	showErrorMessage(
-            		Locale.getString("NO_INDIVIDUAL_ERROR"),
-                    Locale.getString("INVALID_GP_ERROR"));
-	    return false;
-        }
+			if (setting.equals("generations"))
+				generationsTextField.setText(value);
+			else if (setting.equals("window"))
+				windowTextField.setText(value);
+			else if (setting.equals("population"))
+				populationTextField.setText(value);
+			else if (setting.equals("breeding_population"))
+				breedingPopulationTextField.setText(value);
+			else if (setting.equals("display_population"))
+				displayPopulationTextField.setText(value);
+		}
+	}
 
-        if(breedingPopulation <= 0) {
-        	showErrorMessage(
-            		Locale.getString("NO_BREEDING_INDIVIDUAL_ERROR"),
-                    Locale.getString("INVALID_GP_ERROR"));
-	    return false;
-        }
+	public void save(String key) {
+		HashMap settings = new HashMap();
 
-        if(displayPopulation <= 0) {
-        	showErrorMessage(
-            		Locale.getString("NO_DISPLAY_INDIVIDUAL_ERROR"),
-                    Locale.getString("INVALID_GP_ERROR"));
-	    return false;
-        }
+		settings.put("generations", generationsTextField.getText());
+		settings.put("window", windowTextField.getText());
+		settings.put("population", populationTextField.getText());
+		settings.put("breeding_population", breedingPopulationTextField.getText());
+		settings.put("display_population", displayPopulationTextField.getText());
 
-        return true;
-    }
+		PreferencesManager.putAnalyserPageSettings(key + getClass().getName(), settings);
+	}
 
-    public JComponent getComponent() {
-        return this;
-    }
+	public boolean parse() {
+		generations = 0;
+		population = 0;
+		breedingPopulation = 0;
+		displayPopulation = 0;
+		window = 0;
 
-    public String getTitle() {
-        return Locale.getString("GP_PAGE_PARAMETERS_SHORT");
-    }
+		try {
+			if (!generationsTextField.getText().equals(""))
+				generations = Integer.parseInt(generationsTextField.getText());
 
-    /**
-     * Return the number of generations in the genetic programme.
-     *
-     * @return the number of generations
-     */
-    public int getGenerations() {
-        return generations;
-    }
+			if (!windowTextField.getText().equals(""))
+				window = Integer.parseInt(windowTextField.getText());
 
-    /**
-     * Return the number of quote days that any indivdual's buy or sell rules
-     * can access at anyone time. The buy or sell rule will only be able to
-     * see this many quote days into the past.
-     *
-     * @return the window size in days
-     */
-    public int getWindow() {
-        return window;
-    }
+			if (!populationTextField.getText().equals(""))
+				population = Integer.parseInt(populationTextField.getText());
 
-    /**
-     * Return the number of individuals to generate for each generation.
-     * The first generation may generate more than this number of
-     * individuals, if the breeding population size has not been reached.
-     *
-     * @return generation's population size
-     */
-    public int getPopulation() {
-        return population;
-    }
+			if (!breedingPopulationTextField.getText().equals(""))
+				breedingPopulation = Integer.parseInt(breedingPopulationTextField.getText());
 
-    /**
-     * Return the number of individuals, for each generation, that can
-     * contribute their buy/sell rules to the next generation.
-     *
-     * @return the breeding population size
-     */
-    public int getBreedingPopulation() {
-        return breedingPopulation;
-    }
+			if (!displayPopulationTextField.getText().equals(""))
+				displayPopulation = Integer.parseInt(displayPopulationTextField.getText());
+		} catch (NumberFormatException e) {
+			showErrorMessage(Locale.getString("ERROR_PARSING_NUMBER", e.getMessage()),
+					Locale.getString("INVALID_GP_ERROR"));
+			return false;
+		}
 
-    /**
-     * Return the number of top performing individuals that are displayed
-     * in the results table.
-     *
-     * @return the display population size
-     */
-    public int getDisplayPopulation() {
-        return displayPopulation;
-    }
+		if (displayPopulation > breedingPopulation) {
+			showErrorMessage(Locale.getString("DISPLAY_POPULATION_ERROR"), Locale.getString("INVALID_GP_ERROR"));
+			return false;
+		}
 
-    private void layoutPage() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		if (generations <= 0) {
+			showErrorMessage(Locale.getString("NO_GENERATION_ERROR"), Locale.getString("INVALID_GP_ERROR"));
+			return false;
+		}
 
-        TitledBorder titledBorder = new TitledBorder(Locale.getString("GP_PAGE_PARAMETERS_LONG"));
-        JPanel panel = new JPanel();
-        panel.setBorder(titledBorder);
-        panel.setLayout(new BorderLayout());
+		if (window < MINIMUM_WINDOW_SIZE) {
+			showErrorMessage(Locale.getString("WINDOW_SIZE_ERROR", MINIMUM_WINDOW_SIZE),
+					Locale.getString("INVALID_GP_ERROR"));
+			return false;
+		}
 
-        JPanel innerPanel = new JPanel();
-        GridBagLayout gridbag = new GridBagLayout();
-        GridBagConstraints c = new GridBagConstraints();
-        innerPanel.setLayout(gridbag);
+		if (population <= 0) {
+			showErrorMessage(Locale.getString("NO_INDIVIDUAL_ERROR"), Locale.getString("INVALID_GP_ERROR"));
+			return false;
+		}
 
-        c.weightx = 1.0;
-        c.ipadx = 5;
-        c.anchor = GridBagConstraints.WEST;
+		if (breedingPopulation <= 0) {
+			showErrorMessage(Locale.getString("NO_BREEDING_INDIVIDUAL_ERROR"), Locale.getString("INVALID_GP_ERROR"));
+			return false;
+		}
 
-        generationsTextField =
-            GridBagHelper.addTextRow(innerPanel, Locale.getString("GENERATIONS"), "",
-                                     gridbag, c,
-                                     5);
+		if (displayPopulation <= 0) {
+			showErrorMessage(Locale.getString("NO_DISPLAY_INDIVIDUAL_ERROR"), Locale.getString("INVALID_GP_ERROR"));
+			return false;
+		}
 
-        populationTextField =
-            GridBagHelper.addTextRow(innerPanel,
-                                     Locale.getString("POPULATION"), "",
-                                     gridbag, c,
-                                     10);
-        breedingPopulationTextField =
-            GridBagHelper.addTextRow(innerPanel,
-                                     Locale.getString("BREEDING_POPULATION"), "",
-                                     gridbag, c, 7);
+		return true;
+	}
 
-        displayPopulationTextField =
-            GridBagHelper.addTextRow(innerPanel,
-                                     Locale.getString("DISPLAY_POPULATION"), "",
-                                     gridbag, c, 7);
-        windowTextField =
-            GridBagHelper.addTextRow(innerPanel, Locale.getString("WINDOW_SIZE"), "",
-                                     gridbag, c,
-                                     5);
+	public JComponent getComponent() {
+		return this;
+	}
 
-        panel.add(innerPanel, BorderLayout.NORTH);
-        add(panel);
-    }
-    
+	public String getTitle() {
+		return Locale.getString("GP_PAGE_PARAMETERS_SHORT");
+	}
+
+	/**
+	 * Return the number of generations in the genetic programme.
+	 *
+	 * @return the number of generations
+	 */
+	public int getGenerations() {
+		return generations;
+	}
+
+	/**
+	 * Return the number of quote days that any indivdual's buy or sell rules can
+	 * access at anyone time. The buy or sell rule will only be able to see this
+	 * many quote days into the past.
+	 *
+	 * @return the window size in days
+	 */
+	public int getWindow() {
+		return window;
+	}
+
+	/**
+	 * Return the number of individuals to generate for each generation. The first
+	 * generation may generate more than this number of individuals, if the breeding
+	 * population size has not been reached.
+	 *
+	 * @return generation's population size
+	 */
+	public int getPopulation() {
+		return population;
+	}
+
+	/**
+	 * Return the number of individuals, for each generation, that can contribute
+	 * their buy/sell rules to the next generation.
+	 *
+	 * @return the breeding population size
+	 */
+	public int getBreedingPopulation() {
+		return breedingPopulation;
+	}
+
+	/**
+	 * Return the number of top performing individuals that are displayed in the
+	 * results table.
+	 *
+	 * @return the display population size
+	 */
+	public int getDisplayPopulation() {
+		return displayPopulation;
+	}
+
+	private void layoutPage() {
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+		TitledBorder titledBorder = new TitledBorder(Locale.getString("GP_PAGE_PARAMETERS_LONG"));
+		JPanel panel = new JPanel();
+		panel.setBorder(titledBorder);
+		panel.setLayout(new BorderLayout());
+
+		JPanel innerPanel = new JPanel();
+		GridBagLayout gridbag = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		innerPanel.setLayout(gridbag);
+
+		c.weightx = 1.0;
+		c.ipadx = 5;
+		c.anchor = GridBagConstraints.WEST;
+
+		generationsTextField = GridBagHelper.addTextRow(innerPanel, Locale.getString("GENERATIONS"), "", gridbag, c, 5);
+
+		populationTextField = GridBagHelper.addTextRow(innerPanel, Locale.getString("POPULATION"), "", gridbag, c, 10);
+		breedingPopulationTextField = GridBagHelper.addTextRow(innerPanel, Locale.getString("BREEDING_POPULATION"), "",
+				gridbag, c, 7);
+
+		displayPopulationTextField = GridBagHelper.addTextRow(innerPanel, Locale.getString("DISPLAY_POPULATION"), "",
+				gridbag, c, 7);
+		windowTextField = GridBagHelper.addTextRow(innerPanel, Locale.getString("WINDOW_SIZE"), "", gridbag, c, 5);
+
+		panel.add(innerPanel, BorderLayout.NORTH);
+		add(panel);
+	}
+
 }

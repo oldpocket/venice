@@ -25,120 +25,116 @@
 
 package nz.org.venice.chart;
 
-public class Coordinate 
-{
+public class Coordinate {
 
-    protected static final int BREAK = -1; //End of coordinates/Out of bounds marker 
+	protected static final int BREAK = -1; // End of coordinates/Out of bounds marker
 
-    private Comparable dataX;
-    private Double dataY;    
-    private Integer yCoord; 
-    private int level;
+	private Comparable dataX;
+	private Double dataY;
+	private Integer yCoord;
+	private int level;
 
-    /**
-     * Construct a new coordinate defined in the chart space  
-     * 
-     * @param x      The X value of the coordinate (a data value)
-     * @param y      The Y value of the coordinate (a data value)
-     * @param yCoord The screen value of the yCoordinate
-     */
-    public Coordinate(Comparable x, Double y, Integer yCoord) {
-	dataX = x;
-	dataY = y;
-	this.yCoord = yCoord;
-	level = 0;
-    }
-
-    /**
-     * Construct a new coordinate defined in the chart space  
-     * 
-     * @param x      The X value of the coordinate (a data value)
-     * @param y      The Y value of the coordinate (a data value)
-     * @param yCoord The screen value of the yCoordinate
-     * @param level  The chart level of the yCoordinate
-     */
-    public Coordinate(Comparable x, Double y, Integer yCoord, int level) {
-	dataX = x;
-	dataY = y;
-	this.yCoord = yCoord;
-	this.level = level;
-    }
-    
-    /** 
-     * Constrcut a Coordinate, as a null coordinate initially
-     *
-     */
-    public Coordinate() {
-	dataX = null;
-	dataY = null;
-	yCoord = new Integer(BREAK);
-	level = 0;
-    }
-	
-    /** 
-     * 
-     * Return the X value of this coordinate
-     * 
-     * @return the X Data value
-    */
-    public Comparable getXData() {
-	return dataX;
-    }
-
-    /** 
-     * 
-     * Return the Y value of this coordinate
-     * 
-     * @return the Y Data value
-    */
-    public Double getYData() {
-	return dataY;
-    }
-    
-    /** 
-     * 
-     * Return the absolute y coordinate of this coordinate
-     * 
-     * @return the Y coordinate
-    */
-    public Integer getYCoord() {
-	return yCoord;
-    }
-
-    /** 
-     * 
-     * Return the graph level the y coordinate
-     * 
-     * @return the level 
-    */
-    public int getLevel() {
-	return level;
-    }
-    
-    
-    /**
-     * 
-     * Direct comparison between this coordinate and a specified one
-     *
-     * @param c The coordinate to be compared against this one
-     * @return True if the coordinate has the same x,y values,
-     *         false otherwise
-       
-    */
-    public boolean compareTo(Coordinate c) {
-	if (dataX.compareTo(c.getXData()) == 0 &&
-	    dataY.compareTo(c.getYData()) == 0) {
-	    
-	    return true;
+	/**
+	 * Construct a new coordinate defined in the chart space
+	 * 
+	 * @param x      The X value of the coordinate (a data value)
+	 * @param y      The Y value of the coordinate (a data value)
+	 * @param yCoord The screen value of the yCoordinate
+	 */
+	public Coordinate(Comparable x, Double y, Integer yCoord) {
+		dataX = x;
+		dataY = y;
+		this.yCoord = yCoord;
+		level = 0;
 	}
-	return false;
-    }
-       
-    //Debugging
-    public String toString() {
-	String rv = "(" + dataX + "," + dataY + "," + yCoord + ")";
-	
-	return rv;
-    }
+
+	/**
+	 * Construct a new coordinate defined in the chart space
+	 * 
+	 * @param x      The X value of the coordinate (a data value)
+	 * @param y      The Y value of the coordinate (a data value)
+	 * @param yCoord The screen value of the yCoordinate
+	 * @param level  The chart level of the yCoordinate
+	 */
+	public Coordinate(Comparable x, Double y, Integer yCoord, int level) {
+		dataX = x;
+		dataY = y;
+		this.yCoord = yCoord;
+		this.level = level;
+	}
+
+	/**
+	 * Constrcut a Coordinate, as a null coordinate initially
+	 *
+	 */
+	public Coordinate() {
+		dataX = null;
+		dataY = null;
+		yCoord = new Integer(BREAK);
+		level = 0;
+	}
+
+	/**
+	 * 
+	 * Return the X value of this coordinate
+	 * 
+	 * @return the X Data value
+	 */
+	public Comparable getXData() {
+		return dataX;
+	}
+
+	/**
+	 * 
+	 * Return the Y value of this coordinate
+	 * 
+	 * @return the Y Data value
+	 */
+	public Double getYData() {
+		return dataY;
+	}
+
+	/**
+	 * 
+	 * Return the absolute y coordinate of this coordinate
+	 * 
+	 * @return the Y coordinate
+	 */
+	public Integer getYCoord() {
+		return yCoord;
+	}
+
+	/**
+	 * 
+	 * Return the graph level the y coordinate
+	 * 
+	 * @return the level
+	 */
+	public int getLevel() {
+		return level;
+	}
+
+	/**
+	 * 
+	 * Direct comparison between this coordinate and a specified one
+	 *
+	 * @param c The coordinate to be compared against this one
+	 * @return True if the coordinate has the same x,y values, false otherwise
+	 * 
+	 */
+	public boolean compareTo(Coordinate c) {
+		if (dataX.compareTo(c.getXData()) == 0 && dataY.compareTo(c.getYData()) == 0) {
+
+			return true;
+		}
+		return false;
+	}
+
+	// Debugging
+	public String toString() {
+		String rv = "(" + dataX + "," + dataY + "," + yCoord + ")";
+
+		return rv;
+	}
 
 }

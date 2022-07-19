@@ -34,145 +34,124 @@ import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
 
 /**
- * Bollinger Bands graph. This graph is used to show the volatility
- * of a stock. It draws two bands on the graph, they are centred around
- * the moving average of the graph. The top band is the moving average
- * plus 2 standard deviations, the lower band is the moving average
- * minus 2 standard deviations.
+ * Bollinger Bands graph. This graph is used to show the volatility of a stock.
+ * It draws two bands on the graph, they are centred around the moving average
+ * of the graph. The top band is the moving average plus 2 standard deviations,
+ * the lower band is the moving average minus 2 standard deviations.
  *
  * @author Andrew Leppard
  * @see PeriodGraphUI
  */
 public class BollingerBandsGraph extends AbstractGraph {
 
-    // Upper and lower band values ready to graph
-    private Graphable upperBand;
-    private Graphable lowerBand;
+	// Upper and lower band values ready to graph
+	private Graphable upperBand;
+	private Graphable lowerBand;
 
-    /**
-     * Create a new bollinger bands graph.
-     *
-     * @param	source	the source to create a standard deviation from
-     */
-    public BollingerBandsGraph(GraphSource source) {
-        super(source);
-        setSettings(new HashMap());
-    }
+	/**
+	 * Create a new bollinger bands graph.
+	 *
+	 * @param source the source to create a standard deviation from
+	 */
+	public BollingerBandsGraph(GraphSource source) {
+		super(source);
+		setSettings(new HashMap());
+	}
 
-    /**
-     * Create a new bollinger bands graph.
-     *
-     * @param	source	the source to create a standard deviation from
-     */
-    public BollingerBandsGraph(GraphSource source, HashMap settings) {
-        super(source);
-	setSettings(settings);
-	super.setSettings(settings);
-        
-    }
+	/**
+	 * Create a new bollinger bands graph.
+	 *
+	 * @param source the source to create a standard deviation from
+	 */
+	public BollingerBandsGraph(GraphSource source, HashMap settings) {
+		super(source);
+		setSettings(settings);
+		super.setSettings(settings);
 
-    public void render(Graphics g, Color colour, int xoffset, int yoffset,
-		       double horizontalScale, double verticalScale,
-		       double topLineValue, double bottomLineValue, 
-		       List xRange, 
-		       boolean vertOrientation) {
+	}
 
-	// We ignore the graph colours and use our own custom colours
-	g.setColor(Color.green.darker());
+	public void render(Graphics g, Color colour, int xoffset, int yoffset, double horizontalScale, double verticalScale,
+			double topLineValue, double bottomLineValue, List xRange, boolean vertOrientation) {
 
-	GraphTools.renderLine(g, upperBand, xoffset, yoffset,
-			      horizontalScale,
-			      verticalScale, 
-			      topLineValue, bottomLineValue, 
-			      xRange, 
-			      vertOrientation);
-	GraphTools.renderLine(g, lowerBand, xoffset, yoffset,
-			      horizontalScale,
-			      verticalScale, 
-			      topLineValue, bottomLineValue, 
-			      xRange, 
-			      vertOrientation);
-    }
+		// We ignore the graph colours and use our own custom colours
+		g.setColor(Color.green.darker());
 
-    public String getToolTipText(Comparable x, int y, int yoffset,
-				 double verticalScale,
-				 double bottomLineValue)
-    {
-	return null; // we never give tool tip information
-    }
+		GraphTools.renderLine(g, upperBand, xoffset, yoffset, horizontalScale, verticalScale, topLineValue,
+				bottomLineValue, xRange, vertOrientation);
+		GraphTools.renderLine(g, lowerBand, xoffset, yoffset, horizontalScale, verticalScale, topLineValue,
+				bottomLineValue, xRange, vertOrientation);
+	}
 
-    // Highest Y value is in the bollinger bands graph
-    public double getHighestY(List x) {
-	return upperBand.getHighestY(x);
-    }
+	public String getToolTipText(Comparable x, int y, int yoffset, double verticalScale, double bottomLineValue) {
+		return null; // we never give tool tip information
+	}
 
-    // Lowest Y value is in the bollinger bands graph
-    public double getLowestY(List x) {
-	return lowerBand.getLowestY(x);
-    }
+	// Highest Y value is in the bollinger bands graph
+	public double getHighestY(List x) {
+		return upperBand.getHighestY(x);
+	}
 
-    /**
-     * Return the name of this graph.
-     *
-     * @return <code>Bollinger Bands</code>
-     */
-    public String getName() {
-        return Locale.getString("BOLLINGER_BANDS");
-    }
+	// Lowest Y value is in the bollinger bands graph
+	public double getLowestY(List x) {
+		return lowerBand.getLowestY(x);
+	}
 
-    public boolean isPrimary() {
-        return true;
-    }
+	/**
+	 * Return the name of this graph.
+	 *
+	 * @return <code>Bollinger Bands</code>
+	 */
+	public String getName() {
+		return Locale.getString("BOLLINGER_BANDS");
+	}
 
-    /**
-     * Return the graph's user interface.
-     *
-     * @param settings the initial settings
-     * @return user interface
-     */
-    public GraphUI getUI(HashMap settings) {
-        return new PeriodGraphUI(settings);
-    }
+	public boolean isPrimary() {
+		return true;
+	}
 
-    public void setSettings(HashMap settings) {
-        super.setSettings(settings);
+	/**
+	 * Return the graph's user interface.
+	 *
+	 * @param settings the initial settings
+	 * @return user interface
+	 */
+	public GraphUI getUI(HashMap settings) {
+		return new PeriodGraphUI(settings);
+	}
 
-        // Retrieve period from settings hashmap
-        int period = PeriodGraphUI.getPeriod(settings);
+	public void setSettings(HashMap settings) {
+		super.setSettings(settings);
 
-	createBollingerBands(getSource().getGraphable(), period);
+		// Retrieve period from settings hashmap
+		int period = PeriodGraphUI.getPeriod(settings);
 
-    }
+		createBollingerBands(getSource().getGraphable(), period);
 
-    
-    private void createBollingerBands(Graphable source, int period) {
-	
-	upperBand = new Graphable();
-	lowerBand = new Graphable();	
+	}
 
-        TradingDate date = (TradingDate)source.getStartX();
-        GraphableQuoteFunctionSource quoteFunctionSource 
-            = new GraphableQuoteFunctionSource(source, date, period);
+	private void createBollingerBands(Graphable source, int period) {
 
-        for(Iterator iterator = source.iterator(); iterator.hasNext();) {
-            date = (TradingDate)iterator.next();
-            quoteFunctionSource.setDate(date);
+		upperBand = new Graphable();
+		lowerBand = new Graphable();
 
-            try {
-                double bollingerTop = QuoteFunctions.bollingerUpper(quoteFunctionSource, period);
-                upperBand.putY(date, new Double(bollingerTop));
+		TradingDate date = (TradingDate) source.getStartX();
+		GraphableQuoteFunctionSource quoteFunctionSource = new GraphableQuoteFunctionSource(source, date, period);
 
-                double bollingerBottom = QuoteFunctions.bollingerLower(quoteFunctionSource, 
-                                                                       period);
-                lowerBand.putY(date, new Double(bollingerBottom));
-            }
-            catch(EvaluationException e) {
-                // This can't happen since our source does not throw this exception
-                assert false;
-            }
-        }
-    }
-    
+		for (Iterator iterator = source.iterator(); iterator.hasNext();) {
+			date = (TradingDate) iterator.next();
+			quoteFunctionSource.setDate(date);
+
+			try {
+				double bollingerTop = QuoteFunctions.bollingerUpper(quoteFunctionSource, period);
+				upperBand.putY(date, new Double(bollingerTop));
+
+				double bollingerBottom = QuoteFunctions.bollingerLower(quoteFunctionSource, period);
+				lowerBand.putY(date, new Double(bollingerBottom));
+			} catch (EvaluationException e) {
+				// This can't happen since our source does not throw this exception
+				assert false;
+			}
+		}
+	}
+
 }
-
-

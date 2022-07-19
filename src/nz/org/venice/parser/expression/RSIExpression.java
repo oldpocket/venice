@@ -36,101 +36,85 @@ import nz.org.venice.quote.Symbol;
  */
 public class RSIExpression extends TernaryExpression {
 
-    public RSIExpression(Expression days, Expression lag, Expression smoothed) {
-        super(days, lag, smoothed);
-    }
-
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
-	throws EvaluationException {
-
-        // Extract arguments
-	int period = (int)getChild(0).evaluate(variables, quoteBundle, symbol, day);
-        if(period <= 0) {
-            EvaluationException e = EvaluationException.RSI_RANGE_EXCEPTION;
-	    e.setMessage(this, "", period);
-	    throw e;
-	}
-        int offset = (int)getChild(1).evaluate(variables, quoteBundle, symbol, day);
-        if (offset > 0) {
-	    EvaluationException e = EvaluationException.RSI_OFFSET_EXCEPTION;
-	    e.setMessage(this, "", offset);
-	    throw e;
+	public RSIExpression(Expression days, Expression lag, Expression smoothed) {
+		super(days, lag, smoothed);
 	}
 
-	int smoothFlag = (int)getChild(2).evaluate(variables, quoteBundle, symbol, day);
-	boolean smoothed = (smoothFlag == 1) ? true : false;
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-        // Calculate and return the RSI. We start the offset one day before the actual offset
-        // and increase the period by one day, as the RSI calculation needs an extra day
-        // over the period.
-	QuoteBundleFunctionSource source = 
-	    new QuoteBundleFunctionSource(quoteBundle, symbol, Quote.DAY_CLOSE, day, offset - 1,
-					  period - 1);
-	double rv;
-	//FIXME - Currently there's no mechanism for a Gondola expression
-	//in analysis mode to access the results of a previous evaluation
-	//So the smoothed RSI will return the same values as "vanilla" RSI
-	if (smoothed) {
-	    //Null paremeter is a placeholder for the results of a previous
-	    //RSISmooth call. Since this the first, there isn't one
-	    RSIData data = QuoteFunctions.smoothRSI(source, period - 1, null);
-	    rv = data.rsi;
-	} else {
-	    rv = QuoteFunctions.rsi(source, period - 1);
+		// Extract arguments
+		int period = (int) getChild(0).evaluate(variables, quoteBundle, symbol, day);
+		if (period <= 0) {
+			EvaluationException e = EvaluationException.RSI_RANGE_EXCEPTION;
+			e.setMessage(this, "", period);
+			throw e;
+		}
+		int offset = (int) getChild(1).evaluate(variables, quoteBundle, symbol, day);
+		if (offset > 0) {
+			EvaluationException e = EvaluationException.RSI_OFFSET_EXCEPTION;
+			e.setMessage(this, "", offset);
+			throw e;
+		}
+
+		int smoothFlag = (int) getChild(2).evaluate(variables, quoteBundle, symbol, day);
+		boolean smoothed = (smoothFlag == 1) ? true : false;
+
+		// Calculate and return the RSI. We start the offset one day before the actual
+		// offset
+		// and increase the period by one day, as the RSI calculation needs an extra day
+		// over the period.
+		QuoteBundleFunctionSource source = new QuoteBundleFunctionSource(quoteBundle, symbol, Quote.DAY_CLOSE, day,
+				offset - 1, period - 1);
+		double rv;
+		// FIXME - Currently there's no mechanism for a Gondola expression
+		// in analysis mode to access the results of a previous evaluation
+		// So the smoothed RSI will return the same values as "vanilla" RSI
+		if (smoothed) {
+			// Null paremeter is a placeholder for the results of a previous
+			// RSISmooth call. Since this the first, there isn't one
+			RSIData data = QuoteFunctions.smoothRSI(source, period - 1, null);
+			rv = data.rsi;
+		} else {
+			rv = QuoteFunctions.rsi(source, period - 1);
+		}
+		return rv;
 	}
-	return rv;
-    }
 
-    public String toString() {
-        Expression periodExpression = getChild(0);
-        Expression lagExpression = getChild(1);
-	
-	String periodExpressionString = (periodExpression != null) 
-	    ? periodExpression.toString() 
-	    : "(null)";
+	public String toString() {
+		Expression periodExpression = getChild(0);
+		Expression lagExpression = getChild(1);
 
-	String lagExpressionString = (lagExpression != null) 
-	    ? lagExpression.toString() 
-	    : "(null)";
-	
+		String periodExpressionString = (periodExpression != null) ? periodExpression.toString() : "(null)";
 
-        return new String("rsi(" +
-                          periodExpressionString + ", " +
-                          lagExpressionString + ")");
-    }
+		String lagExpressionString = (lagExpression != null) ? lagExpression.toString() : "(null)";
 
-    public int checkType() throws TypeMismatchException {
-	if(getChild(0).checkType() == INTEGER_TYPE &&
-	   getChild(1).checkType() == INTEGER_TYPE)
-	    return FLOAT_TYPE;
-	else {
-	    String types = 
-		getChild(0).getType() + " , " + 
-		getChild(1).getType();
-
-	    String expectedTypes = 
-		INTEGER_TYPE + " , " +
-		INTEGER_TYPE;
-		
-	    throw new TypeMismatchException(this, types, expectedTypes);
+		return new String("rsi(" + periodExpressionString + ", " + lagExpressionString + ")");
 	}
-    }
 
-    /**
-     * Get the type of the expression.
-     *
-     * @return {@link #FLOAT_TYPE}.
-     */
-    public int getType() {
-        return FLOAT_TYPE;
-    }
+	public int checkType() throws TypeMismatchException {
+		if (getChild(0).checkType() == INTEGER_TYPE && getChild(1).checkType() == INTEGER_TYPE)
+			return FLOAT_TYPE;
+		else {
+			String types = getChild(0).getType() + " , " + getChild(1).getType();
 
+			String expectedTypes = INTEGER_TYPE + " , " + INTEGER_TYPE;
 
+			throw new TypeMismatchException(this, types, expectedTypes);
+		}
+	}
 
-    public Object clone() {
-        return new RSIExpression((Expression)getChild(0).clone(),
-                                 (Expression)getChild(1).clone(),
-				 (Expression)getChild(2).clone());
-    }
+	/**
+	 * Get the type of the expression.
+	 *
+	 * @return {@link #FLOAT_TYPE}.
+	 */
+	public int getType() {
+		return FLOAT_TYPE;
+	}
+
+	public Object clone() {
+		return new RSIExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone(),
+				(Expression) getChild(2).clone());
+	}
 }
-

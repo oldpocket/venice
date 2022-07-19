@@ -30,72 +30,70 @@ import nz.org.venice.quote.Symbol;
  */
 public class CeilExpression extends UnaryExpression {
 
-    /**
-     * An expression which performs exponential function <code>floor</code> on the 
-     * sub-expressions.
-     */
-    public CeilExpression(Expression arg) {
-	super(arg);
-    }
-
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) 
-	throws EvaluationException {
-	
-	return Math.ceil(getChild(0).evaluate(variables, quoteBundle, symbol, day));
-    }
-
-    public Expression simplify() {
-        // First simplify child argument
-        Expression simplified = super.simplify();
-        
-        // If the child argument is a constant we can precompute.
-        if(simplified.getChild(0) instanceof NumberExpression) {
-            try {
-                return new NumberExpression(simplified.evaluate(null, null, null, 0), simplified.getType());
-            }
-            catch(EvaluationException e) {
-                // Shouldn't happen.
-                return simplified;
-            }
-        }
-        else {
-            return simplified;
-        }
-    }
-
-    public String toString() {
-	String childString = (getChild(0) != null) ? getChild(0).toString() : "(null)";
-	return new String("ceil(" + childString + ")");
-    }
-
-    /**
-     * Check the input argument to the expression. It can only be
-     * {@link #INTEGER_TYPE} or {@link #FLOAT_TYPE}. 
-     *
-     * @return	the type of the expression
-     */
-    public int checkType() throws TypeMismatchException {
-        int type = getChild(0).checkType();
-
-        if(type == FLOAT_TYPE || type == INTEGER_TYPE)
-            return getType();
-        else {
-	    String types = "" + type;
-	    String expectedTypes = "" + FLOAT_TYPE;
-            throw new TypeMismatchException(this, types, expectedTypes);
+	/**
+	 * An expression which performs exponential function <code>floor</code> on the
+	 * sub-expressions.
+	 */
+	public CeilExpression(Expression arg) {
+		super(arg);
 	}
-    }
 
-    /**
-     * Get the type of the expression.
-     *
-     * @return {@link #FLOAT_TYPE}.
-     */
-    public int getType() {
-        return INTEGER_TYPE;
-    }
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-    public Object clone() {
-        return new CeilExpression((Expression)getChild(0).clone());
-    }
+		return Math.ceil(getChild(0).evaluate(variables, quoteBundle, symbol, day));
+	}
+
+	public Expression simplify() {
+		// First simplify child argument
+		Expression simplified = super.simplify();
+
+		// If the child argument is a constant we can precompute.
+		if (simplified.getChild(0) instanceof NumberExpression) {
+			try {
+				return new NumberExpression(simplified.evaluate(null, null, null, 0), simplified.getType());
+			} catch (EvaluationException e) {
+				// Shouldn't happen.
+				return simplified;
+			}
+		} else {
+			return simplified;
+		}
+	}
+
+	public String toString() {
+		String childString = (getChild(0) != null) ? getChild(0).toString() : "(null)";
+		return new String("ceil(" + childString + ")");
+	}
+
+	/**
+	 * Check the input argument to the expression. It can only be
+	 * {@link #INTEGER_TYPE} or {@link #FLOAT_TYPE}.
+	 *
+	 * @return the type of the expression
+	 */
+	public int checkType() throws TypeMismatchException {
+		int type = getChild(0).checkType();
+
+		if (type == FLOAT_TYPE || type == INTEGER_TYPE)
+			return getType();
+		else {
+			String types = "" + type;
+			String expectedTypes = "" + FLOAT_TYPE;
+			throw new TypeMismatchException(this, types, expectedTypes);
+		}
+	}
+
+	/**
+	 * Get the type of the expression.
+	 *
+	 * @return {@link #FLOAT_TYPE}.
+	 */
+	public int getType() {
+		return INTEGER_TYPE;
+	}
+
+	public Object clone() {
+		return new CeilExpression((Expression) getChild(0).clone());
+	}
 }

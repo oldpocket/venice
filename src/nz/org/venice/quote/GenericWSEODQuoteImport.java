@@ -48,26 +48,24 @@ import nz.org.venice.util.TradingDate;
 public class GenericWSEODQuoteImport {
 
 	// The following symbols will be replaced by the quote, date range we are after:
-	private final static String SYMBOL      = "_SYM_";
-	private final static String START_DAY   = "_SD_";
+	private final static String SYMBOL = "_SYM_";
+	private final static String START_DAY = "_SD_";
 	private final static String START_MONTH = "_SM_";
-	private final static String START_YEAR  = "_SY_";
-	private final static String END_DAY     = "_ED_";
-	private final static String END_MONTH   = "_EM_";
-	private final static String END_YEAR    = "_EY_";
+	private final static String START_YEAR = "_SY_";
+	private final static String END_DAY = "_ED_";
+	private final static String END_MONTH = "_EM_";
+	private final static String END_YEAR = "_EY_";
 
 	// Retrieve quotes in batches of MAX_NUMBER_OF_RETRIEVAL_DAYS. This
 	// limit should be safe since for the Generic Web Service provided.
 	private final static int MAX_NUMBER_OF_RETRIEVAL_DAYS = 100;
 
-	// Let's define the URL pattern that must be followed by the Generic Web Service.
-	private final static String URL_PATTERN = ("s=" + SYMBOL + "&a=" + START_MONTH +
-			"&b=" + START_DAY + "&c=" + START_YEAR +
-			"&d=" + END_MONTH + "&e=" + END_DAY +
-			"&f=" + END_YEAR + "&g=d&ignore=.csv");
+	// Let's define the URL pattern that must be followed by the Generic Web
+	// Service.
+	private final static String URL_PATTERN = ("s=" + SYMBOL + "&a=" + START_MONTH + "&b=" + START_DAY + "&c="
+			+ START_YEAR + "&d=" + END_MONTH + "&e=" + END_DAY + "&f=" + END_YEAR + "&g=d&ignore=.csv");
 
-	private final static String GENERIC_WS_URL_PATTERN =
-			("http://yfinance.lealis.com.br/eod_quotes?" + URL_PATTERN);
+	private final static String GENERIC_WS_URL_PATTERN = ("http://yfinance.lealis.com.br/eod_quotes?" + URL_PATTERN);
 
 	// This class is not instantiated.
 	private GenericWSEODQuoteImport() {
@@ -75,22 +73,21 @@ public class GenericWSEODQuoteImport {
 	}
 
 	/**
-	 * Retrieve quotes from Generic Web Service. Will fire multiple request
-	 * if the specified period is above the maximum number of
-	 * quotes specified by class.
+	 * Retrieve quotes from Generic Web Service. Will fire multiple request if the
+	 * specified period is above the maximum number of quotes specified by class.
 	 *
-	 * @param report report to log warnings and errors
-	 * @param symbol symbol to import
-	 * @param suffix optional suffix to append (e.g. ".AX"). This suffix tells
-	 *    which exchange the symbol belongs to and need to be supported by the Generic Web Service.
+	 * @param report    report to log warnings and errors
+	 * @param symbol    symbol to import
+	 * @param suffix    optional suffix to append (e.g. ".AX"). This suffix tells
+	 *                  which exchange the symbol belongs to and need to be
+	 *                  supported by the Generic Web Service.
 	 * @param startDate start of date range to import
-	 * @param endDate end of date range to import
+	 * @param endDate   end of date range to import
 	 * @return list of quotes
 	 * @exception ImportExportException if there was an error retrieving the quotes
 	 */
-	public static List importSymbol(Report report, Symbol symbol, String suffix,
-			TradingDate startDate, TradingDate endDate)
-					throws ImportExportException {
+	public static List importSymbol(Report report, Symbol symbol, String suffix, TradingDate startDate,
+			TradingDate endDate) throws ImportExportException {
 
 		List result = new ArrayList();
 
@@ -101,7 +98,7 @@ public class GenericWSEODQuoteImport {
 		do {
 			// determine startDate for retrieval
 			retrievalStartDate = retrievalEndDate.previous(MAX_NUMBER_OF_RETRIEVAL_DAYS);
-			if(retrievalStartDate.before(startDate)) {
+			if (retrievalStartDate.before(startDate)) {
 				retrievalStartDate = startDate;
 			}
 			// retrieve quotes and add to result
@@ -110,40 +107,37 @@ public class GenericWSEODQuoteImport {
 
 			// determine endDate for next retrieval
 			retrievalEndDate = retrievalStartDate.previous(1);
-		} while(!retrievalEndDate.before(startDate));
+		} while (!retrievalEndDate.before(startDate));
 
-		if(result.size() == 0) {
-			report.addError(Locale.getString("YAHOO_DISPLAY_URL") + ":" +
-					symbol + ":" +
-					Locale.getString("ERROR") + ": " +
-					Locale.getString("NO_QUOTES_FOUND"));
+		if (result.size() == 0) {
+			report.addError(Locale.getString("YAHOO_DISPLAY_URL") + ":" + symbol + ":" + Locale.getString("ERROR")
+					+ ": " + Locale.getString("NO_QUOTES_FOUND"));
 		}
 		return result;
 	}
 
 	/**
-	 * Retrieve quotes from Generic Web Service.
-	 * Do not exceed the specified MAX_NUMBER_OF_RETRIEVAL_DAYS!
+	 * Retrieve quotes from Generic Web Service. Do not exceed the specified
+	 * MAX_NUMBER_OF_RETRIEVAL_DAYS!
 	 *
-	 * @param report report to log warnings and errors
-	 * @param symbol symbol to import
-	 * @param suffix optional suffix to append (e.g. ".AX"). This suffix tells
-	 *    which exchange the symbol belongs to and need to be supported by the Generic Web Service.
+	 * @param report    report to log warnings and errors
+	 * @param symbol    symbol to import
+	 * @param suffix    optional suffix to append (e.g. ".AX"). This suffix tells
+	 *                  which exchange the symbol belongs to and need to be
+	 *                  supported by the Generic Web Service.
 	 * @param startDate start of date range to import
-	 * @param endDate end of date range to import
+	 * @param endDate   end of date range to import
 	 * @return list of quotes
 	 * @exception ImportExportException if there was an error retrieving the quotes
 	 */
-	private static List retrieveQuotes(Report report, Symbol symbol, String suffix,
-			TradingDate startDate, TradingDate endDate)
-					throws ImportExportException {
+	private static List retrieveQuotes(Report report, Symbol symbol, String suffix, TradingDate startDate,
+			TradingDate endDate) throws ImportExportException {
 
 		List quotes = new ArrayList();
 		String URLString = constructURL(symbol, suffix, startDate, endDate);
 		EODQuoteFilter filter = new GenericWSEODQuoteFilter(symbol);
 
-		PreferencesManager.ProxyPreferences proxyPreferences =
-				PreferencesManager.getProxySettings();
+		PreferencesManager.ProxyPreferences proxyPreferences = PreferencesManager.getProxySettings();
 
 		try {
 			URL url = new URL(URLString);
@@ -154,20 +148,17 @@ public class GenericWSEODQuoteImport {
 			// Skip first line as it doesn't contain a quote
 			String line = bufferedInput.readLine();
 
-			while(line != null) {
+			while (line != null) {
 				line = bufferedInput.readLine();
 
-				if(line != null) {
+				if (line != null) {
 					try {
 						EODQuote quote = filter.toEODQuote(line);
 						quotes.add(quote);
 						verify(report, quote);
-					}
-					catch(QuoteFormatException e) {
-						report.addError(Locale.getString("YAHOO_DISPLAY_URL") + ":" +
-								symbol + ":" +
-								Locale.getString("ERROR") + ": " +
-								e.getMessage());
+					} catch (QuoteFormatException e) {
+						report.addError(Locale.getString("YAHOO_DISPLAY_URL") + ":" + symbol + ":"
+								+ Locale.getString("ERROR") + ": " + e.getMessage());
 					}
 				}
 			}
@@ -175,38 +166,33 @@ public class GenericWSEODQuoteImport {
 			bufferedInput.close();
 		}
 
-		catch(BindException e) {
-			throw new ImportExportException(Locale.getString("UNABLE_TO_CONNECT_ERROR",
-					e.getMessage()));
+		catch (BindException e) {
+			throw new ImportExportException(Locale.getString("UNABLE_TO_CONNECT_ERROR", e.getMessage()));
 		}
 
-		catch(ConnectException e) {
-			throw new ImportExportException(Locale.getString("UNABLE_TO_CONNECT_ERROR",
-					e.getMessage()));
+		catch (ConnectException e) {
+			throw new ImportExportException(Locale.getString("UNABLE_TO_CONNECT_ERROR", e.getMessage()));
 		}
 
-		catch(UnknownHostException e) {
-			throw new ImportExportException(Locale.getString("UNKNOWN_HOST_ERROR",
-					e.getMessage()));
+		catch (UnknownHostException e) {
+			throw new ImportExportException(Locale.getString("UNKNOWN_HOST_ERROR", e.getMessage()));
 		}
 
-		catch(NoRouteToHostException e) {
-			throw new ImportExportException(Locale.getString("DESTINATION_UNREACHABLE_ERROR",
-					e.getMessage()));
+		catch (NoRouteToHostException e) {
+			throw new ImportExportException(Locale.getString("DESTINATION_UNREACHABLE_ERROR", e.getMessage()));
 		}
 
-		catch(MalformedURLException e) {
-			throw new ImportExportException(Locale.getString("INVALID_PROXY_ERROR",
-					proxyPreferences.host,
-					proxyPreferences.port));
+		catch (MalformedURLException e) {
+			throw new ImportExportException(
+					Locale.getString("INVALID_PROXY_ERROR", proxyPreferences.host, proxyPreferences.port));
 		}
 
-		catch(FileNotFoundException e) {
+		catch (FileNotFoundException e) {
 			// Don't abort the import if there are no quotes for a given symbol
 			// empty list will be returned
 		}
 
-		catch(IOException e) {
+		catch (IOException e) {
 			throw new ImportExportException(Locale.getString("ERROR_DOWNLOADING_QUOTES"));
 		}
 
@@ -214,24 +200,26 @@ public class GenericWSEODQuoteImport {
 	}
 
 	/**
-	 * Construct the URL necessary to retrieve all the quotes for the given symbol between
-	 * the given dates from the Generic Web Service.
+	 * Construct the URL necessary to retrieve all the quotes for the given symbol
+	 * between the given dates from the Generic Web Service.
 	 *
 	 * @param symbol the symbol to retrieve
-	 * @param suffix optional suffix to append (e.g. ".AX"). This suffix tells
-	 *   which exchange the symbol belongs to and need to be supported by the Generic Web Service.
-	 * @param start the start date to retrieve
-	 * @param end the end date to retrieve
+	 * @param suffix optional suffix to append (e.g. ".AX"). This suffix tells which
+	 *               exchange the symbol belongs to and need to be supported by the
+	 *               Generic Web Service.
+	 * @param start  the start date to retrieve
+	 * @param end    the end date to retrieve
 	 * @return URL string
 	 */
 	private static String constructURL(Symbol symbol, String suffix, TradingDate start, TradingDate end) {
 		String URLString = GENERIC_WS_URL_PATTERN;
 		String symbolString = symbol.toString();
 
-		// Append symbol with optional suffix. If the user has not provided a full-stop, provide
+		// Append symbol with optional suffix. If the user has not provided a full-stop,
+		// provide
 		// them with one.
-		if(suffix.length() > 0) {
-			if(!suffix.startsWith("."))
+		if (suffix.length() > 0) {
+			if (!suffix.startsWith("."))
 				symbolString += ".";
 			symbolString += suffix;
 		}
@@ -248,27 +236,23 @@ public class GenericWSEODQuoteImport {
 	}
 
 	/**
-	 * Verify the quote is valid. Log any problems to the report and try to clean
-	 * it up the best we can.
+	 * Verify the quote is valid. Log any problems to the report and try to clean it
+	 * up the best we can.
 	 *
 	 * @param report the report
-	 * @param quote the quote
+	 * @param quote  the quote
 	 */
 	private static void verify(Report report, EODQuote quote) {
 		try {
 			quote.verify();
-		}
-		catch(QuoteFormatException e) {
+		} catch (QuoteFormatException e) {
 			List messages = e.getMessages();
 
-			for(Iterator iterator = messages.iterator(); iterator.hasNext();) {
-				String message = (String)iterator.next();
+			for (Iterator iterator = messages.iterator(); iterator.hasNext();) {
+				String message = (String) iterator.next();
 
-				report.addWarning(Locale.getString("YAHOO_DISPLAY_URL") + ":" +
-						quote.getSymbol() + ":" +
-						quote.getDate() + ":" +
-						Locale.getString("WARNING") + ": " +
-						message);
+				report.addWarning(Locale.getString("YAHOO_DISPLAY_URL") + ":" + quote.getSymbol() + ":"
+						+ quote.getDate() + ":" + Locale.getString("WARNING") + ": " + message);
 			}
 		}
 	}

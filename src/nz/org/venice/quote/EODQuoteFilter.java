@@ -19,34 +19,34 @@
 package nz.org.venice.quote;
 
 /**
- * Provides an interface for converting to/from a text string containing a 
- * single end-of-day quote from/to the internal stock quote object. 
+ * Provides an interface for converting to/from a text string containing a
+ * single end-of-day quote from/to the internal stock quote object.
  *
  * @author Andrew Leppard
  */
-public interface EODQuoteFilter {    
-    /**
-     * Return the name of the filter.
-     *
-     * @return	the name of the filter
-     */
-    public String getName();
+public interface EODQuoteFilter {
+	/**
+	 * Return the name of the filter.
+	 *
+	 * @return the name of the filter
+	 */
+	public String getName();
 
-    /**
-     * Parse the given text string and returns the stock quote or null
-     * if it did not contain a valid quote.
-     *
-     * @param	quoteLine	a single line of text containing a quote.
-     * @return	the stock quote
-     * @exception QuoteFormatException if the quote could not be parsed
-     */
-    public EODQuote toEODQuote(String quoteLine) throws QuoteFormatException;
+	/**
+	 * Parse the given text string and returns the stock quote or null if it did not
+	 * contain a valid quote.
+	 *
+	 * @param quoteLine a single line of text containing a quote.
+	 * @return the stock quote
+	 * @exception QuoteFormatException if the quote could not be parsed
+	 */
+	public EODQuote toEODQuote(String quoteLine) throws QuoteFormatException;
 
-    /**
-     * Convert the given stock quote to a string line.
-     *
-     * @param	quote	a stock quote
-     * @return	string version of the quote
-     */
-    public String toString(EODQuote quote);
+	/**
+	 * Convert the given stock quote to a string line.
+	 *
+	 * @param quote a stock quote
+	 * @return string version of the quote
+	 */
+	public String toString(EODQuote quote);
 }

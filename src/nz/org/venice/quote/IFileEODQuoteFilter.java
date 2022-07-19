@@ -31,9 +31,9 @@ import nz.org.venice.util.Report;
 
 public interface IFileEODQuoteFilter extends EODQuoteFilter {
 	/**
-     * Return the an instance of the importer.
-     *
-     * @return	the instance of the importer
-     */
-    public IFileEODQuoteImport getImporter(Report report);
+	 * Return the an instance of the importer.
+	 *
+	 * @return the instance of the importer
+	 */
+	public IFileEODQuoteImport getImporter(Report report);
 }

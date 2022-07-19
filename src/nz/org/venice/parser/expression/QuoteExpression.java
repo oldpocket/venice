@@ -26,105 +26,95 @@ import nz.org.venice.quote.QuoteBundle;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
 
-
 /**
- * Class that represents a quote kind, e.g. day open, day close, etc.
- * Originally there was a separate class for each quote kind but
- * this was deemed a little excessive, so it was all folded into
- * a single class.
+ * Class that represents a quote kind, e.g. day open, day close, etc. Originally
+ * there was a separate class for each quote kind but this was deemed a little
+ * excessive, so it was all folded into a single class.
  */
-public class QuoteExpression 
-    extends TerminalExpression
-    implements QuoteSymbol {
+public class QuoteExpression extends TerminalExpression implements QuoteSymbol {
 
-    // Quote kind - Quote.DAY_OPEN, Quote.DAY_CLOSE, Quote.DAY_LOW, etc...
-    private int quoteKind;
+	// Quote kind - Quote.DAY_OPEN, Quote.DAY_CLOSE, Quote.DAY_LOW, etc...
+	private int quoteKind;
 
-    /**
-     * Create a new quote expression.
-     *
-     * @param quoteKind Kind of quote. One of {@link Quote#DAY_OPEN},
-     *        {@link Quote#DAY_CLOSE}, {@link Quote#DAY_LOW},
-     *        {@link Quote#DAY_HIGH} or {@link Quote#DAY_VOLUME}
-     */
-        
-    public QuoteExpression(int quoteKind) {
-	assert(quoteKind == Quote.DAY_OPEN || quoteKind == Quote.DAY_CLOSE ||
-               quoteKind == Quote.DAY_LOW || quoteKind == Quote.DAY_HIGH ||
-               quoteKind == Quote.DAY_VOLUME);
+	/**
+	 * Create a new quote expression.
+	 *
+	 * @param quoteKind Kind of quote. One of {@link Quote#DAY_OPEN},
+	 *                  {@link Quote#DAY_CLOSE}, {@link Quote#DAY_LOW},
+	 *                  {@link Quote#DAY_HIGH} or {@link Quote#DAY_VOLUME}
+	 */
 
+	public QuoteExpression(int quoteKind) {
+		assert (quoteKind == Quote.DAY_OPEN || quoteKind == Quote.DAY_CLOSE || quoteKind == Quote.DAY_LOW
+				|| quoteKind == Quote.DAY_HIGH || quoteKind == Quote.DAY_VOLUME);
 
-        this.quoteKind = quoteKind;
-    }
-    
-
-    
-    /**
-     * Get the quote kind.
-     *
-     * @return	the quote kind, one of: {@link Quote#DAY_OPEN},
-     * {@link Quote#DAY_CLOSE}, {@link Quote#DAY_HIGH}, {@link Quote#DAY_LOW}
-     * or {@link Quote#DAY_VOLUME}.
-     */
-    public int getQuoteKind() {
-	return quoteKind;
-    }
-
-
-
-    public Symbol getSymbol() {
-	return null;
-    }
-
-    /**
-     * Get the type of the expression.
-     *
-     * @return {@link #FLOAT_QUOTE_TYPE} or {@link #INTEGER_QUOTE_TYPE}.
-     */
-    public int getType() {
-        if(getQuoteKind() == Quote.DAY_VOLUME)
-            return INTEGER_QUOTE_TYPE;
-        else
-            return FLOAT_QUOTE_TYPE;
-    }
-
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
-	throws EvaluationException {
-
-	try {
-	    return quoteBundle.getQuote(symbol, getQuoteKind(), day, 0);
+		this.quoteKind = quoteKind;
 	}
-	catch(MissingQuoteException e) {
-	    // What should I do in this case?
-	    String message = symbol + " : " + Locale.getString("NO_QUOTES_DATE", quoteBundle.offsetToDate(day).toString());
-	    
-	    throw new EvaluationException(message);
-	    //return 0.0D;
-	}	       
-    }
 
-    public String toString() {
-        switch(quoteKind) {
-        case Quote.DAY_OPEN:
-            return "open";
-        case Quote.DAY_CLOSE:
-            return "close";
-        case Quote.DAY_HIGH:
-            return "high";
-        case Quote.DAY_LOW:
-            return "low";
-        default:
-            assert quoteKind == Quote.DAY_VOLUME;
-            return "volume";
-        }
-    }
+	/**
+	 * Get the quote kind.
+	 *
+	 * @return the quote kind, one of: {@link Quote#DAY_OPEN},
+	 *         {@link Quote#DAY_CLOSE}, {@link Quote#DAY_HIGH},
+	 *         {@link Quote#DAY_LOW} or {@link Quote#DAY_VOLUME}.
+	 */
+	public int getQuoteKind() {
+		return quoteKind;
+	}
 
-    public Object clone() {
-        return new QuoteExpression(quoteKind);
-    }
+	public Symbol getSymbol() {
+		return null;
+	}
 
-    public int checkType() {
-	return getType();
-    }
+	/**
+	 * Get the type of the expression.
+	 *
+	 * @return {@link #FLOAT_QUOTE_TYPE} or {@link #INTEGER_QUOTE_TYPE}.
+	 */
+	public int getType() {
+		if (getQuoteKind() == Quote.DAY_VOLUME)
+			return INTEGER_QUOTE_TYPE;
+		else
+			return FLOAT_QUOTE_TYPE;
+	}
+
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
+
+		try {
+			return quoteBundle.getQuote(symbol, getQuoteKind(), day, 0);
+		} catch (MissingQuoteException e) {
+			// What should I do in this case?
+			String message = symbol + " : "
+					+ Locale.getString("NO_QUOTES_DATE", quoteBundle.offsetToDate(day).toString());
+
+			throw new EvaluationException(message);
+			// return 0.0D;
+		}
+	}
+
+	public String toString() {
+		switch (quoteKind) {
+		case Quote.DAY_OPEN:
+			return "open";
+		case Quote.DAY_CLOSE:
+			return "close";
+		case Quote.DAY_HIGH:
+			return "high";
+		case Quote.DAY_LOW:
+			return "low";
+		default:
+			assert quoteKind == Quote.DAY_VOLUME;
+			return "volume";
+		}
+	}
+
+	public Object clone() {
+		return new QuoteExpression(quoteKind);
+	}
+
+	public int checkType() {
+		return getType();
+	}
 
 }

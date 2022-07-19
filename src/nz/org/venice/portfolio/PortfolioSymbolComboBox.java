@@ -32,37 +32,36 @@ import nz.org.venice.util.TradingDate;
  *
  * @see Portfolio
  */
-public class PortfolioSymbolComboBox extends JComboBox
-{
-    private Portfolio portfolio;
+public class PortfolioSymbolComboBox extends JComboBox {
+	private Portfolio portfolio;
 
-    /**
-     * Creates a new combo box listing all the symbols held in the portfolio on
-     * the given date. The date is currently ignored.
-     *
-     * @param portfolio the portfolio
-     * @param date the date
-     */
-    public PortfolioSymbolComboBox(Portfolio portfolio, TradingDate date) {
-	super();
+	/**
+	 * Creates a new combo box listing all the symbols held in the portfolio on the
+	 * given date. The date is currently ignored.
+	 *
+	 * @param portfolio the portfolio
+	 * @param date      the date
+	 */
+	public PortfolioSymbolComboBox(Portfolio portfolio, TradingDate date) {
+		super();
 
-	this.portfolio = portfolio;
+		this.portfolio = portfolio;
 
-	setDate(date);
-    }
+		setDate(date);
+	}
 
-    /** 
-     * List symbols held in the current portfolio on the new date.
-     *
-     * @param date the new date
-     */
-    public void setDate(TradingDate date) {
-	removeAllItems();
-	
-	List symbols = portfolio.getSymbolsTraded();
-	Collections.sort(symbols);
+	/**
+	 * List symbols held in the current portfolio on the new date.
+	 *
+	 * @param date the new date
+	 */
+	public void setDate(TradingDate date) {
+		removeAllItems();
 
-        for(Iterator iterator = symbols.iterator(); iterator.hasNext();) 
-            addItem(iterator.next());
-    }
+		List symbols = portfolio.getSymbolsTraded();
+		Collections.sort(symbols);
+
+		for (Iterator iterator = symbols.iterator(); iterator.hasNext();)
+			addItem(iterator.next());
+	}
 }

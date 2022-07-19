@@ -21,10 +21,10 @@ package nz.org.venice.quote;
 import java.util.EventListener;
 
 /**
- * Interface for classes that are listening for when new intra-day
- * quotes are downloaded. All classes that are quote listeners
- * will receive an event when a new intra-day quote has been
- * downloaded and they should refresh any intra-day quote displays.
+ * Interface for classes that are listening for when new intra-day quotes are
+ * downloaded. All classes that are quote listeners will receive an event when a
+ * new intra-day quote has been downloaded and they should refresh any intra-day
+ * quote displays.
  *
  * @author Andrew Leppard
  * @see IDQuoteCache
@@ -32,11 +32,11 @@ import java.util.EventListener;
  */
 public interface QuoteListener extends EventListener {
 
-    /**
-     * Called when a new intra-day quote has been downloaded.
-     *
-     * @param quoteEvent the quote event
-     */
-    public void newQuotes(QuoteEvent quoteEvent);
+	/**
+	 * Called when a new intra-day quote has been downloaded.
+	 *
+	 * @param quoteEvent the quote event
+	 */
+	public void newQuotes(QuoteEvent quoteEvent);
 
 }

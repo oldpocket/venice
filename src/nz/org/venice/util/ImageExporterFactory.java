@@ -18,10 +18,9 @@
 
 package nz.org.venice.util;
 
-
 /**
- * Image exporter factory, get the correct exporter by extension when
- * exporting a graph.
+ * Image exporter factory, get the correct exporter by extension when exporting
+ * a graph.
  * 
  * @author Guillermo Bonvehi
  * @see IImageExporter
@@ -43,14 +42,14 @@ public class ImageExporterFactory {
 		}
 		throw new IllegalArgumentException("Supported file extension expected.");
 	}
-	
+
 	public static String getExtension(String filename) {
 		String ext = null;
 		int i = filename.lastIndexOf(".");
-		
-		if (i > 0 &&  i < filename.length() - 1) {
-		    ext = filename.substring(i+1).toLowerCase();
+
+		if (i > 0 && i < filename.length() - 1) {
+			ext = filename.substring(i + 1).toLowerCase();
 		}
 		return ext;
-	    }
+	}
 }

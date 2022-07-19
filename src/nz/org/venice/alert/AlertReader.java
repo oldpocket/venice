@@ -16,7 +16,6 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
 package nz.org.venice.alert;
 
 import java.util.List;
@@ -29,30 +28,33 @@ import nz.org.venice.quote.Symbol;
  * 
  * @author Mark Hummel
  * @see Alert
- * @see AlertWriter 
+ * @see AlertWriter
  * @see AlertModule
  */
 
 public interface AlertReader {
-       
-    /**
-     * Get all alerts currently stored.
-     * @return A list of all the alerts currently stored.
-     */    
-    public List getAlerts() throws AlertException;
-    
-    /**
-     * Get all alerts currently stored for the symbol.
-     * @param symbol The symbol to filter the alerts on.
-     * @return A list of all the alerts for this symbol.
-     */    
-    public List getAlertsBySymbol(Symbol symbol) throws AlertException;
 
-    
-    /** Get all alerts currently stored for the given symbols.
-     * @param symbols The symbols to filter the alerts on.
-     * @return A list of all the alerts for this symbol.
-     */    
-    public List getAlertsBySymbolList(List symbols) throws AlertException;
+	/**
+	 * Get all alerts currently stored.
+	 * 
+	 * @return A list of all the alerts currently stored.
+	 */
+	public List getAlerts() throws AlertException;
+
+	/**
+	 * Get all alerts currently stored for the symbol.
+	 * 
+	 * @param symbol The symbol to filter the alerts on.
+	 * @return A list of all the alerts for this symbol.
+	 */
+	public List getAlertsBySymbol(Symbol symbol) throws AlertException;
+
+	/**
+	 * Get all alerts currently stored for the given symbols.
+	 * 
+	 * @param symbols The symbols to filter the alerts on.
+	 * @return A list of all the alerts for this symbol.
+	 */
+	public List getAlertsBySymbolList(List symbols) throws AlertException;
 
 }

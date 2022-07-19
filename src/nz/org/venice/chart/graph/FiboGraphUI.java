@@ -29,97 +29,92 @@ import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.util.Locale;
 
 /**
- *  Prompt user for the zero percent and 100 percent levels for Fibonacci chart *
+ * Prompt user for the zero percent and 100 percent levels for Fibonacci chart *
+ * 
  * @author Andrew Goh
  */
 public class FiboGraphUI implements GraphUI {
 
-    // The graph's user interface
-    private JPanel panel;
-    private JTextField TextFieldZero;
-    private JTextField TextField100;
+	// The graph's user interface
+	private JPanel panel;
+	private JTextField TextFieldZero;
+	private JTextField TextField100;
 
-    
-    // String name of settings
-    public final static String ZEROPCT = "zeropct";
-    public final static String HUNDREDPCT = "hundredpct";
+	// String name of settings
+	public final static String ZEROPCT = "zeropct";
+	public final static String HUNDREDPCT = "hundredpct";
 
-    /**
-     * Create a new exponential smoothed moving average user interface with the
-     * initial settings.
-     *
-     * @param settings the initial settings
-     */
-    public FiboGraphUI(HashMap settings) {
-        buildPanel();
-        setSettings(settings);
-    }
+	/**
+	 * Create a new exponential smoothed moving average user interface with the
+	 * initial settings.
+	 *
+	 * @param settings the initial settings
+	 */
+	public FiboGraphUI(HashMap settings) {
+		buildPanel();
+		setSettings(settings);
+	}
 
-    /**
-     * Build the user interface JPanel.
-     */
-    private void buildPanel() {
-        panel = new JPanel();
-        GridBagLayout layout = new GridBagLayout();
-        GridBagConstraints c = new GridBagConstraints();
-        panel.setLayout(layout);
+	/**
+	 * Build the user interface JPanel.
+	 */
+	private void buildPanel() {
+		panel = new JPanel();
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		panel.setLayout(layout);
 
-        c.weightx = 1.0;
-        c.ipadx = 5;
-        c.anchor = GridBagConstraints.WEST;
-	
-	String zeroField = "";
-	String hundredField = "";
+		c.weightx = 1.0;
+		c.ipadx = 5;
+		c.anchor = GridBagConstraints.WEST;
 
-	TextFieldZero = GridBagHelper.addTextRow(panel, Locale.getString("ZERO_PCT"), zeroField,
-                                                   layout, c, 8);
-        TextField100 = GridBagHelper.addTextRow(panel,
-                                     Locale.getString("HUNDRED_PCT"), hundredField,
-                                     layout, c, 8);
-    }
+		String zeroField = "";
+		String hundredField = "";
 
-    public String checkSettings() {
-	return checkSettings(getSettings());
-    }
+		TextFieldZero = GridBagHelper.addTextRow(panel, Locale.getString("ZERO_PCT"), zeroField, layout, c, 8);
+		TextField100 = GridBagHelper.addTextRow(panel, Locale.getString("HUNDRED_PCT"), hundredField, layout, c, 8);
+	}
 
-    public String checkSettings(HashMap settings) {
-        // Check input
-        String temp = (String)settings.get(ZEROPCT);
+	public String checkSettings() {
+		return checkSettings(getSettings());
+	}
 
-        try {
-            double dtemp = Double.parseDouble(temp);
-        }
-        catch(NumberFormatException e) {
-            return Locale.getString("ERROR_PARSING_NUMBER", temp);
-        }
+	public String checkSettings(HashMap settings) {
+		// Check input
+		String temp = (String) settings.get(ZEROPCT);
 
-        temp = (String)settings.get(HUNDREDPCT);
+		try {
+			double dtemp = Double.parseDouble(temp);
+		} catch (NumberFormatException e) {
+			return Locale.getString("ERROR_PARSING_NUMBER", temp);
+		}
 
-        try {
-            double dtemp = Double.parseDouble(temp);
-        }
-        catch(NumberFormatException e) {
-            return Locale.getString("ERROR_PARSING_NUMBER", temp);
-        }
+		temp = (String) settings.get(HUNDREDPCT);
 
-        // Settings are OK
-        return null;
-    }
+		try {
+			double dtemp = Double.parseDouble(temp);
+		} catch (NumberFormatException e) {
+			return Locale.getString("ERROR_PARSING_NUMBER", temp);
+		}
 
-    public HashMap getSettings() {
-        HashMap settings = new HashMap();
-        settings.put(ZEROPCT, TextFieldZero.getText());
-        settings.put(HUNDREDPCT, TextField100.getText());
-        return settings;
-    }
+		// Settings are OK
+		return null;
+	}
 
-    public void setSettings(HashMap settings) {
-        TextFieldZero.setText((String) settings.get(ZEROPCT));
-        TextField100.setText((String) settings.get(HUNDREDPCT));
-    }
+	public HashMap getSettings() {
+		HashMap settings = new HashMap();
+		settings.put(ZEROPCT, TextFieldZero.getText());
+		settings.put(HUNDREDPCT, TextField100.getText());
+		return settings;
+	}
 
-    public JPanel getPanel() {
-        return panel;
-    }
+	public void setSettings(HashMap settings) {
+		TextFieldZero.setText((String) settings.get(ZEROPCT));
+		TextField100.setText((String) settings.get(HUNDREDPCT));
+	}
+
+	public JPanel getPanel() {
+		return panel;
+	}
 
 }

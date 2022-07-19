@@ -42,169 +42,155 @@ import nz.org.venice.quote.SymbolMetadata;
 import nz.org.venice.util.Locale;
 
 public class IndexEditorDialog extends JInternalFrame implements ActionListener, KeyListener {
-    private boolean okClicked = false;
-    private boolean wasCancelled = false;
+	private boolean okClicked = false;
+	private boolean wasCancelled = false;
 
-    private SymbolMetadata indexSymbol = null;
+	private SymbolMetadata indexSymbol = null;
 
-    private JTextField symbolField;
-    private JTextField nameField;
+	private JTextField symbolField;
+	private JTextField nameField;
 
-    private JButton okButton;
-    private JButton cancelButton;
-    private JButton helpButton;
+	private JButton okButton;
+	private JButton cancelButton;
+	private JButton helpButton;
 
-    public IndexEditorDialog() {
-	super();
-	initialise();
-    }
+	public IndexEditorDialog() {
+		super();
+		initialise();
+	}
 
-    public IndexEditorDialog(SymbolMetadata indexSymbolEdit) {
-	super();
+	public IndexEditorDialog(SymbolMetadata indexSymbolEdit) {
+		super();
 
-	indexSymbol = indexSymbolEdit;
+		indexSymbol = indexSymbolEdit;
 
-	initialise();
-    }
-    
-    public boolean okClicked() {
-	return okClicked;
-    }
+		initialise();
+	}
 
-    public SymbolMetadata getIndexSymbol() {
-	assert okClicked == true;
-	return indexSymbol;
-    }
+	public boolean okClicked() {
+		return okClicked;
+	}
 
-    private void initialise() {
-	setSize(350,249);
-	setMaximizable(false);
-	setResizable(true);
-	setClosable(true);
-	setTitle(Locale.getString("EDIT_INDEX"));
-	
-	this.setContentPane(getPanel());
-	
-	setVisible(true);
-	DesktopManager.getDesktop().add(this);
-    }
+	public SymbolMetadata getIndexSymbol() {
+		assert okClicked == true;
+		return indexSymbol;
+	}
 
-    private JPanel getPanel() {
-	JPanel panel = new JPanel();
-	panel.setLayout(new BorderLayout());
-	panel.add(getTextPanel(), BorderLayout.CENTER);
-	panel.add(getButtonPanel(), BorderLayout.SOUTH);
+	private void initialise() {
+		setSize(350, 249);
+		setMaximizable(false);
+		setResizable(true);
+		setClosable(true);
+		setTitle(Locale.getString("EDIT_INDEX"));
 
-	return panel;
-    }
+		this.setContentPane(getPanel());
 
-    private JPanel getTextPanel() {
-	JPanel panel = new JPanel();
-	
-	GridBagLayout layout = new GridBagLayout();
-	GridBagConstraints c = new GridBagConstraints();
-	
-	c.weightx = 1.0;
-	c.ipadx = 5;
-	c.anchor = GridBagConstraints.WEST;
-	
-	panel.setLayout(layout);
+		setVisible(true);
+		DesktopManager.getDesktop().add(this);
+	}
 
-	String symbolText = (indexSymbol != null) 
-	    ? indexSymbol.getSymbol().toString()
-	    : "";
+	private JPanel getPanel() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		panel.add(getTextPanel(), BorderLayout.CENTER);
+		panel.add(getButtonPanel(), BorderLayout.SOUTH);
 
-	symbolField = GridBagHelper.addTextRow(panel, Locale.getString("STOCK"),
-					       symbolText, layout, c, 8);
+		return panel;
+	}
 
-	symbolField.addKeyListener(this);
-	symbolField.setToolTipText(Locale.getString("SYMBOL_FIELD_TOOLTIP"));
-	
-	String nameText = (indexSymbol != null) 
-	    ? indexSymbol.getName()
-	    : "";
-	
+	private JPanel getTextPanel() {
+		JPanel panel = new JPanel();
 
-	nameField = GridBagHelper.addTextRow(panel, Locale.getString("NAME"),
-					       nameText, layout, c, 8);
-				   
-				   
-	nameField.setToolTipText(Locale.getString("INDEX_NAME_TOOLTIP"));
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
 
-	helpButton = GridBagHelper.addHelpButtonRow(panel, 
-						    Locale.getString("INDEX_SYMBOLS_TITLE"),
-						    layout,
-						    c);	
+		c.weightx = 1.0;
+		c.ipadx = 5;
+		c.anchor = GridBagConstraints.WEST;
 
-	helpButton.addActionListener(this);
+		panel.setLayout(layout);
 
-	return panel;
-    }
- 
-    private JPanel getButtonPanel() {
-	JPanel panel = new JPanel();
-	//panel.setLayout(new BorderLayout());
-	
-	okButton = new JButton(Locale.getString("OK"));
-	cancelButton = new JButton(Locale.getString("CANCEL"));	
-	okButton.addActionListener(this);
-	okButton.setEnabled(false);
-	cancelButton.addActionListener(this);
-       
-	panel.add(okButton);
-	panel.add(cancelButton);
-	
-	return panel;	
-    }
+		String symbolText = (indexSymbol != null) ? indexSymbol.getSymbol().toString() : "";
 
-    public void actionPerformed(ActionEvent e) {
-	boolean closeDialog = false;
-	if (e.getSource() == okButton) {
-	    indexSymbol = 
-		new SymbolMetadata(symbolField.getText(),
-				   nameField.getText(),
-				   true);
+		symbolField = GridBagHelper.addTextRow(panel, Locale.getString("STOCK"), symbolText, layout, c, 8);
 
-	    okClicked = true;
-	    closeDialog = true;
+		symbolField.addKeyListener(this);
+		symbolField.setToolTipText(Locale.getString("SYMBOL_FIELD_TOOLTIP"));
 
-	} else if (e.getSource() == cancelButton) {
-	    closeDialog = true;
-	} else if (e.getSource() == helpButton) {
-	    CommandManager.getInstance().openHelp("Index Definition");
-	} else {
+		String nameText = (indexSymbol != null) ? indexSymbol.getName() : "";
+
+		nameField = GridBagHelper.addTextRow(panel, Locale.getString("NAME"), nameText, layout, c, 8);
+
+		nameField.setToolTipText(Locale.getString("INDEX_NAME_TOOLTIP"));
+
+		helpButton = GridBagHelper.addHelpButtonRow(panel, Locale.getString("INDEX_SYMBOLS_TITLE"), layout, c);
+
+		helpButton.addActionListener(this);
+
+		return panel;
+	}
+
+	private JPanel getButtonPanel() {
+		JPanel panel = new JPanel();
+		// panel.setLayout(new BorderLayout());
+
+		okButton = new JButton(Locale.getString("OK"));
+		cancelButton = new JButton(Locale.getString("CANCEL"));
+		okButton.addActionListener(this);
+		okButton.setEnabled(false);
+		cancelButton.addActionListener(this);
+
+		panel.add(okButton);
+		panel.add(cancelButton);
+
+		return panel;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		boolean closeDialog = false;
+		if (e.getSource() == okButton) {
+			indexSymbol = new SymbolMetadata(symbolField.getText(), nameField.getText(), true);
+
+			okClicked = true;
+			closeDialog = true;
+
+		} else if (e.getSource() == cancelButton) {
+			closeDialog = true;
+		} else if (e.getSource() == helpButton) {
+			CommandManager.getInstance().openHelp("Index Definition");
+		} else {
+
+		}
+
+		if (closeDialog) {
+			try {
+				setClosed(true);
+			} catch (java.beans.PropertyVetoException pve) {
+
+			}
+		}
+	}
+
+	public void keyTyped(KeyEvent e) {
+		if (checkRequiredFieldsEntered()) {
+			okButton.setEnabled(true);
+		} else {
+			okButton.setEnabled(false);
+		}
+	}
+
+	public void keyPressed(KeyEvent e) {
+	}
+
+	public void keyReleased(KeyEvent e) {
 
 	}
 
-	if (closeDialog) {
-	    try {
-		setClosed(true);
-	    } catch (java.beans.PropertyVetoException pve) {
-		
-	    }
+	private boolean checkRequiredFieldsEntered() {
+		if (symbolField.getText().equals("")) {
+			return false;
+		}
+		return true;
 	}
-    }
-   
-    public void keyTyped(KeyEvent e) {
-	if (checkRequiredFieldsEntered()) {
-	    okButton.setEnabled(true);
-	} else {
-	    okButton.setEnabled(false);
-	}
-    }
 
-    public void keyPressed(KeyEvent e) {
-    }
-
-    public void keyReleased(KeyEvent e) {
-
-    }
-
-    private boolean checkRequiredFieldsEntered() {
-	if (symbolField.getText().equals("")) {
-	    return false;
-	}
-	return true;
-    }
-   
 }

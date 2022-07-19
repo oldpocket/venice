@@ -36,60 +36,59 @@ import nz.org.venice.quote.QuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 public class DataCheckExpression extends BinaryExpression {
-    public DataCheckExpression(Expression symbol, Expression arg) {
-	super(symbol, arg);
-    }
-
-    public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) throws EvaluationException {
-		
-	QuoteSymbol quoteChild = (QuoteSymbol)getChild(0);
-	int quoteKind = quoteChild.getQuoteKind();
-	Symbol explicitSymbol = (quoteChild.getSymbol() != null) 
-	    ? quoteChild.getSymbol() : symbol;
-
-	int offset = (int)getChild(1).evaluate(variables, quoteBundle, symbol, day);
-
-	if (offset > 0) {
-	    EvaluationException e = EvaluationException.LAG_OFFSET_EXCEPTION;
-	    e.setMessage(this, "", offset);
-	    throw e;
+	public DataCheckExpression(Expression symbol, Expression arg) {
+		super(symbol, arg);
 	}
 
-	try {
-	    quoteBundle.getQuote(explicitSymbol, quoteKind, day + offset);
-	    return Expression.TRUE;
-	} catch (MissingQuoteException e) {
-	    try {
-		quoteBundle.getNearestQuote(explicitSymbol, quoteKind, day + offset);
+	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+			throws EvaluationException {
 
-		return Expression.TRUE;
-	    } catch (MissingQuoteException e2) {
-		return Expression.FALSE;
-	    }
+		QuoteSymbol quoteChild = (QuoteSymbol) getChild(0);
+		int quoteKind = quoteChild.getQuoteKind();
+		Symbol explicitSymbol = (quoteChild.getSymbol() != null) ? quoteChild.getSymbol() : symbol;
+
+		int offset = (int) getChild(1).evaluate(variables, quoteBundle, symbol, day);
+
+		if (offset > 0) {
+			EvaluationException e = EvaluationException.LAG_OFFSET_EXCEPTION;
+			e.setMessage(this, "", offset);
+			throw e;
+		}
+
+		try {
+			quoteBundle.getQuote(explicitSymbol, quoteKind, day + offset);
+			return Expression.TRUE;
+		} catch (MissingQuoteException e) {
+			try {
+				quoteBundle.getNearestQuote(explicitSymbol, quoteKind, day + offset);
+
+				return Expression.TRUE;
+			} catch (MissingQuoteException e2) {
+				return Expression.FALSE;
+			}
+		}
 	}
-    }
 
-    public int checkType() throws TypeMismatchException {
-	if (getChild(0).checkType() == FLOAT_QUOTE_TYPE &&
-	    getChild(1).checkType() == INTEGER_TYPE ) {
-	    return getType();
-	} else {
-	    String types = getChild(0).getType() + " , " + getChild(1).getType();
-	    String expectedTypes = FLOAT_QUOTE_TYPE + " , " + INTEGER_TYPE;
+	public int checkType() throws TypeMismatchException {
+		if (getChild(0).checkType() == FLOAT_QUOTE_TYPE && getChild(1).checkType() == INTEGER_TYPE) {
+			return getType();
+		} else {
+			String types = getChild(0).getType() + " , " + getChild(1).getType();
+			String expectedTypes = FLOAT_QUOTE_TYPE + " , " + INTEGER_TYPE;
 
-	    throw new TypeMismatchException(this, types, expectedTypes);
+			throw new TypeMismatchException(this, types, expectedTypes);
+		}
 	}
-    }
 
-    public int getType() {
-	return BOOLEAN_TYPE; 
-    }
+	public int getType() {
+		return BOOLEAN_TYPE;
+	}
 
-    public String toString() {
-	return new String("offsetExists()");
-    }
+	public String toString() {
+		return new String("offsetExists()");
+	}
 
-    public Object clone() {
-	return new DataCheckExpression(getChild(0), getChild(1));
-    }
+	public Object clone() {
+		return new DataCheckExpression(getChild(0), getChild(1));
+	}
 }

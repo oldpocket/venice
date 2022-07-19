@@ -32,75 +32,65 @@ import nz.org.venice.parser.Parser;
  */
 public class ExpressionQuery {
 
-    private ExpressionQuery() {
-	// Cannot instantiate this class
-    }
+	private ExpressionQuery() {
+		// Cannot instantiate this class
+	}
 
-    /**
-     * Open a new <code>ExpressionQuery</code> dialog. Ask the user to
-     * enter an expression string. Parse this string and check for validity,
-     * if the string is not valid the user will be asked to enter a valid
-     * string. 
-     *
-     * @param	parent	the parent desktop
-     * @param	title	the title of the dialog
-     * @return	the expression the user entered or <code>null</code>
-     * if the user cancelled the dialog
-     */
-    public static String getExpression(JDesktopPane parent, String title,
-				       String prompt) {
-	return getExpression(parent, title, prompt, "");
-    }
+	/**
+	 * Open a new <code>ExpressionQuery</code> dialog. Ask the user to enter an
+	 * expression string. Parse this string and check for validity, if the string is
+	 * not valid the user will be asked to enter a valid string.
+	 *
+	 * @param parent the parent desktop
+	 * @param title  the title of the dialog
+	 * @return the expression the user entered or <code>null</code> if the user
+	 *         cancelled the dialog
+	 */
+	public static String getExpression(JDesktopPane parent, String title, String prompt) {
+		return getExpression(parent, title, prompt, "");
+	}
 
-    /**
-     * Open a new <code>ExpressionQuery</code> dialog. Ask the user to
-     * enter an expression string. Parse this string and check for validity,
-     * if the string is not valid the user will be asked to enter a valid
-     * string. 
-     *
-     * @param	parent	the parent desktop
-     * @param	title	the title of the dialog
-     * @param   prompt  the prompt
-     * @param	defaultExpression	default expression string
-     * @return	the expression the user entered or <code>null</code>
-     * if the user cancelled the dialog
-     */
-    public static String getExpression(JDesktopPane parent, String title,
-				       String prompt, String defaultExpression) {
-	
-	Expression expression = null;
-	boolean invalidResponse;
-	String expressionString = defaultExpression;
+	/**
+	 * Open a new <code>ExpressionQuery</code> dialog. Ask the user to enter an
+	 * expression string. Parse this string and check for validity, if the string is
+	 * not valid the user will be asked to enter a valid string.
+	 *
+	 * @param parent            the parent desktop
+	 * @param title             the title of the dialog
+	 * @param prompt            the prompt
+	 * @param defaultExpression default expression string
+	 * @return the expression the user entered or <code>null</code> if the user
+	 *         cancelled the dialog
+	 */
+	public static String getExpression(JDesktopPane parent, String title, String prompt, String defaultExpression) {
 
-	do {
-	    // False unless shown otherwise
-	    invalidResponse = false;
+		Expression expression = null;
+		boolean invalidResponse;
+		String expressionString = defaultExpression;
 
-	    // Prompt user for expression
-	    ExpressionDialog dlg = new ExpressionDialog(parent, prompt, title,
-                                                        expressionString);
-	    expressionString = dlg.showDialog();
+		do {
+			// False unless shown otherwise
+			invalidResponse = false;
 
-	    // Parse expression checking for type errors
-	    if(expressionString != null && expressionString.length() > 0)
+			// Prompt user for expression
+			ExpressionDialog dlg = new ExpressionDialog(parent, prompt, title, expressionString);
+			expressionString = dlg.showDialog();
 
-		try {
-		    expression = Parser.parse(expressionString);
-		}
-		catch(ExpressionException e) {
-		    invalidResponse = true;
-		    
-		    // Tell user expression is wrong and try again
-		    JOptionPane.
-			showInternalMessageDialog(parent, 
-						  e.getReason() + ": " +
-						  expressionString,
-						  "Error parsing expression",
-						  JOptionPane.ERROR_MESSAGE);
-		}
-	    
-	} while(invalidResponse);
+			// Parse expression checking for type errors
+			if (expressionString != null && expressionString.length() > 0)
 
-	return expressionString;
-    }
+				try {
+					expression = Parser.parse(expressionString);
+				} catch (ExpressionException e) {
+					invalidResponse = true;
+
+					// Tell user expression is wrong and try again
+					JOptionPane.showInternalMessageDialog(parent, e.getReason() + ": " + expressionString,
+							"Error parsing expression", JOptionPane.ERROR_MESSAGE);
+				}
+
+		} while (invalidResponse);
+
+		return expressionString;
+	}
 }

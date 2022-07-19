@@ -25,64 +25,61 @@ import nz.org.venice.parser.Expression;
  */
 abstract public class BinaryExpression extends AbstractExpression {
 
-    /**
-     * Create a new binary expression with the given left and right
-     * arguments.
-     *
-     * @param	left	the left argument
-     * @param	right	the right argument
-     */
-    public BinaryExpression(Expression left,
-			    Expression right) {	
-	super(new Expression[] {left, right});
-	assert left != null && right != null;
+	/**
+	 * Create a new binary expression with the given left and right arguments.
+	 *
+	 * @param left  the left argument
+	 * @param right the right argument
+	 */
+	public BinaryExpression(Expression left, Expression right) {
+		super(new Expression[] { left, right });
+		assert left != null && right != null;
 
-        //setChild(left, 0);
-        //setChild(right, 1);
-    }
-
-    /**
-     * Return the number of children required in a binary expression.
-     * This will always evaluate to <code>2</code>.
-     *
-     * @return	<code>2</code>
-     */
-    public int getChildCount() {
-	return 2;
-    }
-
-    /**
-     * Helper method to conver the given expression to a string.
-     * Given an operator such as <code>+</code>, <code>-</code> etc
-     * it will return <code>arg1 operator arg2</code>. It will insert
-     * parentheses as needed.
-     *
-     * @param	operator	the binary operator
-     * @return	the string representation
-     */
-    protected String toString(String operator) {
-	String string = "";
-	
-	if (getChild(0) != null) {
-	    if(getChild(0).getChildCount() < 2) {
-		string += getChild(0).toString();
-	    } else {
-		string += "(" + getChild(0).toString() + ")";
-	    }	    	
-	} else {
-	    string += "(null)";
+		// setChild(left, 0);
+		// setChild(right, 1);
 	}
-	string += operator;
-	
-	if (getChild(1) != null) {
-	    if(getChild(1).getChildCount() < 2) {
-		string += getChild(1).toString();
-	    } else {
-		string += "(" + getChild(1).toString() + ")";
-	    } 
-	} else {
-	    string += "(null)";
+
+	/**
+	 * Return the number of children required in a binary expression. This will
+	 * always evaluate to <code>2</code>.
+	 *
+	 * @return <code>2</code>
+	 */
+	public int getChildCount() {
+		return 2;
 	}
-	return string;
-    }
+
+	/**
+	 * Helper method to conver the given expression to a string. Given an operator
+	 * such as <code>+</code>, <code>-</code> etc it will return
+	 * <code>arg1 operator arg2</code>. It will insert parentheses as needed.
+	 *
+	 * @param operator the binary operator
+	 * @return the string representation
+	 */
+	protected String toString(String operator) {
+		String string = "";
+
+		if (getChild(0) != null) {
+			if (getChild(0).getChildCount() < 2) {
+				string += getChild(0).toString();
+			} else {
+				string += "(" + getChild(0).toString() + ")";
+			}
+		} else {
+			string += "(null)";
+		}
+		string += operator;
+
+		if (getChild(1) != null) {
+			if (getChild(1).getChildCount() < 2) {
+				string += getChild(1).toString();
+			} else {
+				string += "(" + getChild(1).toString() + ")";
+			}
+		} else {
+			string += "(null)";
+		}
+		return string;
+	}
 }

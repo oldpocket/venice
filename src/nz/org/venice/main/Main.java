@@ -58,8 +58,8 @@ import nz.org.venice.util.Locale;
 import nz.org.venice.util.VeniceLog;
 
 /**
- * The top level class which contains the main() function. This class builds
- * the outer frame and creates the desktop.
+ * The top level class which contains the main() function. This class builds the
+ * outer frame and creates the desktop.
  *
  * @author Andrew Leppard
  */
@@ -82,12 +82,13 @@ public class Main extends JFrame {
 
 	/** Copyright date range, e.g. "2003-5" */
 	public static String COPYRIGHT_DATE_RANGE = "2003-19";
-	
+
 	/** Copyright date range, e.g. "2003-5" */
 	public static String COPYRIGHT_DATE_NEW_RANGE = "2021-21";
 
 	/**
 	 * Get the main frame for the current application
+	 * 
 	 * @return The frame
 	 */
 	public static JFrame getApplicationFrame() {
@@ -98,17 +99,17 @@ public class Main extends JFrame {
 	private void setConsoleCodePage() {
 		String osName = System.getProperty("os.name");
 		String codePage = "";
-		if(osName.startsWith("Windows")) codePage = "CP850";  
-		else if(osName.startsWith("Mac")) codePage = "UTF-8";
-		if(codePage != "") {
+		if (osName.startsWith("Windows"))
+			codePage = "CP850";
+		else if (osName.startsWith("Mac"))
+			codePage = "UTF-8";
+		if (codePage != "") {
 			try {
-				System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out),
-						false, codePage));
-				System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err), 
-						true, codePage));
+				System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out), false, codePage));
+				System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err), true, codePage));
 			} catch (Exception e) {
 				e.printStackTrace();
-			} 
+			}
 		}
 	}
 
@@ -120,16 +121,15 @@ public class Main extends JFrame {
 		// Set the console code page depending on your operating system.
 		setConsoleCodePage();
 		// Display a brief copyright message
-		String title = (Locale.getString("VENICE_LONG") + ", " + LONG_VERSION + " | " +
-				RELEASE_DATE);
+		String title = (Locale.getString("VENICE_LONG") + ", " + LONG_VERSION + " | " + RELEASE_DATE);
 		System.out.println(title);
-		for(int i = 0; i < title.length(); i++)
+		for (int i = 0; i < title.length(); i++)
 			System.out.print("-");
 		System.out.println("");
-		System.out.println(Locale.getString("COPYRIGHT", COPYRIGHT_DATE_RANGE) + ", " +
-				"Andrew Leppard (andrew venice org nz)");
-		System.out.println(Locale.getString("COPYRIGHT", COPYRIGHT_DATE_NEW_RANGE) + ", " +
-				"Fabio Godoy (fabio.godoy at oldpocket com)");
+		System.out.println(
+				Locale.getString("COPYRIGHT", COPYRIGHT_DATE_RANGE) + ", " + "Andrew Leppard (andrew venice org nz)");
+		System.out.println(Locale.getString("COPYRIGHT", COPYRIGHT_DATE_NEW_RANGE) + ", "
+				+ "Fabio Godoy (fabio.godoy at oldpocket com)");
 		System.out.println(Locale.getString("SEE_LICENSE"));
 
 		displayPreferences = PreferencesManager.getDisplaySettings();
@@ -160,6 +160,7 @@ public class Main extends JFrame {
 				// User closed window by hitting "X" button
 				saveSettingsAndExit();
 			}
+
 			public void windowClosed(WindowEvent e) {
 				// User closed window by selecting exit from the menu
 				saveSettingsAndExit();
@@ -167,7 +168,7 @@ public class Main extends JFrame {
 		});
 
 		// Temporarily disable functionality if the user has not accepted the license.
-		if(PreferencesManager.getHasGPLAcceptance())
+		if (PreferencesManager.getHasGPLAcceptance())
 			MainMenu.getInstance().disableMenus();
 
 		setVisible(true);
@@ -175,7 +176,7 @@ public class Main extends JFrame {
 		// First make sure user has agreed to GPL. If they do not agree to
 		// the license, then quit the application immediately.
 		if (PreferencesManager.getHasGPLAcceptance()) {
-			if(!GPLViewDialog.showGPLAcceptanceDialog()) {
+			if (!GPLViewDialog.showGPLAcceptanceDialog()) {
 				dispose();
 				System.exit(0);
 			}
@@ -187,13 +188,12 @@ public class Main extends JFrame {
 			}
 		}
 
-		//Restore saved windows + state
-		//Need to make the frame visible before adding new frames
+		// Restore saved windows + state
+		// Need to make the frame visible before adding new frames
 		setVisible(true);
 		restoreSavedFrames();
 
 		CommandManager.getInstance().triggeredAlerts();
-
 
 	}
 
@@ -213,7 +213,7 @@ public class Main extends JFrame {
 		// Shutdown the database if necessary
 		QuoteSourceManager.shutdown();
 
-		//Close the log if necessary
+		// Close the log if necessary
 		VeniceLog.getInstance().close();
 
 		dispose();
@@ -221,8 +221,8 @@ public class Main extends JFrame {
 	}
 
 	/**
-	 * Start the application. Currently the application ignores all
-	 * command line arguments.
+	 * Start the application. Currently the application ignores all command line
+	 * arguments.
 	 */
 	public static void main(String[] args) {
 		// Set the look and feel to be the default for the current platform
@@ -234,11 +234,10 @@ public class Main extends JFrame {
 					break;
 				}
 			}
-			//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch(Exception e) {
+			// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
 			// Shouldn't happen, but if it does just keep going
-		}	
+		}
 		venice = new Main();
 
 		// Now run Jython start up macros
@@ -249,31 +248,28 @@ public class Main extends JFrame {
 		}
 
 		// Start up intra-day quote sync
-		PreferencesManager.IDQuoteSyncPreferences idQuoteSyncPreferences =
-				PreferencesManager.getIDQuoteSyncPreferences();
+		PreferencesManager.IDQuoteSyncPreferences idQuoteSyncPreferences = PreferencesManager
+				.getIDQuoteSyncPreferences();
 		IDQuoteSync.getInstance().setPeriod(idQuoteSyncPreferences.period);
 
 		try {
-			List symbols = new ArrayList(Symbol.toSortedSet(idQuoteSyncPreferences.symbols,
-					false));
+			List symbols = new ArrayList(Symbol.toSortedSet(idQuoteSyncPreferences.symbols, false));
 
 			IDQuoteSync.getInstance().addSymbols(symbols);
 			IDQuoteSync.getInstance().setSuffix(idQuoteSyncPreferences.suffix);
-		} catch(SymbolFormatException e) {
+		} catch (SymbolFormatException e) {
 			// Ignore error in preferences
 		}
 
-		IDQuoteSync.getInstance().setTimeRange(idQuoteSyncPreferences.openTime,
-				idQuoteSyncPreferences.closeTime);
+		IDQuoteSync.getInstance().setTimeRange(idQuoteSyncPreferences.openTime, idQuoteSyncPreferences.closeTime);
 		IDQuoteSync.getInstance().setEnabled(idQuoteSyncPreferences.isEnabled);
 
 	}
 
-
 	/**
 	 * Restore saved internal frames and their modules, reconstructing their
-     position and geometry.
-
+	 * position and geometry.
+	 * 
 	 **/
 
 	private void restoreSavedFrames() {
@@ -291,7 +287,7 @@ public class Main extends JFrame {
 
 		savedFrameFiles = PreferencesManager.getSavedFrames();
 		iterator = savedFrameFiles.iterator();
-		savedFrames  = savedFrameFiles.size();
+		savedFrames = savedFrameFiles.size();
 
 		if (savedFrames <= 0) {
 			ProgressDialogManager.closeProgressDialog(progress);
@@ -305,7 +301,6 @@ public class Main extends JFrame {
 		progress.setMaximum(savedFrames);
 		progress.setMaster(true);
 
-
 		/* Make sure the initial desktop has displayed first */
 		while (iterator.hasNext()) {
 			if (thread.isInterrupted()) {
@@ -314,16 +309,16 @@ public class Main extends JFrame {
 			progress.increment();
 			try {
 
-				File savedFrameFile = (File)iterator.next();
+				File savedFrameFile = (File) iterator.next();
 				FileInputStream inputStream = new FileInputStream(savedFrameFile);
 
 				try {
 					ModuleFrameSettings newFrameSettings = ModuleFrameSettingsReader.read(inputStream);
 					Settings moduleSettings = newFrameSettings.getModuleSettings();
-					//Recreate the module from settings.
+					// Recreate the module from settings.
 					Module newModule = moduleSettings.getModule(desktop);
 
-					//Place it initially at 0,0
+					// Place it initially at 0,0
 					ModuleFrame newFrame = desktopManager.newFrame(newModule);
 
 					newFrame.setSizeAndLocation(newFrame, desktop, false, true);
@@ -346,9 +341,6 @@ public class Main extends JFrame {
 		ProgressDialogManager.closeProgressDialog(progress);
 		if (!thread.isInterrupted()) {
 			PreferencesManager.removeSavedFrames();
-		}	
+		}
 	}
 }
-
-
-

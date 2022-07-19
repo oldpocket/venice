@@ -30,78 +30,69 @@ import nz.org.venice.util.Locale;
  */
 public class NumberDialog {
 
-    private NumberDialog() {
-	// Cannot instantiate this class
-    }
+	private NumberDialog() {
+		// Cannot instantiate this class
+	}
 
-    /**
-     * Opens a new dialog asking the user to enter a number. If the user
-     * enters an illegal number, then the number will be rejected
-     * and the user will be asked to re-enter the number.
-     * The number will be returned or <code>null</code> if the user
-     * cancelled the dialog.
-     *
-     * @param parent       the parent desktop
-     * @param title        the title of the dialog
-     * @param prompt       the prompt string
-     * @param defaultValue the default value to use.
-     * @return the value
-     */
-    public static Double getDouble(JDesktopPane parent,
-                                   String       title,
-                                   String       prompt,
-                                   double       defaultValue) {
-        Double value = null;
-        String valueText = Double.toString(defaultValue);
-        boolean invalidResponse;
+	/**
+	 * Opens a new dialog asking the user to enter a number. If the user enters an
+	 * illegal number, then the number will be rejected and the user will be asked
+	 * to re-enter the number. The number will be returned or <code>null</code> if
+	 * the user cancelled the dialog.
+	 *
+	 * @param parent       the parent desktop
+	 * @param title        the title of the dialog
+	 * @param prompt       the prompt string
+	 * @param defaultValue the default value to use.
+	 * @return the value
+	 */
+	public static Double getDouble(JDesktopPane parent, String title, String prompt, double defaultValue) {
+		Double value = null;
+		String valueText = Double.toString(defaultValue);
+		boolean invalidResponse;
 
-        do {
-            invalidResponse = false; // assume user does OK
-            
-            // Prompt for number
-            TextDialog dialog = new TextDialog(parent, prompt, title,
-                                               valueText);
-            
-            valueText = dialog.showDialog();
+		do {
+			invalidResponse = false; // assume user does OK
 
-            if(valueText != null) {
-                value = parseDouble(parent, valueText);
+			// Prompt for number
+			TextDialog dialog = new TextDialog(parent, prompt, title, valueText);
 
-                if(value == null)
-                    invalidResponse = true;
-            }
-            
-	    // Keep going while user hasnt entered a valid number and
-	    // is selecting "ok"
-        } while(invalidResponse);
+			valueText = dialog.showDialog();
 
-        return value;
-    }
+			if (valueText != null) {
+				value = parseDouble(parent, valueText);
 
-    /**
-     * Given a string, parse it into a double and if there was an error raise a
-     * dialog to the user.
-     *
-     * @param parent the parent desktop
-     * @param text   the text to parse
-     * @return the value or <code>null</code> on error.
-     */
-    private static Double parseDouble(JDesktopPane parent, String text) {
-        Double value = null;
+				if (value == null)
+					invalidResponse = true;
+			}
 
-        // Try and convert the text into a double object
-        try {
-            value = new Double(text);
-        }
-        catch(NumberFormatException e) {
-            JOptionPane.showInternalMessageDialog(parent, 
-                                                  Locale.getString("ERROR_PARSING_NUMBER",
-                                                                   text),
-                                                  Locale.getString("INVALID_NUMBER_TITLE"),
-                                                  JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-        
-        return value;
-    }
+			// Keep going while user hasnt entered a valid number and
+			// is selecting "ok"
+		} while (invalidResponse);
+
+		return value;
+	}
+
+	/**
+	 * Given a string, parse it into a double and if there was an error raise a
+	 * dialog to the user.
+	 *
+	 * @param parent the parent desktop
+	 * @param text   the text to parse
+	 * @return the value or <code>null</code> on error.
+	 */
+	private static Double parseDouble(JDesktopPane parent, String text) {
+		Double value = null;
+
+		// Try and convert the text into a double object
+		try {
+			value = new Double(text);
+		} catch (NumberFormatException e) {
+			JOptionPane.showInternalMessageDialog(parent, Locale.getString("ERROR_PARSING_NUMBER", text),
+					Locale.getString("INVALID_NUMBER_TITLE"), JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+
+		return value;
+	}
 }

@@ -51,8 +51,8 @@ import nz.org.venice.util.TradingTime;
 import nz.org.venice.util.TradingTimeFormatException;
 
 /**
- * The sync Intra-day quotes module allows automatic downloading of
- * Intra-day quotes from the internet into Venice.
+ * The sync Intra-day quotes module allows automatic downloading of Intra-day
+ * quotes from the internet into Venice.
  *
  * @author Andrew Leppard
  * @see IDQuoteSync
@@ -138,41 +138,32 @@ public class IDQuoteSyncModule extends JPanel implements Module {
 		sourceComboBox.addItem(Locale.getString("YAHOO"));
 		sourceComboBox.setToolTipText(Locale.getString("IDQUOTE_SOURCE_TOOLTIP"));
 
-
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		gridbag.setConstraints(sourceComboBox, c);
 		titledPanel.add(sourceComboBox);
 
-		symbolListTextField = GridBagHelper.addTextRow(titledPanel, Locale.getString("SYMBOLS"),
-				prefs.symbols,
-				gridbag, c, 11);
+		symbolListTextField = GridBagHelper.addTextRow(titledPanel, Locale.getString("SYMBOLS"), prefs.symbols, gridbag,
+				c, 11);
 
 		symbolListTextField.setToolTipText(Locale.getString("SYMBOL_FIELD_TOOLTIP"));
 
-		suffixTextField = GridBagHelper.addTextRow(titledPanel, Locale.getString("ADD_SUFFIX"),
-				prefs.suffix,
-				gridbag, c, 11);
+		suffixTextField = GridBagHelper.addTextRow(titledPanel, Locale.getString("ADD_SUFFIX"), prefs.suffix, gridbag,
+				c, 11);
 
 		suffixTextField.setToolTipText(Locale.getString("SUFFIX_FIELD_TOOLTIP"));
 
-		openTimeTextField = GridBagHelper.addTextRow(titledPanel,
-				Locale.getString("OPEN_TIME"),
-				prefs.openTime.toString(),
-				gridbag, c, 11);
+		openTimeTextField = GridBagHelper.addTextRow(titledPanel, Locale.getString("OPEN_TIME"),
+				prefs.openTime.toString(), gridbag, c, 11);
 
 		openTimeTextField.setToolTipText(Locale.getString("START_TIME_FIELD_TOOLTIP"));
 
-		closeTimeTextField = GridBagHelper.addTextRow(titledPanel,
-				Locale.getString("CLOSE_TIME"),
-				prefs.closeTime.toString(),
-				gridbag, c, 11);
+		closeTimeTextField = GridBagHelper.addTextRow(titledPanel, Locale.getString("CLOSE_TIME"),
+				prefs.closeTime.toString(), gridbag, c, 11);
 
 		closeTimeTextField.setToolTipText(Locale.getString("START_TIME_FIELD_TOOLTIP"));
 
-		periodTextField = GridBagHelper.addTextRow(titledPanel,
-				Locale.getString("PERIOD_IN_SECONDS"),
-				Integer.toString(prefs.period),
-				gridbag, c, 11);
+		periodTextField = GridBagHelper.addTextRow(titledPanel, Locale.getString("PERIOD_IN_SECONDS"),
+				Integer.toString(prefs.period), gridbag, c, 11);
 
 		periodTextField.setToolTipText(Locale.getString("PERIOD_FIELD_TOOLTIP"));
 
@@ -208,8 +199,8 @@ public class IDQuoteSyncModule extends JPanel implements Module {
 	}
 
 	/**
-	 * Enable/disable the appropriate widgets depending on which widgets
-	 * are checked.
+	 * Enable/disable the appropriate widgets depending on which widgets are
+	 * checked.
 	 */
 	private void checkDisabledStatus() {
 		boolean isEnabled = isEnabledCheckBox.isSelected();
@@ -223,8 +214,8 @@ public class IDQuoteSyncModule extends JPanel implements Module {
 	}
 
 	/**
-	 * Configure Venice to sync Intra-day quotes according to the values given on the user
-	 * interface.
+	 * Configure Venice to sync Intra-day quotes according to the values given on
+	 * the user interface.
 	 */
 	private void sync() {
 		// Parse sync configuration parameters
@@ -256,11 +247,8 @@ public class IDQuoteSyncModule extends JPanel implements Module {
 			// Don't check that the symbols exist before sync. After all,
 			// they might not at first sync.
 			symbolList = new ArrayList(Symbol.toSortedSet(symbolListText, false));
-		}
-		catch(SymbolFormatException e) {
-			JOptionPane.showInternalMessageDialog(desktop,
-					e.getMessage(),
-					Locale.getString("INVALID_SYMBOL_LIST"),
+		} catch (SymbolFormatException e) {
+			JOptionPane.showInternalMessageDialog(desktop, e.getMessage(), Locale.getString("INVALID_SYMBOL_LIST"),
 					JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
@@ -269,27 +257,19 @@ public class IDQuoteSyncModule extends JPanel implements Module {
 		try {
 			openTime = new TradingTime(openTimeTextField.getText());
 			closeTime = new TradingTime(closeTimeTextField.getText());
-		}
-		catch(TradingTimeFormatException e) {
-			JOptionPane.showInternalMessageDialog(desktop,
-					Locale.getString("ERROR_PARSING_TIME",
-							e.getTime()),
-					Locale.getString("INVALID_TIME"),
-					JOptionPane.ERROR_MESSAGE);
+		} catch (TradingTimeFormatException e) {
+			JOptionPane.showInternalMessageDialog(desktop, Locale.getString("ERROR_PARSING_TIME", e.getTime()),
+					Locale.getString("INVALID_TIME"), JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 
 		// Parse polling period
 		try {
 			period = Integer.parseInt(periodTextField.getText());
-		}
-		catch(NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			JOptionPane.showInternalMessageDialog(desktop,
-					Locale.getString("ERROR_PARSING_NUMBER",
-							periodTextField.getText(),
-							e.getMessage()),
-					Locale.getString("INVALID_PERIOD"),
-					JOptionPane.ERROR_MESSAGE);
+					Locale.getString("ERROR_PARSING_NUMBER", periodTextField.getText(), e.getMessage()),
+					Locale.getString("INVALID_PERIOD"), JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 
@@ -326,7 +306,7 @@ public class IDQuoteSyncModule extends JPanel implements Module {
 	/**
 	 * Add a property change listener for module change events.
 	 *
-	 * @param	listener	listener
+	 * @param listener listener
 	 */
 	public void addModuleChangeListener(PropertyChangeListener listener) {
 		propertySupport.addPropertyChangeListener(listener);
@@ -335,7 +315,7 @@ public class IDQuoteSyncModule extends JPanel implements Module {
 	/**
 	 * Remove a property change listener for module change events.
 	 *
-	 * @param	listener	listener
+	 * @param listener listener
 	 */
 	public void removeModuleChangeListener(PropertyChangeListener listener) {
 		propertySupport.removePropertyChangeListener(listener);
@@ -353,7 +333,7 @@ public class IDQuoteSyncModule extends JPanel implements Module {
 	/**
 	 * Return menu bar for quote source preferences module.
 	 *
-	 * @return	the menu bar.
+	 * @return the menu bar.
 	 */
 	public JMenuBar getJMenuBar() {
 		return null;
@@ -362,7 +342,7 @@ public class IDQuoteSyncModule extends JPanel implements Module {
 	/**
 	 * Return frame icon for quote source preferences module.
 	 *
-	 * @return	the frame icon.
+	 * @return the frame icon.
 	 */
 	public ImageIcon getFrameIcon() {
 		return null;
@@ -371,7 +351,7 @@ public class IDQuoteSyncModule extends JPanel implements Module {
 	/**
 	 * Returns the window title.
 	 *
-	 * @return	the window title.
+	 * @return the window title.
 	 */
 	public String getTitle() {
 		return Locale.getString("SYNC_ID_TITLE");
@@ -380,16 +360,16 @@ public class IDQuoteSyncModule extends JPanel implements Module {
 	/**
 	 * Return whether the module should be enclosed in a scroll pane.
 	 *
-	 * @return	enclose module in scroll bar
+	 * @return enclose module in scroll bar
 	 */
 	public boolean encloseInScrollPane() {
 		return true;
 	}
 
 	/**
-	 * Called when window is closing. We handle the saving explicitly so
-	 * this is only called when the user clicks on the close button in the
-	 * top right hand of the window. Dont trigger a save event for this.
+	 * Called when window is closing. We handle the saving explicitly so this is
+	 * only called when the user clicks on the close button in the top right hand of
+	 * the window. Dont trigger a save event for this.
 	 */
 	public void save() {
 		// Same as hitting cancel - do not save anything

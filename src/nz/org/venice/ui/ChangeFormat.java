@@ -22,76 +22,75 @@ import nz.org.venice.util.Money;
 
 /**
  * An abstract representation of the concept of Change. This class stores the
- * change of a value (in percent). It is currently used as a place holder
- * for the class <code>SortedTable</code> to allow us to differentiate it
- * from the other <code>double</code> values used in that object. This way
- * we can format it differently.
+ * change of a value (in percent). It is currently used as a place holder for
+ * the class <code>SortedTable</code> to allow us to differentiate it from the
+ * other <code>double</code> values used in that object. This way we can format
+ * it differently.
  */
 public class ChangeFormat implements Comparable {
-    double change;
+	double change;
 
-    /**
-     * Create a new Change object from the given change.
-     *
-     * @param	change	the change in percent
-     */
-    public ChangeFormat(double change) {
-	this.change = change;
-    }
+	/**
+	 * Create a new Change object from the given change.
+	 *
+	 * @param change the change in percent
+	 */
+	public ChangeFormat(double change) {
+		this.change = change;
+	}
 
-    /**
-     * Create a new change object and calculate the change
-     * from the initial and final monetary values.
-     *
-     * @param initialValue the initial amount
-     * @param finalValue the final amount
-     */
-    public ChangeFormat(Money initialValue, Money finalValue) {
-        this(initialValue.doubleValue(), finalValue.doubleValue());
-    }
+	/**
+	 * Create a new change object and calculate the change from the initial and
+	 * final monetary values.
+	 *
+	 * @param initialValue the initial amount
+	 * @param finalValue   the final amount
+	 */
+	public ChangeFormat(Money initialValue, Money finalValue) {
+		this(initialValue.doubleValue(), finalValue.doubleValue());
+	}
 
-    /**
-     * Create a new change object and calculate the change
-     * from the initial and final monetary values.
-     *
-     * @param initialValue the initial amount
-     * @param finalValue the final amount
-     */
-    public ChangeFormat(double initialValue, double finalValue) {
-	change = 0.0D;
+	/**
+	 * Create a new change object and calculate the change from the initial and
+	 * final monetary values.
+	 *
+	 * @param initialValue the initial amount
+	 * @param finalValue   the final amount
+	 */
+	public ChangeFormat(double initialValue, double finalValue) {
+		change = 0.0D;
 
-        if(initialValue != 0.0D)
-            change = ((finalValue - initialValue) / initialValue) * 100;
-    }
+		if (initialValue != 0.0D)
+			change = ((finalValue - initialValue) / initialValue) * 100;
+	}
 
-    /**
-     * Get the change percent.
-     *
-     * @return	the change in percent
-     */
-    public double getChange() {
-	return change;
-    }
+	/**
+	 * Get the change percent.
+	 *
+	 * @return the change in percent
+	 */
+	public double getChange() {
+		return change;
+	}
 
-    /**
-     * Compare two change objects.
-     *
-     * @param	object	change object to compare to
-     * @return	the value <code>0</code> if the change objects are equal;
-     * <code>1</code> if this change object is after the specified change
-     * object or
-     * <code>-1</code> if this change object is before the specified change
-     * object
-     */
-    public int compareTo(Object object) {
+	/**
+	 * Compare two change objects.
+	 *
+	 * @param object change object to compare to
+	 * @return the value <code>0</code> if the change objects are equal;
+	 *         <code>1</code> if this change object is after the specified change
+	 *         object or <code>-1</code> if this change object is before the
+	 *         specified change object
+	 */
+	public int compareTo(Object object) {
 
-	ChangeFormat change = (ChangeFormat)object;
+		ChangeFormat change = (ChangeFormat) object;
 
-	if(getChange() < change.getChange())
-	    return -1;
-	if(getChange() > change.getChange())
-	    return 1;
+		if (getChange() < change.getChange())
+			return -1;
+		if (getChange() > change.getChange())
+			return 1;
 
-	return 0;
-    }	
+		return 0;
+	}
 }

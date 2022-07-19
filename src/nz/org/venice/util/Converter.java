@@ -34,59 +34,55 @@ import java.text.DecimalFormat;
 
 public class Converter {
 
-    /**
-     * Convert a number to a fixed length string of the given number of
-     * digits. E.g. converting 3 to a fixed 4 digit string yields "0003".
-     *
-     * @param	number	the number to convert into a string
-     * @param	digits	the fixed number of digits to output
-     * @return	the string
-     */
-    public static String toFixedString(int number, int digits) {
-	String string = Integer.toString(number);
-	String zero = new String("0");
-	
-	// Keep adding zeros at the front until its as big as digits
-	while(string.length() < digits) {
-	    string = zero.concat(string);
+	/**
+	 * Convert a number to a fixed length string of the given number of digits. E.g.
+	 * converting 3 to a fixed 4 digit string yields "0003".
+	 *
+	 * @param number the number to convert into a string
+	 * @param digits the fixed number of digits to output
+	 * @return the string
+	 */
+	public static String toFixedString(int number, int digits) {
+		String string = Integer.toString(number);
+		String zero = new String("0");
+
+		// Keep adding zeros at the front until its as big as digits
+		while (string.length() < digits) {
+			string = zero.concat(string);
+		}
+		return string;
 	}
-	return string;
-    }
 
-    
-    /**
-     * Return a formatted string according to format.
-     * 
-     * @param args An array of integers containing data
-     * @param lengths An array of ints specifying how long each args should be.
-     * @return a formatted date string
-     */
-    public static String dateFormat(Integer args[], int lengths[], String separator) {
-	
-	String mesg = "";
+	/**
+	 * Return a formatted string according to format.
+	 * 
+	 * @param args    An array of integers containing data
+	 * @param lengths An array of ints specifying how long each args should be.
+	 * @return a formatted date string
+	 */
+	public static String dateFormat(Integer args[], int lengths[], String separator) {
 
-	assert args.length == lengths.length;
-	DecimalFormat[] formats = new DecimalFormat[args.length];
-	
-	for (int i = 0; i < args.length; i++) {
-	    formats[i] = new DecimalFormat(constructFormat(lengths[i]));
-	    mesg += formats[i].format(args[i]);
-	    if (i < args.length - 1) {
-		mesg += separator;
-	    }
+		String mesg = "";
+
+		assert args.length == lengths.length;
+		DecimalFormat[] formats = new DecimalFormat[args.length];
+
+		for (int i = 0; i < args.length; i++) {
+			formats[i] = new DecimalFormat(constructFormat(lengths[i]));
+			mesg += formats[i].format(args[i]);
+			if (i < args.length - 1) {
+				mesg += separator;
+			}
+		}
+		return mesg;
 	}
-	return mesg;
-    }
 
-    private static String constructFormat(int length) {
-	String rv = "#";
-	for (int i = 0; i < length; i++) {
-	    rv += "0";
-	}	
-	rv += ".###";
-	return rv;
-    }    
+	private static String constructFormat(int length) {
+		String rv = "#";
+		for (int i = 0; i < length; i++) {
+			rv += "0";
+		}
+		rv += ".###";
+		return rv;
+	}
 }
-
-
-

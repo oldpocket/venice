@@ -34,35 +34,34 @@ import java.util.List;
  */
 public class FileEODQuoteExport {
 
-    // This class is not instantiated.
-    private FileEODQuoteExport() {
-        assert false;
-    } 
+	// This class is not instantiated.
+	private FileEODQuoteExport() {
+		assert false;
+	}
 
-    /**
-     * Export a single day of quotes from Venice into a file
-     *
-     * @param filter format of quote file
-     * @param file quote file to export
-     * @param quotes list of quotes to export
-     * @exception IOException if there was an error writing the file
-     */
-    public static void exportFile(EODQuoteFilter filter, File file, List quotes)
-        throws IOException {
+	/**
+	 * Export a single day of quotes from Venice into a file
+	 *
+	 * @param filter format of quote file
+	 * @param file   quote file to export
+	 * @param quotes list of quotes to export
+	 * @exception IOException if there was an error writing the file
+	 */
+	public static void exportFile(EODQuoteFilter filter, File file, List quotes) throws IOException {
 
-        // Don't bother creating empty files
-        if(quotes.size() > 0) {
-            FileWriter fileWriter = new FileWriter(file);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            PrintWriter printWriter = new PrintWriter(bufferedWriter);
-            
-            // Iterate through stocks printing them to file
-            for(Iterator iterator = quotes.iterator(); iterator.hasNext();) {
-                EODQuote quote = (EODQuote)iterator.next();
-                printWriter.println(filter.toString(quote));
-            }
-            
-            printWriter.close();
-        }
-    }
+		// Don't bother creating empty files
+		if (quotes.size() > 0) {
+			FileWriter fileWriter = new FileWriter(file);
+			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+			PrintWriter printWriter = new PrintWriter(bufferedWriter);
+
+			// Iterate through stocks printing them to file
+			for (Iterator iterator = quotes.iterator(); iterator.hasNext();) {
+				EODQuote quote = (EODQuote) iterator.next();
+				printWriter.println(filter.toString(quote));
+			}
+
+			printWriter.close();
+		}
+	}
 }

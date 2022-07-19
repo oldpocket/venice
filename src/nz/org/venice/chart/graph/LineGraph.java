@@ -26,74 +26,64 @@ import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.source.GraphSource;
 
 /**
- * Simple line graph. This graph is used to draw any kind of line such
- * as day close, day open, day high, day low etc.
+ * Simple line graph. This graph is used to draw any kind of line such as day
+ * close, day open, day high, day low etc.
  *
  * @author Andrew Leppard
  */
 public class LineGraph extends AbstractGraph {
 
-    // The name of the graph, e.g. "Line Chart" or "Day Close".
-    private String name;
+	// The name of the graph, e.g. "Line Chart" or "Day Close".
+	private String name;
 
-    // See Graph.java
-    private boolean isPrimary;
+	// See Graph.java
+	private boolean isPrimary;
 
-    /**
-     * Create a new simple line graph.
-     *
-     * @param	source	the source to render
-     * @param   name    the graph name
-     * @param   isPrimary is this a primary graph?
-     */
-    public LineGraph(GraphSource source, String name, boolean isPrimary) {
-	super(source);
-        this.name = name;
-        this.isPrimary = isPrimary;
-    }
-
-    public void render(Graphics g, Color colour, int xoffset, int yoffset,
-		       double horizontalScale, double verticalScale,
-		       double topLineValue, double bottomLineValue, 
-		       List xRange, boolean vertOrientation) {
-
-	g.setColor(colour);
-
-
-	GraphTools.renderLine(g, getSource().getGraphable(), xoffset, yoffset,
-			      horizontalScale,
-			      verticalScale, 
-			      topLineValue, bottomLineValue, 
-			      xRange, vertOrientation);
-    }
-
-    public String getToolTipText(Comparable x, int yCoordinate, int yoffset,
-				 double verticalScale,
-				 double bottomLineValue)
-    {
-	Double y = getY(x);
-	
-	if(y != null) {
-	    int yOfGraph = yoffset -
-		GraphTools.scaleAndFitPoint(y.doubleValue(),
-					    bottomLineValue, verticalScale);
-	    // Its our graph *only* if its within 5 pixels	
-	    if(Math.abs(yCoordinate - yOfGraph) < Graph.TOOL_TIP_BUFFER)
-		return getSource().getToolTipText(x);
+	/**
+	 * Create a new simple line graph.
+	 *
+	 * @param source    the source to render
+	 * @param name      the graph name
+	 * @param isPrimary is this a primary graph?
+	 */
+	public LineGraph(GraphSource source, String name, boolean isPrimary) {
+		super(source);
+		this.name = name;
+		this.isPrimary = isPrimary;
 	}
-	return null;
-    }
 
-    /**
-     * Return the name of this graph.
-     *
-     * @return the name given to the constructor
-     */
-    public String getName() {
-        return name;
-    }
+	public void render(Graphics g, Color colour, int xoffset, int yoffset, double horizontalScale, double verticalScale,
+			double topLineValue, double bottomLineValue, List xRange, boolean vertOrientation) {
 
-    public boolean isPrimary() {
-        return isPrimary;
-    }
+		g.setColor(colour);
+
+		GraphTools.renderLine(g, getSource().getGraphable(), xoffset, yoffset, horizontalScale, verticalScale,
+				topLineValue, bottomLineValue, xRange, vertOrientation);
+	}
+
+	public String getToolTipText(Comparable x, int yCoordinate, int yoffset, double verticalScale,
+			double bottomLineValue) {
+		Double y = getY(x);
+
+		if (y != null) {
+			int yOfGraph = yoffset - GraphTools.scaleAndFitPoint(y.doubleValue(), bottomLineValue, verticalScale);
+			// Its our graph *only* if its within 5 pixels
+			if (Math.abs(yCoordinate - yOfGraph) < Graph.TOOL_TIP_BUFFER)
+				return getSource().getToolTipText(x);
+		}
+		return null;
+	}
+
+	/**
+	 * Return the name of this graph.
+	 *
+	 * @return the name given to the constructor
+	 */
+	public String getName() {
+		return name;
+	}
+
+	public boolean isPrimary() {
+		return isPrimary;
+	}
 }

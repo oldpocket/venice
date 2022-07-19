@@ -35,197 +35,197 @@ import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.util.Locale;
 
 /**
- * Provides a dialog that enables the user to modify graph settings. Each
- * graph can have its own user interface that enables the user to modify
- * its settings. This dialog takes that interface and displays it in a
- * standard way to the user.
+ * Provides a dialog that enables the user to modify graph settings. Each graph
+ * can have its own user interface that enables the user to modify its settings.
+ * This dialog takes that interface and displays it in a standard way to the
+ * user.
  *
  * @author Andrew Leppard
  * @see nz.org.venice.chart.graph.GraphUI
  */
 public class GraphSettingsDialog extends JInternalFrame {
 
-    // No button has been pressed on the dialog
-    private final static int DIALOG_IS_UP = 0;
+	// No button has been pressed on the dialog
+	private final static int DIALOG_IS_UP = 0;
 
-    /** The user has pressed the ADD button. */
-    public final static int ADD = 1;
+	/** The user has pressed the ADD button. */
+	public final static int ADD = 1;
 
-    /** The user has pressed the EDIT button. */
-    public final static int EDIT = 2;
+	/** The user has pressed the EDIT button. */
+	public final static int EDIT = 2;
 
-    /** The user has pressed the DELETE button. */
-    public final static int DELETE = 3;
+	/** The user has pressed the DELETE button. */
+	public final static int DELETE = 3;
 
-    /** The user has pressed the CANCEL button. */
-    public final static int CANCEL = 4;
+	/** The user has pressed the CANCEL button. */
+	public final static int CANCEL = 4;
 
-    // The button that has been pressed
-    private int buttonPressed = DIALOG_IS_UP;
+	// The button that has been pressed
+	private int buttonPressed = DIALOG_IS_UP;
 
-    // The graph's user interface
-    private GraphUI graphUI;
+	// The graph's user interface
+	private GraphUI graphUI;
 
-    // Wether this is a new graph or an existing one
-    private boolean newGraph;
+	// Wether this is a new graph or an existing one
+	private boolean newGraph;
 
-    //FIXME: 
-    //Don't show add buttons for adding, etc
+	// FIXME:
+	// Don't show add buttons for adding, etc
 
-    /**
-     * Create a new graph settings dialog.
-     *
-     * @param graphUI the graph settings user interface
-     * @param name the name of the graph
-     */
-    public GraphSettingsDialog(GraphUI graphUI, String name) {
-        super(name);
+	/**
+	 * Create a new graph settings dialog.
+	 *
+	 * @param graphUI the graph settings user interface
+	 * @param name    the name of the graph
+	 */
+	public GraphSettingsDialog(GraphUI graphUI, String name) {
+		super(name);
 
-        this.graphUI = graphUI;
-	newGraph = true;
+		this.graphUI = graphUI;
+		newGraph = true;
 
-        buildUI(graphUI);
-    }
-
-    /**
-     * Create a new graph settings dialog.
-     *
-     * @param graphUI the graph settings user interface
-     * @param name the name of the graph
-     * @param newGraph wether this is a newly created graph
-     */
-    public GraphSettingsDialog(GraphUI graphUI, String name, boolean newGraph) {
-        super(name);
-
-        this.graphUI = graphUI;
-	this.newGraph = newGraph;
-
-        buildUI(graphUI);
-    }
-
-    /**
-     * Show the dialog.
-     *
-     * @return the button pressed, {@link #ADD}, {@link #EDIT}, {@link #DELETE}, or {@link #CANCEL} .
-     */
-    public int showDialog() {
-	// Open dialog in centre of window
-	Dimension size = getPreferredSize();
-	int x = (DesktopManager.getDesktop().getWidth() - size.width) / 2;
-	int y = (DesktopManager.getDesktop().getHeight() - size.height) / 2;
-	setBounds(x, y, size.width, size.height);
-
-	DesktopManager.getDesktop().add(this);
-        show();
-
-	try {
-	    while(buttonPressed == DIALOG_IS_UP) {
-		Thread.sleep(10);
-	    }
-	}
-	catch(Exception e) {
-	    // ignore
+		buildUI(graphUI);
 	}
 
-        return buttonPressed;
-    }
+	/**
+	 * Create a new graph settings dialog.
+	 *
+	 * @param graphUI  the graph settings user interface
+	 * @param name     the name of the graph
+	 * @param newGraph wether this is a newly created graph
+	 */
+	public GraphSettingsDialog(GraphUI graphUI, String name, boolean newGraph) {
+		super(name);
 
-    /**
-     * Return the settings in the user interface. This method should only
-     * be called if the user pressed the {@link #ADD} button.
-     *
-     * @return the settings
-     */
-    public HashMap getSettings() {
-	//FIXME
-	//Add assert
+		this.graphUI = graphUI;
+		this.newGraph = newGraph;
 
-        return graphUI.getSettings();
-    }
-
-    /**
-     * Build the user interface based on the given graph user interface.
-     *
-     * @param graphUI graph user interface
-     */
-    private void buildUI(GraphUI graphUI) {
-        JButton addButton = new JButton(Locale.getString("ADD"));
-        addButton.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-                    if(checkSettings()) {
-                        buttonPressed = ADD;
-                        dispose();
-                    }
-                }});
-
-        
-        JButton editButton = new JButton(Locale.getString("EDIT"));
-        editButton.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-		    if(checkSettings()) {
-			buttonPressed = EDIT;
-			dispose();
-		    }
-                }});
-
-        JButton deleteButton = new JButton(Locale.getString("DELETE"));
-        deleteButton.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-                    buttonPressed = DELETE;
-                    dispose();
-                }});
-        
-
-        JButton cancelButton = new JButton(Locale.getString("CANCEL"));
-        cancelButton.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-                    buttonPressed = CANCEL;
-                    dispose();
-                }});
-
-        JPanel panel = new JPanel();
-        TitledBorder border = new TitledBorder(Locale.getString("SETTINGS"));
-        BorderLayout layout = new BorderLayout();
-        panel.setBorder(border);
-        panel.setLayout(layout);
-        panel.add(graphUI.getPanel());
-
-        JPanel buttonPanel = new JPanel();
-
-	if (newGraph) {
-	    buttonPanel.add(addButton);
-	} else { 	
-	    buttonPanel.add(editButton);
-	    buttonPanel.add(deleteButton);
-	}
-	
-        buttonPanel.add(cancelButton);	
-
-	if (newGraph) {
-	    getRootPane().setDefaultButton(addButton);
-	} else {
-	    getRootPane().setDefaultButton(deleteButton);
+		buildUI(graphUI);
 	}
 
-        getContentPane().add(panel, BorderLayout.CENTER);
-        getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+	/**
+	 * Show the dialog.
+	 *
+	 * @return the button pressed, {@link #ADD}, {@link #EDIT}, {@link #DELETE}, or
+	 *         {@link #CANCEL} .
+	 */
+	public int showDialog() {
+		// Open dialog in centre of window
+		Dimension size = getPreferredSize();
+		int x = (DesktopManager.getDesktop().getWidth() - size.width) / 2;
+		int y = (DesktopManager.getDesktop().getHeight() - size.height) / 2;
+		setBounds(x, y, size.width, size.height);
 
-    }
+		DesktopManager.getDesktop().add(this);
+		show();
 
-    /**
-     * Check the settings entered by the user. Display an error message if the
-     * settings are invalid.
-     *
-     * @return <code>true</code> if they were valid.
-     */
-    private boolean checkSettings() {
-        String error = graphUI.checkSettings();
+		try {
+			while (buttonPressed == DIALOG_IS_UP) {
+				Thread.sleep(10);
+			}
+		} catch (Exception e) {
+			// ignore
+		}
 
-        if(error != null)
-            JOptionPane.showInternalMessageDialog(this,
-                                                  error,
-                                                  Locale.getString("ERROR_GRAPH_SETTINGS_TITLE"),
-                                                  JOptionPane.ERROR_MESSAGE);
-        return(error == null);
-    }
+		return buttonPressed;
+	}
+
+	/**
+	 * Return the settings in the user interface. This method should only be called
+	 * if the user pressed the {@link #ADD} button.
+	 *
+	 * @return the settings
+	 */
+	public HashMap getSettings() {
+		// FIXME
+		// Add assert
+
+		return graphUI.getSettings();
+	}
+
+	/**
+	 * Build the user interface based on the given graph user interface.
+	 *
+	 * @param graphUI graph user interface
+	 */
+	private void buildUI(GraphUI graphUI) {
+		JButton addButton = new JButton(Locale.getString("ADD"));
+		addButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (checkSettings()) {
+					buttonPressed = ADD;
+					dispose();
+				}
+			}
+		});
+
+		JButton editButton = new JButton(Locale.getString("EDIT"));
+		editButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (checkSettings()) {
+					buttonPressed = EDIT;
+					dispose();
+				}
+			}
+		});
+
+		JButton deleteButton = new JButton(Locale.getString("DELETE"));
+		deleteButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buttonPressed = DELETE;
+				dispose();
+			}
+		});
+
+		JButton cancelButton = new JButton(Locale.getString("CANCEL"));
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buttonPressed = CANCEL;
+				dispose();
+			}
+		});
+
+		JPanel panel = new JPanel();
+		TitledBorder border = new TitledBorder(Locale.getString("SETTINGS"));
+		BorderLayout layout = new BorderLayout();
+		panel.setBorder(border);
+		panel.setLayout(layout);
+		panel.add(graphUI.getPanel());
+
+		JPanel buttonPanel = new JPanel();
+
+		if (newGraph) {
+			buttonPanel.add(addButton);
+		} else {
+			buttonPanel.add(editButton);
+			buttonPanel.add(deleteButton);
+		}
+
+		buttonPanel.add(cancelButton);
+
+		if (newGraph) {
+			getRootPane().setDefaultButton(addButton);
+		} else {
+			getRootPane().setDefaultButton(deleteButton);
+		}
+
+		getContentPane().add(panel, BorderLayout.CENTER);
+		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+
+	}
+
+	/**
+	 * Check the settings entered by the user. Display an error message if the
+	 * settings are invalid.
+	 *
+	 * @return <code>true</code> if they were valid.
+	 */
+	private boolean checkSettings() {
+		String error = graphUI.checkSettings();
+
+		if (error != null)
+			JOptionPane.showInternalMessageDialog(this, error, Locale.getString("ERROR_GRAPH_SETTINGS_TITLE"),
+					JOptionPane.ERROR_MESSAGE);
+		return (error == null);
+	}
 }

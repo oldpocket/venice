@@ -26,28 +26,28 @@ package nz.org.venice.quote;
  */
 public interface IDQuoteFilter {
 
-    /**
-     * Return the name of the filter.
-     *
-     * @return	the name of the filter
-     */
-    public String getName();
+	/**
+	 * Return the name of the filter.
+	 *
+	 * @return the name of the filter
+	 */
+	public String getName();
 
-    /**
-     * Parse the given text string and returns the stock quote or null
-     * if it did not contain a valid quote.
-     *
-     * @param	quoteLine	a single line of text containing a quote.
-     * @return	the stock quote
-     * @exception QuoteFormatException if the quote could not be parsed
-     */
-    public IDQuote toIDQuote(String quoteLine) throws QuoteFormatException;
+	/**
+	 * Parse the given text string and returns the stock quote or null if it did not
+	 * contain a valid quote.
+	 *
+	 * @param quoteLine a single line of text containing a quote.
+	 * @return the stock quote
+	 * @exception QuoteFormatException if the quote could not be parsed
+	 */
+	public IDQuote toIDQuote(String quoteLine) throws QuoteFormatException;
 
-    /**
-     * Convert the given stock quote to a string line.
-     *
-     * @param	quote	a stock quote
-     * @return	string version of the quote
-     */
-    public String toString(IDQuote quote);
+	/**
+	 * Convert the given stock quote to a string line.
+	 *
+	 * @param quote a stock quote
+	 * @return string version of the quote
+	 */
+	public String toString(IDQuote quote);
 }

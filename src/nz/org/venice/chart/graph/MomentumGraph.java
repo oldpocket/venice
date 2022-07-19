@@ -30,10 +30,9 @@ import nz.org.venice.chart.source.GraphSource;
 import nz.org.venice.util.Locale;
 
 /**
- * Momentum graph. This graph is used to show the direction that the
- * stock price is moving. The momentum for a given day is calculated
- * as the day close of today minus the day close of <i>period</i>
- * days ago.
+ * Momentum graph. This graph is used to show the direction that the stock price
+ * is moving. The momentum for a given day is calculated as the day close of
+ * today minus the day close of <i>period</i> days ago.
  *
  * @author Andrew Leppard
  * @see PeriodGraphUI
@@ -46,7 +45,7 @@ public class MomentumGraph extends AbstractGraph {
 	/**
 	 * Create a new momentum graph.
 	 *
-	 * @param	source	the source to create a momentum graph from
+	 * @param source the source to create a momentum graph from
 	 */
 	public MomentumGraph(GraphSource source) {
 		super(source);
@@ -56,41 +55,29 @@ public class MomentumGraph extends AbstractGraph {
 	/**
 	 * Create a new momentum graph.
 	 *
-	 * @param	source	the source to create a momentum graph from
-	 * @param	settings  the settings of the new graph
+	 * @param source   the source to create a momentum graph from
+	 * @param settings the settings of the new graph
 	 */
 	public MomentumGraph(GraphSource source, HashMap settings) {
 		super(source);
 		setSettings(settings);
 	}
 
-
-	public void render(Graphics g, Color colour, int xoffset, int yoffset,
-			double horizontalScale, double verticalScale,
-			double topLineValue, double bottomLineValue, 
-			List xRange, 
-			boolean vertOrientation) {
+	public void render(Graphics g, Color colour, int xoffset, int yoffset, double horizontalScale, double verticalScale,
+			double topLineValue, double bottomLineValue, List xRange, boolean vertOrientation) {
 
 		g.setColor(colour);
-		GraphTools.renderBar(g, momentum, xoffset, yoffset,
-				horizontalScale,
-				verticalScale, 
-				topLineValue, bottomLineValue, 
-				xRange, 
-				vertOrientation);
+		GraphTools.renderBar(g, momentum, xoffset, yoffset, horizontalScale, verticalScale, topLineValue,
+				bottomLineValue, xRange, vertOrientation);
 	}
 
-	public String getToolTipText(Comparable x, int y, int yoffset,
-			double verticalScale,
-			double bottomLineValue)
-	{
+	public String getToolTipText(Comparable x, int y, int yoffset, double verticalScale, double bottomLineValue) {
 		return null; // we never give tool tip information
 	}
 
 	// Centre momentum graph
 	public double getHighestY(List x) {
-		return Math.max(Math.abs(momentum.getHighestY(x)),
-				Math.abs(momentum.getLowestY(x)));
+		return Math.max(Math.abs(momentum.getHighestY(x)), Math.abs(momentum.getLowestY(x)));
 	}
 
 	// Centre momentum graph
@@ -100,26 +87,13 @@ public class MomentumGraph extends AbstractGraph {
 
 	// Override vertical axis
 	public double[] getAcceptableMajorDeltas() {
-		double[] major = {0.01D,
-				0.1D,
-				1D,
-				10D,
-				100D,
-				1000D};
+		double[] major = { 0.01D, 0.1D, 1D, 10D, 100D, 1000D };
 		return major;
 	}
 
 	// Override vertical axis
 	public double[] getAcceptableMinorDeltas() {
-		double[] minor = {1D,
-				2D,
-				3D,
-				4D,
-				5D,
-				6D,
-				7D,
-				8D,
-				9D};
+		double[] minor = { 1D, 2D, 3D, 4D, 5D, 6D, 7D, 8D, 9D };
 		return minor;
 	}
 
@@ -131,24 +105,22 @@ public class MomentumGraph extends AbstractGraph {
 	/**
 	 * Create a momentum graphable.
 	 *
-	 * @param	source	the input graph source
-	 * @param	period	the desired period of the momentum graph
-	 * @return	the graphable containing averaged data from the source
+	 * @param source the input graph source
+	 * @param period the desired period of the momentum graph
+	 * @return the graphable containing averaged data from the source
 	 */
-	public static Graphable createMomentum(Graphable source,
-			int period) {
+	public static Graphable createMomentum(Graphable source, int period) {
 		Graphable momentum = new Graphable();
 
 		// Date set and value array will be in sync
 		double[] values = source.toArray();
 		Iterator iterator = source.getXRange().iterator();
 
-		int i = 0;	
+		int i = 0;
 
-		while(iterator.hasNext()) {
-			Comparable x = (Comparable)iterator.next();
-			double todaysMomentum =
-					values[i] - values[Math.max(1 + i - period, 0)];
+		while (iterator.hasNext()) {
+			Comparable x = (Comparable) iterator.next();
+			double todaysMomentum = values[i] - values[Math.max(1 + i - period, 0)];
 
 			momentum.putY(x, new Double(todaysMomentum));
 
@@ -178,8 +150,7 @@ public class MomentumGraph extends AbstractGraph {
 		int period = PeriodGraphUI.getPeriod(settings);
 
 		// create momentum
-		momentum = createMomentum(getSource().getGraphable(),
-				period);
+		momentum = createMomentum(getSource().getGraphable(), period);
 	}
 
 	/**
@@ -192,5 +163,3 @@ public class MomentumGraph extends AbstractGraph {
 		return new PeriodGraphUI(settings);
 	}
 }
-
-

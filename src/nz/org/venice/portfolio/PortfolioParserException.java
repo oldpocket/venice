@@ -26,12 +26,12 @@ package nz.org.venice.portfolio;
  */
 public class PortfolioParserException extends Throwable {
 
-    /**
-     * Create a new portfolio parser exception.
-     *
-     * @param message a message describing the error.
-     */
-    public PortfolioParserException(String message) {
-        super(message);
-    }
+	/**
+	 * Create a new portfolio parser exception.
+	 *
+	 * @param message a message describing the error.
+	 */
+	public PortfolioParserException(String message) {
+		super(message);
+	}
 }

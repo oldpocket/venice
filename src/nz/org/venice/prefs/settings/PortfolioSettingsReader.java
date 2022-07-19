@@ -22,20 +22,17 @@ import org.w3c.dom.Element;
 
 public class PortfolioSettingsReader {
 
-    private PortfolioSettingsReader() {
+	private PortfolioSettingsReader() {
 
-    }
+	}
 
-    public static PortfolioModuleSettings read(Element root) {
-	PortfolioModuleSettings settings = new PortfolioModuleSettings();      
-	String title = XMLHelper.getAttribute(root, "name");
-	
-	settings.setTitle(title);
+	public static PortfolioModuleSettings read(Element root) {
+		PortfolioModuleSettings settings = new PortfolioModuleSettings();
+		String title = XMLHelper.getAttribute(root, "name");
 
-	
+		settings.setTitle(title);
 
-	return settings;
-    }
-    
-    
+		return settings;
+	}
+
 }

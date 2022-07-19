@@ -16,17 +16,13 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-
 package nz.org.venice.prefs.settings;
-
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public interface SettingsWriter {
-    
 
-    public void write(Settings settings, Document document, Element parent);
-          
+	public void write(Settings settings, Document document, Element parent);
+
 }

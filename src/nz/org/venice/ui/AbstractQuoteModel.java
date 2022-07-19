@@ -29,8 +29,8 @@ import nz.org.venice.util.Locale;
 
 /**
  * Helper for constructing quote table models. This abstract table model allows
- * you to pass a list of columns for describing a table. The model append
- * a list of expression columns that let the user apply expressions to quotes in the
+ * you to pass a list of columns for describing a table. The model append a list
+ * of expression columns that let the user apply expressions to quotes in the
  * table. The model will then care care of returning information to the table
  * about each column and recomputing the expression columns as necessary.
  *
@@ -40,174 +40,163 @@ import nz.org.venice.util.Locale;
  */
 public abstract class AbstractQuoteModel extends AbstractTableModel {
 
-    /** The number of expression columns to display for tables that support them. */
-    public final static int EXPRESSION_COLUMN_COUNT = 5;
+	/** The number of expression columns to display for tables that support them. */
+	public final static int EXPRESSION_COLUMN_COUNT = 5;
 
-    // Quote bundle
-    private QuoteBundle quoteBundle;
+	// Quote bundle
+	private QuoteBundle quoteBundle;
 
-    // List of quotes to be displayed in table
-    private List quotes;
+	// List of quotes to be displayed in table
+	private List quotes;
 
-    // Array of expression columns
-    private ExpressionColumn[] expressionColumns;
-    
-    /**
-     * Create a new quote table model with no columns.
-     *
-     * @param quoteBundle           Quote bundle
-     * @param quotes                A list of {@link nz.org.venice.quote.Quote}s which contain
-     *                              the quote symbols and dates to table.
-     * @param firstExpressionColumn The column number of the first expression
-     *                              column.
-     */
-    public AbstractQuoteModel(QuoteBundle quoteBundle,
-                              List quotes,
-                              int firstExpressionColumn) {
-        super();
-        this.quoteBundle = quoteBundle;
-        this.quotes = quotes;
+	// Array of expression columns
+	private ExpressionColumn[] expressionColumns;
 
-        expressionColumns = createExpressionColumns(firstExpressionColumn);
-    }
+	/**
+	 * Create a new quote table model with no columns.
+	 *
+	 * @param quoteBundle           Quote bundle
+	 * @param quotes                A list of {@link nz.org.venice.quote.Quote}s
+	 *                              which contain the quote symbols and dates to
+	 *                              table.
+	 * @param firstExpressionColumn The column number of the first expression
+	 *                              column.
+	 */
+	public AbstractQuoteModel(QuoteBundle quoteBundle, List quotes, int firstExpressionColumn) {
+		super();
+		this.quoteBundle = quoteBundle;
+		this.quotes = quotes;
 
-    /**
-     * Return the array of expression columns.
-     *
-     * @return Array of expression columns.
-     * @see Column
-     * @see ExpressionColumn
-     */
-    public ExpressionColumn[] getExpressionColumns() {
-        return expressionColumns;
-    }
-    
-    /**
-     * Set the expression columns. This function also calculates their values.
-     *
-     * @param expressionColumns New expression columns
-     */
-    public void setExpressionColumns(ExpressionColumn[] expressionColumns) {
-        Thread thread = Thread.currentThread();
-        ProgressDialog progress = ProgressDialogManager.getProgressDialog();
-        progress.setIndeterminate(true);
-        progress.show(Locale.getString("APPLYING_EQUATIONS"));
+		expressionColumns = createExpressionColumns(firstExpressionColumn);
+	}
 
-        this.expressionColumns = expressionColumns;
+	/**
+	 * Return the array of expression columns.
+	 *
+	 * @return Array of expression columns.
+	 * @see Column
+	 * @see ExpressionColumn
+	 */
+	public ExpressionColumn[] getExpressionColumns() {
+		return expressionColumns;
+	}
 
-        for(int i = 0; i < this.expressionColumns.length; i++) {
-            try {
-                this.expressionColumns[i].calculate(quoteBundle, quotes);
-            }
-            catch(EvaluationException e) {
-                displayErrorMessage(e.getReason());
-            }
+	/**
+	 * Set the expression columns. This function also calculates their values.
+	 *
+	 * @param expressionColumns New expression columns
+	 */
+	public void setExpressionColumns(ExpressionColumn[] expressionColumns) {
+		Thread thread = Thread.currentThread();
+		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		progress.setIndeterminate(true);
+		progress.show(Locale.getString("APPLYING_EQUATIONS"));
 
-            if(thread.isInterrupted())
-                break;
-        }
+		this.expressionColumns = expressionColumns;
 
-        ProgressDialogManager.closeProgressDialog(progress);        
-    }
+		for (int i = 0; i < this.expressionColumns.length; i++) {
+			try {
+				this.expressionColumns[i].calculate(quoteBundle, quotes);
+			} catch (EvaluationException e) {
+				displayErrorMessage(e.getReason());
+			}
 
+			if (thread.isInterrupted())
+				break;
+		}
 
-    /**
-     * Return the number of columns in the table.
-     *
-     * @return Number of columns in table.
-     */
-    public int getColumnCount() {
-        return super.getColumnCount() + expressionColumns.length;
-    }
+		ProgressDialogManager.closeProgressDialog(progress);
+	}
 
-    /**
-     * Return a column.
-     *
-     * @param columnNumber Number of column.
-     * @return Column
-     */
-    public Column getColumn(int columnNumber) {
-        if(columnNumber < super.getColumnCount())
-            return super.getColumn(columnNumber);
-        else {
-            columnNumber -= super.getColumnCount();
-            assert columnNumber <= expressionColumns.length;
-            return expressionColumns[columnNumber];
-        }
-    }
+	/**
+	 * Return the number of columns in the table.
+	 *
+	 * @return Number of columns in table.
+	 */
+	public int getColumnCount() {
+		return super.getColumnCount() + expressionColumns.length;
+	}
 
-    /**
-     * Return the list of quotes in the table.
-     *
-     * @return Tabled quotes.
-     */
-    public List getQuotes() {
-        return quotes;
-    }
-    
-    /**
-     * Set the list of quotes to table.
-     *
-     * @param quotes New quotes to table.
-     */
-    public void setQuotes(List quotes) {
-        this.quotes = quotes;
+	/**
+	 * Return a column.
+	 *
+	 * @param columnNumber Number of column.
+	 * @return Column
+	 */
+	public Column getColumn(int columnNumber) {
+		if (columnNumber < super.getColumnCount())
+			return super.getColumn(columnNumber);
+		else {
+			columnNumber -= super.getColumnCount();
+			assert columnNumber <= expressionColumns.length;
+			return expressionColumns[columnNumber];
+		}
+	}
 
-        // Recalculate the expressions for each quote
-        for(int i = 0; i < expressionColumns.length; i++) {
-            try {
-                expressionColumns[i].calculate(quoteBundle, quotes);
-            }
-            catch(EvaluationException e) {
-                displayErrorMessage(e.getReason());
-            }
-        }
+	/**
+	 * Return the list of quotes in the table.
+	 *
+	 * @return Tabled quotes.
+	 */
+	public List getQuotes() {
+		return quotes;
+	}
 
-        fireTableDataChanged();                       
-    }
+	/**
+	 * Set the list of quotes to table.
+	 *
+	 * @param quotes New quotes to table.
+	 */
+	public void setQuotes(List quotes) {
+		this.quotes = quotes;
 
-    /**
-     * Return the number of rows in the table.
-     *
-     * @return Number of rows in table.
-     */
-    public int getRowCount() {
-        return quotes.size();
-    }
+		// Recalculate the expressions for each quote
+		for (int i = 0; i < expressionColumns.length; i++) {
+			try {
+				expressionColumns[i].calculate(quoteBundle, quotes);
+			} catch (EvaluationException e) {
+				displayErrorMessage(e.getReason());
+			}
+		}
 
-    /**
-     * Display an error message to the user.
-     *
-     * @param message The message to display.
-     */
-    private void displayErrorMessage(final String message) {
-        SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    JOptionPane.showInternalMessageDialog(DesktopManager.getDesktop(),
-                                                          message + ".",
-                                                          Locale.getString("ERROR_EVALUATING_EQUATIONS"),
-                                                          JOptionPane.ERROR_MESSAGE);
-                }
-            });
-    }
+		fireTableDataChanged();
+	}
 
-    /**
-     * Create the expression columns.
-     *
-     * @param columnNumber Column number.
-     * @return Array of expression columns.
-     */
-    private ExpressionColumn[] createExpressionColumns(int columnNumber) {
-        ExpressionColumn[] expressionColumns = new ExpressionColumn[EXPRESSION_COLUMN_COUNT];
+	/**
+	 * Return the number of rows in the table.
+	 *
+	 * @return Number of rows in table.
+	 */
+	public int getRowCount() {
+		return quotes.size();
+	}
 
-        for(int i = 0; i < expressionColumns.length; i++)
-            expressionColumns[i] = new ExpressionColumn(columnNumber++, 
-                                                        Locale.getString("EQUATION_NUMBER", (i + 1)),
-                                                        Locale.getString("EQUATION_COLUMN_HEADER", 
-                                                                         (i + 1)),
-                                                        Column.HIDDEN,
-                                                        "",
-                                                        null);
-        return expressionColumns;
-    }
+	/**
+	 * Display an error message to the user.
+	 *
+	 * @param message The message to display.
+	 */
+	private void displayErrorMessage(final String message) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				JOptionPane.showInternalMessageDialog(DesktopManager.getDesktop(), message + ".",
+						Locale.getString("ERROR_EVALUATING_EQUATIONS"), JOptionPane.ERROR_MESSAGE);
+			}
+		});
+	}
+
+	/**
+	 * Create the expression columns.
+	 *
+	 * @param columnNumber Column number.
+	 * @return Array of expression columns.
+	 */
+	private ExpressionColumn[] createExpressionColumns(int columnNumber) {
+		ExpressionColumn[] expressionColumns = new ExpressionColumn[EXPRESSION_COLUMN_COUNT];
+
+		for (int i = 0; i < expressionColumns.length; i++)
+			expressionColumns[i] = new ExpressionColumn(columnNumber++, Locale.getString("EQUATION_NUMBER", (i + 1)),
+					Locale.getString("EQUATION_COLUMN_HEADER", (i + 1)), Column.HIDDEN, "", null);
+		return expressionColumns;
+	}
 }
