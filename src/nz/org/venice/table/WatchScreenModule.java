@@ -14,7 +14,7 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 package nz.org.venice.table;
 
@@ -83,527 +83,526 @@ import nz.org.venice.prefs.settings.WatchScreenSettings;
  */
 public class WatchScreenModule extends AbstractTable implements Module, ActionListener {
 
-    // Main menu items
-    private JMenuBar menuBar;
-    private JMenuItem addSymbols;
-    private JMenuItem removeSymbols;
-    private JMenuItem graphSymbols;
-    private JMenuItem graphIndexSymbols;
-    private JMenuItem tableSymbols;
-    private JMenuItem tableClose;
-    private JMenuItem renameWatchScreen;
-    private JMenuItem deleteWatchScreen;
-    private JMenuItem applyExpressionsMenuItem;
-    private JMenuItem addAlert;
+	// Main menu items
+	private JMenuBar menuBar;
+	private JMenuItem addSymbols;
+	private JMenuItem removeSymbols;
+	private JMenuItem graphSymbols;
+	private JMenuItem graphIndexSymbols;
+	private JMenuItem tableSymbols;
+	private JMenuItem tableClose;
+	private JMenuItem renameWatchScreen;
+	private JMenuItem deleteWatchScreen;
+	private JMenuItem applyExpressionsMenuItem;
+	private JMenuItem addAlert;
 
-    // Poup menu items
-    private JMenuItem popupRemoveSymbols = null;
-    private JMenuItem popupGraphSymbols = null;
-    private JMenuItem popupTableSymbols = null;
+	// Poup menu items
+	private JMenuItem popupRemoveSymbols = null;
+	private JMenuItem popupGraphSymbols = null;
+	private JMenuItem popupTableSymbols = null;
 
-    private PropertyChangeSupport propertySupport;
-    private MixedQuoteBundle quoteBundle;
+	private PropertyChangeSupport propertySupport;
+	private MixedQuoteBundle quoteBundle;
 
-    private WatchScreen watchScreen;
-    private MixedQuoteModel model;
-    private WatchScreenSettings settings;
+	private WatchScreen watchScreen;
+	private MixedQuoteModel model;
+	private WatchScreenSettings settings;
 
-    // Frame Icon
-    private String frameIcon = "nz/org/venice/images/TableIcon.gif";
+	// Frame Icon
+	private String frameIcon = "nz/org/venice/images/TableIcon.gif";
 
-    // Set to true if weve deleted this watch screen and shouldn't try
-    // to save it when we exit
-    private boolean isDeleted = false;
+	// Set to true if weve deleted this watch screen and shouldn't try
+	// to save it when we exit
+	private boolean isDeleted = false;
 
-    /**
-     * Create a watch screen module.
-     *
-     * @param watchScreen the watch screen object
-     * @param quoteBundle watch screen quotes
-     */
-    public WatchScreenModule(WatchScreen watchScreen,
-                             MixedQuoteBundle quoteBundle) {
+	/**
+	 * Create a watch screen module.
+	 *
+	 * @param watchScreen the watch screen object
+	 * @param quoteBundle watch screen quotes
+	 */
+	public WatchScreenModule(WatchScreen watchScreen, MixedQuoteBundle quoteBundle) {
 
-        this.watchScreen = watchScreen;
-	this.quoteBundle = quoteBundle;
+		this.watchScreen = watchScreen;
+		this.quoteBundle = quoteBundle;
 
-	propertySupport = new PropertyChangeSupport(this);
+		propertySupport = new PropertyChangeSupport(this);
 
-        model = new MixedQuoteModel(quoteBundle, getQuotes(), Column.HIDDEN, Column.VISIBLE);
-	setModel(model, MixedQuoteModel.SYMBOL_COLUMN, SORT_UP);
-	showColumns(model);
-	addMenu();
-	model.addTableModelListener(this);
-        resort();
+		model = new MixedQuoteModel(quoteBundle, getQuotes(), Column.HIDDEN, Column.VISIBLE);
+		setModel(model, MixedQuoteModel.SYMBOL_COLUMN, SORT_UP);
+		showColumns(model);
+		addMenu();
+		model.addTableModelListener(this);
+		resort();
 
-        // If the user clicks on the table trap it.
-	addMouseListener(new MouseAdapter() {
-		public void mouseClicked(MouseEvent evt) {
-                    handleMouseClicked(evt);
-                }
-	    });
+		// If the user clicks on the table trap it.
+		addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evt) {
+				handleMouseClicked(evt);
+			}
+		});
 
-        // Update the table on new intra-day quotes
-        IDQuoteCache.getInstance().addQuoteListener(new QuoteListener() {
-               public void newQuotes(QuoteEvent event) {
-		   updateTable();
-                }
-            });
-    }
-
-    // Graph menu item is only enabled when items are selected in the table.
-    private void checkMenuDisabledStatus() {
-	int numberOfSelectedRows = getSelectedRowCount();
-
-        removeSymbols.setEnabled(numberOfSelectedRows > 0? true : false);
-        graphSymbols.setEnabled(numberOfSelectedRows > 0? true : false);
-	graphIndexSymbols.setEnabled(numberOfSelectedRows > 0? true : false);
-        tableSymbols.setEnabled(numberOfSelectedRows > 0? true : false);
-	addAlert.setEnabled(numberOfSelectedRows == 1? true : false);
-    }
-
-    // If the user double clicks on a stock with the LMB, graph the stock.
-    // If the user right clicks over the table, open up a popup menu.
-    private void handleMouseClicked(MouseEvent event) {
-
-        Point point = event.getPoint();
-
-        // Right click on the table - raise menu
-        if(event.getButton() == MouseEvent.BUTTON3) {
-            JPopupMenu menu = new JPopupMenu();
-
-            popupGraphSymbols =
-                MenuHelper.addMenuItem(this, menu,
-                                       Locale.getString("GRAPH"));
-            popupGraphSymbols.setEnabled(getSelectedRowCount() > 0);
-
-            popupTableSymbols =
-                MenuHelper.addMenuItem(this, menu,
-                                       Locale.getString("TABLE"));
-            popupTableSymbols.setEnabled(getSelectedRowCount() > 0);
-
-            menu.addSeparator();
-
-            popupRemoveSymbols =
-                MenuHelper.addMenuItem(this, menu,
-                                       Locale.getString("REMOVE"));
-            popupRemoveSymbols.setEnabled(getSelectedRowCount() > 0);
-
-            menu.show(this, point.x, point.y);
-        }
-
-        // Left double click on the table - graph stock
-        else if(event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 2) {
-
-            // Left double click on the table - graph stock
-            int[] selectedRows = getSelectedRows();
-            List symbols = new ArrayList();
-            for(int i = 0; i < selectedRows.length; i++) {
-                Symbol symbol
-                    = (Symbol)model.getValueAt(selectedRows[i],
-                                               MixedQuoteModel.SYMBOL_COLUMN);
-                symbols.add(symbol);
-            }
-            // Graph the highlighted symbols
-            CommandManager.getInstance().graphStockBySymbol(symbols);
-        }
-    }
-
-    // Create a menu
-    private void addMenu() {
-	menuBar = new JMenuBar();
-
-        // Watch Screen Menu
-        {
-            JMenu tableMenu = MenuHelper.addMenu(menuBar, Locale.getString("WATCH_SCREEN"));
-
-            // Show columns menu
-            tableMenu.add(createShowColumnMenu(model));
-
-            tableMenu.addSeparator();
-
-            applyExpressionsMenuItem = MenuHelper.addMenuItem(this, tableMenu,
-                                                              Locale.getString("APPLY_EQUATIONS"));
-
-            tableMenu.addSeparator();
-
-            deleteWatchScreen = MenuHelper.addMenuItem(this, tableMenu,
-                                                       Locale.getString("DELETE"));
-
-            renameWatchScreen = MenuHelper.addMenuItem(this, tableMenu,
-                                                       Locale.getString("RENAME"));
-
-            tableMenu.addSeparator();
-
-            tableClose = MenuHelper.addMenuItem(this, tableMenu,
-						Locale.getString("CLOSE"));
-        }
-
-        // Symbol Menu
-        {
-            JMenu symbolsMenu = MenuHelper.addMenu(menuBar, Locale.getString("SYMBOLS"));
-
-            addSymbols =
-                MenuHelper.addMenuItem(this, symbolsMenu,
-                                       Locale.getString("ADD"));
-            removeSymbols =
-                MenuHelper.addMenuItem(this, symbolsMenu,
-                                       Locale.getString("REMOVE"));
-
-            symbolsMenu.addSeparator();
-
-            graphSymbols =
-                MenuHelper.addMenuItem(this, symbolsMenu,
-                                       Locale.getString("GRAPH"));
-
-            graphIndexSymbols =
-                MenuHelper.addMenuItem(this, symbolsMenu,
-                                       Locale.getString("GRAPH_INDEX"));
-
-
-            tableSymbols =
-                MenuHelper.addMenuItem(this, symbolsMenu,
-                                       Locale.getString("TABLE"));
-
-	    addAlert = 
-		MenuHelper.addMenuItem(this, symbolsMenu,
-				       Locale.getString("ALERT_ADD"));
-        }
-
-        // Listen for changes in selection so we can update the menus
-        getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
-                public void valueChanged(ListSelectionEvent e) {
-                    checkMenuDisabledStatus();
-                }
-
-            });
-
-	checkMenuDisabledStatus();
-    }
-
-    /**
-     * Tell module to save any current state data / preferences data because
-     * the window is being closed.
-     */
-    public void save() {
-        // Don't save the watch screen if it was just deleted.
-	if(!isDeleted) {
-            try {
-                PreferencesManager.putWatchScreen(watchScreen);
-            }
-            catch(PreferencesException e) {
-                DesktopManager.showErrorMessage(Locale.getString("ERROR_SAVING_WATCH_SCREEN_TITLE"),
-                                                e.getMessage());
-            }
-
-	    settings = new WatchScreenSettings(watchScreen.getName());
-
-        }
-    }
-
-    /**
-     * Return the window title.
-     *
-     * @return	the window title
-     */
-    public String getTitle() {
-        return watchScreen.getName();
-    }
-
-    /**
-     * Add a property change listener for module change events.
-     *
-     * @param	listener	listener
-     */
-    public void addModuleChangeListener(PropertyChangeListener listener) {
-        propertySupport.addPropertyChangeListener(listener);
-    }
-
-    /**
-     * Remove a property change listener for module change events.
-     *
-     * @param	listener	listener
-     */
-    public void removeModuleChangeListener(PropertyChangeListener listener) {
-        propertySupport.removePropertyChangeListener(listener);
-    }
-
-    /**
-     * Return frame icon for table module.
-     *
-     * @return	the frame icon.
-     */
-    public ImageIcon getFrameIcon() {
-	return new ImageIcon(ClassLoader.getSystemClassLoader().getResource(frameIcon));
-    }
-
-    /**
-     * Return displayed component for this module.
-     *
-     * @return the component to display.
-     */
-    public JComponent getComponent() {
-	return this;
-    }
-
-    /**
-     * Return menu bar for chart module.
-     *
-     * @return	the menu bar.
-     */
-    public JMenuBar getJMenuBar() {
-	return menuBar;
-    }
-
-    /**
-     * Return whether the module should be enclosed in a scroll pane.
-     *
-     * @return	enclose module in scroll bar
-     */
-    public boolean encloseInScrollPane() {
-	return true;
-    }
-
-    /**
-     * Handle widget events.
-     *
-     * @param	e	action event
-     */
-    public void actionPerformed(final ActionEvent e) {
-
-	if(e.getSource() == tableClose) {
-	    propertySupport.
-		firePropertyChange(ModuleFrame.WINDOW_CLOSE_PROPERTY, 0, 1);
+		// Update the table on new intra-day quotes
+		IDQuoteCache.getInstance().addQuoteListener(new QuoteListener() {
+			public void newQuotes(QuoteEvent event) {
+				updateTable();
+			}
+		});
 	}
 
-        // Graph symbols, either by the popup menu or the main menu
-        else if((popupGraphSymbols != null && e.getSource() == popupGraphSymbols) ||
-                e.getSource() == graphSymbols || e.getSource() == graphIndexSymbols) {
+	// Graph menu item is only enabled when items are selected in the table.
+	private void checkMenuDisabledStatus() {
+		int numberOfSelectedRows = getSelectedRowCount();
 
-            int[] selectedRows = getSelectedRows();
-            List symbols = new ArrayList();
-
-            for(int i = 0; i < selectedRows.length; i++) {
-                Symbol symbol = (Symbol)model.getValueAt(selectedRows[i],
-                                                         MixedQuoteModel.SYMBOL_COLUMN);
-
-                symbols.add(symbol);
-            }
-
-            // Graph the highlighted symbols
-	    if (e.getSource() == graphSymbols || e.getSource() == popupGraphSymbols) {
-		CommandManager.getInstance().graphStockBySymbol(symbols);
-	    }
-	    else if (e.getSource() == graphIndexSymbols) {
-		CommandManager.getInstance().graphIndexBySymbol(symbols);
-	    }
-        }
-
-        // Remove symbols, either by the popup menu or the main menu
-        else if((popupRemoveSymbols != null && e.getSource() == popupRemoveSymbols) ||
-                e.getSource() == removeSymbols) {
-
-            int[] selectedRows = getSelectedRows();
-            List symbols = new ArrayList();
-
-            // Pull out symbols into separate list. We have to do this in two steps
-            // because if we start to remove them in this loop the getValueAt()
-            // function won't work properly.
-            for(int i = 0; i < selectedRows.length; i++) {
-                Symbol symbol = (Symbol)model.getValueAt(selectedRows[i],
-                                                         MixedQuoteModel.SYMBOL_COLUMN);
-                symbols.add(symbol);
-            }
-
-            // Now delete from watch screen
-            watchScreen.removeAllSymbols(symbols);
-
-            model.setQuotes(getQuotes());
-            model.fireTableDataChanged();
-        }
-
-        // Add symbols to watch screen
-        else if(e.getSource() == addSymbols)
-            addSymbols();
-
-        // Apply expressions to watch screen
-        else if(e.getSource() == applyExpressionsMenuItem)
-            applyExpressions(model);
-
-        // Delete watch screen
-        else if(e.getSource() == deleteWatchScreen)
-            deleteWatchScreen();
-
-        // Rename watch screen
-        else if(e.getSource() == renameWatchScreen)
-            renameWatchScreen();
-
-        // Table symbols, either by the popup menu or the main menu
-        else if((popupTableSymbols != null && e.getSource() == popupTableSymbols) ||
-                e.getSource() == tableSymbols) {
-
-            int[] selectedRows = getSelectedRows();
-            List symbols = new ArrayList();
-
-            for(int i = 0; i < selectedRows.length; i++) {
-                Symbol symbol = (Symbol)model.getValueAt(selectedRows[i],
-                                                         MixedQuoteModel.SYMBOL_COLUMN);
-
-                symbols.add(symbol);
-            }
-
-            // Table the highlighted symbols
-            CommandManager.getInstance().tableStocks(symbols);
-        }
-	else if (e.getSource() == addAlert) {
-	    int[] selectedRows = getSelectedRows();
-
-	    assert selectedRows.length == 1;
-
-	    Symbol symbol = (Symbol)model.getValueAt(0,
-						     MixedQuoteModel.
-						     SYMBOL_COLUMN);
-	    addAlert(symbol);
+		removeSymbols.setEnabled(numberOfSelectedRows > 0? true : false);
+		graphSymbols.setEnabled(numberOfSelectedRows > 0? true : false);
+		graphIndexSymbols.setEnabled(numberOfSelectedRows > 0? true : false);
+		tableSymbols.setEnabled(numberOfSelectedRows > 0? true : false);
+		addAlert.setEnabled(numberOfSelectedRows == 1? true : false);
 	}
-	else
-            assert false;
-    }
 
-    private void addAlert(final Symbol symbol) {
-	
-	// Handle action in a separate thread so we dont
-	// hold up the dispatch thread. See O'Reilley Swing pg 1138-9.
-	Thread showAddDialog = new Thread() {
+	// If the user double clicks on a stock with the LMB, graph the stock.
+	// If the user right clicks over the table, open up a popup menu.
+	private void handleMouseClicked(MouseEvent event) {
 
-		public void run() {
-		    CommandManager.getInstance().newAlert(symbol);
+		Point point = event.getPoint();
+
+		// Right click on the table - raise menu
+		if(event.getButton() == MouseEvent.BUTTON3) {
+			JPopupMenu menu = new JPopupMenu();
+
+			popupGraphSymbols =
+					MenuHelper.addMenuItem(this, menu,
+							Locale.getString("GRAPH"));
+			popupGraphSymbols.setEnabled(getSelectedRowCount() > 0);
+
+			popupTableSymbols =
+					MenuHelper.addMenuItem(this, menu,
+							Locale.getString("TABLE"));
+			popupTableSymbols.setEnabled(getSelectedRowCount() > 0);
+
+			menu.addSeparator();
+
+			popupRemoveSymbols =
+					MenuHelper.addMenuItem(this, menu,
+							Locale.getString("REMOVE"));
+			popupRemoveSymbols.setEnabled(getSelectedRowCount() > 0);
+
+			menu.show(this, point.x, point.y);
 		}
-	    };
-	
-	showAddDialog.start();
 
-    }
+		// Left double click on the table - graph stock
+		else if(event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 2) {
 
-    // Delete this watch screen
-    private void deleteWatchScreen() {
-	int option =
-	    JOptionPane.showInternalConfirmDialog(DesktopManager.getDesktop(),
-						  Locale.getString("SURE_DELETE_WATCH_SCREEN"),
-						  Locale.getString("DELETE_WATCH_SCREEN"),
-						  JOptionPane.YES_NO_OPTION);
-	if(option == JOptionPane.YES_OPTION) {
-	    PreferencesManager.deleteWatchScreen(watchScreen.getName());
-
-	    MainMenu.getInstance().updateWatchScreenMenu();
-
-	    // Prevent save() function resurrecting watch screen
-	    isDeleted = true;
-
-	    // Close window
-	    propertySupport.
-		firePropertyChange(ModuleFrame.WINDOW_CLOSE_PROPERTY, 0, 1);
+			// Left double click on the table - graph stock
+			int[] selectedRows = getSelectedRows();
+			List symbols = new ArrayList();
+			for(int i = 0; i < selectedRows.length; i++) {
+				Symbol symbol
+				= (Symbol)model.getValueAt(selectedRows[i],
+						MixedQuoteModel.SYMBOL_COLUMN);
+				symbols.add(symbol);
+			}
+			// Graph the highlighted symbols
+			CommandManager.getInstance().graphStockBySymbol(symbols);
+		}
 	}
-    }
 
-    // Rename the watch screen
-    private void renameWatchScreen() {
-	// Handle all action in a separate thread so we dont
-	// hold up the dispatch thread. See O'Reilley Swing pg 1138-9.
-	Thread thread = new Thread() {
+	// Create a menu
+	private void addMenu() {
+		menuBar = new JMenuBar();
 
-		public void run() {
-                    String oldWatchScreenName = watchScreen.getName();
+		// Watch Screen Menu
+		{
+			JMenu tableMenu = MenuHelper.addMenu(menuBar, Locale.getString("WATCH_SCREEN"));
 
-                    // Get new name for watch screen
-                    TextDialog dialog = new TextDialog(DesktopManager.getDesktop(),
-                                                       Locale.getString("ENTER_NEW_WATCH_SCREEN_NAME"),
-                                                       Locale.getString("RENAME_WATCH_SCREEN"),
-                                                       oldWatchScreenName);
-                    String newWatchScreenName = dialog.showDialog();
+			// Show columns menu
+			tableMenu.add(createShowColumnMenu(model));
 
-                    if(newWatchScreenName != null && newWatchScreenName.length() > 0 &&
-                       !newWatchScreenName.equals(oldWatchScreenName)) {
+			tableMenu.addSeparator();
 
-                        // Save the watch screen under the new name
-                        watchScreen.setName(newWatchScreenName);
-                        try {
-                            PreferencesManager.putWatchScreen(watchScreen);
-                        }
-                        catch(PreferencesException e) {
-                            DesktopManager.showErrorMessage(Locale.getString("ERROR_SAVING_WATCH_SCREEN_TITLE"),
-                                                            e.getMessage());
-                        }
+			applyExpressionsMenuItem = MenuHelper.addMenuItem(this, tableMenu,
+					Locale.getString("APPLY_EQUATIONS"));
 
-                        // Delete the old watch screen
-                        PreferencesManager.deleteWatchScreen(oldWatchScreenName);
+			tableMenu.addSeparator();
 
-                        // Update GUI
-                        MainMenu.getInstance().updateWatchScreenMenu();
-                        propertySupport.firePropertyChange(ModuleFrame.TITLEBAR_CHANGED_PROPERTY,
-                                                           0, 1);
-                    }
-                }};
+			deleteWatchScreen = MenuHelper.addMenuItem(this, tableMenu,
+					Locale.getString("DELETE"));
 
-        thread.start();
-    }
+			renameWatchScreen = MenuHelper.addMenuItem(this, tableMenu,
+					Locale.getString("RENAME"));
 
-    // Add symbols to the watchscreen
-    private void addSymbols() {
-	// Handle all action in a separate thread so we dont
-	// hold up the dispatch thread. See O'Reilley Swing pg 1138-9.
-	Thread thread = new Thread() {
-		public void run() {
-                    Set symbols = SymbolListDialog.getSymbols(DesktopManager.getDesktop(),
-                                                              Locale.getString("ADD_SYMBOLS"));
-                    if(symbols != null) {
-                        // Add symbols to watch screen, quote sync and table
-                        List symbolList = new ArrayList(symbols);
+			tableMenu.addSeparator();
 
-                        watchScreen.addSymbols(symbolList);
-                        IDQuoteSync.getInstance().addSymbols(symbolList);
-                        model.setQuotes(getQuotes());
-                    }
-                }};
+			tableClose = MenuHelper.addMenuItem(this, tableMenu,
+					Locale.getString("CLOSE"));
+		}
 
-        thread.start();
-    }
+		// Symbol Menu
+		{
+			JMenu symbolsMenu = MenuHelper.addMenu(menuBar, Locale.getString("SYMBOLS"));
 
-    // Using the watch screen object, create a list of quotes that
-    // we should display from the quote bundle
-    private List getQuotes() {
-        List quotes = new ArrayList();
-        int dateOffset = quoteBundle.getLastOffset();
+			addSymbols =
+					MenuHelper.addMenuItem(this, symbolsMenu,
+							Locale.getString("ADD"));
+			removeSymbols =
+					MenuHelper.addMenuItem(this, symbolsMenu,
+							Locale.getString("REMOVE"));
 
-        for(Iterator iterator = watchScreen.getSymbols().iterator();
-            iterator.hasNext();) {
-            Symbol symbol = (Symbol)iterator.next();
-            Quote quote;
+			symbolsMenu.addSeparator();
 
-            try {
-                quote = quoteBundle.getQuote(symbol, dateOffset);
-            }
-            catch(MissingQuoteException e) {
-                quote = new IDQuote(symbol, new TradingDate(), new TradingTime(),
-                                    0, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-            }
+			graphSymbols =
+					MenuHelper.addMenuItem(this, symbolsMenu,
+							Locale.getString("GRAPH"));
 
-            quotes.add(quote);
-        }
+			graphIndexSymbols =
+					MenuHelper.addMenuItem(this, symbolsMenu,
+							Locale.getString("GRAPH_INDEX"));
 
-        return quotes;
-    }
 
-    /**
-     * This function is called when new intra-day quotes have been downloaded
-     * and we should update the table.
-     */
-    private void updateTable() {
-        model.setQuotes(getQuotes());
-        model.fireTableDataChanged();
-    }
+			tableSymbols =
+					MenuHelper.addMenuItem(this, symbolsMenu,
+							Locale.getString("TABLE"));
 
-    public Settings getSettings() {
-	return settings;
-    }
+			addAlert = 
+					MenuHelper.addMenuItem(this, symbolsMenu,
+							Locale.getString("ALERT_ADD"));
+		}
+
+		// Listen for changes in selection so we can update the menus
+		getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			public void valueChanged(ListSelectionEvent e) {
+				checkMenuDisabledStatus();
+			}
+
+		});
+
+		checkMenuDisabledStatus();
+	}
+
+	/**
+	 * Tell module to save any current state data / preferences data because
+	 * the window is being closed.
+	 */
+	public void save() {
+		// Don't save the watch screen if it was just deleted.
+		if(!isDeleted) {
+			try {
+				PreferencesManager.putWatchScreen(watchScreen);
+			}
+			catch(PreferencesException e) {
+				DesktopManager.showErrorMessage(Locale.getString("ERROR_SAVING_WATCH_SCREEN_TITLE"),
+						e.getMessage());
+			}
+
+			settings = new WatchScreenSettings(watchScreen.getName());
+
+		}
+	}
+
+	/**
+	 * Return the window title.
+	 *
+	 * @return	the window title
+	 */
+	public String getTitle() {
+		return watchScreen.getName();
+	}
+
+	/**
+	 * Add a property change listener for module change events.
+	 *
+	 * @param	listener	listener
+	 */
+	public void addModuleChangeListener(PropertyChangeListener listener) {
+		propertySupport.addPropertyChangeListener(listener);
+	}
+
+	/**
+	 * Remove a property change listener for module change events.
+	 *
+	 * @param	listener	listener
+	 */
+	public void removeModuleChangeListener(PropertyChangeListener listener) {
+		propertySupport.removePropertyChangeListener(listener);
+	}
+
+	/**
+	 * Return frame icon for table module.
+	 *
+	 * @return	the frame icon.
+	 */
+	public ImageIcon getFrameIcon() {
+		return new ImageIcon(ClassLoader.getSystemClassLoader().getResource(frameIcon));
+	}
+
+	/**
+	 * Return displayed component for this module.
+	 *
+	 * @return the component to display.
+	 */
+	public JComponent getComponent() {
+		return this;
+	}
+
+	/**
+	 * Return menu bar for chart module.
+	 *
+	 * @return	the menu bar.
+	 */
+	public JMenuBar getJMenuBar() {
+		return menuBar;
+	}
+
+	/**
+	 * Return whether the module should be enclosed in a scroll pane.
+	 *
+	 * @return	enclose module in scroll bar
+	 */
+	public boolean encloseInScrollPane() {
+		return true;
+	}
+
+	/**
+	 * Handle widget events.
+	 *
+	 * @param	e	action event
+	 */
+	public void actionPerformed(final ActionEvent e) {
+
+		if(e.getSource() == tableClose) {
+			propertySupport.
+			firePropertyChange(ModuleFrame.WINDOW_CLOSE_PROPERTY, 0, 1);
+		}
+
+		// Graph symbols, either by the popup menu or the main menu
+		else if((popupGraphSymbols != null && e.getSource() == popupGraphSymbols) ||
+				e.getSource() == graphSymbols || e.getSource() == graphIndexSymbols) {
+
+			int[] selectedRows = getSelectedRows();
+			List symbols = new ArrayList();
+
+			for(int i = 0; i < selectedRows.length; i++) {
+				Symbol symbol = (Symbol)model.getValueAt(selectedRows[i],
+						MixedQuoteModel.SYMBOL_COLUMN);
+
+				symbols.add(symbol);
+			}
+
+			// Graph the highlighted symbols
+			if (e.getSource() == graphSymbols || e.getSource() == popupGraphSymbols) {
+				CommandManager.getInstance().graphStockBySymbol(symbols);
+			}
+			else if (e.getSource() == graphIndexSymbols) {
+				CommandManager.getInstance().graphIndexBySymbol(symbols);
+			}
+		}
+
+		// Remove symbols, either by the popup menu or the main menu
+		else if((popupRemoveSymbols != null && e.getSource() == popupRemoveSymbols) ||
+				e.getSource() == removeSymbols) {
+
+			int[] selectedRows = getSelectedRows();
+			List symbols = new ArrayList();
+
+			// Pull out symbols into separate list. We have to do this in two steps
+			// because if we start to remove them in this loop the getValueAt()
+			// function won't work properly.
+			for(int i = 0; i < selectedRows.length; i++) {
+				Symbol symbol = (Symbol)model.getValueAt(selectedRows[i],
+						MixedQuoteModel.SYMBOL_COLUMN);
+				symbols.add(symbol);
+			}
+
+			// Now delete from watch screen
+			watchScreen.removeAllSymbols(symbols);
+
+			model.setQuotes(getQuotes());
+			model.fireTableDataChanged();
+		}
+
+		// Add symbols to watch screen
+		else if(e.getSource() == addSymbols)
+			addSymbols();
+
+		// Apply expressions to watch screen
+		else if(e.getSource() == applyExpressionsMenuItem)
+			applyExpressions(model);
+
+		// Delete watch screen
+		else if(e.getSource() == deleteWatchScreen)
+			deleteWatchScreen();
+
+		// Rename watch screen
+		else if(e.getSource() == renameWatchScreen)
+			renameWatchScreen();
+
+		// Table symbols, either by the popup menu or the main menu
+		else if((popupTableSymbols != null && e.getSource() == popupTableSymbols) ||
+				e.getSource() == tableSymbols) {
+
+			int[] selectedRows = getSelectedRows();
+			List symbols = new ArrayList();
+
+			for(int i = 0; i < selectedRows.length; i++) {
+				Symbol symbol = (Symbol)model.getValueAt(selectedRows[i],
+						MixedQuoteModel.SYMBOL_COLUMN);
+
+				symbols.add(symbol);
+			}
+
+			// Table the highlighted symbols
+			CommandManager.getInstance().tableStocks(symbols);
+		}
+		else if (e.getSource() == addAlert) {
+			int[] selectedRows = getSelectedRows();
+
+			assert selectedRows.length == 1;
+
+			Symbol symbol = (Symbol)model.getValueAt(0,
+					MixedQuoteModel.
+					SYMBOL_COLUMN);
+			addAlert(symbol);
+		}
+		else
+			assert false;
+	}
+
+	private void addAlert(final Symbol symbol) {
+
+		// Handle action in a separate thread so we dont
+		// hold up the dispatch thread. See O'Reilley Swing pg 1138-9.
+		Thread showAddDialog = new Thread() {
+
+			public void run() {
+				CommandManager.getInstance().newAlert(symbol);
+			}
+		};
+
+		showAddDialog.start();
+
+	}
+
+	// Delete this watch screen
+	private void deleteWatchScreen() {
+		int option =
+				JOptionPane.showInternalConfirmDialog(DesktopManager.getDesktop(),
+						Locale.getString("SURE_DELETE_WATCH_SCREEN"),
+						Locale.getString("DELETE_WATCH_SCREEN"),
+						JOptionPane.YES_NO_OPTION);
+		if(option == JOptionPane.YES_OPTION) {
+			PreferencesManager.deleteWatchScreen(watchScreen.getName());
+
+			MainMenu.getInstance().updateWatchScreenMenu();
+
+			// Prevent save() function resurrecting watch screen
+			isDeleted = true;
+
+			// Close window
+			propertySupport.
+			firePropertyChange(ModuleFrame.WINDOW_CLOSE_PROPERTY, 0, 1);
+		}
+	}
+
+	// Rename the watch screen
+	private void renameWatchScreen() {
+		// Handle all action in a separate thread so we dont
+		// hold up the dispatch thread. See O'Reilley Swing pg 1138-9.
+		Thread thread = new Thread() {
+
+			public void run() {
+				String oldWatchScreenName = watchScreen.getName();
+
+				// Get new name for watch screen
+				TextDialog dialog = new TextDialog(DesktopManager.getDesktop(),
+						Locale.getString("ENTER_NEW_WATCH_SCREEN_NAME"),
+						Locale.getString("RENAME_WATCH_SCREEN"),
+						oldWatchScreenName);
+				String newWatchScreenName = dialog.showDialog();
+
+				if(newWatchScreenName != null && newWatchScreenName.length() > 0 &&
+						!newWatchScreenName.equals(oldWatchScreenName)) {
+
+					// Save the watch screen under the new name
+					watchScreen.setName(newWatchScreenName);
+					try {
+						PreferencesManager.putWatchScreen(watchScreen);
+					}
+					catch(PreferencesException e) {
+						DesktopManager.showErrorMessage(Locale.getString("ERROR_SAVING_WATCH_SCREEN_TITLE"),
+								e.getMessage());
+					}
+
+					// Delete the old watch screen
+					PreferencesManager.deleteWatchScreen(oldWatchScreenName);
+
+					// Update GUI
+					MainMenu.getInstance().updateWatchScreenMenu();
+					propertySupport.firePropertyChange(ModuleFrame.TITLEBAR_CHANGED_PROPERTY,
+							0, 1);
+				}
+			}};
+
+			thread.start();
+	}
+
+	// Add symbols to the watchscreen
+	private void addSymbols() {
+		// Handle all action in a separate thread so we dont
+		// hold up the dispatch thread. See O'Reilley Swing pg 1138-9.
+		Thread thread = new Thread() {
+			public void run() {
+				Set symbols = SymbolListDialog.getSymbols(DesktopManager.getDesktop(),
+						Locale.getString("ADD_SYMBOLS"));
+				if(symbols != null) {
+					// Add symbols to watch screen, quote sync and table
+					List symbolList = new ArrayList(symbols);
+
+					watchScreen.addSymbols(symbolList);
+					IDQuoteSync.getInstance().addSymbols(symbolList);
+					model.setQuotes(getQuotes());
+				}
+			}};
+
+			thread.start();
+	}
+
+	// Using the watch screen object, create a list of quotes that
+	// we should display from the quote bundle
+	private List getQuotes() {
+		List quotes = new ArrayList();
+		int dateOffset = quoteBundle.getLastOffset();
+
+		for(Iterator iterator = watchScreen.getSymbols().iterator();
+				iterator.hasNext();) {
+			Symbol symbol = (Symbol)iterator.next();
+			Quote quote;
+
+			try {
+				quote = quoteBundle.getQuote(symbol, dateOffset);
+			}
+			catch(MissingQuoteException e) {
+				quote = new IDQuote(symbol, new TradingDate(), new TradingTime(),
+						0, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+			}
+
+			quotes.add(quote);
+		}
+
+		return quotes;
+	}
+
+	/**
+	 * This function is called when new intra-day quotes have been downloaded
+	 * and we should update the table.
+	 */
+	private void updateTable() {
+		model.setQuotes(getQuotes());
+		model.fireTableDataChanged();
+	}
+
+	public Settings getSettings() {
+		return settings;
+	}
 }
