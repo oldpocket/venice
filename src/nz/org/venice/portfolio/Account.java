@@ -18,8 +18,8 @@
 
 package nz.org.venice.portfolio;
 
-import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.util.Currency;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;

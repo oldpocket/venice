@@ -22,15 +22,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
-import javax.swing.JComboBox;
-
-import java.util.ArrayList;
-import java.util.Vector;
 
 import nz.org.venice.ui.ColourSelectionPanel;
 import nz.org.venice.ui.GridBagHelper;

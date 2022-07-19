@@ -18,7 +18,7 @@
 
 package nz.org.venice.ui;
 
-import java.util.*;
+import java.util.Hashtable;
 
 /**
  * This class controls progress dialog creation/deletion in venice. It controls

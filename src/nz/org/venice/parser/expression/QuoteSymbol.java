@@ -18,8 +18,8 @@
 
 package nz.org.venice.parser.expression;
 
-import nz.org.venice.quote.Symbol;
 import nz.org.venice.parser.EvaluationException;
+import nz.org.venice.quote.Symbol;
 
 //FIXME - Need a better name
 public interface QuoteSymbol {

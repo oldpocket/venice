@@ -33,11 +33,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -45,17 +46,17 @@ import javax.swing.event.ListSelectionListener;
 import nz.org.venice.main.CommandManager;
 import nz.org.venice.main.Module;
 import nz.org.venice.main.ModuleFrame;
+import nz.org.venice.prefs.settings.AnalyserResultSettings;
+import nz.org.venice.prefs.settings.Settings;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.AbstractTableModel;
-import nz.org.venice.ui.Column;
 import nz.org.venice.ui.ChangeFormat;
+import nz.org.venice.ui.Column;
 import nz.org.venice.ui.ExpressionEditorDialog;
 import nz.org.venice.ui.MenuHelper;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
-import nz.org.venice.prefs.settings.Settings;
-import nz.org.venice.prefs.settings.AnalyserResultSettings;
 
 public class GAResultModule extends AbstractTable implements Module {
     private PropertyChangeSupport propertySupport;

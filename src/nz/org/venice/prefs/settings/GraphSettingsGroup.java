@@ -18,9 +18,6 @@
 
 package nz.org.venice.prefs.settings;
 
-import java.util.*;
-import nz.org.venice.prefs.settings.GraphSettings;
-
 /*
   This class groups the data necessary to recreate levels and graphs
   for a chart. It is used exclusively by ChartModule and therefore could have 

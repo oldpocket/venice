@@ -18,19 +18,7 @@
 
 package nz.org.venice.prefs.settings;
 
-import java.util.Vector;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import nz.org.venice.prefs.settings.Settings;
-import nz.org.venice.prefs.settings.PortfolioModuleSettings;
-import nz.org.venice.prefs.settings.XMLHelper;
 
 public class PortfolioSettingsReader {
 

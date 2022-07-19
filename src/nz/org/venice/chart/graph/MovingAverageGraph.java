@@ -23,9 +23,10 @@ import java.awt.Graphics;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
+import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
 import nz.org.venice.chart.GraphableQuoteFunctionSource;
-import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.source.GraphSource;
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.quote.QuoteFunctions;

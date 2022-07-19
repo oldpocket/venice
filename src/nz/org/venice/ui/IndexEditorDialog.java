@@ -24,24 +24,20 @@
 
 package nz.org.venice.ui;
 
-import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JButton;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
-import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.main.CommandManager;
-import nz.org.venice.ui.DesktopManager;
-import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.quote.SymbolMetadata;
 import nz.org.venice.util.Locale;
 

@@ -18,14 +18,23 @@
 
 package nz.org.venice.chart;
 
-import java.awt.*;
-import java.awt.image.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.plaf.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Vector;
 
+import javax.swing.JComponent;
+import javax.swing.plaf.ComponentUI;
+
+import nz.org.venice.chart.graph.Graph;
 import nz.org.venice.prefs.PreferencesManager;
-import nz.org.venice.chart.graph.*;
 
 /**
  * Chart Implementation.

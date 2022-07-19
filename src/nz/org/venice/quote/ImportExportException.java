@@ -18,8 +18,6 @@
 
 package nz.org.venice.quote;
 
-import java.lang.Throwable;
-
 /**
  * This exception represents an error importing or exporting a quote to
  * or from Venice.

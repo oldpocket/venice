@@ -18,24 +18,47 @@
 
 package nz.org.venice.help;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.net.*;
-import java.util.*;
-import java.util.regex.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
-import javax.swing.text.html.HTMLDocument;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JEditorPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JToolBar;
+import javax.swing.JTree;
+import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.tree.TreePath;
 
 import nz.org.venice.main.Module;
 import nz.org.venice.main.ModuleFrame;
-import nz.org.venice.util.Locale;
-import nz.org.venice.prefs.settings.Settings;
 import nz.org.venice.prefs.settings.HelpModuleSettings;
+import nz.org.venice.prefs.settings.Settings;
 import nz.org.venice.ui.TextDialog;
+import nz.org.venice.util.Locale;
 
 /**
  * This module provides a help browser for Venice. It allows traveresal of a tree

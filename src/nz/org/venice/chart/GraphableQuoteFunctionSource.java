@@ -18,14 +18,14 @@
 
 package nz.org.venice.chart;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.quote.QuoteFunctionSource;
 import nz.org.venice.util.TradingDate;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 
 /**
  * Allow the {@link nz.org.venice.quote.QuoteFunctions} package to use quotes directly 

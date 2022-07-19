@@ -18,9 +18,7 @@
 
 package nz.org.venice.chart;
 
-import java.util.*;
-
-import nz.org.venice.util.TradingDate;
+import java.util.Vector;
 
 /**
  * A wrapper for Point and Figure data 

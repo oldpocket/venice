@@ -18,10 +18,6 @@
 
 package nz.org.venice.alert;
 
-
-import nz.org.venice.quote.Symbol;
-import nz.org.venice.util.TradingDate;
-
 /**
  * Provides an interface to set, modify and delete alerts. Allows AlertModule  
  * to do the updates regardless of where the alerts are stored.

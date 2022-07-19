@@ -18,20 +18,20 @@
 
 package nz.org.venice.prefs;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JDesktopPane;
-import javax.swing.BoxLayout;
-import javax.swing.JPasswordField;
 import java.awt.BorderLayout;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 
+import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import nz.org.venice.ui.GridBagHelper;

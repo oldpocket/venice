@@ -21,9 +21,10 @@ package nz.org.venice.chart.graph;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.HashMap;
+
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JCheckBox;
 
 import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.util.Locale;

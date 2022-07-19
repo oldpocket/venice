@@ -18,9 +18,11 @@
 
 package nz.org.venice.chart;
 
-import java.awt.*;
-import java.util.*;
-import nz.org.venice.util.*;
+import java.awt.Graphics;
+import java.util.Iterator;
+import java.util.Vector;
+
+import nz.org.venice.util.TradingDate;
 
 public class HorizontalAxis {
     

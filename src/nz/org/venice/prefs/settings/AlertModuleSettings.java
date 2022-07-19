@@ -18,6 +18,8 @@
 
 package nz.org.venice.prefs.settings;
 
+import java.util.List;
+
 /**
  * This class  represents Alert Module data  which can restore modules upon restart. 
  * 
@@ -28,19 +30,13 @@ package nz.org.venice.prefs.settings;
 */
 
 import javax.swing.JDesktopPane;
-import java.util.*;
 
-import nz.org.venice.main.Module;
-import nz.org.venice.alert.AlertModule;
-import nz.org.venice.alert.AlertManager;
-import nz.org.venice.alert.AlertWriter;
-import nz.org.venice.alert.AlertReader;
 import nz.org.venice.alert.AlertException;
-
-import nz.org.venice.prefs.PreferencesModule;
-import nz.org.venice.prefs.PreferencesManager;
-import nz.org.venice.prefs.PreferencesException;
-import nz.org.venice.prefs.settings.SettingsWriter;
+import nz.org.venice.alert.AlertManager;
+import nz.org.venice.alert.AlertModule;
+import nz.org.venice.alert.AlertReader;
+import nz.org.venice.alert.AlertWriter;
+import nz.org.venice.main.Module;
 
 public class AlertModuleSettings extends AbstractSettings {
 

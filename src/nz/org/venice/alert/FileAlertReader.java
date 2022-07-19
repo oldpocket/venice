@@ -19,21 +19,18 @@
 package nz.org.venice.alert;
 
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.StringTokenizer;
+import java.util.List;
 import java.util.NoSuchElementException;
-import java.lang.NumberFormatException;
+import java.util.StringTokenizer;
+import java.util.prefs.Preferences;
 
+import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.SymbolFormatException;
 import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.TradingDateFormatException;
-
-
-import nz.org.venice.prefs.PreferencesManager;
-import java.util.prefs.Preferences;
 
 /**
  * Retrieve alerts stored in the local filesystem.

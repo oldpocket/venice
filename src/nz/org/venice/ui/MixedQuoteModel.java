@@ -22,14 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nz.org.venice.quote.IDQuote;
-import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.QuoteBundle;
 import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.WeekendDateException;
 import nz.org.venice.util.Locale;
-import nz.org.venice.util.TradingTime;
 
 /**
  * Table model to display a mixture of end of day and intra-day quotes to the user.

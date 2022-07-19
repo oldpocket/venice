@@ -18,12 +18,10 @@
 
 package nz.org.venice.quote;
 
-import java.util.Iterator;
 import java.util.List;
 
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.util.TradingDate;
-import nz.org.venice.util.TradingTime;
 
 /**
  * When a task requires a mix of end-of-day and intra-day stock quotes, it should

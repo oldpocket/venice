@@ -24,12 +24,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import nz.org.venice.portfolio.Portfolio;
-import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.ui.AbstractTableModel;
-import nz.org.venice.ui.Column;
 import nz.org.venice.ui.ChangeFormat;
+import nz.org.venice.ui.Column;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;

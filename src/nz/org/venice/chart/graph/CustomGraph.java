@@ -23,15 +23,16 @@ import java.awt.Graphics;
 import java.util.HashMap;
 import java.util.List;
 
-import nz.org.venice.chart.Graphable;
 import nz.org.venice.chart.GraphTools;
+import nz.org.venice.chart.Graphable;
 import nz.org.venice.chart.source.GraphSource;
-import nz.org.venice.util.Locale;
-import nz.org.venice.parser.Parser;
+import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.parser.Expression;
 import nz.org.venice.parser.ExpressionException;
+import nz.org.venice.parser.Parser;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.Symbol;
+import nz.org.venice.util.Locale;
 
 /**
  * Graph a Gondola expression. This graph allows the user to construct and graph

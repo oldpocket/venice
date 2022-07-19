@@ -24,30 +24,28 @@
 
 package nz.org.venice.ui;
 
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JLayeredPane;
 import java.awt.BorderLayout;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-import java.awt.event.ActionListener;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-
-import java.util.List;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import nz.org.venice.chart.source.Adjustment;
-import nz.org.venice.ui.GridBagHelper;
-import nz.org.venice.util.TradingDate;
-import nz.org.venice.util.TradingDateFormatException;
 import nz.org.venice.main.CommandManager;
 import nz.org.venice.util.Locale;
+import nz.org.venice.util.TradingDate;
+import nz.org.venice.util.TradingDateFormatException;
 
 public class AdjustPriceDataDialog extends JInternalFrame 
     implements ActionListener {     

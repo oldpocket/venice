@@ -18,10 +18,12 @@
 
 package nz.org.venice.chart.graph;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.List;
-import nz.org.venice.chart.*;
-import nz.org.venice.chart.source.*;
+
+import nz.org.venice.chart.GraphTools;
+import nz.org.venice.chart.source.GraphSource;
 
 /**
  * Horizontal bar graph. This graph is most commonly used to draw

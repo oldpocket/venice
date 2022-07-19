@@ -22,13 +22,14 @@ import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
-import javax.swing.border.TitledBorder;
+
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.border.TitledBorder;
 
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.ui.ConfirmDialog;

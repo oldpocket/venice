@@ -18,17 +18,21 @@
 
 package nz.org.venice.ui;
 
-import java.util.StringTokenizer;
-import java.util.Vector;
 import java.awt.Dimension;
 import java.beans.PropertyVetoException;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.event.EventListenerList;
 
 import nz.org.venice.main.Module;
 import nz.org.venice.main.ModuleFrame;
-import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.prefs.PreferencesException;
+import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.util.Locale;
 
 /**

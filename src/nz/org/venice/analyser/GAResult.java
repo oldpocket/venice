@@ -23,14 +23,16 @@
 
 package nz.org.venice.analyser;
 
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 import nz.org.venice.analyser.ga.GAIndividual;
 import nz.org.venice.parser.Expression;
-import nz.org.venice.portfolio.Transaction;
 import nz.org.venice.portfolio.Portfolio;
-import nz.org.venice.quote.*;
+import nz.org.venice.portfolio.Transaction;
+import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.quote.MissingQuoteException;
+import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
 

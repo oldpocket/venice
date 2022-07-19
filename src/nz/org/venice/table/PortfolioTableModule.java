@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -30,12 +31,13 @@ import javax.swing.JMenuItem;
 
 import nz.org.venice.main.Module;
 import nz.org.venice.main.ModuleFrame;
-import nz.org.venice.util.Locale;
 import nz.org.venice.portfolio.Portfolio;
-import nz.org.venice.quote.*;
-import nz.org.venice.ui.*;
-import nz.org.venice.prefs.settings.Settings;
 import nz.org.venice.prefs.settings.PortfolioTableModuleSettings;
+import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.ui.AbstractTable;
+import nz.org.venice.ui.MenuHelper;
+import nz.org.venice.util.Locale;
 
 /**
  * Venice module for displaying a portfolio in a table.

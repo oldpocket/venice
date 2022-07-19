@@ -24,7 +24,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyVetoException;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -32,19 +31,16 @@ import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
-import nz.org.venice.main.CommandManager;
 import nz.org.venice.parser.Expression;
 import nz.org.venice.parser.ExpressionException;
+import nz.org.venice.parser.ImplicitVariables;
 import nz.org.venice.parser.Parser;
 import nz.org.venice.parser.Variable;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.parser.ImplicitVariables;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.ui.ExpressionComboBox;
 import nz.org.venice.ui.GridBagHelper;

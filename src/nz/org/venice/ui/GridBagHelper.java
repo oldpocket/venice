@@ -20,17 +20,17 @@ package nz.org.venice.ui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.lang.String;
-import javax.swing.JCheckBox;
+import java.net.URL;
+import java.util.Vector;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.ImageIcon;
-import java.util.Vector;
-import java.net.URL;
 
 import nz.org.venice.util.Locale;
 

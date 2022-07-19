@@ -19,6 +19,7 @@
 
 package nz.org.venice.prefs;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -30,29 +31,27 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.prefs.Preferences;
 import java.util.prefs.BackingStoreException;
-import java.awt.Color;
+import java.util.prefs.Preferences;
 
+import nz.org.venice.macro.StoredMacro;
 import nz.org.venice.main.Main;
 import nz.org.venice.main.ModuleFrame;
-import nz.org.venice.prefs.settings.ModuleFrameSettingsWriter;
-import nz.org.venice.prefs.settings.ModuleSettingsParserException;
-import nz.org.venice.macro.StoredMacro;
 import nz.org.venice.portfolio.Account;
 import nz.org.venice.portfolio.CashAccount;
-import nz.org.venice.portfolio.ShareAccount;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.portfolio.PortfolioParserException;
 import nz.org.venice.portfolio.PortfolioReader;
 import nz.org.venice.portfolio.PortfolioWriter;
+import nz.org.venice.portfolio.ShareAccount;
 import nz.org.venice.portfolio.Transaction;
+import nz.org.venice.prefs.settings.ModuleFrameSettingsWriter;
+import nz.org.venice.prefs.settings.ModuleSettingsParserException;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.SymbolFormatException;
 import nz.org.venice.quote.SymbolMetadata;
 import nz.org.venice.quote.SymbolMetadataReader;
 import nz.org.venice.quote.SymbolMetadataWriter;
-import nz.org.venice.quote.SymbolMetadata;
 import nz.org.venice.table.WatchScreen;
 import nz.org.venice.table.WatchScreenParserException;
 import nz.org.venice.table.WatchScreenReader;

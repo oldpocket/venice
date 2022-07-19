@@ -18,38 +18,62 @@
 
 package nz.org.venice.chart;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.net.*;
-import java.util.*;
-import javax.swing.*;
-
-
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.Vector;
 
-import nz.org.venice.chart.graph.*;
-import nz.org.venice.chart.source.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
+import nz.org.venice.chart.graph.Graph;
+import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.main.CommandManager;
 import nz.org.venice.main.Module;
 import nz.org.venice.main.ModuleFrame;
-import nz.org.venice.main.CommandManager;
-import nz.org.venice.util.Locale;
-import nz.org.venice.portfolio.*;
-import nz.org.venice.quote.*;
-import nz.org.venice.ui.*;
-import nz.org.venice.ui.DesktopManager;
-import nz.org.venice.prefs.PreferencesManager;
+import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.prefs.PreferencesException;
-import nz.org.venice.util.TradingDate;
-
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.prefs.settings.ChartModuleSettings;
 import nz.org.venice.prefs.settings.GraphSettings;
-import nz.org.venice.prefs.settings.MenuSettings;
 import nz.org.venice.prefs.settings.GraphSettingsGroup;
+import nz.org.venice.prefs.settings.MenuSettings;
+import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.quote.EODQuoteRange;
+import nz.org.venice.quote.QuoteSourceManager;
+import nz.org.venice.quote.Symbol;
+import nz.org.venice.quote.SymbolFormatException;
+import nz.org.venice.ui.DesktopManager;
+import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.ProgressDialogManager;
+import nz.org.venice.ui.SymbolListDialog;
+import nz.org.venice.util.Locale;
+import nz.org.venice.util.TradingDate;
 
 /**
  * The charting module for venice. This class provides the user interface

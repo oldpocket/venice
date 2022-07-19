@@ -26,10 +26,11 @@ package nz.org.venice.analyser;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeSupport;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -39,23 +40,23 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
-import nz.org.venice.analyser.ga.*;
+import nz.org.venice.analyser.ga.GAIndividual;
+import nz.org.venice.analyser.ga.GeneticAlgorithm;
 import nz.org.venice.main.CommandManager;
 import nz.org.venice.main.Module;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.ImplicitVariables;
 import nz.org.venice.parser.Variable;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.parser.ImplicitVariables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.prefs.settings.AnalyserModuleSettings;
+import nz.org.venice.prefs.settings.Settings;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.ui.ProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
-import nz.org.venice.prefs.settings.Settings;
-import nz.org.venice.prefs.settings.AnalyserModuleSettings;
 
 public class GAModule extends JPanel implements Module {
 

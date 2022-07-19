@@ -21,14 +21,14 @@ package nz.org.venice.prefs;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+
 import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JCheckBox;
 
-import nz.org.venice.quote.EODQuoteCache;
 import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.util.Locale;
 

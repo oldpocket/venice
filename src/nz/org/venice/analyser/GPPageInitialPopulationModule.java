@@ -33,25 +33,26 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import nz.org.venice.main.Module;
+import nz.org.venice.prefs.settings.Settings;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.AbstractTableModel;
 import nz.org.venice.ui.Column;
 import nz.org.venice.ui.ConfirmDialog;
 import nz.org.venice.ui.ExpressionEditorDialog;
-import nz.org.venice.ui.TextsEditorDialog;
 import nz.org.venice.ui.MenuHelper;
+import nz.org.venice.ui.TextsEditorDialog;
 import nz.org.venice.util.Locale;
-import nz.org.venice.prefs.settings.Settings;
 import nz.org.venice.util.VeniceLog;
 
 public class GPPageInitialPopulationModule extends AbstractTable implements Module {

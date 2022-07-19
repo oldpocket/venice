@@ -32,13 +32,12 @@ package nz.org.venice.prefs.settings;
 */
 
 import javax.swing.JDesktopPane;
-import java.util.*;
-import nz.org.venice.main.Module;
-import nz.org.venice.analyser.PaperTradeModule;
-import nz.org.venice.analyser.PaperTradeResult;
-import nz.org.venice.analyser.GPModule;
-import nz.org.venice.analyser.GAModule;
+
 import nz.org.venice.analyser.ANNModule;
+import nz.org.venice.analyser.GAModule;
+import nz.org.venice.analyser.GPModule;
+import nz.org.venice.analyser.PaperTradeModule;
+import nz.org.venice.main.Module;
 
 public class AnalyserModuleSettings extends AbstractSettings {
         

@@ -20,24 +20,23 @@ package nz.org.venice.chart.graph;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.lang.String;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.Vector;
 
-import nz.org.venice.chart.Graphable;
 import nz.org.venice.chart.GraphTools;
+import nz.org.venice.chart.Graphable;
 import nz.org.venice.chart.source.GraphSource;
-import nz.org.venice.util.Locale;
-import nz.org.venice.util.TradingDate;
 import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.ui.ProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
+import nz.org.venice.util.Locale;
+import nz.org.venice.util.TradingDate;
 
 /**
  * Advance/Decline graph. This graphs the Advance/Decline market indicator. This

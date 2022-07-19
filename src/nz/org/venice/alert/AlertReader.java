@@ -22,7 +22,6 @@ package nz.org.venice.alert;
 import java.util.List;
 
 import nz.org.venice.quote.Symbol;
-import nz.org.venice.util.TradingDate;
 
 /**
  * Provides a common interface to retrieve alerts. Allows AlertModule to display

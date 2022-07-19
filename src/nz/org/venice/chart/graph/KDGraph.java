@@ -29,7 +29,6 @@ import java.util.Set;
 import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
 import nz.org.venice.chart.source.GraphSource;
-import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
 

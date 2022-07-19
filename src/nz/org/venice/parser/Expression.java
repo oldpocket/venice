@@ -18,8 +18,8 @@
 
 package nz.org.venice.parser;
 
-import java.util.Iterator;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import nz.org.venice.quote.QuoteBundle;
 import nz.org.venice.quote.Symbol;

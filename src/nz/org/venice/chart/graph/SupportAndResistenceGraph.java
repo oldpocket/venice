@@ -18,19 +18,21 @@
 
 package nz.org.venice.chart.graph;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.HashMap;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
-import nz.org.venice.chart.*;
-import nz.org.venice.chart.source.*;
-import nz.org.venice.util.*;
+import nz.org.venice.chart.GraphTools;
+import nz.org.venice.chart.Graphable;
+import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.util.Locale;
 
 /**
  * Support and Resistence "graph". This graph draws single lines across common price occurrances. 

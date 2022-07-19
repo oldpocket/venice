@@ -21,6 +21,8 @@ package nz.org.venice.portfolio;
 import java.util.ArrayList;
 import java.util.List;
 
+import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.AbstractTableModel;
 import nz.org.venice.ui.AccountNameFormat;
@@ -29,8 +31,6 @@ import nz.org.venice.ui.Column;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
-import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.EODQuoteBundle;
 
 /**
  * Display an account summary in a swing table for a portfolio. The table

@@ -23,10 +23,10 @@ import nz.org.venice.parser.Expression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.QuoteBundle;
 import nz.org.venice.quote.QuoteBundleFunctionSource;
 import nz.org.venice.quote.QuoteFunctions;
 import nz.org.venice.quote.QuoteFunctions.RSIData;
-import nz.org.venice.quote.QuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**

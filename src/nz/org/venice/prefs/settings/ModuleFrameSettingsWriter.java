@@ -18,43 +18,19 @@
 
 package nz.org.venice.prefs.settings;
 
-import nz.org.venice.quote.Symbol;
-import nz.org.venice.main.ModuleFrame;
-import nz.org.venice.main.Module;
-
-import java.io.OutputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.beans.XMLEncoder;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.List;
-import java.util.Collection;
-import java.awt.Rectangle;
-import java.awt.Dimension;
+import java.io.OutputStream;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import javax.swing.JScrollPane;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.XStreamException;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
-import nz.org.venice.quote.Symbol;
-import nz.org.venice.chart.graph.Graph;
-
+import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.util.ExchangeRateCache;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
 
 
 /**

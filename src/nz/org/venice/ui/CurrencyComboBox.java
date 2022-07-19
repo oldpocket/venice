@@ -18,11 +18,12 @@
 
 package nz.org.venice.ui;
 
-import nz.org.venice.util.Currency;
-
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.JComboBox;
+
+import nz.org.venice.util.Currency;
 
 /**
  * Extension of JComboBox used for displaying a list of available currencies in

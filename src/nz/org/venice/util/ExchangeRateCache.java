@@ -22,21 +22,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Map;
 
 import javax.swing.JDesktopPane;
 
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.quote.DatabaseQuoteSource;
+import nz.org.venice.quote.GenericWSExchangeRateImport;
 import nz.org.venice.quote.ImportExportException;
 import nz.org.venice.quote.QuoteSourceManager;
-import nz.org.venice.quote.GenericWSExchangeRateImport;
-import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.ui.NumberDialog;
-import nz.org.venice.ui.ProgressDialog;
-import nz.org.venice.ui.ProgressDialogManager;
 
 /**
  * Cache of exchange rates. This class caches exchange rates in memory from the

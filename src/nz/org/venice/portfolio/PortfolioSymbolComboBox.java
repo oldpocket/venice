@@ -21,6 +21,7 @@ package nz.org.venice.portfolio;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.JComboBox;
 
 import nz.org.venice.util.TradingDate;

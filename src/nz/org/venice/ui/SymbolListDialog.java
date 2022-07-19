@@ -19,6 +19,7 @@
 package nz.org.venice.ui;
 
 import java.util.SortedSet;
+
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 

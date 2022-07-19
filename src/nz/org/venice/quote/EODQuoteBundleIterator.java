@@ -18,9 +18,11 @@
 
 package nz.org.venice.quote;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
-import nz.org.venice.util.*;
+import nz.org.venice.util.TradingDate;
 
 /**
  * Iterator for traversing EODQuotes in an EODQuoteBundle. This iterator allows the user to

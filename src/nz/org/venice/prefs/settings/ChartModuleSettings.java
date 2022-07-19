@@ -20,36 +20,13 @@
 
 package nz.org.venice.prefs.settings;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.prefs.Preferences;
-import java.util.prefs.BackingStoreException;
+
 import javax.swing.JDesktopPane;
 
-import nz.org.venice.main.Main;
-import nz.org.venice.macro.StoredMacro;
-import nz.org.venice.quote.Symbol;
-import nz.org.venice.quote.SymbolFormatException;
-import nz.org.venice.table.WatchScreen;
-import nz.org.venice.table.WatchScreenParserException;
-import nz.org.venice.table.WatchScreenReader;
-import nz.org.venice.table.WatchScreenWriter;
-import nz.org.venice.chart.ChartModule;
 import nz.org.venice.chart.ChartDrawingModel;
-
-
+import nz.org.venice.chart.ChartModule;
 import nz.org.venice.main.Module;
-import nz.org.venice.main.ModuleFrame;
-import java.util.Collection;
-import java.util.Vector;
 
 /**
  * This class represents ChartModule data which can be saved for the purposes

@@ -28,13 +28,12 @@ import java.util.TreeMap;
 
 import nz.org.venice.analyser.OrderCache;
 import nz.org.venice.analyser.PaperTrade;
-
-import nz.org.venice.parser.Expression;
 import nz.org.venice.parser.EvaluationException;
+import nz.org.venice.parser.Expression;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.portfolio.Portfolio;
-import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;

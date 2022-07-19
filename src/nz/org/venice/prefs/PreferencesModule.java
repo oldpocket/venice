@@ -18,17 +18,30 @@
 
 package nz.org.venice.prefs;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.util.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.Iterator;
+import java.util.Vector;
+
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JList;
+import javax.swing.JMenuBar;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import nz.org.venice.main.Module;
 import nz.org.venice.main.ModuleFrame;
-import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.prefs.settings.PreferencesModuleSettings;
 import nz.org.venice.prefs.settings.Settings;
 import nz.org.venice.util.Locale;

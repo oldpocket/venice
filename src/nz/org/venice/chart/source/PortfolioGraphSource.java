@@ -18,16 +18,17 @@
 
 package nz.org.venice.chart.source;
 
+import java.util.Iterator;
+import java.util.List;
+
 import nz.org.venice.chart.Graphable;
+import nz.org.venice.portfolio.Account;
+import nz.org.venice.portfolio.Portfolio;
+import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
-import nz.org.venice.portfolio.Account;
-import nz.org.venice.portfolio.Portfolio;
-import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.EODQuoteBundle;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Provides a Portfolio graph source. This class allows portfolios to be graphed.

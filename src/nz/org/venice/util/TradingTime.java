@@ -20,8 +20,8 @@ package nz.org.venice.util;
 
 import java.text.NumberFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * A replacement time for java.util.Calendar.

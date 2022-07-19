@@ -18,52 +18,35 @@
 
 package nz.org.venice.alert;
 
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.Vector;
+
 import javax.swing.ImageIcon;
-import javax.swing.JDesktopPane;
 import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.SwingUtilities;
 
-import nz.org.venice.main.CommandManager;
 import nz.org.venice.main.Module;
-import nz.org.venice.main.ModuleFrame;
-import nz.org.venice.prefs.PreferencesException;
-import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.prefs.settings.AbstractSettings;
-import nz.org.venice.prefs.settings.Settings;
 import nz.org.venice.prefs.settings.AlertModuleSettings;
-
-
+import nz.org.venice.prefs.settings.Settings;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.AbstractTableModel;
 import nz.org.venice.ui.Column;
-import nz.org.venice.ui.DesktopManager;
-import nz.org.venice.ui.MainMenu;
 import nz.org.venice.ui.MenuHelper;
-import nz.org.venice.ui.SymbolListDialog;
-import nz.org.venice.ui.TextDialog;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
-import nz.org.venice.util.TradingTime;
 
 /**
  * Venice module for displaying Alerts set by the user. This module allows a

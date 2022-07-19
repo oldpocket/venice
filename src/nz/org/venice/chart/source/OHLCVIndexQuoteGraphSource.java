@@ -18,14 +18,18 @@
 
 package nz.org.venice.chart.source;
 
-import nz.org.venice.chart.*;
+import java.util.Iterator;
+import java.util.List;
+
+import nz.org.venice.chart.Graphable;
+import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.quote.MissingQuoteException;
+import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.Symbol;
 import nz.org.venice.ui.QuoteFormat;
+import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
-import nz.org.venice.util.Locale;
-import nz.org.venice.quote.*;
-
-import java.util.*;
 
 /**
  * Provides a <code>EODQuoteBundle</code> index source. This class

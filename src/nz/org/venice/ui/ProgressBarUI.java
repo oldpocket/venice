@@ -18,11 +18,18 @@
 
 package nz.org.venice.ui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import javax.swing.*;
-import javax.swing.plaf.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+
+import javax.swing.JComponent;
+import javax.swing.JProgressBar;
+import javax.swing.plaf.ComponentUI;
 
 public class ProgressBarUI extends javax.swing.plaf.ProgressBarUI implements ImageObserver,
                                                                              ActionListener {

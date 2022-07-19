@@ -21,6 +21,7 @@ package nz.org.venice.ui;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;

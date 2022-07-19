@@ -32,6 +32,8 @@
 
 package nz.org.venice.quote;
 
+import nz.org.venice.prefs.IndexPreferencesPage;
+
 public class SymbolMetadata {
 
 	private final Symbol symbol;

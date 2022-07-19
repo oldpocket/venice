@@ -27,8 +27,8 @@
 package nz.org.venice.alert;
 
 
-import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.TradingDate;
 
 public abstract class Alert {

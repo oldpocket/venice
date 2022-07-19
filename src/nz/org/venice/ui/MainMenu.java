@@ -19,21 +19,32 @@
 package nz.org.venice.ui;
 
 import java.awt.Component;
-import java.awt.event.*;
-import java.beans.*;
-import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.beans.PropertyVetoException;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 
 import nz.org.venice.macro.MacroManager;
 import nz.org.venice.macro.StoredMacro;
-import nz.org.venice.main.Module;
-import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.main.CommandManager;
+import nz.org.venice.main.Module;
+import nz.org.venice.prefs.PreferencesManager;
+import nz.org.venice.prefs.PreferencesModule;
+import nz.org.venice.quote.EODQuoteRange;
 import nz.org.venice.util.Locale;
-import nz.org.venice.portfolio.*;
-import nz.org.venice.prefs.*;
-import nz.org.venice.quote.*;
 
 /**
  * The main menu of the application.

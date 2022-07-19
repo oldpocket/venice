@@ -18,7 +18,7 @@
 
 package nz.org.venice.util;
 
-import java.util.*;
+import java.util.Comparator;
 
 /**
  * A comparator for comparing <code>TradingDate</code> objects.

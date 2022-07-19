@@ -25,9 +25,8 @@ import java.util.TreeMap;
 import nz.org.venice.analyser.GPGondolaSelection;
 import nz.org.venice.analyser.GPModuleConstants;
 import nz.org.venice.analyser.OrderCache;
-
-import nz.org.venice.parser.Expression;
 import nz.org.venice.parser.EvaluationException;
+import nz.org.venice.parser.Expression;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.VeniceLog;

@@ -30,16 +30,6 @@
 package nz.org.venice.prefs;
 
 
-import javax.swing.JComponent;
-import javax.swing.JDesktopPane;
-import javax.swing.JScrollPane;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.event.InternalFrameListener;
-import javax.swing.event.InternalFrameEvent;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,6 +38,17 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
+
+import nz.org.venice.quote.QuoteSource;
 import nz.org.venice.quote.SymbolMetadata;
 import nz.org.venice.ui.AbstractTableModel;
 import nz.org.venice.ui.IndexEditorDialog;

@@ -20,14 +20,9 @@ package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.parser.Expression;
-import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.quote.QuoteBundle;
-import nz.org.venice.quote.QuoteBundleFunctionSource;
-import nz.org.venice.quote.QuoteFunctions;
 import nz.org.venice.quote.Symbol;
-
-import nz.org.venice.util.Locale;
 
 /**
  * An no op expression which when evaluated halts the processing of rules.

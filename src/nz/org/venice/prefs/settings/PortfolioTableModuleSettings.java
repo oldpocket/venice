@@ -32,20 +32,16 @@ package nz.org.venice.prefs.settings;
 */
 
 import javax.swing.JDesktopPane;
-import java.util.*;
+
 import nz.org.venice.main.Module;
-import nz.org.venice.table.PortfolioTableModule;
-import nz.org.venice.quote.MixedQuoteBundle;
+import nz.org.venice.portfolio.Portfolio;
+import nz.org.venice.prefs.PreferencesException;
+import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.EODQuoteRange;
 import nz.org.venice.quote.QuoteSourceManager;
-import nz.org.venice.table.WatchScreen;
+import nz.org.venice.table.PortfolioTableModule;
 import nz.org.venice.util.TradingDate;
-import nz.org.venice.portfolio.Portfolio;
-
-import nz.org.venice.prefs.PreferencesManager;
-import nz.org.venice.prefs.PreferencesException;
-import nz.org.venice.prefs.settings.SettingsWriter;
 
 public class PortfolioTableModuleSettings extends AbstractSettings {
     

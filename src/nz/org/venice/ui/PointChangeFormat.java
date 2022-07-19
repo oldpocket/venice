@@ -18,7 +18,6 @@
 
 package nz.org.venice.ui;
 
-import java.lang.Comparable;
 import java.text.NumberFormat;
 
 /**

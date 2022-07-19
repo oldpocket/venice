@@ -18,8 +18,11 @@
 
 package nz.org.venice.main;
 
-import java.beans.*;
-import javax.swing.*;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JMenuBar;
 
 import nz.org.venice.prefs.settings.Settings;
 

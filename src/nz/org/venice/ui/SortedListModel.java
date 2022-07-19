@@ -18,11 +18,16 @@
 
 package nz.org.venice.ui;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 /**
  * This model is used for providing alphabetically sorted displays to JList gadgests
  */
-import javax.swing.*;
-import java.util.*;
+import javax.swing.AbstractListModel;
 
 public class SortedListModel extends AbstractListModel {
 

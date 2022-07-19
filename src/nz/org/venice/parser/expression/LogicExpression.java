@@ -18,7 +18,8 @@
 
 package nz.org.venice.parser.expression;
 
-import nz.org.venice.parser.*;
+import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.TypeMismatchException;
 
 /**
  * Abstract base class for the boolean expressions:

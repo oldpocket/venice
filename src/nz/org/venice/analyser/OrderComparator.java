@@ -23,9 +23,9 @@ import java.util.Comparator;
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.parser.Expression;
 import nz.org.venice.parser.Variables;
+import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.quote.Quote;
-import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**

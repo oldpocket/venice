@@ -18,8 +18,6 @@
 
 package nz.org.venice.quote;
 
-import java.lang.Throwable;
-
 /**
  * This exception represents the error condition that occurs when the caller
  * is trying to retrieve a quote that has not been loaded into Venice.

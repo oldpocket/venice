@@ -18,17 +18,17 @@
 
 package nz.org.venice.prefs;
 
-import javax.swing.JRadioButton;
-import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
-import javax.swing.ButtonGroup;
-import javax.swing.BoxLayout;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.BorderLayout;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 import nz.org.venice.util.Locale;
 

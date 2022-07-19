@@ -18,7 +18,8 @@
 
 package nz.org.venice.parser;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * A stack of tokens which is used during parsing.

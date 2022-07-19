@@ -19,8 +19,8 @@
 package nz.org.venice.alert;
 
 import nz.org.venice.prefs.PreferencesManager;
-import nz.org.venice.quote.DatabaseManager;
 import nz.org.venice.quote.DatabaseAccessManager;
+import nz.org.venice.quote.DatabaseManager;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.TradingDate;
 

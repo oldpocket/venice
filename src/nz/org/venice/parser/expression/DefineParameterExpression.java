@@ -18,16 +18,11 @@
 
 package nz.org.venice.parser.expression;
 
-import java.lang.String;
-
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.parser.Variable;
 import nz.org.venice.quote.QuoteBundle;
 import nz.org.venice.quote.Symbol;
-import nz.org.venice.util.Locale;
 
 /**
  * A representation of a function parameter definition.

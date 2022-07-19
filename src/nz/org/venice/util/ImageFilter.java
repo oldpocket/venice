@@ -18,8 +18,9 @@
 
 package nz.org.venice.util;
 
-import javax.swing.filechooser.FileFilter;
 import java.io.File;
+
+import javax.swing.filechooser.FileFilter;
 
 /**
  * Image filter for dialog boxes.

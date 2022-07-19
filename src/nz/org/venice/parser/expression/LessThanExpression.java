@@ -18,8 +18,11 @@
 
 package nz.org.venice.parser.expression;
 
-import nz.org.venice.parser.*;
-import nz.org.venice.quote.*;
+import nz.org.venice.parser.EvaluationException;
+import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.Variables;
+import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.Symbol;
 
 /**
  * An expression which compares whether the first expression is less than

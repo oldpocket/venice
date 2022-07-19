@@ -29,17 +29,17 @@
 
 package nz.org.venice.chart;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ListIterator;
 
+import nz.org.venice.chart.graph.Graph;
 import nz.org.venice.chart.source.GraphSource;
 import nz.org.venice.quote.Symbol;
-import nz.org.venice.ui.ModuleListener;
-import nz.org.venice.ui.ModuleEvent;
 import nz.org.venice.table.TrackedQuoteModule;
-import nz.org.venice.chart.graph.Graph;
+import nz.org.venice.ui.ModuleEvent;
+import nz.org.venice.ui.ModuleListener;
 
 public class ChartTracking implements ModuleListener {
     

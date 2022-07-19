@@ -18,14 +18,14 @@
 
 package nz.org.venice.quote;
 
-import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.ui.DesktopManager;

@@ -22,29 +22,27 @@
 
 package nz.org.venice.macro;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
+import javax.swing.JList;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import nz.org.venice.main.Module;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.prefs.settings.Settings;
 import nz.org.venice.util.Locale;
-
-import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
-import javax.swing.JScrollPane;
-import javax.swing.JList;
-import javax.swing.JButton;
 /**
  * @author Dan Makovec venice@makovec.net
  *

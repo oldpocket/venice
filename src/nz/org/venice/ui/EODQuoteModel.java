@@ -21,11 +21,11 @@ package nz.org.venice.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.quote.EODQuote;
 import nz.org.venice.quote.EODQuoteBundle;
-import nz.org.venice.quote.QuoteSourceManager;
+import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
 

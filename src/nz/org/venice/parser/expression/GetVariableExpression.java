@@ -18,8 +18,6 @@
 
 package nz.org.venice.parser.expression;
 
-import java.lang.String;
-
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.parser.Variable;
 import nz.org.venice.parser.Variables;

@@ -19,7 +19,6 @@
 package nz.org.venice.quote;
 
 import nz.org.venice.parser.EvaluationException;
-
 import nz.org.venice.util.TradingDate;
 
 /**

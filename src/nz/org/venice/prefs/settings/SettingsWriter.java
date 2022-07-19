@@ -21,19 +21,8 @@
 package nz.org.venice.prefs.settings;
 
 
-/**
- * This is an interface for which Module settings writers must conform. It exists so that settings can be written at a top level without needing to know the exact module type. 
- * 
- * @author Mark Hummel
- * @see PreferencesManager
- * @see ModuleSettingsWriter
- * @see ModuleSettingReader 
-*/
-
-import java.util.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Text;
 
 public interface SettingsWriter {
     

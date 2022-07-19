@@ -18,40 +18,51 @@
 
 package nz.org.venice.portfolio;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
-import java.io.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.beans.PropertyVetoException;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
-import javax.swing.JFileChooser;
-import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.border.*;
+import javax.swing.border.EmptyBorder;
 
+import nz.org.venice.main.CommandManager;
 import nz.org.venice.main.Module;
 import nz.org.venice.main.ModuleFrame;
-import nz.org.venice.main.CommandManager;
+import nz.org.venice.prefs.PreferencesException;
+import nz.org.venice.prefs.PreferencesManager;
+import nz.org.venice.prefs.settings.PortfolioModuleSettings;
+import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.quote.MissingQuoteException;
+import nz.org.venice.quote.QuoteSourceManager;
+import nz.org.venice.ui.ConfirmDialog;
+import nz.org.venice.ui.DesktopManager;
+import nz.org.venice.ui.MainMenu;
+import nz.org.venice.ui.MenuHelper;
+import nz.org.venice.ui.TextDialog;
 import nz.org.venice.util.Currency;
 import nz.org.venice.util.ExchangeRateCache;
 import nz.org.venice.util.Locale;
-import nz.org.venice.prefs.*;
-import nz.org.venice.prefs.settings.Settings;
-import nz.org.venice.prefs.settings.PortfolioModuleSettings;
-import nz.org.venice.quote.*;
-import nz.org.venice.ui.*;
 
 /**
  * Venice module for displaying a portfolio to the user. This module

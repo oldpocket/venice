@@ -18,23 +18,18 @@
 
 package nz.org.venice.quote;
 
-import nz.org.venice.ui.DesktopManager;
-import nz.org.venice.ui.PasswordDialog;
-import nz.org.venice.prefs.PreferencesManager;
-import nz.org.venice.prefs.PreferencesManager.DatabasePreferences;
-import nz.org.venice.alert.AlertManager;
-import nz.org.venice.util.Locale;
-import nz.org.venice.util.TradingDate;
-
 import java.util.Base64;
-import java.util.UUID;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+
+import nz.org.venice.alert.AlertManager;
+import nz.org.venice.prefs.PreferencesManager;
+import nz.org.venice.prefs.PreferencesManager.DatabasePreferences;
+import nz.org.venice.ui.DesktopManager;
+import nz.org.venice.ui.PasswordDialog;
+import nz.org.venice.util.Locale;
 
 /**
  * Manages database settings where the data is session based (ie not stored

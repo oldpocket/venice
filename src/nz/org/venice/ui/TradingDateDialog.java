@@ -18,7 +18,6 @@
 
 package nz.org.venice.ui;
 
-import java.lang.String;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 

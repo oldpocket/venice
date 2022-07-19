@@ -21,6 +21,10 @@
 package nz.org.venice.prefs.settings;
 
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+
 /**
  * This class represents analyser results that were saved when Venice was closed.
  * 
@@ -31,13 +35,12 @@ package nz.org.venice.prefs.settings;
 */
 
 import javax.swing.JDesktopPane;
-import java.util.*;
-import nz.org.venice.main.Module;
-import nz.org.venice.analyser.PaperTradeResultModule;
-import nz.org.venice.analyser.PaperTradeResult;
-import nz.org.venice.analyser.GPResultModule;
-import nz.org.venice.analyser.GAResultModule;
+
 import nz.org.venice.analyser.ANNResultModule;
+import nz.org.venice.analyser.GAResultModule;
+import nz.org.venice.analyser.GPResultModule;
+import nz.org.venice.analyser.PaperTradeResultModule;
+import nz.org.venice.main.Module;
 
 
 public class AnalyserResultSettings extends AbstractSettings {

@@ -18,9 +18,9 @@
 
 package nz.org.venice.ui;
 
-import nz.org.venice.main.Module;
-
 import java.util.EventObject;
+
+import nz.org.venice.main.Module;
 
 /**
  * Representation of an event indicating that a module has been added,

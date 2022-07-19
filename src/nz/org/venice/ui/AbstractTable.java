@@ -25,6 +25,7 @@ import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -36,11 +37,7 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellRenderer;
 
-import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
-import nz.org.venice.util.Money;
-import nz.org.venice.util.TradingDate;
-import nz.org.venice.util.TradingTime;
 
 /**
  * Helper for constructing tables. The abstract table sets up the look & feel for

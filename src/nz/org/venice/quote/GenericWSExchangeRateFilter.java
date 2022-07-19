@@ -19,10 +19,10 @@
 package nz.org.venice.quote;
 
 import nz.org.venice.util.Currency;
-import nz.org.venice.util.TradingDate;
-import nz.org.venice.util.TradingDateFormatException;
 import nz.org.venice.util.ExchangeRate;
 import nz.org.venice.util.Locale;
+import nz.org.venice.util.TradingDate;
+import nz.org.venice.util.TradingDateFormatException;
 import nz.org.venice.util.UnknownCurrencyCodeException;
 
 /**

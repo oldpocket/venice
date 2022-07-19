@@ -20,10 +20,10 @@ package nz.org.venice.parser.expression;
 
 import java.util.UUID;
 
-import nz.org.venice.parser.Expression;
-import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.AnalyserGuard;
+import nz.org.venice.parser.EvaluationException;
+import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.quote.QuoteBundle;
 import nz.org.venice.quote.Symbol;

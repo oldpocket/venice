@@ -18,31 +18,34 @@
 
 package nz.org.venice.quote;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Vector;
 import java.util.List;
 import java.util.UUID;
-import java.io.InputStream;
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import java.text.DecimalFormat;
-import java.util.Properties;
-import java.util.HashMap;
-import java.util.regex.*;
-import javax.xml.parsers.*;
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import nz.org.venice.ui.DesktopManager;
+import nz.org.venice.util.Converter;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
-import nz.org.venice.util.Converter;
 
 
 

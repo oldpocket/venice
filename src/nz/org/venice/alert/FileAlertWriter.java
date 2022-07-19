@@ -19,11 +19,10 @@
 package nz.org.venice.alert;
 
 
-import nz.org.venice.quote.Symbol;
-import nz.org.venice.util.TradingDate;
+import java.util.prefs.Preferences;
 
 import nz.org.venice.prefs.PreferencesManager;
-import java.util.prefs.Preferences;
+import nz.org.venice.util.TradingDate;
 
 /**
  * Store new alerts in the filesystem. Update, delete and enable alerts already

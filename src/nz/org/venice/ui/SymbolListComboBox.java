@@ -18,19 +18,20 @@
 
 package nz.org.venice.ui;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.SortedSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.SortedSet;
+
 import javax.swing.JComboBox;
 
+import nz.org.venice.prefs.PreferencesException;
+import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.quote.EODQuoteRange;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.SymbolFormatException;
-import nz.org.venice.util.Locale;
-import nz.org.venice.prefs.PreferencesException;
-import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.table.WatchScreen;
+import nz.org.venice.util.Locale;
 
 /**
  * A JComboBox which allows the user to choose from a selection of symbol lists.

@@ -23,11 +23,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.util.TradingDate;
-import nz.org.venice.util.TradingTime;
 import nz.org.venice.util.TradingDateComparator;
+import nz.org.venice.util.TradingTime;
 
 /**
  * This class contains all the end-of-day stock quotes currently in memory. Its purpose is to

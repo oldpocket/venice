@@ -18,14 +18,11 @@
 
 package nz.org.venice.util;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
-
-import nz.org.venice.util.Locale;
 
 /**
  * A replacement date for java.util.Date, java.util.Calendar &

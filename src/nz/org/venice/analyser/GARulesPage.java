@@ -24,7 +24,6 @@
 
 package nz.org.venice.analyser;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -47,11 +46,11 @@ import javax.swing.border.TitledBorder;
 import nz.org.venice.analyser.ga.GAIndividual;
 import nz.org.venice.parser.Expression;
 import nz.org.venice.parser.ExpressionException;
+import nz.org.venice.parser.ImplicitVariables;
 import nz.org.venice.parser.Parser;
 import nz.org.venice.parser.Token;
 import nz.org.venice.parser.Variable;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.parser.ImplicitVariables;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.ui.ExpressionComboBox;
 import nz.org.venice.ui.GridBagHelper;

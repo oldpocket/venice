@@ -21,8 +21,6 @@ package nz.org.venice.parser;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import nz.org.venice.parser.Token;
-import nz.org.venice.parser.Expression;
 import nz.org.venice.parser.expression.FunctionExpression;
 
 

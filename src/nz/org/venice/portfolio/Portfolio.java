@@ -18,20 +18,6 @@
 
 package nz.org.venice.portfolio;
 
-import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.EODQuoteBundle;
-import nz.org.venice.quote.EODQuoteCache;
-import nz.org.venice.quote.Symbol;
-import nz.org.venice.quote.SymbolFormatException;
-import nz.org.venice.quote.WeekendDateException;
-import nz.org.venice.util.Currency;
-import nz.org.venice.util.ExchangeRateCache;
-import nz.org.venice.util.Money;
-import nz.org.venice.util.MoneyFormatException;
-import nz.org.venice.util.TradingDate;
-import nz.org.venice.util.TradingDateFormatException;
-import nz.org.venice.util.UnknownCurrencyCodeException;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -39,6 +25,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
+
+import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.quote.EODQuoteCache;
+import nz.org.venice.quote.MissingQuoteException;
+import nz.org.venice.util.Currency;
+import nz.org.venice.util.ExchangeRateCache;
+import nz.org.venice.util.Money;
+import nz.org.venice.util.TradingDate;
 
 /**
  * Representation of a portfolio. A portfolio object contains several

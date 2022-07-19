@@ -25,9 +25,8 @@
 
 package nz.org.venice.chart;
 
-import java.util.Vector;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Vector;
 
 public class ChartDrawingModel
 {

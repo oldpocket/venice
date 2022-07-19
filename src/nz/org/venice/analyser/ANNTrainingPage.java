@@ -19,16 +19,18 @@
 package nz.org.venice.analyser;
 
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.util.HashMap;
 import java.util.Iterator;
-import javax.swing.border.TitledBorder;
+
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
+
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.util.Locale;

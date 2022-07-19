@@ -21,37 +21,41 @@ package nz.org.venice.main;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.Iterator;
-import java.io.*;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
-import javax.swing.UIManager.*;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import nz.org.venice.macro.MacroManager;
 import nz.org.venice.prefs.PreferencesManager;
-import nz.org.venice.prefs.settings.Settings;
 import nz.org.venice.prefs.settings.ModuleFrameSettings;
 import nz.org.venice.prefs.settings.ModuleFrameSettingsReader;
 import nz.org.venice.prefs.settings.ModuleSettingsParserException;
+import nz.org.venice.prefs.settings.Settings;
 import nz.org.venice.quote.IDQuoteSync;
 import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.SymbolFormatException;
-import nz.org.venice.ui.GPLViewDialog;
 import nz.org.venice.ui.DesktopManager;
+import nz.org.venice.ui.GPLViewDialog;
 import nz.org.venice.ui.MainMenu;
 import nz.org.venice.ui.ProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.util.ExchangeRateCache;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.VeniceLog;
-import nz.org.venice.alert.AlertManager;
 
 /**
  * The top level class which contains the main() function. This class builds

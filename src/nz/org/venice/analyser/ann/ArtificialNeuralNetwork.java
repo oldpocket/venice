@@ -23,25 +23,39 @@ package nz.org.venice.analyser.ann;
  * the Joone engine package can be downloaded from:
  * http://www.jooneworld.com/
  */
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.RandomAccessFile;
+
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 
-import nz.org.venice.ui.ProgressDialog;
-import nz.org.venice.ui.ProgressDialogManager;
-import nz.org.venice.util.Locale;
-
 /* Joone import */
-import org.joone.engine.*;
-import org.joone.engine.learning.*;
+import org.joone.engine.DirectSynapse;
+import org.joone.engine.FullSynapse;
+import org.joone.engine.Layer;
+import org.joone.engine.LinearLayer;
+import org.joone.engine.Monitor;
+import org.joone.engine.NeuralNetEvent;
+import org.joone.engine.NeuralNetListener;
+import org.joone.engine.Pattern;
+import org.joone.engine.SigmoidLayer;
+import org.joone.engine.learning.TeachingSynapse;
 import org.joone.io.MemoryInputSynapse;
-import org.joone.net.*;
 /* End Joone import */
+import org.joone.net.NeuralNet;
+import org.joone.net.NeuralNetLoader;
 
 /* XStream import */
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 /* End XStream import */
+
+import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.util.Locale;
 
 /**
  * @author Alberto Nacher

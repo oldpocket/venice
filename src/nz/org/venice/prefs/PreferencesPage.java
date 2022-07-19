@@ -18,7 +18,7 @@
 
 package nz.org.venice.prefs;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 
 /** 
  * Common interface for all preference pages displayed by the

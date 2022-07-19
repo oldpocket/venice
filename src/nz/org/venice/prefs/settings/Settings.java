@@ -31,10 +31,8 @@ package nz.org.venice.prefs.settings;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JScrollPane;
-import java.util.*;
-import nz.org.venice.main.Module;
 
-import nz.org.venice.prefs.settings.SettingsWriter;
+import nz.org.venice.main.Module;
 
 public interface Settings {
     

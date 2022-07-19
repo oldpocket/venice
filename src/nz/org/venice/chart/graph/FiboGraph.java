@@ -21,21 +21,14 @@ package nz.org.venice.chart.graph;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.text.DecimalFormat;
-import java.text.Format;
-import java.text.NumberFormat;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import nz.org.venice.chart.Graphable;
-import nz.org.venice.chart.GraphableQuoteFunctionSource;
-import nz.org.venice.chart.GraphTools;
+
 import nz.org.venice.chart.BasicChartUI;
+import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.source.GraphSource;
-import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.quote.QuoteFunctions;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.util.Locale;
-import nz.org.venice.util.TradingDate;
 
 /**
  * Draw the fibonacci retracement levels on the chart

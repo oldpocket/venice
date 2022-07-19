@@ -21,8 +21,8 @@ package nz.org.venice.parser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import nz.org.venice.util.Locale;
 import nz.org.venice.parser.expression.AbstractExpression;
+import nz.org.venice.util.Locale;
 
 /**
  * A representation of any token in the <i>Gondola</i> language.

@@ -21,6 +21,8 @@
 package nz.org.venice.prefs.settings;
 
 
+import java.util.Stack;
+
 /**
  * This class represents HelpModule data which can restore Help modules upon restart. 
  * 
@@ -32,12 +34,9 @@ package nz.org.venice.prefs.settings;
 */
 
 import javax.swing.JDesktopPane;
-import java.util.*;
 
-import nz.org.venice.main.Module;
 import nz.org.venice.help.HelpModule;
-import nz.org.venice.prefs.PreferencesManager;
-import nz.org.venice.prefs.PreferencesException;
+import nz.org.venice.main.Module;
 
 public class HelpModuleSettings extends AbstractSettings {
     

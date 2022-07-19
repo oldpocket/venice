@@ -19,17 +19,14 @@ g   but WITHOUT ANY WARRANTY; without even the implied warranty of
 package nz.org.venice.alert;
 
 import java.sql.SQLException;
-import java.sql.ResultSet;
 import java.sql.Statement;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 import nz.org.venice.quote.DatabaseManager;
-import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.quote.Symbol;
-import nz.org.venice.util.TradingDate;
+import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.util.Locale;
 
 /**

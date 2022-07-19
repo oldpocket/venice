@@ -18,19 +18,13 @@
 
 package nz.org.venice.analyser.gp;
 
-import java.util.Iterator;
-import java.util.List;
-
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.Quote;
 import nz.org.venice.quote.EODQuoteBundle;
-import nz.org.venice.quote.EODQuoteBundleIterator;
 import nz.org.venice.quote.EODQuoteCache;
 import nz.org.venice.quote.EODQuoteRange;
+import nz.org.venice.quote.MissingQuoteException;
+import nz.org.venice.quote.Quote;
 import nz.org.venice.quote.Symbol;
-import nz.org.venice.quote.WeekendDateException;
-import nz.org.venice.util.TradingDate;
 
 /**
  * This class is a specialised version of the EODQuoteBundle tailored specifically

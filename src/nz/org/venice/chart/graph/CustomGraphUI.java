@@ -23,8 +23,9 @@ import java.awt.GridBagLayout;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
-import javax.swing.JPanel;
+
 import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 
 import nz.org.venice.chart.Graphable;
 import nz.org.venice.parser.EvaluationException;

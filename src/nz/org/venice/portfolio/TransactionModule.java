@@ -18,28 +18,40 @@
 
 package nz.org.venice.portfolio;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.*;
-import javax.swing.event.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import nz.org.venice.main.Module;
 import nz.org.venice.main.ModuleFrame;
-import nz.org.venice.util.Locale;
-import nz.org.venice.util.Money;
-import nz.org.venice.util.TradingDate;
+import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.TransactionModuleSettings;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.AbstractTableModel;
 import nz.org.venice.ui.Column;
+import nz.org.venice.ui.ConfirmDialog;
 import nz.org.venice.ui.MenuHelper;
-import nz.org.venice.ui.*;
-import nz.org.venice.prefs.settings.Settings;
-import nz.org.venice.prefs.settings.TransactionModuleSettings;
+import nz.org.venice.util.Locale;
+import nz.org.venice.util.Money;
+import nz.org.venice.util.TradingDate;
 
 /** 
  * Venice module for displaying a portfolio's transaction history to

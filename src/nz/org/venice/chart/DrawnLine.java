@@ -25,8 +25,6 @@
 
 package nz.org.venice.chart;
 
-import java.util.Vector;
-
 public class DrawnLine 
 {
 

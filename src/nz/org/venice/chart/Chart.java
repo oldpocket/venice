@@ -18,14 +18,22 @@
 
 package nz.org.venice.chart;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.text.*;
-import java.util.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.text.Collator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.Vector;
 
-import nz.org.venice.chart.graph.*;
+import javax.swing.JComponent;
+
+import nz.org.venice.chart.graph.Graph;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;

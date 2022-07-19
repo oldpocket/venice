@@ -19,6 +19,7 @@
 package nz.org.venice.chart.graph;
 
 import java.util.HashMap;
+
 import javax.swing.JPanel;
 
 /**

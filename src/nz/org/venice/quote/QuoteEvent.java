@@ -19,7 +19,6 @@
 package nz.org.venice.quote;
 
 import java.util.EventObject;
-import java.util.List;
 
 /**
  * Representation of an event indicating that a new intra-day

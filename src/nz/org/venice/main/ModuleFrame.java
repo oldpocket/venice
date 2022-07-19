@@ -19,14 +19,21 @@
 package nz.org.venice.main;
 
 import java.awt.Dimension;
-import java.beans.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-import javax.swing.KeyStroke;
 import java.awt.Event;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
+import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 
 import nz.org.venice.ui.DesktopManager;
 

@@ -24,26 +24,35 @@
 
 package nz.org.venice.alert;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Vector;
-import javax.swing.*;
-import javax.swing.border.*;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import nz.org.venice.main.CommandManager;
+import nz.org.venice.parser.ExpressionException;
+import nz.org.venice.parser.Parser;
+import nz.org.venice.quote.Symbol;
+import nz.org.venice.quote.SymbolFormatException;
+import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.TradingDateFormatException;
-import nz.org.venice.parser.Parser;
-import nz.org.venice.parser.ExpressionException;
-
-
-import nz.org.venice.quote.*;
-import nz.org.venice.ui.*;
 
 /**
  * A dialog for letting the user add a new Alert

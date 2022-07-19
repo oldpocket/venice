@@ -19,20 +19,13 @@
 package nz.org.venice.prefs.settings;
 
 
-import java.io.InputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-import com.thoughtworks.xstream.XStreamException;
+import java.io.InputStream;
 
-import nz.org.venice.prefs.settings.ModuleSettingsParserException;
-import nz.org.venice.main.ModuleFrame;
-import nz.org.venice.prefs.settings.ModuleFrameSettings;
-import nz.org.venice.prefs.settings.GraphSettings;
-import nz.org.venice.quote.Symbol;
-import nz.org.venice.quote.SymbolFormatException;
-import nz.org.venice.util.Locale;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.XStreamException;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 
 /**

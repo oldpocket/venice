@@ -27,7 +27,6 @@ import nz.org.venice.quote.QuoteBundle;
 import nz.org.venice.quote.QuoteBundleFunctionSource;
 import nz.org.venice.quote.QuoteFunctions;
 import nz.org.venice.quote.Symbol;
-import nz.org.venice.util.VeniceLog;
 
 /**
  * An expression which finds the OBV (On Balance Volume) over a given trading period.

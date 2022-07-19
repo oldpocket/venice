@@ -18,46 +18,14 @@
 
 package nz.org.venice.table;
 
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.File;
-import java.io.RandomAccessFile;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JDesktopPane;
-import javax.swing.JFileChooser;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
-import nz.org.venice.main.*;
-import nz.org.venice.util.Locale;
-import nz.org.venice.util.TradingDate;
-import nz.org.venice.parser.*;
-import nz.org.venice.quote.*;
 import nz.org.venice.chart.ChartTracking;
-import nz.org.venice.ui.AbstractTable;
-import nz.org.venice.ui.Column;
-import nz.org.venice.ui.DesktopManager;
-import nz.org.venice.ui.EODQuoteModel;
-import nz.org.venice.ui.ExpressionQuery;
-import nz.org.venice.ui.MenuHelper;
-import nz.org.venice.ui.SymbolListDialog;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.prefs.settings.QuoteModuleSettings;
+import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.util.Locale;
 
 /**
  * Venice module for displaying the value of the quote under a cursor. As the

@@ -18,25 +18,23 @@
 
 package nz.org.venice.chart;
 
-import java.beans.PropertyVetoException;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
-import javax.swing.JPanel;
-import javax.swing.JInternalFrame;
-import javax.swing.JButton;
-import javax.swing.JLayeredPane;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.util.Date;
+import java.beans.PropertyVetoException;
 import java.text.DateFormat;
+import java.util.Date;
 
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
-
+import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.util.Locale;
-import nz.org.venice.prefs.PreferencesManager;
 
 /**
  * Provides a text area for which a user can make notes regarding thie stock symbol being graphed.

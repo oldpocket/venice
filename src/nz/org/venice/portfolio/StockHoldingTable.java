@@ -26,26 +26,27 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import nz.org.venice.main.CommandManager;
+import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.quote.MissingQuoteException;
+import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.QuoteSourceManager;
+import nz.org.venice.quote.Symbol;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.AbstractTableModel;
-import nz.org.venice.ui.Column;
 import nz.org.venice.ui.ChangeFormat;
+import nz.org.venice.ui.Column;
 import nz.org.venice.ui.PointChangeFormat;
 import nz.org.venice.ui.QuoteFormat;
 import nz.org.venice.util.Currency;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
-import nz.org.venice.main.CommandManager;
-import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.QuoteSourceManager;
-import nz.org.venice.quote.Quote;
-import nz.org.venice.quote.EODQuoteBundle;
-import nz.org.venice.quote.Symbol;
 
 /**
  * Display stock holdings in a swing table for a ShareAccount. This table

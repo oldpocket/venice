@@ -18,9 +18,11 @@
 
 package nz.org.venice.util;
 
- import java.awt.*;
- import java.io.*;
- import java.awt.image.*;
+ import java.awt.Component;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.awt.image.PixelGrabber;
+import java.io.FileOutputStream;
 
 
 /**

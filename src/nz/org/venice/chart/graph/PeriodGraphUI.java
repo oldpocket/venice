@@ -21,6 +21,7 @@ package nz.org.venice.chart.graph;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.HashMap;
+
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 

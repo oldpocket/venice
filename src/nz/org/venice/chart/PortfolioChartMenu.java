@@ -18,16 +18,25 @@
 
 package nz.org.venice.chart;
 
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
-import nz.org.venice.chart.graph.*;
-import nz.org.venice.chart.source.*;
-import nz.org.venice.util.Locale;
-import nz.org.venice.portfolio.*;
-import nz.org.venice.quote.*;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+
+import nz.org.venice.chart.graph.BarGraph;
+import nz.org.venice.chart.graph.Graph;
+import nz.org.venice.chart.graph.LineGraph;
+import nz.org.venice.chart.source.PortfolioGraphSource;
+import nz.org.venice.portfolio.Account;
+import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.prefs.settings.MenuSettings;
+import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.util.Locale;
 
 /**
  * Provides a menu which is associated with a stock symbol being graphed.

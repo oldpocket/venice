@@ -19,9 +19,9 @@
 package nz.org.venice.parser;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.Iterator;
 
 /**
  * A collection of variables.

@@ -19,26 +19,25 @@
 package nz.org.venice.parser;
 
 import java.util.ArrayList;
-import java.util.Vector;
-import java.util.List;
-import java.util.Iterator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 import nz.org.venice.parser.expression.ClauseExpression;
-import nz.org.venice.parser.expression.DefineVariableExpression;
-import nz.org.venice.parser.expression.GetVariableExpression;
 import nz.org.venice.parser.expression.DefineParameterExpression;
-import nz.org.venice.parser.expression.FunctionExpression;
+import nz.org.venice.parser.expression.DefineVariableExpression;
 import nz.org.venice.parser.expression.EvalFunctionExpression;
+import nz.org.venice.parser.expression.FunctionExpression;
+import nz.org.venice.parser.expression.GetVariableExpression;
+import nz.org.venice.parser.expression.IncludeExpression;
 import nz.org.venice.parser.expression.LagExpression;
 import nz.org.venice.parser.expression.NumberExpression;
 import nz.org.venice.parser.expression.SetVariableExpression;
 import nz.org.venice.parser.expression.StringExpression;
-import nz.org.venice.parser.expression.IncludeExpression;
-
-import nz.org.venice.quote.QuoteFunctions;
-import nz.org.venice.prefs.StoredExpression;
 import nz.org.venice.prefs.PreferencesManager;
+import nz.org.venice.prefs.StoredExpression;
+import nz.org.venice.quote.QuoteFunctions;
 import nz.org.venice.util.Locale;
 
 /**

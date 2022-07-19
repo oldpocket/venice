@@ -22,9 +22,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.HashMap;
 import java.util.Vector;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 
 import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.util.Locale;

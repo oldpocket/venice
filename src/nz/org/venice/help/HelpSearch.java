@@ -18,15 +18,13 @@
 
 package nz.org.venice.help;
 
-import javax.swing.text.html.HTMLEditorKit;
-import javax.swing.text.html.parser.ParserDelegator;
-import javax.swing.text.MutableAttributeSet;
-import javax.swing.text.html.HTML.Tag;
 import java.io.Reader;
 import java.io.StringReader;
 
-import nz.org.venice.prefs.settings.Settings;
-import nz.org.venice.prefs.settings.HelpModuleSettings;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.html.HTML.Tag;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.parser.ParserDelegator;
 
 
 /**

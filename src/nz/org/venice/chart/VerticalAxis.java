@@ -18,9 +18,10 @@
 
 package nz.org.venice.chart;
 
-import nz.org.venice.chart.graph.*;
+import java.awt.Font;
+import java.awt.Graphics;
 
-import java.awt.*;
+import nz.org.venice.chart.graph.Graph;
 
 public class VerticalAxis {
 

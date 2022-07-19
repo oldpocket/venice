@@ -27,26 +27,16 @@ package nz.org.venice.chart;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Vector;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JOptionPane;
 
-import nz.org.venice.quote.Symbol;
-import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.chart.graph.CustomGraph;
 import nz.org.venice.chart.graph.Graph;
 import nz.org.venice.chart.graph.GraphUI;
-import nz.org.venice.chart.graph.CustomGraph;
-import nz.org.venice.chart.GraphFactory;
+import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
 
 public class EODCustomGraphMenu extends JMenu implements ActionListener {

@@ -18,8 +18,6 @@
 
 package nz.org.venice.table;
 
-import nz.org.venice.quote.Symbol;
-
 import java.io.OutputStream;
 import java.util.Iterator;
 
@@ -34,6 +32,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import nz.org.venice.quote.Symbol;
 
 /**
  * This class writes watch screens in XML format.

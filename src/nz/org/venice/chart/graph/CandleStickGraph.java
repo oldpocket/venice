@@ -18,12 +18,15 @@
 
 package nz.org.venice.chart.graph;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.Iterator;
 import java.util.List;
-import nz.org.venice.chart.*;
-import nz.org.venice.chart.source.*;
-import nz.org.venice.util.*;
+
+import nz.org.venice.chart.GraphTools;
+import nz.org.venice.chart.Graphable;
+import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.util.Locale;
 
 /**
  * Candlestick graph. This graph draws a single vertical line between the

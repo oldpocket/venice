@@ -18,7 +18,7 @@
 
 package nz.org.venice.chart.source;
 
-import nz.org.venice.chart.*;
+import nz.org.venice.chart.Graphable;
 
 /**
  * Provides an abstraction of the data being graphed, this way graphs

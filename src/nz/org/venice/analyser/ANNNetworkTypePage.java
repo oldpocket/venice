@@ -26,6 +26,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
+
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -39,8 +40,8 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 
-import nz.org.venice.analyser.ann.ArtificialNeuralNetwork;
 import nz.org.venice.analyser.ann.ANNConstants;
+import nz.org.venice.analyser.ann.ArtificialNeuralNetwork;
 import nz.org.venice.analyser.ann.FileExtensionException;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.ui.GridBagHelper;

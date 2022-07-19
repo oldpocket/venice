@@ -24,14 +24,13 @@
 
 package nz.org.venice.alert;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.border.*;
 import java.net.URL;
 
+import javax.swing.ImageIcon;
+import javax.swing.JDesktopPane;
+import javax.swing.JOptionPane;
+
 import nz.org.venice.util.Locale;
-import nz.org.venice.main.CommandManager;
 
 /**
  * A dialog which displays notifications of alerts which have been triggered.

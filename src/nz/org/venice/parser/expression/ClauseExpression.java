@@ -21,8 +21,8 @@ package nz.org.venice.parser.expression;
 import java.util.ArrayList;
 import java.util.List;
 
-import nz.org.venice.parser.Expression;
 import nz.org.venice.parser.EvaluationException;
+import nz.org.venice.parser.Expression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.quote.QuoteBundle;

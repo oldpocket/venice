@@ -20,11 +20,14 @@ package nz.org.venice.chart.source;
 
 import java.util.Iterator;
 
-import nz.org.venice.chart.*;
+import nz.org.venice.chart.Graphable;
+import nz.org.venice.quote.EODQuoteBundle;
+import nz.org.venice.quote.MissingQuoteException;
+import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.Symbol;
 import nz.org.venice.ui.QuoteFormat;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
-import nz.org.venice.quote.*;
 
 /**
  * Provides a <code>EODQuoteBundle</code> graph source. This class

@@ -18,7 +18,6 @@
 
 package nz.org.venice.quote;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import nz.org.venice.parser.EvaluationException;

@@ -18,8 +18,8 @@
 
 package nz.org.venice.quote;
 
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 
 import nz.org.venice.util.Currency;
 import nz.org.venice.util.TradingDate;

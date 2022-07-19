@@ -23,31 +23,29 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.JPasswordField;
-import javax.swing.JCheckBox;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.JOptionPane;
 
-import nz.org.venice.ui.DesktopManager;
-import nz.org.venice.ui.GridBagHelper;
-import nz.org.venice.prefs.PreferencesManager;
-import nz.org.venice.quote.DatabaseQuoteSource;
-import nz.org.venice.quote.DatabaseManager;
 import nz.org.venice.quote.DatabaseAccessManager;
-import nz.org.venice.quote.QuoteSourceManager;
+import nz.org.venice.quote.DatabaseManager;
 import nz.org.venice.quote.EODQuoteCache;
+import nz.org.venice.quote.QuoteSourceManager;
+import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.util.Locale;
 
 /** 

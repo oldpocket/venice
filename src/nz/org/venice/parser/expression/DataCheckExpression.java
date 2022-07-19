@@ -18,6 +18,8 @@
 
 package nz.org.venice.parser.expression;
 
+import nz.org.venice.parser.EvaluationException;
+
 /**
  * A utility expression which checks if data exists for the offset. Some expressions, (Lag for example) will either abort or return 0 for missing data which
 upsets averages and skews other rules.
@@ -27,13 +29,11 @@ upsets averages and skews other rules.
  **/
 
 import nz.org.venice.parser.Expression;
-import nz.org.venice.quote.Quote;
-import nz.org.venice.quote.Symbol;
 import nz.org.venice.parser.TypeMismatchException;
-import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.parser.Variables;
+import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.Symbol;
 
 public class DataCheckExpression extends BinaryExpression {
     public DataCheckExpression(Expression symbol, Expression arg) {
