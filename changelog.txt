@@ -1,15 +1,11 @@
-Changes for Venice, 0.753 beta ??/??/??
+Changes for Venice, 0.8 beta ??/??/??
 =========================================
-* Change table state save/restore to avoid saving the entire table contents 
-* Improve alert triggered reporting dialog, allowing the user to go back and 
-forward 
-* Genetic Programming Overfit avoidance:
-  - Complexity penalty
-  - Noise reduction (e.g. average)
-  - Randomly change source data points 
-* Intraday charts
-
-% Preload data for most used symbols on cache refresh.
+* A new generic web-service importer, in place of the Yahoo importer that don?t work anymore (Yahoo removed the API support)
+* Removed external libraries not being used, or changed for native solutions
+* Libraries still in use were updated to the last version
+* Removed weekend constraings, so we can work with crypto-currencies that work 24x7.
+* Fixed bugs (or not-updated code regarding Java and others updated libraries).
+* Overall code identation and remove of non used import statements.
 
 Changes for Venice, 0.752 beta 26/December/2018
 ===============================================
@@ -24,7 +20,6 @@ Changes for Venice, 0.751 beta 20/07/2012
 * Replaced old cast expressions with ceil() and floor()
 * Added logging keyword to Gondola
 
-
 * Fixed bug in bestfit() (trend expression)
 * Fixed bug in Papertrade - stockcapital incorrect when date falls on weekend/missing
 * Fixed bug #3519400 ('Show End of Chart' option not honoured when zooming out).
@@ -33,6 +28,7 @@ Changes for Venice, 0.751 beta 20/07/2012
 * Fixed bugs in GP dialog handling.
 
 Changes for Venice, 0.75 beta 01/05/2012
+=========================================
 * Appearance and usability improved with icons from Libreoffice (instead of the mash up of jlfgr and hand drawn icons) 
 * Can now show previous/later data in charts when zoomed in.
 * Splits and Dividends can be factored into charts display
@@ -46,16 +42,11 @@ indeces
 * Can now select the background colour of a chart
 * Screenshots in the manual and be displayed in the online help
 
-
 * Fixed bug #3519380 (Dialogs (ie Paper Trade) hangs when pressing Run)
 * Fixed bug #1328497 (Point Change lacks decimal point)
 * Fixed bug #1328217 (Chart display currency, should be points)
 * Fixed bug #3519731 (Adding new symbol to existing chart doesnt follow default)
 * Fixed bug in For expression evaluation 
-
-
-
-
 
 Changes for Venice, 0.74 beta 16/02/2012
 =========================================
@@ -71,9 +62,6 @@ Changes for Venice, 0.74 beta 16/02/2012
 * Added functions ceil and floor to Gondola
 * Added messages to evaluation exception
 * Fixed bug #(3437002) Gondola evaluation of boolean expressions.
- 
-
-
 
 Changes for Venice, 0.731 beta 16/10/2011
 =========================================
@@ -90,10 +78,8 @@ Changes for Venice, 0.73 beta 10/05/2011
 * Updated table checks to be case insensitive (Patch #3226995)
 * Bug fix for Bug #3191299 
 
-
 Changes for Venice, 0.723 beta 22/02/2011
 =========================================
-
 * Fixed bug #3137455 February 31st is accepted as a date
 * Added alert functionality
 * Added cursor tracking
@@ -101,8 +87,7 @@ Changes for Venice, 0.723 beta 22/02/2011
 * Improved internationalisation for console (Christian Brom) 
 
 Changes for Venice, 0.722 beta 01/11/2010
------------------------------------------
-
+=========================================
 * Fixed Artificial Neural Network functionality
   (Updated manual, added input check)
 * Fixed Bug #1617089 Average Cost not included in average cost of share
