@@ -18,16 +18,14 @@
 
 package nz.org.venice.prefs.settings;
 
+import java.beans.ExceptionListener;
+import java.beans.XMLEncoder;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.swing.JScrollPane;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.XStreamException;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.util.ExchangeRateCache;
@@ -74,18 +72,14 @@ public class ModuleFrameSettingsWriter {
 				moduleSettings.setScrollBarValues(scrollPane);
 			}
 
-			BufferedOutputStream buffStream = new BufferedOutputStream(stream);
-
-			XStream xStream = new XStream(new DomDriver());
-			xStream.omitField(ExchangeRateCache.class, "desktopPane");
-
-			try {
-				String xml = xStream.toXML(settings);
-				stream.write(xml.getBytes());
-				stream.close();
-			} catch (XStreamException e) {
-				throw new ModuleSettingsParserException(e.getMessage());
-			}
+			XMLEncoder encoder = new XMLEncoder(stream);
+		    encoder.setExceptionListener(new ExceptionListener() {
+		            public void exceptionThrown(Exception e) {
+		              System.out.println("Exception! :"+e.toString());
+		            }
+		    });
+		    encoder.writeObject(settings);
+		    encoder.close();
 		} else {
 			throw new ModuleSettingsParserException("No Settings to save");
 		}

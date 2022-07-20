@@ -18,6 +18,9 @@
 
 package nz.org.venice.analyser.ann;
 
+import java.beans.ExceptionListener;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
 /* In this class we manage all the Joone relations.
  * Here you can find all the import of the Joone classes,
  * the Joone engine package can be downloaded from:
@@ -48,11 +51,6 @@ import org.joone.io.MemoryInputSynapse;
 /* End Joone import */
 import org.joone.net.NeuralNet;
 import org.joone.net.NeuralNetLoader;
-
-/* XStream import */
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-/* End XStream import */
 
 import nz.org.venice.ui.ProgressDialog;
 import nz.org.venice.util.Locale;
@@ -352,12 +350,10 @@ public class ArtificialNeuralNetwork implements NeuralNetListener {
 				this.nnet = loader.getNeuralNet();
 			} else if (fileName.substring(len - ANNConstants.XML.length(), len).equals(ANNConstants.XML)) {
 				/* import .xml file */
-				byte[] buf = new byte[(int) randomAccessFile.length()];
-				randomAccessFile.read(buf);
-				String xml = new String(buf);
-				// Get the neural network
-				XStream xstream = new XStream(new DomDriver());
-				this.nnet = (NeuralNet) xstream.fromXML(xml);
+				XMLDecoder decoder = new XMLDecoder(stream);
+				this.nnet = (NeuralNet) decoder.readObject();
+				decoder.close();
+				
 			} else {
 				// do nothing
 			}
@@ -417,10 +413,14 @@ public class ArtificialNeuralNetwork implements NeuralNetListener {
 				out.writeObject(this.nnet);
 			} else if (fileName.substring(len - ANNConstants.XML.length(), len).equals(ANNConstants.XML)) {
 				/* export .xml file */
-				XStream xstream = new XStream(new DomDriver());
-				String xml = xstream.toXML(this.nnet);
-				xml = "<?xml version=\"1.0\"?>\n" + xml;
-				stream.write(xml.getBytes());
+				XMLEncoder encoder = new XMLEncoder(stream);
+				encoder.setExceptionListener(new ExceptionListener() {
+				            public void exceptionThrown(Exception e) {
+				              System.out.println("Exception! :"+e.toString());
+				            }
+				});
+				encoder.writeObject(this.nnet);
+				encoder.close();
 			} else {
 				// do nothing
 			}

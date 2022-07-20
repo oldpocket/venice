@@ -18,13 +18,10 @@
 
 package nz.org.venice.prefs.settings;
 
+import java.beans.XMLDecoder;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.XStreamException;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
  * This class parses ModuleFrameSettings written in XML format.
@@ -62,21 +59,15 @@ public class ModuleFrameSettingsReader {
 			settings = new ModuleFrameSettings();
 		}
 
-		BufferedInputStream buffStream = new BufferedInputStream(stream);
-		byte[] buf = new byte[stream.available()];
-		stream.read(buf);
-		String xml = new String(buf);
-
 		try {
-			XStream xStream = new XStream(new DomDriver());
-			ModuleFrameSettings result = (ModuleFrameSettings) xStream.fromXML(xml);
-			stream.close();
-			return (ModuleFrameSettings) result;
-		} catch (XStreamException xe) {
+			XMLDecoder decoder = new XMLDecoder(stream);
+			ModuleFrameSettings result = (ModuleFrameSettings) decoder.readObject();
+	    	decoder.close();
+	    	return (ModuleFrameSettings) result;
+		} catch (Exception xe) {
 			// Caused by Malformed XML, unable to instantiate object
 			throw new ModuleSettingsParserException(xe.getMessage());
 		}
-
 	}
 
 }
