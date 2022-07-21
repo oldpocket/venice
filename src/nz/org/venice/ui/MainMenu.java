@@ -254,7 +254,7 @@ public class MainMenu implements ActionListener, ModuleListener {
 		quoteIndicesListDateMenuItem = MenuHelper.addMenuItem(this, quoteMenuIndices, Locale.getString("LIST_BY_DATE"));
 
 		// Table -> All Stocks
-		JMenu quoteMenuCommodities = MenuHelper.addMenu(quoteMenu, Locale.getString("ALL_STOCKS"), 'A');
+		JMenu quoteMenuCommodities = MenuHelper.addMenu(quoteMenu, Locale.getString("ALL_SYMBOLS"), 'A');
 
 		// Table -> All Stocks -> List All
 		quoteCommoditiesListAllMenuItem = MenuHelper.addMenuItem(this, quoteMenuCommodities,
