@@ -1,0 +1,43 @@
+<chapter id='Contribute' fileref='contribute.xml' role='user'>
+  <chapterinfo>
+    <title>Contribute</title>    
+  </chapterinfo>
+  
+  <section>
+    <sectioninfo>
+      <title>Contribute</title>
+    </sectioninfo>
+    <para>You can contribute to Project Venice in several different ways:</para>
+  </section>
+  
+  <section>
+    <sectioninfo>
+      <title>Develop</title>
+    </sectioninfo>
+    <para>Venice is an Open Source project, the source code is distributed under the GNU General Public License (GPL). This gives developers the ability to view and modify the source code, while being safe in the knowledge that their contributions are protected under the GPL. Code contributions are always welcome. If you plan to develop, or already developing for Venice please <link xlink:href='contact.html' xmlns:xlink='http://www.w3.org/xlink'>let us know.</link></para>
+
+      <para>For suggestions about what to add, here is a list of the planned <link xlink:href='future.html' xmlns:xlink='http://www.w3.org/xlink'>future features</link></para>
+  </section>
+  
+  <section>
+    <sectioninfo>
+      <title>Donate</title>
+    </sectioninfo>
+    <para>All donations to Project Venice will be greatly appreciated. You can donate <link xlink:href='http://www.amazon.com/gp/registry/registry.html/102-5884024-8871342?%5Fencoding=UTF8&amp;id=1UU0NG5WSY2HL' xmlns:xlink='http://www.w3.org/xlink'>books</link>,<link xlink:href='http://sourceforge.net/donate/index.php?group_id=53631' xmlns:xlink='http://www.w3.org/xlink'>money</link>, or even just a <link xlink:href='contact.html' xmlns:xlink='http://www.w3.org/xlink'>postcard</link>.</para>
+  </section>
+
+  <section>
+    <sectioninfo>
+      <title>Suggest</title>
+    </sectioninfo>
+    <para>Perhaps you tested Venice and found it did not have all the features you require. Perhaps the user interface doesn't work how you think it should. Perhaps it didn't work at all! If you don't <link xlink:href='contact.html' xmlns:xlink='http://www.w3.org/xlink'>let us know</link>, then we might not know to fix it.</para>
+  </section>
+
+  <section>
+    <sectioninfo>
+      <title>Translate</title>
+    </sectioninfo>
+    <para>The latest version of Venice supports internationalisation and can display languages other than English. Translating the user interface text is easy. If you are interested in translating, please <link xlink:href='contact.html' xmlns:xlink='http://www.w3.org/xlink'>contact us</link>. Currently, Venice has been translated into Chinese, French, German, Italian, Polish, Swedish and Catalan.</para>
+  </section>
+
+</chapter>

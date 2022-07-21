@@ -1,0 +1,61 @@
+<!--
+<!DOCTYPE chapter [
+	  <!ENTITY auml "&#228;">
+	  <!ENTITY ouml "&#246;">
+	  ]>
+-->
+<chapter id='credits' fileref='credits.xml' role='user'>
+  <chapterinfo>
+    <title>Credits</title>    
+  </chapterinfo>
+    
+  <section>
+    <sectioninfo>
+      <title>Credits</title>
+    </sectioninfo>
+    <para>The following people have made Venice possible:</para>
+  </section>
+  
+  <section>
+    <sectioninfo>
+      <title>Code</title>
+    </sectioninfo>
+    <para>Lead: Andrew Leppard, Daniel Makovec, Mark Hummel</para>
+    52<para>&#xa0;</para>
+    <para>Support: Quentin Bossard, Peter Fradley, Mark Hummel, Bryan Lin, Alberto Nacher, Matthias St&#246;ckel, Dennis van den Berg, Andrew Goh, Christian Brom, &amp; Guillermo Bonhevi.</para>
+  </section>
+  
+  <section>
+    <sectioninfo>
+      <title>Translation</title>
+    </sectioninfo>
+    <para>
+      <simplelist type='horiz' columns='2'>
+	<member>Catalan: </member>
+	<member>Jordi Pujol</member>
+	<member>French: </member>
+	<member>Quentin Bossard</member>
+	<member>German: </member>
+	<member>Christian Brom</member>
+	<member>Italian: </member>
+	<member>Alberto Nacher</member>
+	<member>Polish: </member>
+	<member>Benedict P. Barszsz</member>
+	<member>Simplified Chinese: </member>
+	<member>Bryan Lin</member>
+	<member>Swedish: </member>
+	<member>Pontus Str&#246;mdahl</member>
+      </simplelist>
+    </para>
+  </section>
+  
+  <section>
+    <sectioninfo>
+      <title>Graphics</title>
+    </sectioninfo>    
+    <para>The winged lion image is:</para>
+    <para>&#xa0;</para>
+    <para>Copyright (C) Nicholas Aodhagan Webb [naw1 <emphasis>at</emphasis> cec <emphasis>dot</emphasis> wustl <emphasis>dot</emphasis> edu]</para>
+  </section>
+
+</chapter>

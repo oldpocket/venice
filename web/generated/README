@@ -1,0 +1,8 @@
+This directory contains the source XML (Docbook V5) and stylesheets to generate the website. 
+The stylesheets generate a div-span website instead of using tables for layout. 
+This was also done to make editing the content easier whilst still maintaining the layout easier.
+
+Docbook-XSL is required to generate the website. The minimum version required is 1.72. The stylesheets which generate the website expect the Docbook stylesheets to be in the bin/docbook-xsl directory.  At the moment, the bin/docbook-xsl directory contains only the stylesheets necessary to generate HTML. They are sourced from the html directory of Docbook-XSL version 1.76.
+
+To generate the website, run ant layout from the base directory using the main build file.
+

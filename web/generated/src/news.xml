@@ -1,0 +1,283 @@
+<section>
+  <sectioninfo>
+    <title>News</title>
+  </sectioninfo>
+
+   
+  <para>The latest release includes improvements to the Paper Trade and Genetic Programming functions, additional support for IDEs and some bug fixes. 
+  <variablelist>  
+    <varlistentry>
+      <term>
+	<para>20/May/2012: Venice 0.751 beta released:</para>
+      </term>
+      <listitem>
+	<itemizedlist>
+	  <listitem>
+	    <para>Improvements were made to the Genetic Programming and Paper Trades modules, fixing bugs in the user interface and evaluation and replacing the deprecated cast expressions with calls to ceil() and floor(). </para>
+	  </listitem>
+	  <listitem>
+	    <para>Support for JBuilder 2005 was added.</para>
+	  </listitem>
+	  <listitem>
+	    <para>Added <code>logging</code> keyword to the Gondola language. </para>
+	  </listitem>
+	  <listitem>
+	    <para>Bugs fixed in this release</para>	    
+	    <itemizedlist>
+	      <listitem>
+		<para>#3522881 - (Null Pointer Exception when editing alerts)</para>
+	      </listitem>
+	      <listitem>
+		<para>#3523813 - (Restoring Chart removes timeline bar)</para>
+	      </listitem>
+	      <listitem>
+		<para>#3519400 - (Show End of Chart option not honoured when zooing out)</para>
+	      </listitem>	      
+	    </itemizedlist>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
+	<para>01/May/2012: Venice 0.75 beta released:</para>
+      </term>
+      <listitem>
+	<itemizedlist>
+	  <listitem>
+	    <para>Replaced older and temporary developer drawn icons with newer icons (from Libreoffice) contributing to a more uniform look and feel. Tooltips for every field, list and non standard button were added. Some dialogs now include a "display help" button.</para>
+	  </listitem>
+	  <listitem>
+	    <para>Adjusting the chart to account for splits and dividends now available. </para>
+	  </listitem>
+	  <listitem>
+	    <para>When a chart is zoomed in, it is now possible to change the timeframe displayed without zooming out and selecting a new region.</para>
+	  </listitem>
+	  <listitem>
+	    <para>Support for Metastock Binary formata added</para>
+	  </listitem>
+	  <listitem>
+	    <para>Users can now define which stocks are actually indeces with support for other metadata coming later.</para>
+	  </listitem>
+	  <listitem>
+	    <para>Added indicator Stochastic Oscillator</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+      <listitem>
+	<para>Bugs fixed in this release</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>#3519380 (Dialogs hang when pressing Run)</para>
+	  </listitem>
+	  <listitem>
+	    <para>#132947 (Point Change lacks decimal point)</para>
+	  </listitem>
+	  <listitem>
+	    <para>#1328217 (Chart displays currency, should be points)</para>
+	  </listitem>
+	  <listitem>
+	    <para>#3519731 (Adding new symbol to existing chart doesnt follow deaults)</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
+	<para>16/Feb/2012: Venice 0.74 beta released</para>
+	<para>Updates in this release</para>
+      </term>
+      <listitem>
+	<itemizedlist>
+	  <listitem>
+	    <para>Gondola Language Extensions: </para>
+	    <itemizedlist>
+	      <listitem>
+		<para>User defined functions: Can write new functions, and call them including passing parameters to them. </para>
+	      </listitem>
+	      <listitem>
+		<para>Rules can now include other rules</para>
+	      </listitem>
+	      <listitem>
+		<para>Comments can be added to rules</para>
+	      </listitem>
+	      <listitem>
+		<para>Alert messages can be displayed when rules are evaluated</para>
+	      </listitem>	      
+	    </itemizedlist>
+	  </listitem>
+	  <listitem>
+	    <para>Can explicity reference symbols within Gondola functions. (e.g. allows expresisons like: close('ABC') &gt; close)</para>
+	  </listitem>
+	  <listitem>
+	    <para>Fixed bug #3437002 (Gondola evaluation of boolean expressions)</para>
+	  </listitem>
+	  <listitem>
+	    <para>Some general usability and security fixes, including protection from infinite loop expressions. </para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
+	<para>16/Oct/2011: Venice 0.731 beta released</para>
+	<para>Updates in this release</para>
+      </term>
+      <listitem>
+	<itemizedlist>
+	  <listitem>
+	    <para>Find highlights wrong region in help text (Bug #3302556)</para>
+	    </listitem>
+	  <listitem>
+	    <para>Fixed bug in Save and Restore (Bug #3315179)</para>
+	  </listitem>
+	  <listitem>
+	    <para>Add Macro overwrites previous one (Bug #1328208)</para>
+	  </listitem>
+	</itemizedlist>	
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
+	<para>10/March/2011: Venice 0.73 beta released</para>
+	<para>Updates in this release:</para>
+      </term>
+      <listitem>
+	<itemizedlist>
+	  <listitem>
+	    <para>Symbol definition changed to VARCHAR (Patch #3228829)</para>
+	  </listitem>
+	  <listitem>
+	    <para>Quote Cache Expiry</para>
+	  </listitem>
+	  <listitem>
+	    <para>Check whether SQL Tables exist is no longer case sensitive (Patch #3226995)</para>
+	  </listitem>
+	  <listitem>
+	    <para>Fix for bug #3191299.</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
+	<para>22/February/2011: Venice 0.723 beta released</para>
+	<para>Updates in this release:</para>
+      </term>
+      <listitem>
+	<itemizedlist>
+	  <listitem>
+	    <para>Fixed Bug #3137455 February 31st is accepted as a date</para>
+	  </listitem>
+	  <listitem>
+	    <para>Internationalisation supported for the Console improved</para>
+	  </listitem>
+	  <listitem>
+	    <para>Implementation of an alert system; Users can now set alerts to trigger when a value is reached.</para>
+	  </listitem>
+	  <listitem>
+	    <para>Can now enable place a cursor on End-of-Day Quote charts, with an accompanying table showing the value of where the quote is. </para>
+	  </listitem>      
+	</itemizedlist>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
+	<para>01/November/2010: Venice 0.722 beta released</para>
+	<para>Bug fixes released:</para>
+	</term>
+      <listitem>
+	<itemizedlist>
+	  <listitem>
+	    <para>Bug #3062208 Keyboard shortcuts not working</para>
+	  </listitem>
+	  <listitem>
+	    <para>Bug #1617089 Average Cost not included in average cost of share</para>
+	  </listitem>	  	  
+	</itemizedlist>
+      </listitem>
+    </varlistentry>
+      <varlistentry>
+	<term>
+	  <para>03/July/2010: Venice 0.721 beta released</para>	  
+	  <para>Updates in this release:</para>
+	</term>
+	<listitem>
+	  <itemizedlist>
+	    <listitem>
+	      <para>Can now update an indicator's settings instead of turning off removing the indicator and adding it againt.</para>
+	    </listitem>
+	    <listitem>
+	      <para>Fixed quote Import/Export for locales which use a comma as a decimal point</para>
+	    </listitem>
+	    <listitem>
+	      <para>Added the ability to search the online help.</para>
+	    </listitem>
+	  <listitem>
+	    <para>The type inference of Gondola expressions is no longer determined by the type of the first operand.</para>
+	  </listitem>
+	  </itemizedlist>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><para>21/March/2010: Venice 0.72 beta released</para>
+	<para>The bugs fixed include:</para></term>
+	<listitem>
+	  <itemizedlist>
+	    <listitem>
+	      <para>Genetic Programming Processing</para>
+	    </listitem>
+	    <listitem>
+	      <para>Exceptions thrown when user clicks in the background.</para>
+	    </listitem>
+	    <listitem>
+	      <para>Exporting MetaStock quotes in locales which use commas as decimals points.</para>
+	    </listitem>
+	    <listitem>
+	      <para>Point and Figure initial chart direction</para>
+	    </listitem>
+	    <listitem>
+	      <para>Other miscellaneous bugs.</para>
+	    </listitem>
+	  </itemizedlist>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>11/June/2008: Launch of new website - venice.org.nz</term>	
+      </varlistentry>
+      <varlistentry>
+	<term><para>25/February/2007: Venice 0.71beta released.</para>
+	  <para>This release enhances XML support, and provides better downloading of ASX quotes.</para></term>
+      </varlistentry>
+      <varlistentry>
+	<term><para>17/April/2006: Venice 0.6beta released.</para>
+	  <para>This release brings basic intra-day quote support, a Polish translation and many bug fixes.</para></term>
+      </varlistentry>
+      <varlistentry>
+	<term><para>13/March/2005: Venice 0.5alpha released</para><para>The biggest release yet. This release brings the addition of Genetic Algorithm support, Jython scripting, and charting of custom indicators. Stock quote import and management have been improved and simplified. Venice has now been translated into Swedish.</para></term>
+      </varlistentry>
+      <varlistentry>
+	<term><para>14/August/2004: Venice 0.4alpha released</para><para>Venice has now been translated Chinese, Italian &amp; French. This release brings incremental improvements to charting, portfolio management, the Gondola language and Genetic Programming. There have also been many bug fixes.</para></term>
+      </varlistentry>
+      <varlistentry>
+	<term><para>14/March/2004: Venice 0.3alpha released</para><para>The third release brings support for importing quotes from the internet, improved stored equation support, further improvements to the Gondolda Language and many bug fixes.</para></term>
+      </varlistentry>
+      <varlistentry>
+	<term><para>24/Aug/2003: Venice 0.2alpha released</para><para>The second release brings more stock listing tables, improved paper trading with more Gondola functions, and also Genetic Programming.</para></term>
+      </varlistentry>
+      <varlistentry>
+	<term><para>13/April/2003: Venice 0.1alpha released</para><para>The first release.</para></term>
+      </varlistentry>
+      <varlistentry>
+	<term><para>17/August/2002: Project Venice web page created.</para><para>Venice now has a web page!</para></term>
+      </varlistentry>
+      <varlistentry>
+	<term><para>15/May/2002: Project Venice moved to Sourceforge</para><para>This is the first step in making Venice publicly available and will hopefully soon lead to a first release.</para></term>
+      </varlistentry>
+      <varlistentry>
+	<term><para>1/March/2001: Start of Project Venice</para><para>Project Venice was initially started as a genetic programming implementation that evolved buy/sell rules. Since then the project scope has expanded to provide much more.</para></term>
+      </varlistentry>
+    </variablelist>
+  </para>
+
+</section>

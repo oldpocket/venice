@@ -1,0 +1,73 @@
+<!DOCTYPE book [
+  <!ENTITY % manifest SYSTEM "manifest.dtd">
+  %manifest; 
+]>
+
+
+<book version='5.0'>
+  <bookinfo>
+    <title>Merchant of Venice</title>
+    <subtitle>Welcome to Venice</subtitle>
+    
+    <mediaobject role='winged-lion'>
+      <imageobject>
+	<imagedata align='center' width='64' height='64' format='png'
+		   fileref='winged_lion.png'/>
+      </imageobject>      
+      <alt>Winged Lion Image</alt>
+    </mediaobject>
+      
+    
+    <authorgroup>
+      <author>
+	<surname>Leppard</surname>
+	<firstname>Andrew</firstname>
+      </author>
+      <author>
+	<surname>Hummel</surname>
+	<firstname>Mark</firstname>
+      </author>
+    </authorgroup>
+
+    <revhistory>
+      <revision>
+	<revnumber>0.72</revnumber>
+	<date>20100321</date>
+	<authorinitials>MH</authorinitials>
+	<revremark>Converted website to Docbook XML</revremark> 
+      </revision>
+    </revhistory>
+  </bookinfo>
+
+  <preface>
+    <para>Venice is a stock market trading programme that supports portfolio management, charting, technical analysis, paper trading and experimental methods like genetic programming. Venice runs in a graphical user interface with online help and has full documentation. Venice runs on UNIX, including Mac OS X and Windows.</para>
+  </preface>
+    
+  <chapter id='main' fileref='index.xml' role='user'>
+    <chapterinfo>
+      <title>Main</title>
+    </chapterinfo>
+    &news;
+
+    <link xlink:href='http://sourceforge.net' xmlns:xlink='http://www.w3.org/xlink'>
+      <mediaobject role='sourceforge-logo'>
+	<imageobject>
+	  <imagedata fileref='http://sourceforge.net/sflogo.php?group_id=53631&amp;type=1' depth='31' width='88'/>
+	</imageobject>	
+      </mediaobject>
+    </link>
+  </chapter>
+  
+  &contactus;
+  &contribute;
+  &credits;
+  &download;
+  &features;  
+  &links;  
+  &manual;
+  &screenshots;  
+
+  <!-- Developer  -->  
+  &api;   
+  &future;
+</book>

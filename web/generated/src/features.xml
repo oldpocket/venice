@@ -1,0 +1,233 @@
+<chapter id='features' fileref='features.xml' role='user'>
+  <chapterinfo>
+    <title>Features</title>    
+  </chapterinfo>
+  
+  <section>
+    <sectioninfo>
+      <title>Feature List</title>
+    </sectioninfo>
+    
+    <para>The latest version of Venice supports the following features:</para>
+
+    <para>
+    <itemizedlist>
+      <listitem>
+	<para>Charting</para>
+	<itemizedlist>
+	  <listitem>
+	  <para>Chart Advance/Decline</para>
+	</listitem>
+	<listitem>
+	  <para>Chart Bar Chart</para>
+	</listitem>
+	<listitem>
+	  <para>Chart Bollinger Bands</para>
+	</listitem>
+	<listitem>
+	  <para>Chart Candle Stick</para>
+	</listitem>
+	<listitem>
+	  <para>Chart Exponential Moving Average</para>
+	</listitem>
+	<listitem>
+	  <para>Chart High-Low</para>
+	</listitem>
+	<listitem>
+	  <para>Chart Moving Average Convergence/Divergence (MACD)</para>
+	</listitem>
+	<listitem>
+	  <para>Chart Momentum</para>
+	</listitem>
+	<listitem>
+	  <para>Chart Moving Average</para>
+	</listitem>
+	<listitem>
+	  <para>Chart On Balance Volume (OBV)</para>
+	</listitem>
+	<listitem>
+	  <para>Chart Open/High/Low/Close/Volume</para>
+	</listitem>
+	<listitem>
+	  <para>Chart Point &amp; Figure</para>
+	</listitem>
+	<listitem>
+	  <para>Chart Relative Strength Index (RSI)</para>
+	</listitem>
+	<listitem>
+	  <para>Chart Standard Deviation</para>
+	</listitem>
+	<listitem>
+	  <para>Chart an Index of a group of any stocks</para>
+	</listitem>
+	<listitem>
+	  <para>Chart Fibonacci Indicator</para>
+	</listitem>
+	<listitem>
+	  <para>Chart Stochastic Oscillator Indicator</para>
+	</listitem>
+	<listitem>
+	  <para>Chart Custom Indicators</para>
+	</listitem>
+	</itemizedlist>
+      </listitem>
+      <listitem>
+	<para>Genetic Algorithms &amp; Programming</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>Use evolutionary computation to tweak buy/sell rules.</para>
+	  </listitem>
+	  <listitem>
+	    <para>Use evolutionary computation to evolve new buy/sell rules.</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+      <listitem>
+	<para>Chart Functions</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>Chart Drawing</para>
+	  </listitem>
+	  <listitem>
+	    <para>Reverse Chart</para>
+	  </listitem>
+	  <listitem>
+	    <para>Chart Export</para>
+	  </listitem>
+	  <listitem>
+	    <para>Adjust for Split or Dividend</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+      <listitem>
+	<para><emphasis>Gondola</emphasis> Language</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>Create custom buy/sell rules for paper trading</para>
+	  </listitem>
+	  <listitem>
+	    <para>List only stocks in table that meet custom criteria</para>
+	  </listitem>
+	  <listitem>
+	    <para>Display custom indicator results in tables</para>
+	  </listitem>
+	  <listitem>
+	    <para>Graph custom indicators</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+      <listitem>
+	<para>Internationalisation</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>Catalan Translation</para>
+	  </listitem>
+	  <listitem>
+	    <para>Chinese Translation</para>
+	  </listitem>
+	  <listitem>
+	    <para>French Translation</para>
+	  </listitem>
+	  <listitem>
+	    <para>German Translation</para>
+	  </listitem>
+	  <listitem>
+	    <para>Italian Translation</para>
+	  </listitem>
+	  <listitem>
+	    <para>Polish Translation</para>
+	  </listitem>
+	  <listitem>
+	    <para>Swedish Translation</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+      <listitem>
+	<para>Online Help</para>
+      </listitem>
+      <listitem>
+	<para>Paper Trading</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>Automated Paper Trade on buy/sell rules</para>
+	  </listitem>
+	  <listitem>
+	    <para>Automated Paper Trade on family of buy/sell rules</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+      <listitem>
+	<para>Portfolio Management</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>Supports multiple portfolios</para>
+	  </listitem>
+	  <listitem>
+	    <para>Portfolios support multiple cash/stock accounts</para>
+	  </listitem>
+	  <listitem>
+	    <para>Portfolios support multiple currencies</para>
+	  </listitem>
+	  <listitem>
+	    <para>Chart portfolio value over time</para>
+	  </listitem>
+	  <listitem>
+	    <para>Chart portfolio return over time</para>
+	  </listitem>
+	  <listitem>
+	    <para>Chart any cash account value over time</para>
+	  </listitem>
+	  <listitem>
+	    <para>Chart any share account value over time</para>
+	  </listitem>
+	  <listitem>
+	    <para>Chart number of stocks held over time</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+      <listitem>
+	<para>Quotes</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>Access quotes in a HQSLDB, MySQL PostgreSQL or other database</para>
+	  </listitem>
+	  <listitem>
+	    <para>Import quote files in EzyChart, InsightTrader or Metastock formats.</para>
+	  </listitem>
+	  <listitem>
+	    <para>Import quotes from the internet (Yahoo Finance, Google)</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+      <listitem>
+	<para>Jython Scripting</para>
+      </listitem>
+      <listitem>
+	<para>Tables</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>List all quotes on any day</para>
+	  </listitem>
+	  <listitem>
+	    <para>List all quotes or any stocks</para>
+	  </listitem>
+	  <listitem>
+	    <para>Sort stocks by activity, change, volume, quote</para>
+	  </listitem>
+	  <listitem>
+	    <para>List only stocks that meet custom criteria</para>
+	  </listitem>
+	  <listitem>
+	    <para>Display custom indicator results</para>
+	  </listitem>
+	  <listitem>
+	    <para>List intra-day stocks in Watch Screens</para>
+	  </listitem>
+	</itemizedlist>
+      </listitem>
+    </itemizedlist>
+    </para>
+
+  </section>
+
+</chapter>

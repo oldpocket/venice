@@ -62,8 +62,8 @@ public class GenericWSEODQuoteImport {
 
 	// Let's define the URL pattern that must be followed by the Generic Web
 	// Service.
-	private final static String URL_PATTERN = ("s=" + SYMBOL + "&a=" + START_MONTH + "&b=" + START_DAY + "&c="
-			+ START_YEAR + "&d=" + END_MONTH + "&e=" + END_DAY + "&f=" + END_YEAR + "&g=d&ignore=.csv");
+	private final static String URL_PATTERN = ("symbol=" + SYMBOL + "&start_month=" + START_MONTH + "&start_day=" + START_DAY + "&start_year="
+			+ START_YEAR + "&end_month=" + END_MONTH + "&end_day=" + END_DAY + "&end_year=" + END_YEAR);
 
 	private final static String GENERIC_WS_URL_PATTERN = ("http://yfinance.lealis.com.br/eod_quotes?" + URL_PATTERN);
 

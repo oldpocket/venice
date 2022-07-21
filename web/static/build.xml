@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<project name="static" default="noaction">
+  <target name="noaction"/>
+</project>
