@@ -79,7 +79,9 @@ public class GenericWSIDQuoteImport {
 
 			InputStreamReader input = new InputStreamReader(url.openStream());
 			BufferedReader bufferedInput = new BufferedReader(input);
-			String line;
+
+			// Skip first line as it doesn't contain a quote
+			String line = bufferedInput.readLine();
 
 			do {
 				line = bufferedInput.readLine();
