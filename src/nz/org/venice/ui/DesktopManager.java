@@ -19,6 +19,8 @@
 package nz.org.venice.ui;
 
 import java.awt.Dimension;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.beans.PropertyVetoException;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -480,6 +482,20 @@ public class DesktopManager extends javax.swing.DefaultDesktopManager implements
 	public ModuleFrame newFrame(Module module, boolean centre, boolean honourSize, boolean resizable) {
 
 		ModuleFrame frame = new ModuleFrame(this, module, centre, honourSize, resizable);
+		
+		frame.addFocusListener(new FocusListener(){
+	        public void focusGained(FocusEvent e){
+	          frame.moveToFront();
+		  		try {
+					frame.setSelected(true);
+				} catch (PropertyVetoException v) {
+					// ignore
+				}
+	        }
+	        public void focusLost(FocusEvent e){
+	        	// ignore
+	        }
+	    });
 
 		// frameRegister.add(frame);
 		// frameRegister.put(String.valueOf(frame.hashCode()), frame);
