@@ -102,9 +102,8 @@ public class ImportQuoteModule extends JPanel implements Module {
 	private File files[];
 
 	// Web site combo box entry indeces.
-	private final static int GOOGLE_SITE = 0; // finance.google.com
-	private final static int YAHOO_SITE = 1; // finance.yahoo.com
-	private final static int FLOAT_SITE = 2; // float.com.au
+	private final static int YAHOO_SITE = 0; // finance.yahoo.com
+	private final static int FLOAT_SITE = 1; // float.com.au
 
 	/**
 	 * Create a new import quote module.
@@ -180,13 +179,10 @@ public class ImportQuoteModule extends JPanel implements Module {
 			titledPanel.add(fromInternet);
 
 			webSiteComboBox = new JComboBox();
-			webSiteComboBox.addItem(Locale.getString("GOOGLE_DISPLAY_URL"));
 			webSiteComboBox.addItem(Locale.getString("YAHOO_DISPLAY_URL"));
 			webSiteComboBox.addItem(Locale.getString("FLOAT_DISPLAY_URL"));
 
-			if (webSite.equals("google"))
-				webSiteComboBox.setSelectedIndex(GOOGLE_SITE);
-			else if (webSite.equals("yahoo"))
+			if (webSite.equals("yahoo"))
 				webSiteComboBox.setSelectedIndex(YAHOO_SITE);
 			else if (webSite.equals("float"))
 				webSiteComboBox.setSelectedIndex(FLOAT_SITE);
@@ -303,21 +299,19 @@ public class ImportQuoteModule extends JPanel implements Module {
 		endDateTextField.setEnabled(fromInternet.isSelected());
 
 		// Symbols are only applicable if importing from Yahoo or Google.
-		symbolList.setEnabled(fromInternet.isSelected() && (webSiteComboBox.getSelectedIndex() == GOOGLE_SITE
-				|| webSiteComboBox.getSelectedIndex() == YAHOO_SITE));
+		symbolList.setEnabled(fromInternet.isSelected() && (webSiteComboBox.getSelectedIndex() == YAHOO_SITE));
 
 		// Prefix or suffix is only applicable if importing from Yahoo or Google.
-		boolean prefixOrSuffixEnabled = (fromInternet.isSelected() && (webSiteComboBox.getSelectedIndex() == GOOGLE_SITE
-				|| webSiteComboBox.getSelectedIndex() == YAHOO_SITE));
+		boolean prefixOrSuffixEnabled = (fromInternet.isSelected() && (webSiteComboBox.getSelectedIndex() == YAHOO_SITE));
 
 		prefixOrSuffixTextField.setEnabled(prefixOrSuffixEnabled);
 		if (prefixOrSuffixEnabled) {
 			// If we are downloading from Google it's a prefix, e.g. "ASX:".
 			// If we are downloading from Yahoo then it's a suffix, e.g. ".AX".
-			if (webSiteComboBox.getSelectedIndex() == GOOGLE_SITE)
-				prefixOrSuffixLabel.setText(Locale.getString("ADD_PREFIX"));
-			else
+			if (webSiteComboBox.getSelectedIndex() == YAHOO_SITE)
 				prefixOrSuffixLabel.setText(Locale.getString("ADD_SUFFIX"));
+			else
+				prefixOrSuffixLabel.setText(Locale.getString("ADD_PREFIX"));
 		}
 	}
 
@@ -364,9 +358,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 		p.put("internetEndDate", endDateTextField.getText());
 		p.put("fileFilter", (String) formatComboBox.getSelectedItem());
 
-		if (webSiteComboBox.getSelectedIndex() == GOOGLE_SITE)
-			p.put("webSite", "google");
-		else if (webSiteComboBox.getSelectedIndex() == YAHOO_SITE)
+		if (webSiteComboBox.getSelectedIndex() == YAHOO_SITE)
 			p.put("webSite", "yahoo");
 		else if (webSiteComboBox.getSelectedIndex() == FLOAT_SITE)
 			p.put("webSite", "float");
@@ -490,9 +482,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 	 */
 	private void importQuotesFromInternet() {
 		if (parseInternetFields()) {
-			if (webSiteComboBox.getSelectedIndex() == GOOGLE_SITE)
-				importQuotesFromGoogle();
-			else if (webSiteComboBox.getSelectedIndex() == YAHOO_SITE)
+			if (webSiteComboBox.getSelectedIndex() == YAHOO_SITE)
 				importQuotesFromYahoo();
 			else
 				importQuotesFromFloat();
@@ -544,72 +534,6 @@ public class ImportQuoteModule extends JPanel implements Module {
 					// remove the symbol argument
 					int symbolQuotesImported = database.importQuotes(quotes);
 					report.addMessage(Locale.getString("YAHOO_DISPLAY_URL") + ":" + symbol + ": "
-							+ Locale.getString("IMPORTED_QUOTES", symbolQuotesImported));
-					quotesImported += symbolQuotesImported;
-				}
-
-				// Stop if the user hit cancel
-				if (Thread.currentThread().isInterrupted())
-					break;
-
-				progress.increment();
-			}
-		}
-
-		catch (ImportExportException e) {
-			DesktopManager.showErrorMessage(e.getMessage());
-		}
-
-		QuoteSourceManager.flush();
-		ProgressDialogManager.closeProgressDialog(progress);
-		displayReport(report, quotesImported);
-	}
-
-	/**
-	 * Import quotes from google.yahoo.com.
-	 */
-	private void importQuotesFromGoogle() {
-		Report report = new Report();
-		int quotesImported = 0;
-
-		// Get database to import to
-		DatabaseQuoteSource database = getDatabaseSource();
-
-		// Tell frame we want to close
-		propertySupport.firePropertyChange(ModuleFrame.WINDOW_CLOSE_PROPERTY, 0, 1);
-
-		// Set up proxy support
-		ProxyPage.setupNetworking();
-
-		// Get optional prefix
-		String prefix = prefixOrSuffix;
-
-		// Now set up progress dialog to display the symbol by symbol progress
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
-		progress.setIndeterminate(false);
-		progress.setMaximum(symbols.size());
-		progress.setProgress(0);
-		progress.setMaster(true);
-		progress.show(Locale.getString("IMPORTING"));
-
-		// Import a symbol at a time
-		try {
-			for (Iterator iterator = symbols.iterator(); iterator.hasNext();) {
-
-				Symbol symbol = (Symbol) iterator.next();
-
-				// Update progress dialog
-				progress.setNote(Locale.getString("IMPORTING_SYMBOL", symbol.toString()));
-
-				// Load quotes from internet
-				List quotes = GoogleEODQuoteImport.importSymbol(report, symbol, prefix, startDate, endDate);
-
-				// Import into database
-				if (quotes.size() > 0) {
-
-					// remove the symbol argument
-					int symbolQuotesImported = database.importQuotes(quotes);
-					report.addMessage(Locale.getString("GOOGLE_DISPLAY_URL") + ":" + symbol + ": "
 							+ Locale.getString("IMPORTED_QUOTES", symbolQuotesImported));
 					quotesImported += symbolQuotesImported;
 				}
@@ -700,7 +624,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 	private boolean parseInternetFields() {
 		// Parse symbol list and validate if we are downloading from Google or Yahoo.
 		// If we are downloading from float.com.au then we ignore this field.
-		if (webSiteComboBox.getSelectedIndex() == GOOGLE_SITE || webSiteComboBox.getSelectedIndex() == YAHOO_SITE) {
+		if (webSiteComboBox.getSelectedIndex() == YAHOO_SITE) {
 			try {
 				// Don't check that the symbols exist before import. After all
 				// they won't at the first import.
