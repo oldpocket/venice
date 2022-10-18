@@ -73,6 +73,9 @@ public class DatabaseManager {
 
 	/** Any generic SQL Database. */
 	public final static int OTHER = 3;
+	
+	/** MariaDB Database. */
+	public final static int MARIADB = 4;
 
 	// Mode
 
@@ -84,6 +87,9 @@ public class DatabaseManager {
 
 	// MySQL driver info
 	public final static String MYSQL_SOFTWARE = "mysql";
+	
+	// MySQL driver info
+	public final static String MARIADB_SOFTWARE = "mariadb";
 
 	// PostgreSQL driver info
 	public final static String POSTGRESQL_SOFTWARE = "postgresql";
@@ -727,7 +733,7 @@ public class DatabaseManager {
 	 * @return the SQL clause for performing <code>LEFT(string, letters)</code>
 	 */
 	public String left(String field, int length) {
-		if (software.equals(MYSQL_SOFTWARE))
+		if (software.equals(MYSQL_SOFTWARE) || software.equals(MARIADB_SOFTWARE))
 			return new String("LEFT(" + field + ", " + length + ")");
 		else {
 			// This is probably more portable than the above

@@ -96,14 +96,17 @@ public class QuoteSourcePage extends JPanel implements PreferencesPage {
 	private final static int POSTGRESQL = 1;
 	private final static int HSQL = 2;
 	private final static int OTHER = 3;
+	private final static int MARIADB = 4;
 
 	// Database default drivers
-	private final static String[] mysql_drivers = { "org.gjt.mm.mysql.Driver", "com.mysql.jdbc.Driver" };
+	private final static String[] mysql_drivers = { "com.mysql.jdbc.Driver" };
+	private final static String[] mariadb_drivers = { "org.mariadb.jdbc.Driver" };
 	private final static String[] postgresql_drivers = { "org.postgresql.Driver" };
 	private final static String[] hsql_drivers = { "org.hsqldb.jdbcDriver" };
 
 	// Database default ports
 	private final static int MYSQL_DEFAULT_PORT = 3306;
+	private final static int MARIADB_DEFAULT_PORT = 3306;
 	private final static int POSTGRESQL_DEFAULT_PORT = 5432;
 	private final static int HSQLDB_DEFAULT_PORT = 9001;
 
@@ -191,11 +194,14 @@ public class QuoteSourcePage extends JPanel implements PreferencesPage {
 		databaseSoftware.addItem(Locale.getString("POSTGRESQL"));
 		databaseSoftware.addItem(Locale.getString("HSQLDB"));
 		databaseSoftware.addItem(Locale.getString("OTHER"));
+		databaseSoftware.addItem(Locale.getString("MARIADB"));
 
 		databaseSoftware.setToolTipText(Locale.getString("QUOTESOURCE_DATABASE_TOOLTIP"));
 
 		if (databasePreferences.software.equals(DatabaseManager.MYSQL_SOFTWARE))
 			databaseSoftware.setSelectedIndex(DatabaseManager.MYSQL);
+		else if (databasePreferences.software.equals(DatabaseManager.MARIADB_SOFTWARE))
+			databaseSoftware.setSelectedIndex(DatabaseManager.MARIADB);
 		else if (databasePreferences.software.equals(DatabaseManager.POSTGRESQL_SOFTWARE))
 			databaseSoftware.setSelectedIndex(DatabaseManager.POSTGRESQL);
 		else if (databasePreferences.software.equals(DatabaseManager.HSQLDB_SOFTWARE))
@@ -214,6 +220,8 @@ public class QuoteSourcePage extends JPanel implements PreferencesPage {
 					databasePasswordPrompt.setEnabled(true);
 					if (databaseSoftware.getSelectedIndex() == DatabaseManager.MYSQL)
 						databasePort.setText(Integer.toString(MYSQL_DEFAULT_PORT));
+					else if (databaseSoftware.getSelectedIndex() == DatabaseManager.MARIADB)
+						databasePort.setText(Integer.toString(MARIADB_DEFAULT_PORT));
 					else if (databaseSoftware.getSelectedIndex() == DatabaseManager.POSTGRESQL)
 						databasePort.setText(Integer.toString(POSTGRESQL_DEFAULT_PORT));
 					else if (databaseSoftware.getSelectedIndex() == DatabaseManager.HSQLDB) {
@@ -357,6 +365,8 @@ public class QuoteSourcePage extends JPanel implements PreferencesPage {
 		databaseDriver.removeAllItems();
 		if (databaseSoftware.getSelectedIndex() == MYSQL)
 			drivers = mysql_drivers;
+		else if (databaseSoftware.getSelectedIndex() == MARIADB)
+			drivers = mariadb_drivers;
 		else if (databaseSoftware.getSelectedIndex() == POSTGRESQL)
 			drivers = postgresql_drivers;
 		else if (databaseSoftware.getSelectedIndex() == HSQL)
@@ -426,6 +436,8 @@ public class QuoteSourcePage extends JPanel implements PreferencesPage {
 			String software = (String) databaseSoftware.getSelectedItem();
 			if (software.equals(Locale.getString("MYSQL")))
 				databasePreferences.software = "mysql";
+			else if (software.equals(Locale.getString("MARIADB")))
+				databasePreferences.software = "mariadb";
 			else if (software.equals(Locale.getString("POSTGRESQL")))
 				databasePreferences.software = "postgresql";
 
