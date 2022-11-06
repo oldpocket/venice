@@ -39,10 +39,10 @@ import nz.org.venice.quote.EODQuoteCache;
 import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.quote.Quote;
 import nz.org.venice.quote.Symbol;
-import nz.org.venice.quote.WeekendDateException;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
+import nz.org.venice.util.WeekendDateException;
 
 /**
  * Paper trades stocks using historical quote data and buy and sell indicators.

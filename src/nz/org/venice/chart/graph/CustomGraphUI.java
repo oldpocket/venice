@@ -35,11 +35,11 @@ import nz.org.venice.parser.Parser;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.Symbol;
-import nz.org.venice.quote.WeekendDateException;
 import nz.org.venice.ui.ExpressionComboBox;
 import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
+import nz.org.venice.util.WeekendDateException;
 
 /**
  * The custom graph user interface.

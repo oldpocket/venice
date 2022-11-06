@@ -16,7 +16,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-package nz.org.venice.quote;
+package nz.org.venice.util;
 
 import java.util.Base64;
 
@@ -27,9 +27,9 @@ import javax.crypto.spec.SecretKeySpec;
 import nz.org.venice.alert.AlertManager;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.prefs.PreferencesManager.DatabasePreferences;
+import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.ui.PasswordDialog;
-import nz.org.venice.util.Locale;
 
 /**
  * Manages database settings where the data is session based (ie not stored on

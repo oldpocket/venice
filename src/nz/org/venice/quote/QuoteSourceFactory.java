@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nz.org.venice.prefs.PreferencesManager;
+import nz.org.venice.util.DatabaseAccessManager;
+import nz.org.venice.util.DatabaseManager;
 
 /**
  * Contains static methods for creating File-, Sample- and DatabaseQuoteSources

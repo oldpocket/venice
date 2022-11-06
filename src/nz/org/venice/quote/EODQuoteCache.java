@@ -27,6 +27,7 @@ import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.TradingDateComparator;
 import nz.org.venice.util.TradingTime;
+import nz.org.venice.util.WeekendDateException;
 
 /**
  * This class contains all the end-of-day stock quotes currently in memory. Its

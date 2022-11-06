@@ -32,6 +32,7 @@ import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.ui.ProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.util.Currency;
+import nz.org.venice.util.DatabaseManager;
 import nz.org.venice.util.ExchangeRate;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;

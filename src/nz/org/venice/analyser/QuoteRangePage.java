@@ -47,13 +47,13 @@ import nz.org.venice.quote.EODQuoteCache;
 import nz.org.venice.quote.EODQuoteRange;
 import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.quote.SymbolFormatException;
-import nz.org.venice.quote.WeekendDateException;
 import nz.org.venice.ui.ExpressionComboBox;
 import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.ui.SymbolListComboBox;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.TradingDateFormatException;
+import nz.org.venice.util.WeekendDateException;
 
 /**
  * An analysis tool page that lets the user enter data about which quotes to

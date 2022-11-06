@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import nz.org.venice.util.TradingDate;
+import nz.org.venice.util.WeekendDateException;
 
 /**
  * Iterator for traversing EODQuotes in an EODQuoteBundle. This iterator allows

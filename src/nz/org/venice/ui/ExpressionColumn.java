@@ -29,8 +29,8 @@ import nz.org.venice.parser.Variables;
 import nz.org.venice.quote.Quote;
 import nz.org.venice.quote.QuoteBundle;
 import nz.org.venice.quote.Symbol;
-import nz.org.venice.quote.WeekendDateException;
 import nz.org.venice.util.TradingDate;
+import nz.org.venice.util.WeekendDateException;
 
 /**
  * Representation of an expression column in a table. An expression column is a

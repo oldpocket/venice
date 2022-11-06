@@ -26,10 +26,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import nz.org.venice.quote.DatabaseManager;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.SymbolFormatException;
 import nz.org.venice.ui.DesktopManager;
+import nz.org.venice.util.DatabaseManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.TradingDateFormatException;

@@ -16,7 +16,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
 */
 
-package nz.org.venice.quote;
+package nz.org.venice.util;
 
 /**
  * This exception represents the error condition that occurs when the caller is

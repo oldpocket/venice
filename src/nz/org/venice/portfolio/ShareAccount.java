@@ -27,10 +27,10 @@ import nz.org.venice.quote.EODQuoteCache;
 import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.quote.Quote;
 import nz.org.venice.quote.Symbol;
-import nz.org.venice.quote.WeekendDateException;
 import nz.org.venice.util.Currency;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
+import nz.org.venice.util.WeekendDateException;
 
 /**
  * Representation of a share account in a portfolio.

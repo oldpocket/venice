@@ -22,6 +22,7 @@ import java.util.List;
 
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.util.TradingDate;
+import nz.org.venice.util.WeekendDateException;
 
 /**
  * When a task requires a mix of end-of-day and intra-day stock quotes, it

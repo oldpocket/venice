@@ -20,6 +20,7 @@ package nz.org.venice.quote;
 
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.util.TradingDate;
+import nz.org.venice.util.WeekendDateException;
 
 /**
  * This class provides a generic interface which can be used to access a bundle

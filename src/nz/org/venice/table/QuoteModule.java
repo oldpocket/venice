@@ -54,7 +54,6 @@ import nz.org.venice.prefs.settings.Settings;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.Quote;
 import nz.org.venice.quote.Symbol;
-import nz.org.venice.quote.WeekendDateException;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.Column;
 import nz.org.venice.ui.DesktopManager;
@@ -64,6 +63,7 @@ import nz.org.venice.ui.MenuHelper;
 import nz.org.venice.ui.SymbolListDialog;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
+import nz.org.venice.util.WeekendDateException;
 
 /**
  * Venice module for displaying a table of stock quotes. This module allows a

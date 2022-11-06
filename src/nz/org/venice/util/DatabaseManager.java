@@ -16,7 +16,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package nz.org.venice.quote;
+package nz.org.venice.util;
 
 import java.io.InputStream;
 import java.sql.Connection;
@@ -42,10 +42,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import nz.org.venice.quote.DatabaseQuoteSource;
+import nz.org.venice.quote.EODQuoteFilter;
+import nz.org.venice.quote.EODQuoteRange;
+import nz.org.venice.quote.Symbol;
 import nz.org.venice.ui.DesktopManager;
-import nz.org.venice.util.Converter;
-import nz.org.venice.util.Locale;
-import nz.org.venice.util.TradingDate;
 
 /**
  * Provides functionality to manage database connections and ensures the
@@ -800,7 +801,7 @@ public class DatabaseManager {
 	 * @param symbol the symbol
 	 * @return the SQL clause
 	 */
-	protected String buildSymbolPresentQuery(Symbol symbol) {
+	public String buildSymbolPresentQuery(Symbol symbol) {
 		if (software == HSQLDB_SOFTWARE)
 			return new String(
 					"SELECT TOP 1 " + DatabaseManager.SYMBOL_FIELD + " FROM " + DatabaseManager.SHARE_TABLE_NAME
@@ -817,7 +818,7 @@ public class DatabaseManager {
 	 * @param date the date
 	 * @return the SQL clause
 	 */
-	protected String buildDatePresentQuery(TradingDate date) {
+	public String buildDatePresentQuery(TradingDate date) {
 		if (software == HSQLDB_SOFTWARE)
 			return new String("SELECT TOP 1 " + DatabaseManager.DATE_FIELD + " FROM " + DatabaseManager.SHARE_TABLE_NAME
 					+ " WHERE " + DatabaseManager.DATE_FIELD + " = '" + toSQLDateString(date) + "' ");

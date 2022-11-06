@@ -34,11 +34,11 @@ import nz.org.venice.quote.Quote;
 import nz.org.venice.quote.QuoteSource;
 import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.quote.Symbol;
-import nz.org.venice.quote.WeekendDateException;
 import nz.org.venice.ui.ProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
+import nz.org.venice.util.WeekendDateException;
 
 /**
  * Returns the singleton reference to the AlertDestination that the user has

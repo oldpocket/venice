@@ -25,6 +25,7 @@ import java.util.List;
 import nz.org.venice.analyser.gp.GPQuoteBundle;
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.util.TradingDate;
+import nz.org.venice.util.WeekendDateException;
 
 /**
  * When a task requires end-of-day stock quotes, it should create an instance of

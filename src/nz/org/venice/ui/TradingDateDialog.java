@@ -23,10 +23,10 @@ import javax.swing.JOptionPane;
 
 import nz.org.venice.quote.EODQuoteCache;
 import nz.org.venice.quote.QuoteSourceManager;
-import nz.org.venice.quote.WeekendDateException;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.TradingDateFormatException;
+import nz.org.venice.util.WeekendDateException;
 
 /**
  * Dialog for querying the user for a date.

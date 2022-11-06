@@ -41,11 +41,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import nz.org.venice.quote.DatabaseAccessManager;
-import nz.org.venice.quote.DatabaseManager;
 import nz.org.venice.quote.EODQuoteCache;
 import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.ui.GridBagHelper;
+import nz.org.venice.util.DatabaseAccessManager;
+import nz.org.venice.util.DatabaseManager;
 import nz.org.venice.util.Locale;
 
 /**

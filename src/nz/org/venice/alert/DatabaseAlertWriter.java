@@ -24,9 +24,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import nz.org.venice.quote.DatabaseManager;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.ui.DesktopManager;
+import nz.org.venice.util.DatabaseManager;
 import nz.org.venice.util.Locale;
 
 /**
