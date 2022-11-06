@@ -47,6 +47,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
+import nz.org.venice.importer.FloatEODQuoteImport;
+import nz.org.venice.importer.GenericWSEODQuoteImport;
 import nz.org.venice.main.CommandManager;
 import nz.org.venice.main.Module;
 import nz.org.venice.main.ModuleFrame;

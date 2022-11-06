@@ -22,6 +22,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import nz.org.venice.importer.EzyChartQuoteFilter;
+import nz.org.venice.importer.MetaStock2QuoteFilter;
+import nz.org.venice.importer.MetaStockQuoteFilter;
+import nz.org.venice.importer.MetastockBinaryEODFilter;
+
 /**
  * Provides a list of quote filters available to us. This class is used as a
  * single point of reference to find and use all of the available quote filters.
@@ -50,7 +55,6 @@ public class EODQuoteFilterList {
 		filters = new ArrayList();
 
 		filters.add(new EzyChartQuoteFilter());
-		filters.add(new InsightTraderQuoteFilter());
 		filters.add(new MetaStockQuoteFilter());
 		filters.add(new MetaStock2QuoteFilter());
 		filters.add(new MetastockBinaryEODFilter());

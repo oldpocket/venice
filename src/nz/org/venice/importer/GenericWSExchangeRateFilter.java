@@ -16,8 +16,9 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
 */
 
-package nz.org.venice.quote;
+package nz.org.venice.importer;
 
+import nz.org.venice.quote.ExchangeRateFormatException;
 import nz.org.venice.util.Currency;
 import nz.org.venice.util.ExchangeRate;
 import nz.org.venice.util.Locale;

@@ -16,8 +16,12 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
 */
 
-package nz.org.venice.quote;
+package nz.org.venice.importer;
 
+import nz.org.venice.quote.EODQuote;
+import nz.org.venice.quote.IFileEODQuoteFilter;
+import nz.org.venice.quote.IFileEODQuoteImport;
+import nz.org.venice.quote.QuoteFormatException;
 import nz.org.venice.util.Report;
 
 public class MetastockBinaryEODFilter implements IFileEODQuoteFilter {

@@ -23,7 +23,7 @@
  * @see MSEmasterFile
  */
 
-package nz.org.venice.quote;
+package nz.org.venice.importer;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

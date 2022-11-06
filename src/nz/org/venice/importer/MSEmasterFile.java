@@ -24,7 +24,7 @@
  * @see MSDataInfo
  */
 
-package nz.org.venice.quote;
+package nz.org.venice.importer;
 
 import java.io.File;
 import java.io.FileNotFoundException;

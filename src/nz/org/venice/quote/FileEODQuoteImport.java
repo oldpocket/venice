@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import nz.org.venice.importer.GenericWSEODQuoteImport;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Report;
 

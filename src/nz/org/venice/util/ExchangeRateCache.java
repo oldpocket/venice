@@ -28,9 +28,9 @@ import java.util.TreeMap;
 
 import javax.swing.JDesktopPane;
 
+import nz.org.venice.importer.GenericWSExchangeRateImport;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.quote.DatabaseQuoteSource;
-import nz.org.venice.quote.GenericWSExchangeRateImport;
 import nz.org.venice.quote.ImportExportException;
 import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.ui.NumberDialog;

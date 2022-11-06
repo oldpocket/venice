@@ -5,50 +5,49 @@
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
    (at your option) any later version.
-
+   
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-
+   
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
- */
+*/
 
-package nz.org.venice.quote;
+package nz.org.venice.importer;
 
+import nz.org.venice.quote.EODQuote;
+import nz.org.venice.quote.FileEODQuoteImport;
+import nz.org.venice.quote.IFileEODQuoteFilter;
+import nz.org.venice.quote.IFileEODQuoteImport;
+import nz.org.venice.quote.QuoteFormatException;
+import nz.org.venice.quote.Symbol;
+import nz.org.venice.quote.SymbolFormatException;
 import nz.org.venice.util.Locale;
+import nz.org.venice.util.Report;
 import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.TradingDateFormatException;
 
 /**
- * Provides a filter to parse the Generic Web Services end-of-day stock quote
- * format. This format uses a date with the month name, prices are in dollars.
- * The first column is the date, then open, high, low, close & volume. The final
- * field is the adjusted close.
- *
- * This filter is not hooked up to the QuoteFilterList because we cannot
- * currently ask the user to enter the missing symbol.
- *
- * Example:
+ * Provides a filter to parse the Ezy Chart quote format. This format uses 2
+ * digit years and prices in cents. The first column is the symbol, then the
+ * date, open, high, low, close & volume. Exampe:
  * 
  * <pre>
- * 16-Oct-03,38.75,39.15,38.22,38.70,307300,38.70
+ * XXX,990715,173,182,171,181,3648921
  * </pre>
  *
  * @author Andrew Leppard
  */
-
-public class GenericWSEODQuoteFilter implements EODQuoteFilter {
-
-	private Symbol symbol;
+public class EzyChartQuoteFilter implements IFileEODQuoteFilter {
 
 	/**
 	 * Creates an instance of the filter.
 	 */
-	public GenericWSEODQuoteFilter(Symbol symbol) {
-		this.symbol = symbol;
+	public EzyChartQuoteFilter() {
+		// nothing to do
 	}
 
 	/**
@@ -57,7 +56,7 @@ public class GenericWSEODQuoteFilter implements EODQuoteFilter {
 	 * @return the name of the filter.
 	 */
 	public String getName() {
-		return "Generic Web Service";
+		return "Ezy Chart";
 	}
 
 	/**
@@ -65,8 +64,8 @@ public class GenericWSEODQuoteFilter implements EODQuoteFilter {
 	 * contain a valid quote.
 	 *
 	 * @param quoteLine a single line of text containing a quote
-	 * @exception QuoteFormatException if the quote could not be parsed
 	 * @return the stock quote
+	 * @exception QuoteFormatException if the quote could not be parsed
 	 */
 	public EODQuote toEODQuote(String quoteLine) throws QuoteFormatException {
 		EODQuote quote = null;
@@ -76,6 +75,14 @@ public class GenericWSEODQuoteFilter implements EODQuoteFilter {
 			int i = 0;
 
 			if (quoteParts.length == 7) {
+				Symbol symbol = null;
+
+				try {
+					symbol = Symbol.find(quoteParts[i++]);
+				} catch (SymbolFormatException e) {
+					throw new QuoteFormatException(e.getMessage());
+				}
+
 				TradingDate date = null;
 
 				try {
@@ -84,14 +91,13 @@ public class GenericWSEODQuoteFilter implements EODQuoteFilter {
 					throw new QuoteFormatException(e.getMessage());
 				}
 
+				// Convert all prices from cents to dollars
 				try {
-					double day_open = Double.parseDouble(quoteParts[i++]);
-					double day_high = Double.parseDouble(quoteParts[i++]);
-					double day_low = Double.parseDouble(quoteParts[i++]);
-					double day_close = Double.parseDouble(quoteParts[i++]);
-					i++; // adjusted day close
+					double day_open = Double.parseDouble(quoteParts[i++]) / 100.0;
+					double day_high = Double.parseDouble(quoteParts[i++]) / 100.0;
+					double day_low = Double.parseDouble(quoteParts[i++]) / 100.0;
+					double day_close = Double.parseDouble(quoteParts[i++]) / 100.0;
 					long day_volume = Long.parseLong(quoteParts[i++]);
-
 					quote = new EODQuote(symbol, date, day_volume, day_low, day_high, day_open, day_close);
 				} catch (NumberFormatException e) {
 					throw new QuoteFormatException(Locale.getString("ERROR_PARSING_NUMBER", quoteParts[i - 1]));
@@ -109,6 +115,13 @@ public class GenericWSEODQuoteFilter implements EODQuoteFilter {
 	 * @return string version of the quote
 	 */
 	public String toString(EODQuote quote) {
-		throw new UnsupportedOperationException();
+		return new String(quote.getSymbol() + "," + quote.getDate().toString("yymmdd") + ","
+				+ Math.round(quote.getDayOpen() * 100.0) + "," + Math.round(quote.getDayHigh() * 100.0) + ","
+				+ Math.round(quote.getDayLow() * 100.0) + "," + Math.round(quote.getDayClose() * 100.0) + ","
+				+ quote.getDayVolume());
+	}
+
+	public IFileEODQuoteImport getImporter(Report report) {
+		return new FileEODQuoteImport(report, this);
 	}
 }

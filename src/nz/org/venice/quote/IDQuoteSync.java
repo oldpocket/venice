@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import nz.org.venice.importer.GenericWSIDQuoteImport;
 import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.TradingTime;

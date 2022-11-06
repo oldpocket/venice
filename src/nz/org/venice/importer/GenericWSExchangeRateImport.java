@@ -16,7 +16,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package nz.org.venice.quote;
+package nz.org.venice.importer;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -30,6 +30,8 @@ import java.net.URL;
 import java.net.UnknownHostException;
 
 import nz.org.venice.prefs.PreferencesManager;
+import nz.org.venice.quote.ExchangeRateFormatException;
+import nz.org.venice.quote.ImportExportException;
 import nz.org.venice.util.Currency;
 import nz.org.venice.util.ExchangeRate;
 import nz.org.venice.util.Find;
