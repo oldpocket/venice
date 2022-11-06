@@ -102,8 +102,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 	private File files[];
 
 	// Web site combo box entry indeces.
-	private final static int YAHOO_SITE = 0; // finance.yahoo.com
-	private final static int FLOAT_SITE = 1; // float.com.au
+	private final static int GENERIC_WEBSERVICE = 0;
 
 	/**
 	 * Create a new import quote module.
@@ -169,23 +168,18 @@ public class ImportQuoteModule extends JPanel implements Module {
 
 		// Import from the internet
 		{
-			String webSite = p.get("webSite", "yahoo");
+			String webSite = p.get("webSite", "generic_ws");
 
 			fromInternet = new JRadioButton(Locale.getString("INTERNET"));
-			if (importFromSource.equals("internet"))
-				fromInternet.setSelected(true);
+			if (importFromSource.equals("internet")) fromInternet.setSelected(true);
 			c.gridwidth = 1;
 			gridbag.setConstraints(fromInternet, c);
 			titledPanel.add(fromInternet);
 
 			webSiteComboBox = new JComboBox();
-			webSiteComboBox.addItem(Locale.getString("YAHOO_DISPLAY_URL"));
-			webSiteComboBox.addItem(Locale.getString("FLOAT_DISPLAY_URL"));
+			webSiteComboBox.addItem(Locale.getString("GENERIC_WEBSERVICE"));
 
-			if (webSite.equals("yahoo"))
-				webSiteComboBox.setSelectedIndex(YAHOO_SITE);
-			else if (webSite.equals("float"))
-				webSiteComboBox.setSelectedIndex(FLOAT_SITE);
+			if (webSite.equals("generic_ws")) webSiteComboBox.setSelectedIndex(GENERIC_WEBSERVICE);
 
 			webSiteComboBox.setToolTipText(Locale.getString("INTERNET_IMPORT_QUOTE_TOOLTIP"));
 
@@ -209,8 +203,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 
 			prefixOrSuffixTextField.setToolTipText(Locale.getString("SUFFIX_FIELD_TOOLTIP"));
 
-			if (c.gridx != -1)
-				c.gridx++;
+			if (c.gridx != -1) c.gridx++;
 			c.gridwidth = GridBagConstraints.REMAINDER;
 			gridbag.setConstraints(prefixOrSuffixTextField, c);
 			titledPanel.add(prefixOrSuffixTextField);
@@ -299,16 +292,16 @@ public class ImportQuoteModule extends JPanel implements Module {
 		endDateTextField.setEnabled(fromInternet.isSelected());
 
 		// Symbols are only applicable if importing from Yahoo or Google.
-		symbolList.setEnabled(fromInternet.isSelected() && (webSiteComboBox.getSelectedIndex() == YAHOO_SITE));
+		symbolList.setEnabled(fromInternet.isSelected() && (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE));
 
 		// Prefix or suffix is only applicable if importing from Yahoo or Google.
-		boolean prefixOrSuffixEnabled = (fromInternet.isSelected() && (webSiteComboBox.getSelectedIndex() == YAHOO_SITE));
+		boolean prefixOrSuffixEnabled = (fromInternet.isSelected() && (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE));
 
 		prefixOrSuffixTextField.setEnabled(prefixOrSuffixEnabled);
 		if (prefixOrSuffixEnabled) {
 			// If we are downloading from Google it's a prefix, e.g. "ASX:".
 			// If we are downloading from Yahoo then it's a suffix, e.g. ".AX".
-			if (webSiteComboBox.getSelectedIndex() == YAHOO_SITE)
+			if (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE)
 				prefixOrSuffixLabel.setText(Locale.getString("ADD_SUFFIX"));
 			else
 				prefixOrSuffixLabel.setText(Locale.getString("ADD_PREFIX"));
@@ -358,10 +351,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 		p.put("internetEndDate", endDateTextField.getText());
 		p.put("fileFilter", (String) formatComboBox.getSelectedItem());
 
-		if (webSiteComboBox.getSelectedIndex() == YAHOO_SITE)
-			p.put("webSite", "yahoo");
-		else if (webSiteComboBox.getSelectedIndex() == FLOAT_SITE)
-			p.put("webSite", "float");
+		if (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE) p.put("webSite", "generic_ws");
 		p.put("prefixOrSuffix", prefixOrSuffixTextField.getText());
 	}
 
@@ -482,7 +472,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 	 */
 	private void importQuotesFromInternet() {
 		if (parseInternetFields()) {
-			if (webSiteComboBox.getSelectedIndex() == YAHOO_SITE)
+			if (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE)
 				importQuotesFromYahoo();
 			else
 				importQuotesFromFloat();
@@ -624,7 +614,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 	private boolean parseInternetFields() {
 		// Parse symbol list and validate if we are downloading from Google or Yahoo.
 		// If we are downloading from float.com.au then we ignore this field.
-		if (webSiteComboBox.getSelectedIndex() == YAHOO_SITE) {
+		if (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE) {
 			try {
 				// Don't check that the symbols exist before import. After all
 				// they won't at the first import.
