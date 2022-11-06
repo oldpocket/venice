@@ -372,24 +372,13 @@ public class QuoteSourcePage extends JPanel implements PreferencesPage {
 		else if (databaseSoftware.getSelectedIndex() == HSQL)
 			drivers = hsql_drivers;
 
-		for (int i = 0; i < drivers.length; i++) {
-			try {
-				Class.forName(drivers[i]);
-				databaseDriver.addItem(drivers[i]);
-			} catch (ClassNotFoundException e) {
-			}
-		}
+		for (int i = 0; i < drivers.length; i++)
+			databaseDriver.addItem(drivers[i]);
 
-		if (databasePreferences.driver != null)
-			try {
-				Class.forName(databasePreferences.driver);
-				databaseDriver.setSelectedItem(databasePreferences.driver);
-			} catch (ClassNotFoundException e) {
-			}
-		else
+		if (drivers.length > 0)
 			databaseDriver.setSelectedIndex(0);
 
-		if (databaseDriver.getSelectedItem() == null) {
+		if (drivers.length == 0) {
 			databaseDriver.addItem(Locale.getString("DATABASE_NO_DRIVERS"));
 			databaseDriver.setToolTipText(Locale.getString("DATABASE_NO_DRIVERS_DETAIL"));
 			databaseDriver.setSelectedIndex(0);
