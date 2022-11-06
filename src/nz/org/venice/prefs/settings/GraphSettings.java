@@ -30,7 +30,7 @@ import nz.org.venice.chart.graph.CandleStickGraph;
 import nz.org.venice.chart.graph.CustomGraph;
 import nz.org.venice.chart.graph.ExpMovingAverageGraph;
 import nz.org.venice.chart.graph.FiboGraph;
-import nz.org.venice.chart.graph.Graph;
+import nz.org.venice.chart.graph.IGraph;
 import nz.org.venice.chart.graph.HighLowBarGraph;
 import nz.org.venice.chart.graph.KDGraph;
 import nz.org.venice.chart.graph.LineGraph;
@@ -43,14 +43,14 @@ import nz.org.venice.chart.graph.PointAndFigureGraph;
 import nz.org.venice.chart.graph.RSIGraph;
 import nz.org.venice.chart.graph.StandardDeviationGraph;
 import nz.org.venice.chart.graph.SupportAndResistenceGraph;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.chart.source.OHLCVIndexQuoteGraphSource;
 import nz.org.venice.chart.source.OHLCVQuoteGraphSource;
 import nz.org.venice.chart.source.PortfolioGraphSource;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.quote.EODQuoteBundle;
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
 
@@ -88,7 +88,7 @@ public class GraphSettings extends AbstractSettings {
 	 */
 
 	public GraphSettings(String key, String parent, String title) {
-		super(Settings.CHART, Settings.GRAPHS, key);
+		super(ISettings.CHART, ISettings.GRAPHS, key);
 		this.title = title;
 	}
 
@@ -99,7 +99,7 @@ public class GraphSettings extends AbstractSettings {
 	 */
 
 	public GraphSettings() {
-		super(Settings.CHART, Settings.GRAPHS);
+		super(ISettings.CHART, ISettings.GRAPHS);
 
 	}
 
@@ -184,7 +184,7 @@ public class GraphSettings extends AbstractSettings {
 	}
 
 	// Graph settings are data of the chart module, so nothing is returned here
-	public Module getModule(JDesktopPane desktop) {
+	public IModule getModule(JDesktopPane desktop) {
 		return null;
 	}
 
@@ -195,104 +195,104 @@ public class GraphSettings extends AbstractSettings {
 	 * @return A graph with these settings.
 	 */
 
-	public Graph getGraph(EODQuoteBundle bundle) {
-		Graph newGraph = null;
+	public IGraph getGraph(EODQuoteBundle bundle) {
+		IGraph newGraph = null;
 
 		if (title.equals(Locale.getString("BAR_CHART"))) {
 
-			newGraph = new BarChartGraph(getSource(bundle, Quote.DAY_OPEN), getSource(bundle, Quote.DAY_LOW),
-					getSource(bundle, Quote.DAY_HIGH), getSource(bundle, Quote.DAY_CLOSE));
+			newGraph = new BarChartGraph(getSource(bundle, IQuote.DAY_OPEN), getSource(bundle, IQuote.DAY_LOW),
+					getSource(bundle, IQuote.DAY_HIGH), getSource(bundle, IQuote.DAY_CLOSE));
 
 		}
 
 		if (title.equals(Locale.getString("CANDLE_STICK"))) {
-			newGraph = new CandleStickGraph(getSource(bundle, Quote.DAY_OPEN), getSource(bundle, Quote.DAY_LOW),
-					getSource(bundle, Quote.DAY_HIGH), getSource(bundle, Quote.DAY_CLOSE));
+			newGraph = new CandleStickGraph(getSource(bundle, IQuote.DAY_OPEN), getSource(bundle, IQuote.DAY_LOW),
+					getSource(bundle, IQuote.DAY_HIGH), getSource(bundle, IQuote.DAY_CLOSE));
 
 		}
 
 		if (title.equals(Locale.getString("POINT_AND_FIGURE"))) {
-			newGraph = new PointAndFigureGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+			newGraph = new PointAndFigureGraph(getSource(bundle, IQuote.DAY_CLOSE), settings);
 		}
 
 		if (title.equals(Locale.getString("HIGH_LOW_BAR"))) {
-			newGraph = new HighLowBarGraph(getSource(bundle, Quote.DAY_LOW), getSource(bundle, Quote.DAY_HIGH),
-					getSource(bundle, Quote.DAY_CLOSE));
+			newGraph = new HighLowBarGraph(getSource(bundle, IQuote.DAY_LOW), getSource(bundle, IQuote.DAY_HIGH),
+					getSource(bundle, IQuote.DAY_CLOSE));
 
 		}
 
 		if (title.equals(Locale.getString("LINE_CHART")) || title.equals(Locale.getString("DAY_CLOSE"))) {
-			newGraph = new LineGraph(getSource(bundle, Quote.DAY_CLOSE), title, true);
+			newGraph = new LineGraph(getSource(bundle, IQuote.DAY_CLOSE), title, true);
 
 		}
 
 		if (title.equals(Locale.getString("DAY_OPEN"))) {
-			newGraph = new LineGraph(getSource(bundle, Quote.DAY_OPEN), title, true);
+			newGraph = new LineGraph(getSource(bundle, IQuote.DAY_OPEN), title, true);
 
 		}
 
 		if (title.equals(Locale.getString("DAY_HIGH"))) {
-			newGraph = new LineGraph(getSource(bundle, Quote.DAY_HIGH), title, true);
+			newGraph = new LineGraph(getSource(bundle, IQuote.DAY_HIGH), title, true);
 
 		}
 
 		if (title.equals(Locale.getString("DAY_LOW"))) {
-			newGraph = new LineGraph(getSource(bundle, Quote.DAY_LOW), title, true);
+			newGraph = new LineGraph(getSource(bundle, IQuote.DAY_LOW), title, true);
 
 		}
 
 		if (title.equals(Locale.getString("VOLUME"))) {
-			newGraph = new LineGraph(getSource(bundle, Quote.DAY_VOLUME), title, true);
+			newGraph = new LineGraph(getSource(bundle, IQuote.DAY_VOLUME), title, true);
 
 		}
 
 		if (title.equals(Locale.getString("SIMPLE_MOVING_AVERAGE"))) {
-			newGraph = new MovingAverageGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+			newGraph = new MovingAverageGraph(getSource(bundle, IQuote.DAY_CLOSE), settings);
 		}
 
 		if (title.equals(Locale.getString("EXP_MOVING_AVERAGE"))) {
-			newGraph = new ExpMovingAverageGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+			newGraph = new ExpMovingAverageGraph(getSource(bundle, IQuote.DAY_CLOSE), settings);
 		}
 
 		if (title.equals(Locale.getString("BOLLINGER_BANDS"))) {
-			newGraph = new BollingerBandsGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+			newGraph = new BollingerBandsGraph(getSource(bundle, IQuote.DAY_CLOSE), settings);
 		}
 
 		if (title.equals(Locale.getString("MOMENTUM"))) {
 
-			newGraph = new MomentumGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+			newGraph = new MomentumGraph(getSource(bundle, IQuote.DAY_CLOSE), settings);
 
 		}
 
 		if (title.equals(Locale.getString("MULT_MOVING_AVERAGE"))) {
-			newGraph = new MultipleMovingAverageGraph(getSource(bundle, Quote.DAY_CLOSE));
+			newGraph = new MultipleMovingAverageGraph(getSource(bundle, IQuote.DAY_CLOSE));
 		}
 
 		if (title.equals((Locale.getString("OBV")))) {
 
-			newGraph = new OBVGraph(getSource(bundle, Quote.DAY_OPEN), getSource(bundle, Quote.DAY_CLOSE),
-					getSource(bundle, Quote.DAY_VOLUME));
+			newGraph = new OBVGraph(getSource(bundle, IQuote.DAY_OPEN), getSource(bundle, IQuote.DAY_CLOSE),
+					getSource(bundle, IQuote.DAY_VOLUME));
 		}
 
 		if (title.equals(Locale.getString("STANDARD_DEVIATION"))) {
-			newGraph = new StandardDeviationGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+			newGraph = new StandardDeviationGraph(getSource(bundle, IQuote.DAY_CLOSE), settings);
 
 		}
 
 		if (title.equals(Locale.getString("MACD"))) {
-			newGraph = new MACDGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+			newGraph = new MACDGraph(getSource(bundle, IQuote.DAY_CLOSE), settings);
 		}
 
 		if (title.equals(Locale.getString("RSI"))) {
-			newGraph = new RSIGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+			newGraph = new RSIGraph(getSource(bundle, IQuote.DAY_CLOSE), settings);
 		}
 
 		if (title.equals(Locale.getString("SUPPORT_AND_RESISTENCE"))) {
-			newGraph = new SupportAndResistenceGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+			newGraph = new SupportAndResistenceGraph(getSource(bundle, IQuote.DAY_CLOSE), settings);
 		}
 
 		if (title.equals(Locale.getString("FIBO_CHART"))) {
-			newGraph = new FiboGraph(getSource(bundle, Quote.DAY_CLOSE), settings);
+			newGraph = new FiboGraph(getSource(bundle, IQuote.DAY_CLOSE), settings);
 		}
 
 		if (title.equals(Locale.getString("CUSTOM"))) {
@@ -300,11 +300,11 @@ public class GraphSettings extends AbstractSettings {
 			// groups of symbols, so the problem of just getting the first symbol
 			// is temporary.
 			Symbol symbol = (Symbol) settingsSymbolList.get(0);
-			newGraph = new CustomGraph(getSource(bundle, Quote.DAY_CLOSE), symbol, bundle, settings);
+			newGraph = new CustomGraph(getSource(bundle, IQuote.DAY_CLOSE), symbol, bundle, settings);
 		}
 		if (title.equals(Locale.getString("KD"))) {
-			newGraph = new KDGraph(getSource(bundle, Quote.DAY_LOW), getSource(bundle, Quote.DAY_HIGH),
-					getSource(bundle, Quote.DAY_CLOSE), settings);
+			newGraph = new KDGraph(getSource(bundle, IQuote.DAY_LOW), getSource(bundle, IQuote.DAY_HIGH),
+					getSource(bundle, IQuote.DAY_CLOSE), settings);
 		}
 		assert newGraph != null;
 
@@ -312,9 +312,9 @@ public class GraphSettings extends AbstractSettings {
 
 	}
 
-	public Graph getGraph(EODQuoteBundle bundle, Portfolio portfolio) {
+	public IGraph getGraph(EODQuoteBundle bundle, Portfolio portfolio) {
 
-		Graph newGraph = null;
+		IGraph newGraph = null;
 		PortfolioGraphSource portfolioGraphSource;
 
 		if (title.equals(MARKET_VALUE)) {
@@ -345,14 +345,14 @@ public class GraphSettings extends AbstractSettings {
 		return newGraph;
 	}
 
-	private GraphSource getSource(EODQuoteBundle bundle, int quoteType) {
+	private IGraphSource getSource(EODQuoteBundle bundle, int quoteType) {
 
 		switch (sourceType) {
-		case GraphSource.SYMBOL:
-		case GraphSource.PORTFOLIO:
-			assert (quoteType >= Quote.DAY_CLOSE || quoteType <= Quote.DAY_VOLUME);
+		case IGraphSource.SYMBOL:
+		case IGraphSource.PORTFOLIO:
+			assert (quoteType >= IQuote.DAY_CLOSE || quoteType <= IQuote.DAY_VOLUME);
 			return new OHLCVQuoteGraphSource(bundle, quoteType);
-		case GraphSource.INDEX:
+		case IGraphSource.INDEX:
 			return new OHLCVIndexQuoteGraphSource(bundle, quoteType);
 		default:
 			return null;

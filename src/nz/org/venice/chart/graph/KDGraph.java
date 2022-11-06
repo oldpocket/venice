@@ -28,22 +28,22 @@ import java.util.Set;
 
 import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
 
 public class KDGraph extends AbstractGraph {
 	private Graphable indicatorKGraphable = null;
 	private Graphable indicatorDGraphable = null;
-	private GraphSource low = null;
-	private GraphSource high = null;
-	private GraphSource close = null;
+	private IGraphSource low = null;
+	private IGraphSource high = null;
+	private IGraphSource close = null;
 
-	public KDGraph(GraphSource low, GraphSource high, GraphSource close) {
+	public KDGraph(IGraphSource low, IGraphSource high, IGraphSource close) {
 		this(low, high, close, new HashMap());
 	}
 
-	public KDGraph(GraphSource low, GraphSource high, GraphSource close, HashMap settings) {
+	public KDGraph(IGraphSource low, IGraphSource high, IGraphSource close, HashMap settings) {
 		super(null);
 		this.low = low;
 		this.high = high;
@@ -239,7 +239,7 @@ public class KDGraph extends AbstractGraph {
 				+ "</font>" + "</p></html>");
 	}
 
-	public GraphUI getUI(HashMap settings) {
+	public IGraphUI getUI(HashMap settings) {
 		return new KDGraphUI(settings);
 	}
 

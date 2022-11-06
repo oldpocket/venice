@@ -40,10 +40,10 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.prefs.settings.PreferencesModuleSettings;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.util.Locale;
 
 /**
@@ -60,10 +60,10 @@ import nz.org.venice.util.Locale;
  * desktop.add(frame);
  * </pre>
  *
- * @see PreferencesPage
+ * @see IPreferencesPage
  */
 
-public class PreferencesModule extends JPanel implements Module, ActionListener {
+public class PreferencesModule extends JPanel implements IModule, ActionListener {
 
 	/**
 	 * Preferences page for retrieving stock quotes.
@@ -94,14 +94,14 @@ public class PreferencesModule extends JPanel implements Module, ActionListener 
 	private DefaultListModel pageListModel;
 	private JDesktopPane desktop;
 	private PropertyChangeSupport propertySupport;
-	private PreferencesPage activePage;
+	private IPreferencesPage activePage;
 
 	private JList pageList;
 	private JButton okButton;
 	private JButton cancelButton;
 	private JSplitPane split;
 
-	private Settings settings;
+	private ISettings settings;
 
 	/**
 	 * Create a new Preference Module loaded with the last viewed page.
@@ -145,13 +145,13 @@ public class PreferencesModule extends JPanel implements Module, ActionListener 
 		pageList = new JList(pageListModel);
 
 		pageList.setSelectedIndex(page);
-		activePage = (PreferencesPage) pages.elementAt(page);
+		activePage = (IPreferencesPage) pages.elementAt(page);
 
 		pageList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				int index = pageList.getSelectedIndex();
 				if (index != -1 && pages.elementAt(index) != activePage) {
-					activePage = (PreferencesPage) pages.elementAt(index);
+					activePage = (IPreferencesPage) pages.elementAt(index);
 					split.setRightComponent(activePage.getComponent());
 				}
 			}
@@ -167,7 +167,7 @@ public class PreferencesModule extends JPanel implements Module, ActionListener 
 		add(buttonPanel, BorderLayout.SOUTH);
 	}
 
-	private void addPage(PreferencesPage page) {
+	private void addPage(IPreferencesPage page) {
 		// Add a border with the page's title around each page
 		page.getComponent().setBorder(new TitledBorder(page.getTitle()));
 		pageListModel.addElement(page.getTitle());
@@ -207,7 +207,7 @@ public class PreferencesModule extends JPanel implements Module, ActionListener 
 		if (e.getSource() == okButton) {
 			// Save preferences from all pages
 			for (Iterator iterator = pages.iterator(); iterator.hasNext();) {
-				PreferencesPage page = (PreferencesPage) iterator.next();
+				IPreferencesPage page = (IPreferencesPage) iterator.next();
 				page.save();
 			}
 
@@ -291,7 +291,7 @@ public class PreferencesModule extends JPanel implements Module, ActionListener 
 		settings = new PreferencesModuleSettings();
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 }

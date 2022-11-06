@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 
 /**
  * Provides a common interface to allow the charting module to support a variety
@@ -35,10 +35,10 @@ import nz.org.venice.chart.source.GraphSource;
  *
  * @author Andrew Leppard
  * @see AbstractGraph
- * @see GraphUI
- * @see GraphSource
+ * @see IGraphUI
+ * @see IGraphSource
  */
-public interface Graph {
+public interface IGraph {
 
 	/**
 	 * Maximum distance between the mouse pointer and the graph which will still
@@ -219,7 +219,7 @@ public interface Graph {
 	 * @param settings initial settings
 	 * @return user interface or <code>null</code>
 	 */
-	public GraphUI getUI(HashMap settings);
+	public IGraphUI getUI(HashMap settings);
 
 	/**
 	 * Return whether the graph is a <i>primary</i> graph. Primary graphs will

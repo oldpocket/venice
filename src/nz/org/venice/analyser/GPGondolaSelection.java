@@ -36,7 +36,7 @@ import nz.org.venice.ui.ConfirmDialog;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.VeniceLog;
 
-public class GPGondolaSelection extends Page implements AnalyserPage {
+public class GPGondolaSelection extends Page implements IAnalyserPage {
 
 	private final int maxPanels = 9;
 

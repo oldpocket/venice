@@ -26,7 +26,7 @@ import nz.org.venice.util.Locale;
  * and are basically sorted as Strings. The only exception is that the total
  * entry always appears at the bottom.
  */
-public class AccountNameFormat implements TwoWayComparable {
+public class AccountNameFormat implements ITwoWayComparable {
 	String name;
 
 	/** The account name format that represents the total row */

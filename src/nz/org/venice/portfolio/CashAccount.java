@@ -149,6 +149,6 @@ public class CashAccount extends AbstractAccount implements Cloneable {
 	}
 
 	public int getType() {
-		return Account.CASH_ACCOUNT;
+		return IAccount.CASH_ACCOUNT;
 	}
 }

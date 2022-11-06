@@ -27,7 +27,7 @@ import java.util.Vector;
 
 import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.util.Locale;
 
 /**
@@ -48,7 +48,7 @@ public class MultipleMovingAverageGraph extends AbstractGraph {
 	 *
 	 * @param source the source to create the moving averages from
 	 */
-	public MultipleMovingAverageGraph(GraphSource source) {
+	public MultipleMovingAverageGraph(IGraphSource source) {
 
 		super(source);
 		setSettings(new HashMap());
@@ -183,7 +183,7 @@ public class MultipleMovingAverageGraph extends AbstractGraph {
 	 * @param settings the initial settings
 	 * @return user interface
 	 */
-	public GraphUI getUI(HashMap settings) {
+	public IGraphUI getUI(HashMap settings) {
 		return null;
 	}
 }

@@ -34,7 +34,7 @@ import nz.org.venice.util.Locale;
  * @author Andrew Leppard
  * @see RSIGraph
  */
-public class KDGraphUI implements GraphUI {
+public class KDGraphUI implements IGraphUI {
 
 	// The graph's user interface
 	private JPanel panel;

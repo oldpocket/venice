@@ -26,7 +26,7 @@ import nz.org.venice.util.Locale;
  * supplied. For example if the expression required a <code>BOOLEAN_TYPE</code>
  * and a <code>VALUE_TYPE</code> was given instead.
  * 
- * @see Expression
+ * @see IExpression
  */
 public class TypeMismatchException extends ExpressionException {
 
@@ -47,7 +47,7 @@ public class TypeMismatchException extends ExpressionException {
 	 * @param expectedTypes A string list where the items are the types the expected
 	 *                      by the expression.
 	 */
-	public TypeMismatchException(Expression expression, String type, String expectedTypes) {
+	public TypeMismatchException(IExpression expression, String type, String expectedTypes) {
 		super(Locale.getString("TYPE_MISMATCH_ERROR") + " on expression object: " + expression.getClass().getName()
 				+ " expression = " + expression.toString() + " expected types = " + expectedTypes + " got: " + type);
 	}
@@ -62,7 +62,7 @@ public class TypeMismatchException extends ExpressionException {
 	 * @param expectedType The type expected by the expression.
 	 * 
 	 */
-	public TypeMismatchException(Expression expression, int type, int expectedType) {
+	public TypeMismatchException(IExpression expression, int type, int expectedType) {
 		super(Locale.getString("TYPE_MISMATCH_ERROR") + " on expression object: " + expression.getClass().getName()
 				+ " expression = " + expression.toString() + " Expected Type: " + expectedType + " got: " + type);
 	}

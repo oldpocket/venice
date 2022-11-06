@@ -33,7 +33,7 @@ import java.util.Vector;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
-import nz.org.venice.chart.graph.Graph;
+import nz.org.venice.chart.graph.IGraph;
 import nz.org.venice.prefs.PreferencesManager;
 
 /**
@@ -253,10 +253,10 @@ public class BasicChartUI extends ComponentUI implements ImageObserver {
 			// Iterate through all graphs until one of the graph gives us
 			// a tooltip
 			Iterator iterator = ((Vector) chart.getLevels().elementAt(level)).iterator();
-			Graph graph;
+			IGraph graph;
 
 			while (iterator.hasNext() && toolTipText == null) {
-				graph = (Graph) iterator.next();
+				graph = (IGraph) iterator.next();
 
 				toolTipText = graph.getToolTipText(x, yCoordinate, yoffset + verticalAxis.getHeightOfGraph(),
 						verticalAxis.getScale(), verticalAxis.getBottomLineValue());
@@ -900,7 +900,7 @@ public class BasicChartUI extends ComponentUI implements ImageObserver {
 	}
 
 	// Draw the vertical grid and the vertical labels onto the chart
-	private void drawVerticalGridAndLabels(Graphics g, Graph firstGraph, String title, VerticalAxis verticalAxis,
+	private void drawVerticalGridAndLabels(Graphics g, IGraph firstGraph, String title, VerticalAxis verticalAxis,
 			int yoffset, int width) {
 		g.setColor(Color.lightGray);
 		verticalAxis.drawGridAndLabels(g, firstGraph, title, 0, yoffset, width - Y_LABEL_WIDTH);
@@ -936,7 +936,7 @@ public class BasicChartUI extends ComponentUI implements ImageObserver {
 
 		VerticalAxis verticalAxis = calculateVerticalAxis(chart, graphs, height, level);
 
-		drawVerticalGridAndLabels(g, (Graph) graphs.firstElement(), getLevelTitle(graphs), verticalAxis, yoffset,
+		drawVerticalGridAndLabels(g, (IGraph) graphs.firstElement(), getLevelTitle(graphs), verticalAxis, yoffset,
 				width);
 		drawGraphs(g, graphs, chart, verticalAxis, yoffset, width, height);
 		drawHorizontalGrid(g, chart, verticalAxis, yoffset);
@@ -953,7 +953,7 @@ public class BasicChartUI extends ComponentUI implements ImageObserver {
 		Iterator iterator = graphs.iterator();
 
 		while (iterator.hasNext()) {
-			symbol = ((Graph) iterator.next()).getSourceName();
+			symbol = ((IGraph) iterator.next()).getSourceName();
 
 			// add it if its not already in our list of symbols
 			symbolsIterator = symbols.iterator();
@@ -997,7 +997,7 @@ public class BasicChartUI extends ComponentUI implements ImageObserver {
 	// Create a new vertical axis which is sized for the component
 	private VerticalAxis calculateVerticalAxis(Chart chart, Vector graphs, int height, int level) {
 
-		Graph firstGraph = (Graph) graphs.firstElement();
+		IGraph firstGraph = (IGraph) graphs.firstElement();
 
 		// Do we need to recalculate vertical axis vector?
 		if (verticalAxes == null)
@@ -1028,13 +1028,13 @@ public class BasicChartUI extends ComponentUI implements ImageObserver {
 	private void drawGraphs(Graphics g, Vector graphs, Chart chart, VerticalAxis verticalAxis, int yoffset, int width,
 			int height) {
 
-		Graph graph;
+		IGraph graph;
 		Iterator iterator = graphs.iterator();
 
 		// Draw vector of overlapping graphs
 		while (iterator.hasNext()) {
 
-			graph = (Graph) iterator.next();
+			graph = (IGraph) iterator.next();
 
 			graph.render(g, getGraphColour(graph, chart), 0,
 					yoffset + verticalAxis.getHeightOfGraph() + (height - verticalAxis.getHeightOfGraph()) / 2,
@@ -1072,7 +1072,7 @@ public class BasicChartUI extends ComponentUI implements ImageObserver {
 		// Iterate through all graphs and draw all their annotations
 		Iterator iterator = chart.getLevels().iterator();
 		Iterator innerIterator;
-		Graph graph;
+		IGraph graph;
 		HashMap annotations;
 		VerticalAxis verticalAxis;
 		int level = 0;
@@ -1084,7 +1084,7 @@ public class BasicChartUI extends ComponentUI implements ImageObserver {
 			verticalAxis = (VerticalAxis) verticalAxes.elementAt(level++);
 
 			while (innerIterator.hasNext()) {
-				graph = (Graph) innerIterator.next();
+				graph = (IGraph) innerIterator.next();
 				// annotations = graph.getAnnotations();
 				annotations = null;
 
@@ -1098,7 +1098,7 @@ public class BasicChartUI extends ComponentUI implements ImageObserver {
 	}
 
 	// Draw all annotations in the given hashmap
-	private void drawGraphAnnotations(Graphics g, Chart chart, Graph graph, VerticalAxis verticalAxis, int yoffset,
+	private void drawGraphAnnotations(Graphics g, Chart chart, IGraph graph, VerticalAxis verticalAxis, int yoffset,
 			HashMap annotations) {
 
 		Set xRange = annotations.keySet();
@@ -1159,7 +1159,7 @@ public class BasicChartUI extends ComponentUI implements ImageObserver {
 
 		while (iterator.hasNext()) {
 
-			y = ((Graph) iterator.next()).getLowestY(x);
+			y = ((IGraph) iterator.next()).getLowestY(x);
 
 			if (y < lowestY)
 				lowestY = y;
@@ -1175,7 +1175,7 @@ public class BasicChartUI extends ComponentUI implements ImageObserver {
 		double highestY = Double.NEGATIVE_INFINITY;
 
 		while (iterator.hasNext()) {
-			y = ((Graph) iterator.next()).getHighestY(x);
+			y = ((IGraph) iterator.next()).getHighestY(x);
 
 			if (y > highestY)
 				highestY = y;
@@ -1256,7 +1256,7 @@ public class BasicChartUI extends ComponentUI implements ImageObserver {
 			// Iterate through all graphs and grab all sources
 			Iterator levelsIterator = chart.getLevels().iterator();
 			Iterator graphsIterator;
-			Graph graph;
+			IGraph graph;
 			String symbol;
 			int coloursUsed = 0;
 
@@ -1266,7 +1266,7 @@ public class BasicChartUI extends ComponentUI implements ImageObserver {
 
 				while (graphsIterator.hasNext()) {
 					// Get symbol
-					graph = (Graph) graphsIterator.next();
+					graph = (IGraph) graphsIterator.next();
 					symbol = graph.getSourceName();
 
 					// Add mapping between symbol and colour if it doesnt
@@ -1291,7 +1291,7 @@ public class BasicChartUI extends ComponentUI implements ImageObserver {
 	 * @param chart the chart component
 	 * @return the colour the graph might be
 	 */
-	public Color getGraphColour(Graph graph, Chart chart) {
+	public Color getGraphColour(IGraph graph, Chart chart) {
 
 		if (colourMap == null)
 			calculateColourMap(chart);

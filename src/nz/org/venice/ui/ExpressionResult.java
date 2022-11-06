@@ -57,7 +57,7 @@ public class ExpressionResult implements Comparable {
 	 * Create a new result.
 	 *
 	 * @param type   Type of the result, e.g.
-	 *               {@link nz.org.venice.parser.Expression#BOOLEAN_TYPE}
+	 *               {@link nz.org.venice.parser.IExpression#BOOLEAN_TYPE}
 	 * @param result Value of result.
 	 */
 	public ExpressionResult(int type, double result) {

@@ -28,11 +28,11 @@ import nz.org.venice.quote.Symbol;
  * 
  * @author Mark Hummel
  * @see Alert
- * @see AlertWriter
+ * @see IAlertWriter
  * @see AlertModule
  */
 
-public interface AlertReader {
+public interface IAlertReader {
 
 	/**
 	 * Get all alerts currently stored.

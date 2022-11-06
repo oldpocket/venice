@@ -18,7 +18,7 @@
 
 package nz.org.venice.parser.expression;
 
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 
 /**
@@ -29,7 +29,7 @@ abstract public class LogicExpression extends BinaryExpression {
 	/**
 	 * Create a new logic expression with the given left and right arguments.
 	 */
-	public LogicExpression(Expression left, Expression right) {
+	public LogicExpression(IExpression left, IExpression right) {
 		super(left, right);
 	}
 
@@ -75,8 +75,8 @@ abstract public class LogicExpression extends BinaryExpression {
 	protected String toString(String operator) {
 		String string = "";
 
-		Expression c1 = getChild(0);
-		Expression c2 = getChild(1);
+		IExpression c1 = getChild(0);
+		IExpression c2 = getChild(1);
 
 		if (c1 != null) {
 			if (c1.getChildCount() < 2) {

@@ -60,7 +60,7 @@ import nz.org.venice.util.Locale;
  *
  * @author Alberto Nacher
  */
-public class GAPage extends Page implements AnalyserPage {
+public class GAPage extends Page implements IAnalyserPage {
 
 	// Swing components
 	private JTextField generationsTextField;

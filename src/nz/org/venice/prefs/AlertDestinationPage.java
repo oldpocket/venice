@@ -36,7 +36,7 @@ import nz.org.venice.util.Locale;
  * Preferences Page for where the user enables/disables alerts and where they
  * should be stored.
  */
-public class AlertDestinationPage extends JPanel implements PreferencesPage, ActionListener {
+public class AlertDestinationPage extends JPanel implements IPreferencesPage, ActionListener {
 
 	private JDesktopPane desktop;
 	private JRadioButton disableButton;

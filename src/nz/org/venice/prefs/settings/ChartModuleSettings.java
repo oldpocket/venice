@@ -24,7 +24,7 @@ import javax.swing.JDesktopPane;
 
 import nz.org.venice.chart.ChartDrawingModel;
 import nz.org.venice.chart.ChartModule;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 
 /**
  * This class represents ChartModule data which can be saved for the purposes of
@@ -32,7 +32,7 @@ import nz.org.venice.main.Module;
  * 
  * @author Mark Hummel
  * @see nz.org.venice.prefs.PreferencesManager
- * @see Settings
+ * @see ISettings
  */
 
 public class ChartModuleSettings extends AbstractSettings {
@@ -57,7 +57,7 @@ public class ChartModuleSettings extends AbstractSettings {
 	 */
 
 	public ChartModuleSettings() {
-		super(Settings.CHART, Settings.CHARTMODULE);
+		super(ISettings.CHART, ISettings.CHARTMODULE);
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class ChartModuleSettings extends AbstractSettings {
 	 */
 
 	public ChartModuleSettings(String key) {
-		super(Settings.CHART, Settings.CHARTMODULE, key);
+		super(ISettings.CHART, ISettings.CHARTMODULE, key);
 	}
 
 	/**
@@ -315,7 +315,7 @@ public class ChartModuleSettings extends AbstractSettings {
 	 * 
 	 */
 
-	public Module getModule(JDesktopPane desktop) {
+	public IModule getModule(JDesktopPane desktop) {
 		return new ChartModule(desktop, this);
 	}
 

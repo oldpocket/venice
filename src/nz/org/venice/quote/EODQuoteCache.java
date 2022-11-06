@@ -104,15 +104,15 @@ public class EODQuoteCache {
 
 		public double getQuote(int quote) {
 			switch (quote) {
-			case (Quote.DAY_OPEN):
+			case (IQuote.DAY_OPEN):
 				return (double) day_open;
-			case (Quote.DAY_CLOSE):
+			case (IQuote.DAY_CLOSE):
 				return (double) day_close;
-			case (Quote.DAY_LOW):
+			case (IQuote.DAY_LOW):
 				return (double) day_low;
-			case (Quote.DAY_HIGH):
+			case (IQuote.DAY_HIGH):
 				return (double) day_high;
-			case (Quote.DAY_VOLUME):
+			case (IQuote.DAY_VOLUME):
 				return (double) day_volume;
 			default:
 				assert false;
@@ -191,9 +191,9 @@ public class EODQuoteCache {
 	 * Get a quote from the cache.
 	 *
 	 * @param symbol     the symbol to load
-	 * @param quoteType  the quote type, one of {@link Quote#DAY_OPEN},
-	 *                   {@link Quote#DAY_CLOSE}, {@link Quote#DAY_LOW},
-	 *                   {@link Quote#DAY_HIGH}, {@link Quote#DAY_VOLUME}
+	 * @param quoteType  the quote type, one of {@link IQuote#DAY_OPEN},
+	 *                   {@link IQuote#DAY_CLOSE}, {@link IQuote#DAY_LOW},
+	 *                   {@link IQuote#DAY_HIGH}, {@link IQuote#DAY_VOLUME}
 	 * @param dateOffset fast access date offset
 	 * @return the quote
 	 * @exception QuoteNotLoadedException if the quote was not in the cache

@@ -44,13 +44,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.prefs.PreferencesManager;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.ui.GridBagHelper;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
@@ -65,7 +65,7 @@ import nz.org.venice.util.TradingDate;
  * @see FileEODQuoteExport
  * @see ImportQuoteModule
  */
-public class ExportQuoteModule extends JPanel implements Module {
+public class ExportQuoteModule extends JPanel implements IModule {
 
 	private JDesktopPane desktop;
 	private PropertyChangeSupport propertySupport;
@@ -75,10 +75,10 @@ public class ExportQuoteModule extends JPanel implements Module {
 	private JTextField fileNamesTextField;
 
 	// Parsed Fields for file export
-	private EODQuoteFilter filter;
+	private IEODQuoteFilter filter;
 	private String fileNames;
 
-	private Settings settings;
+	private ISettings settings;
 
 	/**
 	 * Create a new export quote module.
@@ -124,7 +124,7 @@ public class ExportQuoteModule extends JPanel implements Module {
 			String selectedFilter = p.get("fileFilter", "MetaStock");
 
 			for (Iterator iterator = formats.iterator(); iterator.hasNext();) {
-				EODQuoteFilter filter = (EODQuoteFilter) iterator.next();
+				IEODQuoteFilter filter = (IEODQuoteFilter) iterator.next();
 				formatComboBox.addItem(filter.getName());
 				if (filter.getName().equals(selectedFilter))
 					formatComboBox.setSelectedItem(filter.getName());
@@ -216,13 +216,13 @@ public class ExportQuoteModule extends JPanel implements Module {
 		propertySupport.firePropertyChange(ModuleFrame.WINDOW_CLOSE_PROPERTY, 0, 1);
 
 		// Now set up progress dialog to display the file by file progress
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 		progress.setIndeterminate(true);
 		progress.setMaster(true);
 		progress.show(Locale.getString("EXPORTING"));
 
 		// Get first and last dates
-		QuoteSource source = QuoteSourceManager.getSource();
+		IQuoteSource source = QuoteSourceManager.getSource();
 		TradingDate firstDate = source.getFirstDate();
 		TradingDate lastDate;
 		List dateRange;
@@ -351,7 +351,7 @@ public class ExportQuoteModule extends JPanel implements Module {
 		// Same as hitting cancel - do not save anything
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 }

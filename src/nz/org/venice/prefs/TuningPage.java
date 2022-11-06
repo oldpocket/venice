@@ -41,7 +41,7 @@ import nz.org.venice.util.Locale;
 /**
  * Provides a preferences page to let the user view and set tuning parameters.
  */
-public class TuningPage extends JPanel implements PreferencesPage, ActionListener {
+public class TuningPage extends JPanel implements IPreferencesPage, ActionListener {
 	private JDesktopPane desktop;
 	private JTextField maxCachedQuotesTextField;
 	private JLabel currentCachedQuotesLabel;

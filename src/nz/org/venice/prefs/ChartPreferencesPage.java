@@ -42,7 +42,7 @@ import nz.org.venice.util.Locale;
 /*
  * Maybe these preferences belong in User Interface?
  */
-public class ChartPreferencesPage extends JPanel implements PreferencesPage {
+public class ChartPreferencesPage extends JPanel implements IPreferencesPage {
 	private JDesktopPane desktop;
 	private JComboBox defaultChart;
 	private ColourSelectionPanel colourSelection;

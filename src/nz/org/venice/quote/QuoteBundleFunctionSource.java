@@ -22,7 +22,7 @@ import nz.org.venice.parser.EvaluationException;
 
 /**
  * Allow the {@link QuoteFunctions} package to use quotes directly from a
- * {@link nz.org.venice.quote.QuoteBundle}. The following code shows an exmaple
+ * {@link nz.org.venice.quote.IQuoteBundle}. The following code shows an exmaple
  * of how to call a quote function from a Gondola expression:
  * 
  * <pre>
@@ -33,12 +33,12 @@ import nz.org.venice.parser.EvaluationException;
  *
  * @author Andrew Leppard
  * @see QuoteFunctions
- * @see nz.org.venice.parser.Expression
+ * @see nz.org.venice.parser.IExpression
  */
-public class QuoteBundleFunctionSource implements QuoteFunctionSource {
+public class QuoteBundleFunctionSource implements IQuoteFunctionSource {
 
 	// The quote bundle containing the quotes
-	private QuoteBundle quoteBundle;
+	private IQuoteBundle quoteBundle;
 
 	// The symbol of the quotes to access
 	private Symbol symbol;
@@ -58,20 +58,20 @@ public class QuoteBundleFunctionSource implements QuoteFunctionSource {
 
 	/**
 	 * Create a new quote function source that uses quotes directly from a
-	 * {@link nz.org.venice.quote.QuoteBundle}.
+	 * {@link nz.org.venice.quote.IQuoteBundle}.
 	 *
 	 * @param quoteBundle the quote bundle containing the quotes
 	 * @param symbol      the symbol of the quotes to access
-	 * @param quoteKind   the quote kind, one of {@link Quote#DAY_OPEN},
-	 *                    {@link Quote#DAY_CLOSE}, {@link Quote#DAY_LOW},
-	 *                    {@link Quote#DAY_HIGH}, {@link Quote#DAY_VOLUME}
+	 * @param quoteKind   the quote kind, one of {@link IQuote#DAY_OPEN},
+	 *                    {@link IQuote#DAY_CLOSE}, {@link IQuote#DAY_LOW},
+	 *                    {@link IQuote#DAY_HIGH}, {@link IQuote#DAY_VOLUME}
 	 * @param day         the day and offset arguments construct the offset of the
 	 *                    current date in the quote bundle we are examining. This
 	 *                    will be the last date accessed by the quote function.
 	 * @param offset      see above
 	 * @param period      the number of quote dates available from this source
 	 */
-	public QuoteBundleFunctionSource(QuoteBundle quoteBundle, Symbol symbol, int quoteKind, int day, int offset,
+	public QuoteBundleFunctionSource(IQuoteBundle quoteBundle, Symbol symbol, int quoteKind, int day, int offset,
 			int period) {
 		this.quoteBundle = quoteBundle;
 		this.symbol = symbol;

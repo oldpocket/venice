@@ -19,11 +19,11 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
 
@@ -41,15 +41,15 @@ public class LagExpression extends BinaryExpression {
 	 * @param quote the quote kind to return
 	 * @param lag   the offset from the current day
 	 */
-	public LagExpression(Expression quote, Expression lag) {
+	public LagExpression(IExpression quote, IExpression lag) {
 		super(quote, lag);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		// Need a better name for this
-		QuoteSymbol quoteChild = (QuoteSymbol) getChild(0);
+		IQuoteSymbol quoteChild = (IQuoteSymbol) getChild(0);
 
 		int lag = (int) getChild(1).evaluate(variables, quoteBundle, symbol, day);
 		if (lag > 0) {
@@ -92,8 +92,8 @@ public class LagExpression extends BinaryExpression {
 	}
 
 	public String toString() {
-		Expression quoteExpression = getChild(0);
-		Expression lagExpression = getChild(1);
+		IExpression quoteExpression = getChild(0);
+		IExpression lagExpression = getChild(1);
 
 		String quoteStr = (getChild(0) != null) ? getChild(0).toString() : "(nulL)";
 		String lagStr = (getChild(1) != null) ? getChild(1).toString() : "(null)";
@@ -126,7 +126,7 @@ public class LagExpression extends BinaryExpression {
 	}
 
 	public Object clone() {
-		return new LagExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone());
+		return new LagExpression((IExpression) getChild(0).clone(), (IExpression) getChild(1).clone());
 	}
 
 }

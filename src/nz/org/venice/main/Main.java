@@ -43,7 +43,7 @@ import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.prefs.settings.ModuleFrameSettings;
 import nz.org.venice.prefs.settings.ModuleFrameSettingsReader;
 import nz.org.venice.prefs.settings.ModuleSettingsParserException;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.quote.IDQuoteSync;
 import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.quote.Symbol;
@@ -51,7 +51,7 @@ import nz.org.venice.quote.SymbolFormatException;
 import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.ui.GPLViewDialog;
 import nz.org.venice.ui.MainMenu;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.util.ExchangeRateCache;
 import nz.org.venice.util.Locale;
@@ -277,7 +277,7 @@ public class Main extends JFrame {
 		Vector savedFrameFiles, dataList;
 		Iterator iterator;
 		int savedFrames;
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 		int progressValue = 0;
 
 		if (!PreferencesManager.getRestoreSavedWindowsSetting()) {
@@ -314,9 +314,9 @@ public class Main extends JFrame {
 
 				try {
 					ModuleFrameSettings newFrameSettings = ModuleFrameSettingsReader.read(inputStream);
-					Settings moduleSettings = newFrameSettings.getModuleSettings();
+					ISettings moduleSettings = newFrameSettings.getModuleSettings();
 					// Recreate the module from settings.
-					Module newModule = moduleSettings.getModule(desktop);
+					IModule newModule = moduleSettings.getModule(desktop);
 
 					// Place it initially at 0,0
 					ModuleFrame newFrame = desktopManager.newFrame(newModule);

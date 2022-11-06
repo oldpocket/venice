@@ -24,7 +24,7 @@ import nz.org.venice.chart.Graphable;
  * Provides an abstraction of the data being graphed, this way graphs do not
  * need to know anything about the underlying data they are graphing.
  */
-public interface GraphSource {
+public interface IGraphSource {
 
 	public final static int SYMBOL = 0;
 	public final static int INDEX = 1;
@@ -65,7 +65,7 @@ public interface GraphSource {
 	 * Return an array of acceptable major deltas for the vertical axis.
 	 *
 	 * @return array of doubles
-	 * @see nz.org.venice.chart.graph.Graph#getAcceptableMajorDeltas
+	 * @see nz.org.venice.chart.graph.IGraph#getAcceptableMajorDeltas
 	 */
 	public double[] getAcceptableMajorDeltas();
 
@@ -73,7 +73,7 @@ public interface GraphSource {
 	 * Return an array of acceptable minor deltas for the vertical axis.
 	 *
 	 * @return array of doubles
-	 * @see nz.org.venice.chart.graph.Graph#getAcceptableMajorDeltas
+	 * @see nz.org.venice.chart.graph.IGraph#getAcceptableMajorDeltas
 	 */
 	public double[] getAcceptableMinorDeltas();
 

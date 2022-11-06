@@ -16,27 +16,38 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
 */
 
-package nz.org.venice.ui;
-
-import java.util.EventObject;
-
-import nz.org.venice.main.IModule;
+package nz.org.venice.quote;
 
 /**
- * Representation of an event indicating that a module has been added, removed
- * or renamed.
+ * Provides an interface for converting to/from a text string containing a
+ * single intra-day quote from/to the internal stock quote object.
  *
  * @author Andrew Leppard
- * @see IModuleListener
  */
-public class ModuleEvent extends EventObject {
+public interface IIDQuoteFilter {
 
 	/**
-	 * Create a new module event based on the given module.
+	 * Return the name of the filter.
 	 *
-	 * @param module the module
+	 * @return the name of the filter
 	 */
-	public ModuleEvent(IModule module) {
-		super((Object) module);
-	}
+	public String getName();
+
+	/**
+	 * Parse the given text string and returns the stock quote or null if it did not
+	 * contain a valid quote.
+	 *
+	 * @param quoteLine a single line of text containing a quote.
+	 * @return the stock quote
+	 * @exception QuoteFormatException if the quote could not be parsed
+	 */
+	public IDQuote toIDQuote(String quoteLine) throws QuoteFormatException;
+
+	/**
+	 * Convert the given stock quote to a string line.
+	 *
+	 * @param quote a stock quote
+	 * @return string version of the quote
+	 */
+	public String toString(IDQuote quote);
 }

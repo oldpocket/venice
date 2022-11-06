@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import nz.org.venice.chart.Graphable;
-import nz.org.venice.portfolio.Account;
+import nz.org.venice.portfolio.IAccount;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.MissingQuoteException;
@@ -36,7 +36,7 @@ import nz.org.venice.util.TradingDate;
  *
  * @author Andrew Leppard
  */
-public class PortfolioGraphSource implements GraphSource {
+public class PortfolioGraphSource implements IGraphSource {
 
 	/** Graph the market value (day close) of the portfolio */
 	public static final int MARKET_VALUE = 0;
@@ -157,7 +157,7 @@ public class PortfolioGraphSource implements GraphSource {
 						// This is inefficient because it only needs to call this once
 						// for the portfolio. However, it's cleaner to put it here and
 						// its impact should be tiny.
-						Account account = portfolio.findAccountByName(accountName);
+						IAccount account = portfolio.findAccountByName(accountName);
 
 						assert account != null;
 
@@ -184,7 +184,7 @@ public class PortfolioGraphSource implements GraphSource {
 	}
 
 	public int getType() {
-		return GraphSource.PORTFOLIO;
+		return IGraphSource.PORTFOLIO;
 	}
 
 	public String getToolTipText(Comparable x) {

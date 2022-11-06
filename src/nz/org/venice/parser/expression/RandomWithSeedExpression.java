@@ -21,10 +21,10 @@ package nz.org.venice.parser.expression;
 import java.util.Random;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -40,12 +40,12 @@ public class RandomWithSeedExpression extends UnaryExpression {
 	 * Create a new random expression for the given <code>seed</code>
 	 */
 
-	public RandomWithSeedExpression(Expression arg) {
+	public RandomWithSeedExpression(IExpression arg) {
 		super(arg);
 		random = new Random();
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		double seed = getChild(0).evaluate(variables, quoteBundle, symbol, day);

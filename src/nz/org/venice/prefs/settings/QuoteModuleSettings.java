@@ -30,7 +30,7 @@ package nz.org.venice.prefs.settings;
 
 import javax.swing.JDesktopPane;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.table.QuoteModule;
 
@@ -45,7 +45,7 @@ public class QuoteModuleSettings extends AbstractSettings {
 	 */
 
 	public QuoteModuleSettings() {
-		super(Settings.TABLE, Settings.QUOTEMODULE);
+		super(ISettings.TABLE, ISettings.QUOTEMODULE);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class QuoteModuleSettings extends AbstractSettings {
 	 * 
 	 * @return A QuoteModule
 	 */
-	public Module getModule(JDesktopPane desktop) {
+	public IModule getModule(JDesktopPane desktop) {
 		return new QuoteModule(quoteBundle, singleDate);
 	}
 

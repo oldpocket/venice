@@ -34,7 +34,7 @@ import nz.org.venice.util.Locale;
  * @author Andrew Leppard
  * @see PointAndFigureGraph
  */
-public class PointAndFigureGraphUI implements GraphUI {
+public class PointAndFigureGraphUI implements IGraphUI {
 
 	// The graph's user interface
 	private JPanel panel;

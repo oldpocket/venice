@@ -40,7 +40,7 @@ import javax.swing.KeyStroke;
 import nz.org.venice.macro.MacroManager;
 import nz.org.venice.macro.StoredMacro;
 import nz.org.venice.main.CommandManager;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.prefs.PreferencesModule;
 import nz.org.venice.quote.EODQuoteRange;
@@ -51,7 +51,7 @@ import nz.org.venice.util.Locale;
  *
  * @author Daniel Makovec
  */
-public class MainMenu implements ActionListener, ModuleListener {
+public class MainMenu implements ActionListener, IModuleListener {
 	// Application's main menu
 	private JMenuBar menuBar;
 
@@ -391,11 +391,11 @@ public class MainMenu implements ActionListener, ModuleListener {
 					}
 				} else if ((mo = menuItemToModuleHash.get(menu)) != null) {
 
-					Module module;
+					IModule module;
 
 					// Get module
 					try {
-						module = (Module) mo;
+						module = (IModule) mo;
 					} catch (ClassCastException e) {
 						assert false;
 						return;
@@ -571,7 +571,7 @@ public class MainMenu implements ActionListener, ModuleListener {
 	 * @param moduleEvent Module Event
 	 */
 	public void moduleAdded(ModuleEvent moduleEvent) {
-		Module module = (Module) moduleEvent.getSource();
+		IModule module = (IModule) moduleEvent.getSource();
 		String title = module.getTitle();
 
 		// First window? Then enable window arrange menu items and
@@ -597,7 +597,7 @@ public class MainMenu implements ActionListener, ModuleListener {
 	 * @param moduleEvent Module Event
 	 */
 	public void moduleRemoved(ModuleEvent moduleEvent) {
-		Module module = (Module) moduleEvent.getSource();
+		IModule module = (IModule) moduleEvent.getSource();
 
 		// Can happen when removing modules quickly.
 		if (moduleToMenuItemHash.get(module) == null) {

@@ -19,10 +19,10 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.QuoteBundleFunctionSource;
 import nz.org.venice.quote.QuoteFunctions;
 import nz.org.venice.quote.Symbol;
@@ -46,14 +46,14 @@ public class EMAExpression extends QuaternaryExpression {
 	 * @param smoothing the smoothing constant for the exponential moving average
 	 * @param lag       the offset from the current day
 	 */
-	public EMAExpression(Expression quote, Expression days, Expression lag, Expression smoothing) {
+	public EMAExpression(IExpression quote, IExpression days, IExpression lag, IExpression smoothing) {
 		super(quote, days, lag, smoothing);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
-		QuoteSymbol quoteChild = (QuoteSymbol) getChild(0);
+		IQuoteSymbol quoteChild = (IQuoteSymbol) getChild(0);
 
 		// Extract arguments
 		int quoteKind = quoteChild.getQuoteKind();
@@ -122,7 +122,7 @@ public class EMAExpression extends QuaternaryExpression {
 	}
 
 	public Object clone() {
-		return new EMAExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone(),
-				(Expression) getChild(2).clone(), (Expression) getChild(3).clone());
+		return new EMAExpression((IExpression) getChild(0).clone(), (IExpression) getChild(1).clone(),
+				(IExpression) getChild(2).clone(), (IExpression) getChild(3).clone());
 	}
 }

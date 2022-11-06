@@ -19,7 +19,7 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -39,7 +39,7 @@ public class StringExpression extends TerminalExpression {
 		this.text = text;
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) {
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day) {
 		// How can I get this to return a string without having to make the expression
 		// keep creating temporary objects?
 		return 0.0D;

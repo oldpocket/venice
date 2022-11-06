@@ -27,7 +27,7 @@ import java.util.Vector;
 
 import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
 
@@ -57,7 +57,7 @@ public class CountbackLineGraph extends AbstractGraph {
 	 * @param high  the source to create a moving average from
 	 * @param close the source to create a moving average from
 	 */
-	public CountbackLineGraph(GraphSource low, GraphSource high, GraphSource close) {
+	public CountbackLineGraph(IGraphSource low, IGraphSource high, IGraphSource close) {
 		super(close);
 		dayLow = low.getGraphable();
 		dayHigh = high.getGraphable();
@@ -167,7 +167,7 @@ public class CountbackLineGraph extends AbstractGraph {
 	 * @param settings the initial settings
 	 * @return user interface
 	 */
-	public GraphUI getUI(HashMap settings) {
+	public IGraphUI getUI(HashMap settings) {
 		return new CountbackLineGraphUI(settings);
 	}
 

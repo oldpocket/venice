@@ -40,7 +40,7 @@ import nz.org.venice.util.Locale;
  * @author Andrew Leppard
  * @see MACDGraph
  */
-public class MACDGraphUI implements GraphUI {
+public class MACDGraphUI implements IGraphUI {
 
 	// String name of settings
 	private final static String AVERAGE_TYPE = "MACD average type";

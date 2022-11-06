@@ -24,7 +24,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
 
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 
 /**
  * Provides a common interface that all modules must adhere to. This interface
@@ -33,7 +33,7 @@ import nz.org.venice.prefs.settings.Settings;
  * function such as charting, showing a table of quotes or providing preference
  * options to the user.
  */
-public interface Module {
+public interface IModule {
 	/**
 	 * Return the window title.
 	 *
@@ -92,6 +92,6 @@ public interface Module {
 	/**
 	 * Return the Settings for the module.
 	 */
-	public Settings getSettings();
+	public ISettings getSettings();
 
 }

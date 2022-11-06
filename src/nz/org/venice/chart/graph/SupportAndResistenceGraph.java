@@ -31,7 +31,7 @@ import java.util.Set;
 
 import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.util.Locale;
 
 /**
@@ -87,7 +87,7 @@ public class SupportAndResistenceGraph extends AbstractGraph {
 	 *
 	 * @param source containing the data source, typically day close.
 	 */
-	public SupportAndResistenceGraph(GraphSource source) {
+	public SupportAndResistenceGraph(IGraphSource source) {
 		super(source);
 		support = new Graphable();
 		resistence = new Graphable();
@@ -100,7 +100,7 @@ public class SupportAndResistenceGraph extends AbstractGraph {
 	 * @param source   containing the data source, typically day close.
 	 * @param settings the settings of the graph
 	 */
-	public SupportAndResistenceGraph(GraphSource source, HashMap settings) {
+	public SupportAndResistenceGraph(IGraphSource source, HashMap settings) {
 		super(source);
 		support = new Graphable();
 		resistence = new Graphable();
@@ -514,7 +514,7 @@ public class SupportAndResistenceGraph extends AbstractGraph {
 		createSupportAndResistence(getSource().getGraphable(), support, resistence, lag, type);
 	}
 
-	public GraphUI getUI(HashMap settings) {
+	public IGraphUI getUI(HashMap settings) {
 		return new SRGraphUI(settings);
 	}
 }

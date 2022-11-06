@@ -37,7 +37,7 @@ import nz.org.venice.util.LocaleConstants;
  *
  * @author Alberto Nacher
  */
-public class LanguagePage extends JPanel implements PreferencesPage {
+public class LanguagePage extends JPanel implements IPreferencesPage {
 
 	final private static int localeCount = LocaleConstants.localeCount;
 	final private static java.util.Locale[] locales = LocaleConstants.locales;

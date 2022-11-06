@@ -217,7 +217,7 @@ public class Variables {
 			return variable.getType();
 		else {
 			assert false;
-			return Expression.FLOAT_TYPE;
+			return IExpression.FLOAT_TYPE;
 		}
 	}
 

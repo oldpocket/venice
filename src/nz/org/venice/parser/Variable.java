@@ -49,15 +49,15 @@ public class Variable {
 	 *
 	 * @param name       the name of the variable.
 	 * @param type       the type of the variable, one of
-	 *                   {@link Expression#BOOLEAN_TYPE},
-	 *                   {@link Expression#FLOAT_TYPE} or
-	 *                   {@link Expression#INTEGER_TYPE}.
+	 *                   {@link IExpression#BOOLEAN_TYPE},
+	 *                   {@link IExpression#FLOAT_TYPE} or
+	 *                   {@link IExpression#INTEGER_TYPE}.
 	 * @param isConstant whether the variable is constant. Either @{link CONSTANT}
 	 *                   or {@link Variable#VARIABLE}.
 	 * @param value      the initial value of the variable.
 	 */
 	public Variable(String name, int type, boolean isConstant, double value) {
-		assert (type == Expression.BOOLEAN_TYPE || type == Expression.FLOAT_TYPE || type == Expression.INTEGER_TYPE);
+		assert (type == IExpression.BOOLEAN_TYPE || type == IExpression.FLOAT_TYPE || type == IExpression.INTEGER_TYPE);
 
 		this.name = name;
 		this.type = type;
@@ -71,15 +71,15 @@ public class Variable {
 	 *
 	 * @param name       the name of the variable.
 	 * @param type       the type of the variable, one of
-	 *                   {@link Expression#BOOLEAN_TYPE},
-	 *                   {@link Expression#FLOAT_TYPE} or
-	 *                   {@link Expression#INTEGER_TYPE}.
+	 *                   {@link IExpression#BOOLEAN_TYPE},
+	 *                   {@link IExpression#FLOAT_TYPE} or
+	 *                   {@link IExpression#INTEGER_TYPE}.
 	 * @param isConstant whether the variable is constant. Either @{link CONSTANT}
 	 *                   or {@link Variable#VARIABLE}.
 	 * @param value      the initial value of the variable.
 	 */
 	public Variable(String name, int type, boolean isConstant, boolean isFunction, double value) {
-		assert (type == Expression.BOOLEAN_TYPE || type == Expression.FLOAT_TYPE || type == Expression.INTEGER_TYPE);
+		assert (type == IExpression.BOOLEAN_TYPE || type == IExpression.FLOAT_TYPE || type == IExpression.INTEGER_TYPE);
 
 		this.name = name;
 		this.type = type;

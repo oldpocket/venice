@@ -103,7 +103,7 @@ public class AlertDialog extends JInternalFrame implements ActionListener, KeyLi
 	private TradingDate endDate;
 	private Double targetValue;
 
-	private AlertWriter alertWriter;
+	private IAlertWriter alertWriter;
 
 	// Previously created alert
 	private final Alert alert;
@@ -113,7 +113,7 @@ public class AlertDialog extends JInternalFrame implements ActionListener, KeyLi
 	private boolean isDone = false;
 	private boolean okButtonPressed = false;
 
-	public AlertDialog(JDesktopPane desktop, Alert alert, AlertWriter alertWriter) {
+	public AlertDialog(JDesktopPane desktop, Alert alert, IAlertWriter alertWriter) {
 		super();
 		this.desktop = desktop;
 		this.alert = alert;
@@ -129,7 +129,7 @@ public class AlertDialog extends JInternalFrame implements ActionListener, KeyLi
 	 * @param desktop the current desktop
 	 * @param symbol  the symbol to create an alert for
 	 */
-	public AlertDialog(JDesktopPane desktop, Symbol symbol, AlertWriter alertWriter) {
+	public AlertDialog(JDesktopPane desktop, Symbol symbol, IAlertWriter alertWriter) {
 		super();
 		this.desktop = desktop;
 		this.symbol = symbol;

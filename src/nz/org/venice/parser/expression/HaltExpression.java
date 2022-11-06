@@ -19,9 +19,9 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -36,8 +36,8 @@ import nz.org.venice.quote.Symbol;
 
 public class HaltExpression extends AlertExpression {
 
-	private Expression mandatoryArg;
-	private Expression[] optionalArgs;
+	private IExpression mandatoryArg;
+	private IExpression[] optionalArgs;
 
 	/**
 	 * Create a new alert expression.
@@ -47,7 +47,7 @@ public class HaltExpression extends AlertExpression {
 	 *                     message defined in arg.
 	 */
 
-	public HaltExpression(Expression arg, Expression[] optionalArgs) {
+	public HaltExpression(IExpression arg, IExpression[] optionalArgs) {
 		super(arg, optionalArgs);
 	}
 
@@ -62,7 +62,7 @@ public class HaltExpression extends AlertExpression {
 	 * @return 0.0
 	 */
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		super.evaluate(variables, quoteBundle, symbol, day);

@@ -52,7 +52,7 @@ public class ModuleFrame extends JInternalFrame implements PropertyChangeListene
 	private final static int DEFAULT_LAYER = 2;
 
 	// Each module frame contains a single module
-	private Module module;
+	private IModule module;
 
 	private DesktopManager desktopManager;
 	private JScrollPane scrollPane;
@@ -70,7 +70,7 @@ public class ModuleFrame extends JInternalFrame implements PropertyChangeListene
 	 *                   override it with the default?
 	 * @param resizable  Is the frame allowed to be resized?
 	 */
-	public ModuleFrame(DesktopManager desktopManager, Module module, boolean centre, boolean honourSize,
+	public ModuleFrame(DesktopManager desktopManager, IModule module, boolean centre, boolean honourSize,
 			boolean resizable) {
 
 		super(module.getTitle(), resizable ? true : false, // resizable
@@ -177,7 +177,7 @@ public class ModuleFrame extends JInternalFrame implements PropertyChangeListene
 	 *
 	 * @return The module running in the frame
 	 */
-	public Module getModule() {
+	public IModule getModule() {
 		return module;
 	}
 

@@ -25,7 +25,7 @@ import java.util.Set;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.EODQuoteCache;
 import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Currency;
 import nz.org.venice.util.Money;
@@ -119,7 +119,7 @@ public class ShareAccount extends AbstractAccount implements Cloneable {
 			StockHolding holding = (StockHolding) stockHoldings.get(symbol);
 
 			value = value
-					.add(quoteBundle.getQuote(holding.getSymbol(), Quote.DAY_CLOSE, dateOffset) * holding.getShares());
+					.add(quoteBundle.getQuote(holding.getSymbol(), IQuote.DAY_CLOSE, dateOffset) * holding.getShares());
 		}
 
 		return value;
@@ -209,7 +209,7 @@ public class ShareAccount extends AbstractAccount implements Cloneable {
 	}
 
 	public int getType() {
-		return Account.SHARE_ACCOUNT;
+		return IAccount.SHARE_ACCOUNT;
 	}
 
 	public Currency getCurrency() {

@@ -29,7 +29,7 @@ import java.util.TreeMap;
 import nz.org.venice.analyser.OrderCache;
 import nz.org.venice.analyser.PaperTrade;
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.quote.EODQuoteBundle;
@@ -75,8 +75,8 @@ public class GeneticAlgorithm {
 	private OrderCache orderCache;
 
 	// Expression rule (fixed in the GA process, becasue only prameters can change)
-	private Expression buyRule;
-	private Expression sellRule;
+	private IExpression buyRule;
+	private IExpression sellRule;
 
 	// Start date of paper trading
 	private TradingDate startDate;
@@ -132,7 +132,7 @@ public class GeneticAlgorithm {
 	 *                               for generating new individuals
 	 * @param variables              variables containing the parameters of GA
 	 */
-	public GeneticAlgorithm(EODQuoteBundle quoteBundle, OrderCache orderCache, Expression buyRule, Expression sellRule,
+	public GeneticAlgorithm(EODQuoteBundle quoteBundle, OrderCache orderCache, IExpression buyRule, IExpression sellRule,
 			TradingDate startDate, TradingDate endDate, Money initialCapital, Money stockValue, int numberStocks,
 			Money tradeCost, int breedingPopulationSize, String tradeValueBuy, String tradeValueSell,
 			GAIndividual lowest, GAIndividual highest, Variables variables) {
@@ -314,7 +314,7 @@ public class GeneticAlgorithm {
 	 *
 	 * @return buy rule expression
 	 */
-	public Expression getBuyRule() {
+	public IExpression getBuyRule() {
 		return buyRule;
 	}
 
@@ -323,7 +323,7 @@ public class GeneticAlgorithm {
 	 *
 	 * @return sell rule expression
 	 */
-	public Expression getSellRule() {
+	public IExpression getSellRule() {
 		return sellRule;
 	}
 
@@ -373,7 +373,7 @@ public class GeneticAlgorithm {
 	 * @return portfolio of individual after paper trading
 	 */
 	public Portfolio paperTrade(EODQuoteBundle quoteBundle, OrderCache orderCache, TradingDate startDate,
-			TradingDate endDate, Expression buyRule, Expression sellRule, Money initialCapital, Money stockValue,
+			TradingDate endDate, IExpression buyRule, IExpression sellRule, Money initialCapital, Money stockValue,
 			int numberStocks, Money tradeCost, Variables variables, String tradeValueBuy, String tradeValueSell)
 			throws EvaluationException {
 

@@ -33,7 +33,7 @@ import java.util.Stack;
 import javax.swing.JDesktopPane;
 
 import nz.org.venice.help.HelpModule;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 
 public class HelpModuleSettings extends AbstractSettings {
 
@@ -45,7 +45,7 @@ public class HelpModuleSettings extends AbstractSettings {
 	 */
 
 	public HelpModuleSettings() {
-		super(Settings.TABLE, Settings.HELPMODULE);
+		super(ISettings.TABLE, ISettings.HELPMODULE);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class HelpModuleSettings extends AbstractSettings {
 	 */
 
 	public HelpModuleSettings(String title) {
-		super(Settings.TABLE, Settings.HELPMODULE);
+		super(ISettings.TABLE, ISettings.HELPMODULE);
 		super.setTitle(title);
 	}
 
@@ -110,7 +110,7 @@ public class HelpModuleSettings extends AbstractSettings {
 	 * @return A HelpModule
 	 */
 
-	public Module getModule(JDesktopPane desktop) {
+	public IModule getModule(JDesktopPane desktop) {
 		return new HelpModule(desktop, this);
 	}
 }

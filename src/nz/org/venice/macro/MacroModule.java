@@ -39,9 +39,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.prefs.PreferencesManager;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.util.Locale;
 
 /**
@@ -50,7 +50,7 @@ import nz.org.venice.util.Locale;
  *         This module gives the user to define and edit Python macro scripts
  *         which control the behaviour of the overall application
  */
-public class MacroModule extends JPanel implements Module, ActionListener {
+public class MacroModule extends JPanel implements IModule, ActionListener {
 
 	private JPanel list_panel = null;
 	private JPanel button_panel = null;
@@ -65,7 +65,7 @@ public class MacroModule extends JPanel implements Module, ActionListener {
 
 	private String frameIcon = "nz/org/venice/images/TableIcon.gif";
 
-	private Settings settings;
+	private ISettings settings;
 
 	/*
 	 * (non-Javadoc)
@@ -310,7 +310,7 @@ public class MacroModule extends JPanel implements Module, ActionListener {
 		}
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 }

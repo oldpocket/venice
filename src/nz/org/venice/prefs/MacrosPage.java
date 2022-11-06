@@ -52,7 +52,7 @@ import nz.org.venice.util.Locale;
  *
  * @author Dan Makovec venice@makovec.net
  */
-public class MacrosPage extends JPanel implements PreferencesPage {
+public class MacrosPage extends JPanel implements IPreferencesPage {
 	private JDesktopPane desktop;
 
 	private JTable macros_table = null;

@@ -40,9 +40,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.prefs.settings.TransactionModuleSettings;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.AbstractTableModel;
@@ -56,7 +56,7 @@ import nz.org.venice.util.TradingDate;
 /**
  * Venice module for displaying a portfolio's transaction history to the user.
  */
-public class TransactionModule extends AbstractTable implements Module, ActionListener {
+public class TransactionModule extends AbstractTable implements IModule, ActionListener {
 
 	// Column ennumeration
 	private static final int DATE_COLUMN = 0;
@@ -509,7 +509,7 @@ public class TransactionModule extends AbstractTable implements Module, ActionLi
 		menuAction.start();
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 }

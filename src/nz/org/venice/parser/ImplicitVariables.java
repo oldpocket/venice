@@ -51,28 +51,28 @@ public class ImplicitVariables {
 	private void init(Variables variables, boolean ordered) {
 
 		if (ordered && !variables.contains("order")) {
-			variables.add("order", Expression.INTEGER_TYPE, Variable.CONSTANT);
+			variables.add("order", IExpression.INTEGER_TYPE, Variable.CONSTANT);
 		}
 
 		if (!variables.contains("held")) {
-			variables.add("held", Expression.INTEGER_TYPE, Variable.CONSTANT);
+			variables.add("held", IExpression.INTEGER_TYPE, Variable.CONSTANT);
 		}
 
 		if (!variables.contains("daysfromstart")) {
-			variables.add("daysfromstart", Expression.INTEGER_TYPE, Variable.CONSTANT);
+			variables.add("daysfromstart", IExpression.INTEGER_TYPE, Variable.CONSTANT);
 		}
 		if (!variables.contains("transactions")) {
-			variables.add("transactions", Expression.INTEGER_TYPE, Variable.CONSTANT);
+			variables.add("transactions", IExpression.INTEGER_TYPE, Variable.CONSTANT);
 		}
 		if (!variables.contains("capital")) {
-			variables.add("capital", Expression.FLOAT_TYPE, Variable.CONSTANT);
+			variables.add("capital", IExpression.FLOAT_TYPE, Variable.CONSTANT);
 		}
 		if (!variables.contains("stockcapital")) {
-			variables.add("stockcapital", Expression.FLOAT_TYPE, Variable.CONSTANT);
+			variables.add("stockcapital", IExpression.FLOAT_TYPE, Variable.CONSTANT);
 		}
 
 		if (!variables.contains("daysfromlasttransaction")) {
-			variables.add("daysfromlasttransaction", Expression.INTEGER_TYPE, Variable.CONSTANT);
+			variables.add("daysfromlasttransaction", IExpression.INTEGER_TYPE, Variable.CONSTANT);
 		}
 	}
 

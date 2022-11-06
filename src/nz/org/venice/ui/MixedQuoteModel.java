@@ -23,8 +23,8 @@ import java.util.List;
 
 import nz.org.venice.quote.IDQuote;
 import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.Quote;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuote;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
@@ -45,7 +45,7 @@ import nz.org.venice.util.WeekendDateException;
 public class MixedQuoteModel extends AbstractQuoteModel {
 
 	// Quote bundle
-	private QuoteBundle quoteBundle;
+	private IQuoteBundle quoteBundle;
 
 	// Column ennumeration
 
@@ -92,14 +92,14 @@ public class MixedQuoteModel extends AbstractQuoteModel {
 	 * Create a new mixed quote model.
 	 *
 	 * @param quoteBundle   Quote bundle
-	 * @param quotes        A list of {@link Quote} which contain the quote symbols
+	 * @param quotes        A list of {@link IQuote} which contain the quote symbols
 	 *                      and dates to table.
 	 * @param displayDate   Display the date column? Either {@link Column#HIDDEN},
 	 *                      {@link Column#VISIBLE} or {@link Column#ALWAYS_HIDDEN}.
 	 * @param displaySymbol Display the symbol column? Either {@link Column#HIDDEN},
 	 *                      {@link Column#VISIBLE} or {@link Column#ALWAYS_HIDDEN}.
 	 */
-	public MixedQuoteModel(QuoteBundle quoteBundle, List quotes, int displayDate, int displaySymbol) {
+	public MixedQuoteModel(IQuoteBundle quoteBundle, List quotes, int displayDate, int displaySymbol) {
 		super(quoteBundle, quotes, ACTIVITY_COLUMN + 1);
 
 		this.quoteBundle = quoteBundle;
@@ -146,7 +146,7 @@ public class MixedQuoteModel extends AbstractQuoteModel {
 			return null;
 
 		// Quotes in this table are a mixture of intra-day and end of day quotes.
-		Quote quote = (Quote) getQuotes().get(row);
+		IQuote quote = (IQuote) getQuotes().get(row);
 		IDQuote idQuote = null;
 		if (quote instanceof IDQuote)
 			idQuote = (IDQuote) quote;
@@ -178,7 +178,7 @@ public class MixedQuoteModel extends AbstractQuoteModel {
 			try {
 				int offset = quoteBundle.getOffset(quote);
 
-				initialQuote = quoteBundle.getQuote(quote.getSymbol(), Quote.DAY_CLOSE, offset - 1);
+				initialQuote = quoteBundle.getQuote(quote.getSymbol(), IQuote.DAY_CLOSE, offset - 1);
 			} catch (MissingQuoteException e) {
 				// No big deal - we default to day open
 			} catch (WeekendDateException e) {
@@ -196,7 +196,7 @@ public class MixedQuoteModel extends AbstractQuoteModel {
 			try {
 				int offset = quoteBundle.getOffset(quote);
 
-				initialQuote = quoteBundle.getQuote(quote.getSymbol(), Quote.DAY_CLOSE, offset - 1);
+				initialQuote = quoteBundle.getQuote(quote.getSymbol(), IQuote.DAY_CLOSE, offset - 1);
 			} catch (MissingQuoteException e) {
 				// No big deal - we default to day open
 			} catch (WeekendDateException e) {

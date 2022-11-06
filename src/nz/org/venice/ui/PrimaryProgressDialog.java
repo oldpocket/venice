@@ -35,14 +35,14 @@ import nz.org.venice.util.Locale;
 /**
  * This class is the only instance of a progress dialog in venice. When a
  * progress dialog is created, this class creates the dialog. The other class
- * that implements {@link ProgressDialog} merely proxies to this class.
+ * that implements {@link IProgressDialog} merely proxies to this class.
  * <p>
  * See {@link ProgressDialogManager} for details about using progress dialogs in
  * venice.
  *
  * @author Andrew Leppard
  */
-public class PrimaryProgressDialog implements ProgressDialog {
+public class PrimaryProgressDialog implements IProgressDialog {
 
 	// Current progress
 	private int progress = 0;

@@ -22,10 +22,10 @@ import java.util.UUID;
 
 import nz.org.venice.parser.AnalyserGuard;
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -62,12 +62,12 @@ public class ForExpression extends QuaternaryExpression {
 	 * @param loop      the loop traversal function.
 	 * @param command   the command to loop.
 	 */
-	public ForExpression(Expression initial, Expression condition, Expression loop, Expression command) {
+	public ForExpression(IExpression initial, IExpression condition, IExpression loop, IExpression command) {
 		super(initial, condition, loop, command);
 		id = UUID.randomUUID();
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		double value = 0.0D;
@@ -85,7 +85,7 @@ public class ForExpression extends QuaternaryExpression {
 		 * 
 		 */
 		// Now loop running the command until the condition is no longer true
-		while (getChild(CONDITION).evaluate(variables, quoteBundle, symbol, day) >= Expression.TRUE_LEVEL) {
+		while (getChild(CONDITION).evaluate(variables, quoteBundle, symbol, day) >= IExpression.TRUE_LEVEL) {
 
 			// Don't want to run forever - if the limit is exceeded
 			// could be an infinite loop.
@@ -142,8 +142,8 @@ public class ForExpression extends QuaternaryExpression {
 	}
 
 	public Object clone() {
-		return new ForExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone(),
-				(Expression) getChild(2).clone(), (Expression) getChild(3).clone());
+		return new ForExpression((IExpression) getChild(0).clone(), (IExpression) getChild(1).clone(),
+				(IExpression) getChild(2).clone(), (IExpression) getChild(3).clone());
 	}
 
 }

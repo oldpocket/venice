@@ -35,7 +35,7 @@ import nz.org.venice.util.Locale;
 /**
  * Provides a preferences page to let the user set user interface parameters.
  */
-public class UserInterfacePage extends JPanel implements PreferencesPage {
+public class UserInterfacePage extends JPanel implements IPreferencesPage {
 	private JDesktopPane desktop;
 	private JTextField minDecimalDigitsTextField;
 	private JTextField maxDecimalDigitsTextField;

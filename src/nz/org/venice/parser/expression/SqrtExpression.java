@@ -19,10 +19,10 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -32,11 +32,11 @@ import nz.org.venice.quote.Symbol;
  */
 public class SqrtExpression extends UnaryExpression {
 
-	public SqrtExpression(Expression number) {
+	public SqrtExpression(IExpression number) {
 		super(number);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		double number = getChild(0).evaluate(variables, quoteBundle, symbol, day);
@@ -72,9 +72,9 @@ public class SqrtExpression extends UnaryExpression {
 		}
 	}
 
-	public Expression simplify() {
+	public IExpression simplify() {
 		// First simplify child argument
-		Expression simplified = super.simplify();
+		IExpression simplified = super.simplify();
 
 		// If the child argument is a constant we can precompute.
 		if (simplified.getChild(0) instanceof NumberExpression) {
@@ -101,7 +101,7 @@ public class SqrtExpression extends UnaryExpression {
 		for (int i = 0; i < childCount; i++) {
 			if (getChild(i) != null) {
 				type = getChild(i).getType();
-				if (type == Expression.FLOAT_TYPE) {
+				if (type == IExpression.FLOAT_TYPE) {
 					return type;
 				}
 			}
@@ -110,6 +110,6 @@ public class SqrtExpression extends UnaryExpression {
 	}
 
 	public Object clone() {
-		return new SqrtExpression((Expression) getChild(0).clone());
+		return new SqrtExpression((IExpression) getChild(0).clone());
 	}
 }

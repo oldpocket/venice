@@ -44,7 +44,7 @@ import javax.swing.ScrollPaneLayout;
 import javax.swing.border.TitledBorder;
 
 import nz.org.venice.analyser.ga.GAIndividual;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.ExpressionException;
 import nz.org.venice.parser.ImplicitVariables;
 import nz.org.venice.parser.Parser;
@@ -56,7 +56,7 @@ import nz.org.venice.ui.ExpressionComboBox;
 import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.util.Locale;
 
-public class GARulesPage extends Page implements AnalyserPage {
+public class GARulesPage extends Page implements IAnalyserPage {
 
 	// Swing components
 	private JCheckBox ruleFamilyEnabledCheckBox;
@@ -68,8 +68,8 @@ public class GARulesPage extends Page implements AnalyserPage {
 	private JButton addParameterButton;
 
 	// Parsed input
-	private Expression buyRule;
-	private Expression sellRule;
+	private IExpression buyRule;
+	private IExpression sellRule;
 
 	// Parameters Table
 	private GARulesPageModule GARulesPageModule;
@@ -219,7 +219,7 @@ public class GARulesPage extends Page implements AnalyserPage {
 	 *
 	 * @return the buy rule
 	 */
-	public Expression getBuyRule() {
+	public IExpression getBuyRule() {
 		return buyRule;
 	}
 
@@ -228,7 +228,7 @@ public class GARulesPage extends Page implements AnalyserPage {
 	 *
 	 * @return the sell rule
 	 */
-	public Expression getSellRule() {
+	public IExpression getSellRule() {
 		return sellRule;
 	}
 
@@ -254,9 +254,9 @@ public class GARulesPage extends Page implements AnalyserPage {
 			// if there is a full stop in the number string,
 			// interpret it as a FLOAT number
 			if (value.indexOf('.') == -1) {
-				types[ii] = Expression.INTEGER_TYPE;
+				types[ii] = IExpression.INTEGER_TYPE;
 			} else {
-				types[ii] = Expression.FLOAT_TYPE;
+				types[ii] = IExpression.FLOAT_TYPE;
 			}
 		}
 		GAIndividual retValue = new GAIndividual(parameters, values, types);
@@ -285,9 +285,9 @@ public class GARulesPage extends Page implements AnalyserPage {
 			// if there is a full stop in the number string,
 			// interpret it as a FLOAT number
 			if (value.indexOf('.') == -1) {
-				types[ii] = Expression.INTEGER_TYPE;
+				types[ii] = IExpression.INTEGER_TYPE;
 			} else {
-				types[ii] = Expression.FLOAT_TYPE;
+				types[ii] = IExpression.FLOAT_TYPE;
 			}
 		}
 		GAIndividual retValue = new GAIndividual(parameters, values, types);

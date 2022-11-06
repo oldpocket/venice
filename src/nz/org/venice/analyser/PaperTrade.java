@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.ExpressionFactory;
 import nz.org.venice.parser.ImplicitVariables;
 import nz.org.venice.parser.Variables;
@@ -37,7 +37,7 @@ import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.EODQuoteCache;
 import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
@@ -176,12 +176,12 @@ public class PaperTrade {
 
 			// If the sellPrice is zero, buy at open price.
 			if (sellPrice == 0) {
-				sellPrice = environment.quoteBundle.getQuote(symbol, Quote.DAY_OPEN, day);
+				sellPrice = environment.quoteBundle.getQuote(symbol, IQuote.DAY_OPEN, day);
 			}
 			// If the wished price is lower than the maximum of the day,
 			// your stocks will be sold.
 			// It simulates an order of selling at fixed price (sellPrice).
-			if (sellPrice <= environment.quoteBundle.getQuote(symbol, Quote.DAY_HIGH, day)) {
+			if (sellPrice <= environment.quoteBundle.getQuote(symbol, IQuote.DAY_HIGH, day)) {
 				Money amount = new Money(shares * sellPrice);
 				TradingDate date = environment.quoteBundle.offsetToDate(day);
 				Transaction sell = Transaction.newReduce(date, amount, symbol, shares, tradeCost,
@@ -206,12 +206,12 @@ public class PaperTrade {
 
 		// If the buyPrice is zero, buy at open price.
 		if (buyPrice == 0) {
-			buyPrice = environment.quoteBundle.getQuote(symbol, Quote.DAY_OPEN, day);
+			buyPrice = environment.quoteBundle.getQuote(symbol, IQuote.DAY_OPEN, day);
 		}
 		// If the wished price is greater than the minimum of the day,
 		// your stocks will be bought.
 		// It simulates an order of buying at fixed price (buyPrice).
-		if (buyPrice >= environment.quoteBundle.getQuote(symbol, Quote.DAY_LOW, day)) {
+		if (buyPrice >= environment.quoteBundle.getQuote(symbol, IQuote.DAY_LOW, day)) {
 			// Calculate maximum number of shares we can buy with the given amount
 			double sharePrice = buyPrice;
 			int shares = (int) Math.floor(amount.doubleValue() / sharePrice);
@@ -247,7 +247,7 @@ public class PaperTrade {
 	 * @param orderCache  cache of ordered symbols
 	 */
 	private static void sellTrades(Environment environment, EODQuoteBundle quoteBundle, Variables variables,
-			Expression sell, Expression buy, int dateOffset, Money tradeCost, List symbols, OrderCache orderCache)
+			IExpression sell, IExpression buy, int dateOffset, Money tradeCost, List symbols, OrderCache orderCache)
 			throws EvaluationException {
 
 		// Iterate through our stock holdings and see if we should sell any
@@ -274,15 +274,15 @@ public class PaperTrade {
 
 			try {
 				// If you want to buy the stock, do not sell it.
-				if (!(buy.evaluate(variables, quoteBundle, symbol, dateOffset) >= Expression.TRUE)) {
-					if (sell.evaluate(variables, quoteBundle, symbol, dateOffset) >= Expression.TRUE) {
+				if (!(buy.evaluate(variables, quoteBundle, symbol, dateOffset) >= IExpression.TRUE)) {
+					if (sell.evaluate(variables, quoteBundle, symbol, dateOffset) >= IExpression.TRUE) {
 						// calculate the price wanted by user trade value expression
 						// to sell the stock (tradeValueWanted).
 						// If trade value expression is 'open', then
 						// set tradeValueWanted = 0 and sell at open price.
 						double tradeValueWanted = 0;
 						if (!environment.tradeValueSell.equals("open")) {
-							Expression tradeValueSellExpression = ExpressionFactory
+							IExpression tradeValueSellExpression = ExpressionFactory
 									.newExpression(environment.tradeValueSell);
 							tradeValueWanted = tradeValueSellExpression.evaluate(variables, environment.quoteBundle,
 									symbol, dateOffset);
@@ -317,7 +317,7 @@ public class PaperTrade {
 	 * @param stockValue  amount of money to spend on stock
 	 */
 	private static void buyTrades(Environment environment, EODQuoteBundle quoteBundle, Variables variables,
-			Expression buy, int dateOffset, Money tradeCost, List symbols, OrderCache orderCache, Money stockValue)
+			IExpression buy, int dateOffset, Money tradeCost, List symbols, OrderCache orderCache, Money stockValue)
 			throws EvaluationException {
 
 		variables.setValue("held", 0);
@@ -342,7 +342,7 @@ public class PaperTrade {
 						variables.setValue("order", order);
 
 					try {
-						if (buy.evaluate(variables, quoteBundle, symbol, dateOffset) >= Expression.TRUE) {
+						if (buy.evaluate(variables, quoteBundle, symbol, dateOffset) >= IExpression.TRUE) {
 
 							// calculate the price wanted by user trade value expression
 							// to buy the stock (tradeValueWanted).
@@ -350,7 +350,7 @@ public class PaperTrade {
 							// set tradeValueWanted = 0 and buy at open price.
 							double tradeValueWanted = 0;
 							if (!environment.tradeValueBuy.equals("open")) {
-								Expression tradeValueBuyExpression = ExpressionFactory
+								IExpression tradeValueBuyExpression = ExpressionFactory
 										.newExpression(environment.tradeValueBuy);
 								tradeValueWanted = tradeValueBuyExpression.evaluate(variables, environment.quoteBundle,
 										symbol, dateOffset);
@@ -415,7 +415,7 @@ public class PaperTrade {
 		try {
 			// Set the actual value of capital for the stock
 			int shares = stockHolding.getShares();
-			double price = environment.quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, dateOffset);
+			double price = environment.quoteBundle.getQuote(symbol, IQuote.DAY_CLOSE, dateOffset);
 			retValue = (double) price * shares;
 		} catch (MissingQuoteException e) {
 			// do nothing
@@ -426,7 +426,7 @@ public class PaperTrade {
 
 			try {
 				if (shares > 0) {
-					double price = environment.quoteBundle.getNearestQuote(symbol, Quote.DAY_CLOSE, dateOffset);
+					double price = environment.quoteBundle.getNearestQuote(symbol, IQuote.DAY_CLOSE, dateOffset);
 					retValue = (double) price * shares;
 				}
 			} catch (MissingQuoteException mqe) {
@@ -474,7 +474,7 @@ public class PaperTrade {
 	 * @return the portfolio at the close of the last day's trade
 	 */
 	public static Portfolio paperTrade(String portfolioName, EODQuoteBundle quoteBundle, Variables variables,
-			OrderCache orderCache, TradingDate startDate, TradingDate endDate, Expression buy, Expression sell,
+			OrderCache orderCache, TradingDate startDate, TradingDate endDate, IExpression buy, IExpression sell,
 			Money capital, Money stockValue, Money tradeCost, String tradeValueBuy, String tradeValueSell)
 			throws EvaluationException {
 
@@ -557,7 +557,7 @@ public class PaperTrade {
 	 * @return the portfolio at the close of the last day's trade
 	 */
 	public static Portfolio paperTrade(String portfolioName, EODQuoteBundle quoteBundle, Variables variables,
-			OrderCache orderCache, TradingDate startDate, TradingDate endDate, Expression buy, Expression sell,
+			OrderCache orderCache, TradingDate startDate, TradingDate endDate, IExpression buy, IExpression sell,
 			Money capital, int numberStocks, Money tradeCost, String tradeValueBuy, String tradeValueSell)
 			throws EvaluationException {
 
@@ -636,8 +636,8 @@ public class PaperTrade {
 	/**
 	 * Set the information for the tip of the next day.
 	 */
-	private static void setTip(Environment environment, EODQuoteBundle quoteBundle, Variables variables, Expression buy,
-			Expression sell, int dateOffset, Money tradeCost, List symbols, OrderCache orderCache) {
+	private static void setTip(Environment environment, EODQuoteBundle quoteBundle, Variables variables, IExpression buy,
+			IExpression sell, int dateOffset, Money tradeCost, List symbols, OrderCache orderCache) {
 
 		symbolStock = new String[symbols.size()];
 		buyRule = new boolean[symbols.size()];
@@ -652,7 +652,7 @@ public class PaperTrade {
 	}
 
 	private static void setSellTip(Environment environment, EODQuoteBundle quoteBundle, Variables variables,
-			Expression sell, int dateOffset, Money tradeCost, List symbols, OrderCache orderCache) {
+			IExpression sell, int dateOffset, Money tradeCost, List symbols, OrderCache orderCache) {
 
 		// Count the sell tip for the next day
 
@@ -692,7 +692,7 @@ public class PaperTrade {
 
 			try {
 				// Get if the stock must be sold
-				sellRule[index] = (sell.evaluate(variables, quoteBundle, symbol, dateOffset) >= Expression.TRUE);
+				sellRule[index] = (sell.evaluate(variables, quoteBundle, symbol, dateOffset) >= IExpression.TRUE);
 
 				// calculate the price wanted by user trade value expression
 				// to sell the stock (tradeValueWanted).
@@ -700,7 +700,7 @@ public class PaperTrade {
 				// set the price to zero (sell at open price).
 				sellValue[index] = 0;
 				if (!environment.tradeValueSell.equals("open")) {
-					Expression tradeValueSellExpression = ExpressionFactory.newExpression(environment.tradeValueSell);
+					IExpression tradeValueSellExpression = ExpressionFactory.newExpression(environment.tradeValueSell);
 					sellValue[index] = tradeValueSellExpression.evaluate(variables, environment.quoteBundle, symbol,
 							dateOffset);
 				}
@@ -713,7 +713,7 @@ public class PaperTrade {
 	}
 
 	private static void setBuyTip(Environment environment, EODQuoteBundle quoteBundle, Variables variables,
-			Expression buy, int dateOffset, Money tradeCost, List symbols, OrderCache orderCache) {
+			IExpression buy, int dateOffset, Money tradeCost, List symbols, OrderCache orderCache) {
 
 		// Count the buy tip for the next day
 		variables.setValue("held", 0);
@@ -736,7 +736,7 @@ public class PaperTrade {
 
 			try {
 				// Get if the stock must be bought
-				buyRule[index] = (buy.evaluate(variables, quoteBundle, symbol, dateOffset) >= Expression.TRUE);
+				buyRule[index] = (buy.evaluate(variables, quoteBundle, symbol, dateOffset) >= IExpression.TRUE);
 
 				// If you own the stock and both sell and buy rule fire,
 				// you wouldn't sell it, neither would you buy it.
@@ -753,7 +753,7 @@ public class PaperTrade {
 				// set this price to zero (buy at open price).
 				buyValue[index] = 0;
 				if (!environment.tradeValueBuy.equals("open")) {
-					Expression tradeValueBuyExpression = ExpressionFactory.newExpression(environment.tradeValueBuy);
+					IExpression tradeValueBuyExpression = ExpressionFactory.newExpression(environment.tradeValueBuy);
 					buyValue[index] = tradeValueBuyExpression.evaluate(variables, environment.quoteBundle, symbol,
 							dateOffset);
 				}

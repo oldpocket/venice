@@ -70,7 +70,7 @@ public class AccountTable extends AbstractTable {
 		}
 
 		private Object getAccountValueAt(int row, int column) {
-			Account todayAccount = (Account) todayPortfolio.getAccounts().get(row);
+			IAccount todayAccount = (IAccount) todayPortfolio.getAccounts().get(row);
 
 			switch (column) {
 			case (ACCOUNT_COLUMN):
@@ -84,7 +84,7 @@ public class AccountTable extends AbstractTable {
 				}
 
 			case (PERCENT_CHANGE_COLUMN):
-				Account yesterdayAccount = (Account) yesterdayPortfolio.getAccounts().get(row);
+				IAccount yesterdayAccount = (IAccount) yesterdayPortfolio.getAccounts().get(row);
 
 				try {
 					Money todayValue = todayAccount.getValue(quoteBundle, date);

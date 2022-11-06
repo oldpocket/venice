@@ -19,11 +19,11 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.Quote;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuote;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.QuoteBundleFunctionSource;
 import nz.org.venice.quote.QuoteFunctions;
 import nz.org.venice.quote.Symbol;
@@ -45,11 +45,11 @@ public class OBVExpression extends TernaryExpression {
 	 * @param days         the number of days to count over
 	 * @param lag          the offset from the current day
 	 */
-	public OBVExpression(Expression days, Expression lag, Expression initialValue) {
+	public OBVExpression(IExpression days, IExpression lag, IExpression initialValue) {
 		super(days, lag, initialValue);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		// Extract arguments
@@ -69,11 +69,11 @@ public class OBVExpression extends TernaryExpression {
 		int initialValue = (int) getChild(2).evaluate(variables, quoteBundle, symbol, day);
 
 		// Calculate and return the OBV.
-		QuoteBundleFunctionSource sourceOpen = new QuoteBundleFunctionSource(quoteBundle, symbol, Quote.DAY_OPEN, day,
+		QuoteBundleFunctionSource sourceOpen = new QuoteBundleFunctionSource(quoteBundle, symbol, IQuote.DAY_OPEN, day,
 				offset, period);
-		QuoteBundleFunctionSource sourceClose = new QuoteBundleFunctionSource(quoteBundle, symbol, Quote.DAY_CLOSE, day,
+		QuoteBundleFunctionSource sourceClose = new QuoteBundleFunctionSource(quoteBundle, symbol, IQuote.DAY_CLOSE, day,
 				offset, period);
-		QuoteBundleFunctionSource sourceVolume = new QuoteBundleFunctionSource(quoteBundle, symbol, Quote.DAY_VOLUME,
+		QuoteBundleFunctionSource sourceVolume = new QuoteBundleFunctionSource(quoteBundle, symbol, IQuote.DAY_VOLUME,
 				day, offset, period);
 
 		return QuoteFunctions.obv(sourceOpen, sourceClose, sourceVolume, period, initialValue);
@@ -130,7 +130,7 @@ public class OBVExpression extends TernaryExpression {
 	}
 
 	public Object clone() {
-		return new OBVExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone(),
-				(Expression) getChild(2).clone());
+		return new OBVExpression((IExpression) getChild(0).clone(), (IExpression) getChild(1).clone(),
+				(IExpression) getChild(2).clone());
 	}
 }

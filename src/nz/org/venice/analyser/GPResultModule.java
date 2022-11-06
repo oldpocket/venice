@@ -40,10 +40,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import nz.org.venice.main.CommandManager;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.prefs.settings.AnalyserResultSettings;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.AbstractTableModel;
 import nz.org.venice.ui.ChangeFormat;
@@ -54,7 +54,7 @@ import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
 
-public class GPResultModule extends AbstractTable implements Module {
+public class GPResultModule extends AbstractTable implements IModule {
 	private PropertyChangeSupport propertySupport;
 
 	private static final int START_DATE_COLUMN = 0;
@@ -671,7 +671,7 @@ public class GPResultModule extends AbstractTable implements Module {
 
 	public void save() {
 
-		settings = new AnalyserResultSettings(Settings.GPRESULTS);
+		settings = new AnalyserResultSettings(ISettings.GPRESULTS);
 		settings.setResults(model.getResults());
 
 		// Free up precious memory
@@ -706,7 +706,7 @@ public class GPResultModule extends AbstractTable implements Module {
 		return true;
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 }

@@ -22,10 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -57,7 +57,7 @@ public class ClauseExpression extends AbstractExpression {
 		}
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		// Execute all the sub-expressions in this clause and return the value
@@ -111,7 +111,7 @@ public class ClauseExpression extends AbstractExpression {
 	 * @param expression the expression to print.
 	 * @return string representation.
 	 */
-	public static String toString(Expression expression) {
+	public static String toString(IExpression expression) {
 		// if (x) {
 		// clause
 		// }
@@ -150,7 +150,7 @@ public class ClauseExpression extends AbstractExpression {
 	public int checkType() throws TypeMismatchException {
 		// Type of the clause expression is the type of the last contained
 		// sub-expression
-		int type = Expression.INTEGER_TYPE;
+		int type = IExpression.INTEGER_TYPE;
 
 		for (int child = 0; child < getChildCount(); child++)
 			type = getChild(child).checkType();

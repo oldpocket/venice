@@ -34,7 +34,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.ExpressionException;
 import nz.org.venice.parser.Parser;
 import nz.org.venice.parser.Variable;
@@ -42,7 +42,7 @@ import nz.org.venice.parser.Variables;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.util.Locale;
 
-public class TradeValuePage extends Page implements AnalyserPage {
+public class TradeValuePage extends Page implements IAnalyserPage {
 
 	private final static int MAX_CHARS_IN_TEXTBOXES = 15;
 
@@ -116,17 +116,17 @@ public class TradeValuePage extends Page implements AnalyserPage {
 			// We need to specify the variables that are given to the expression
 			// expressions so they can be parsed properly.
 			Variables variables = new Variables();
-			variables.add("held", Expression.INTEGER_TYPE, Variable.CONSTANT);
-			variables.add("order", Expression.INTEGER_TYPE, Variable.CONSTANT);
-			variables.add("daysfromstart", Expression.INTEGER_TYPE, Variable.CONSTANT);
-			variables.add("transactions", Expression.INTEGER_TYPE, Variable.CONSTANT);
-			variables.add("capital", Expression.FLOAT_TYPE, Variable.CONSTANT);
-			variables.add("stockcapital", Expression.FLOAT_TYPE, Variable.CONSTANT);
+			variables.add("held", IExpression.INTEGER_TYPE, Variable.CONSTANT);
+			variables.add("order", IExpression.INTEGER_TYPE, Variable.CONSTANT);
+			variables.add("daysfromstart", IExpression.INTEGER_TYPE, Variable.CONSTANT);
+			variables.add("transactions", IExpression.INTEGER_TYPE, Variable.CONSTANT);
+			variables.add("capital", IExpression.FLOAT_TYPE, Variable.CONSTANT);
+			variables.add("stockcapital", IExpression.FLOAT_TYPE, Variable.CONSTANT);
 			if (tradeValueBuyByEquationButton.isSelected()) {
-				Expression tradeValueBuyExpression = Parser.parse(variables, tradeValueBuyTextField.getText());
+				IExpression tradeValueBuyExpression = Parser.parse(variables, tradeValueBuyTextField.getText());
 			}
 			if (tradeValueSellByEquationButton.isSelected()) {
-				Expression tradeValueSellExpression = Parser.parse(variables, tradeValueSellTextField.getText());
+				IExpression tradeValueSellExpression = Parser.parse(variables, tradeValueSellTextField.getText());
 			}
 		} catch (ExpressionException e) {
 			showErrorMessage(Locale.getString("ERROR_PARSING_SYSTEM_RULES"),

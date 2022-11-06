@@ -28,10 +28,10 @@ import nz.org.venice.util.TradingDate;
  * stored.
  * 
  * @author Mark Hummel
- * @see AlertWriter
+ * @see IAlertWriter
  */
 
-public class FileAlertWriter implements AlertWriter {
+public class FileAlertWriter implements IAlertWriter {
 
 	public FileAlertWriter() {
 	}

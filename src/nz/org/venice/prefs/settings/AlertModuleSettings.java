@@ -34,20 +34,20 @@ import javax.swing.JDesktopPane;
 import nz.org.venice.alert.AlertException;
 import nz.org.venice.alert.AlertManager;
 import nz.org.venice.alert.AlertModule;
-import nz.org.venice.alert.AlertReader;
-import nz.org.venice.alert.AlertWriter;
-import nz.org.venice.main.Module;
+import nz.org.venice.alert.IAlertReader;
+import nz.org.venice.alert.IAlertWriter;
+import nz.org.venice.main.IModule;
 
 public class AlertModuleSettings extends AbstractSettings {
 
 	List symbols;
 
 	public AlertModuleSettings() {
-		super(Settings.ALERTS, Settings.MODULE);
+		super(ISettings.ALERTS, ISettings.MODULE);
 	}
 
 	public AlertModuleSettings(List symbols) {
-		super(Settings.ALERTS, Settings.MODULE);
+		super(ISettings.ALERTS, ISettings.MODULE);
 		this.symbols = symbols;
 	}
 
@@ -55,11 +55,11 @@ public class AlertModuleSettings extends AbstractSettings {
 		this.symbols = symbols;
 	}
 
-	public Module getModule(JDesktopPane desktop) {
-		AlertReader reader = AlertManager.getReader();
-		AlertWriter writer = AlertManager.getWriter();
+	public IModule getModule(JDesktopPane desktop) {
+		IAlertReader reader = AlertManager.getReader();
+		IAlertWriter writer = AlertManager.getWriter();
 
-		Module alertModule = null;
+		IModule alertModule = null;
 
 		try {
 			if (symbols == null) {

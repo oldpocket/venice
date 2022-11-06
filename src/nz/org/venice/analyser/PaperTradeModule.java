@@ -37,23 +37,23 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 import nz.org.venice.main.CommandManager;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.Variable;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.prefs.settings.AnalyserModuleSettings;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.quote.EODQuoteBundle;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
 
-public class PaperTradeModule extends Page implements Module {
+public class PaperTradeModule extends Page implements IModule {
 
 	private PropertyChangeSupport propertySupport;
 	private EODQuoteBundle quoteBundle;
@@ -143,7 +143,7 @@ public class PaperTradeModule extends Page implements Module {
 		portfolioPage.save(getClass().getName());
 		tradeValuePage.save(getClass().getName());
 
-		settings = new AnalyserModuleSettings(Settings.PAPERTRADEMODULE);
+		settings = new AnalyserModuleSettings(ISettings.PAPERTRADEMODULE);
 
 	}
 
@@ -247,9 +247,9 @@ public class PaperTradeModule extends Page implements Module {
 			return true;
 	}
 
-	private PaperTradeResult paperTrade(ProgressDialog progress, EODQuoteBundle quoteBundle,
+	private PaperTradeResult paperTrade(IProgressDialog progress, EODQuoteBundle quoteBundle,
 			String quoteRangeDescription, OrderCache orderCache, TradingDate startDate, TradingDate endDate,
-			Expression buyRule, Expression sellRule, Money initialCapital, int mode, Money stockValue, int numberStocks,
+			IExpression buyRule, IExpression sellRule, Money initialCapital, int mode, Money stockValue, int numberStocks,
 			Money tradeCost, Variables variables, int a, int b, int c, String tradeValueBuy, String tradeValueSell)
 			throws EvaluationException {
 
@@ -276,7 +276,7 @@ public class PaperTradeModule extends Page implements Module {
 	}
 
 	private List getPaperTradeResults() {
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 
 		Thread thread = Thread.currentThread();
 		progress.setIndeterminate(true);
@@ -290,8 +290,8 @@ public class PaperTradeModule extends Page implements Module {
 		int cRange = rulesPage.getCRange();
 		TradingDate startDate = quoteRangePage.getQuoteRange().getFirstDate();
 		TradingDate endDate = quoteRangePage.getQuoteRange().getLastDate();
-		Expression buyRule = rulesPage.getBuyRule();
-		Expression sellRule = rulesPage.getSellRule();
+		IExpression buyRule = rulesPage.getBuyRule();
+		IExpression sellRule = rulesPage.getSellRule();
 		Money initialCapital = portfolioPage.getInitialCapital();
 		int mode = portfolioPage.getMode();
 		Money stockValue = portfolioPage.getStockValue();
@@ -329,9 +329,9 @@ public class PaperTradeModule extends Page implements Module {
 			// If the user has selected rule family, then iterate through
 			// each combination of a, b, c
 			if (isFamilyEnabled) {
-				variables.add("a", Expression.INTEGER_TYPE, Variable.CONSTANT);
-				variables.add("b", Expression.INTEGER_TYPE, Variable.CONSTANT);
-				variables.add("c", Expression.INTEGER_TYPE, Variable.CONSTANT);
+				variables.add("a", IExpression.INTEGER_TYPE, Variable.CONSTANT);
+				variables.add("b", IExpression.INTEGER_TYPE, Variable.CONSTANT);
+				variables.add("c", IExpression.INTEGER_TYPE, Variable.CONSTANT);
 
 				for (int a = 1; a <= aRange; a++) {
 					if (thread.isInterrupted())
@@ -411,7 +411,7 @@ public class PaperTradeModule extends Page implements Module {
 		});
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 }

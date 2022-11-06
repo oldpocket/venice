@@ -19,11 +19,11 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variable;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
 
@@ -36,7 +36,7 @@ public class SetVariableExpression extends UnaryExpression {
 	private String name;
 	private int type;
 
-	public SetVariableExpression(String name, int type, Expression value) {
+	public SetVariableExpression(String name, int type, IExpression value) {
 		super(value);
 
 		assert name != null && name.length() > 0;
@@ -45,7 +45,7 @@ public class SetVariableExpression extends UnaryExpression {
 		this.type = type;
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		Variable variable = variables.get(name);
@@ -95,14 +95,14 @@ public class SetVariableExpression extends UnaryExpression {
 	}
 
 	public int hashCode() {
-		Expression child1 = getChild(0);
+		IExpression child1 = getChild(0);
 		assert child1 != null;
 
 		return (child1.hashCode() ^ getName().hashCode() ^ (37 * getType()));
 	}
 
 	public Object clone() {
-		return new SetVariableExpression(name, type, (Expression) getChild(0).clone());
+		return new SetVariableExpression(name, type, (IExpression) getChild(0).clone());
 	}
 
 }

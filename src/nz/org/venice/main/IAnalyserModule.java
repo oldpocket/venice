@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
 
-public interface AnalyserModule {
+public interface IAnalyserModule {
 	public String getTitle();
 
 	public void addModuleChangeListener(PropertyChangeListener listener);

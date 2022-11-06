@@ -28,7 +28,7 @@ import nz.org.venice.util.TradingTime;
  *
  * @author Andrew Leppard
  */
-public class IDQuote implements Quote {
+public class IDQuote implements IQuote {
 
 	// Stock symbol
 	private Symbol symbol;

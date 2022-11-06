@@ -40,7 +40,7 @@ import nz.org.venice.util.TradingDate;
  * <p>
  * A quote range represents a range or set of quotes. It does not represent the
  * actual quotes themselves. The class that represents the quotes in a quote
- * range is {@link QuoteBundle}.
+ * range is {@link IQuoteBundle}.
  */
 public class EODQuoteRange implements Cloneable {
 

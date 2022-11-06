@@ -23,7 +23,7 @@ import java.util.Random;
 import nz.org.venice.analyser.OrderCache;
 import nz.org.venice.analyser.PaperTrade;
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.portfolio.Portfolio;
@@ -43,10 +43,10 @@ import nz.org.venice.util.TradingDate;
 public class Individual implements Comparable {
 
 	// The evolved buy indicator
-	private Expression buyRule = null;
+	private IExpression buyRule = null;
 
 	// The evolved sell indicator
-	private Expression sellRule = null;
+	private IExpression sellRule = null;
 
 	// The individuals portfolio after trades
 	private Portfolio portfolio = null;
@@ -79,7 +79,7 @@ public class Individual implements Comparable {
 	 * @param buyRule  the buy indicator
 	 * @param sellRule the sell indicator
 	 */
-	public Individual(Expression buyRule, Expression sellRule) {
+	public Individual(IExpression buyRule, IExpression sellRule) {
 		this.buyRule = buyRule;
 		this.sellRule = sellRule;
 
@@ -94,8 +94,8 @@ public class Individual implements Comparable {
 	 */
 	public Individual(Mutator buyRuleMutator, Mutator sellRuleMutator) {
 		// By setting the level low we create bushier trees
-		buyRule = buyRuleMutator.createRandomNonTerminal(Expression.BOOLEAN_TYPE, 0);
-		sellRule = sellRuleMutator.createRandomNonTerminal(Expression.BOOLEAN_TYPE, 0);
+		buyRule = buyRuleMutator.createRandomNonTerminal(IExpression.BOOLEAN_TYPE, 0);
+		sellRule = sellRuleMutator.createRandomNonTerminal(IExpression.BOOLEAN_TYPE, 0);
 
 		buyRule = buyRule.simplify();
 		sellRule = sellRule.simplify();
@@ -117,14 +117,14 @@ public class Individual implements Comparable {
 			Individual mother) {
 		int breedType = getRandomBreedType(random);
 
-		buyRule = (Expression) father.getBuyRule().clone();
+		buyRule = (IExpression) father.getBuyRule().clone();
 
 		// SWAP
 		{
 			if (breedType == BREED_BY_SWAPPING || breedType == BREED_BY_SWAPPING_AND_RECOMBINING)
-				sellRule = (Expression) mother.getSellRule().clone();
+				sellRule = (IExpression) mother.getSellRule().clone();
 			else
-				sellRule = (Expression) father.getSellRule().clone();
+				sellRule = (IExpression) father.getSellRule().clone();
 		}
 
 		// RECOMBINE
@@ -185,7 +185,7 @@ public class Individual implements Comparable {
 		int buyRuleSize = buyRule.size();
 
 		return (sellRuleSize >= min && sellRuleSize <= max && buyRuleSize >= min && buyRuleSize <= max
-				&& (buyRule.size(Expression.FLOAT_QUOTE_TYPE) > 0 || buyRule.size(Expression.INTEGER_QUOTE_TYPE) > 0));
+				&& (buyRule.size(IExpression.FLOAT_QUOTE_TYPE) > 0 || buyRule.size(IExpression.INTEGER_QUOTE_TYPE) > 0));
 	}
 
 	/**
@@ -253,7 +253,7 @@ public class Individual implements Comparable {
 	 *
 	 * @return buy rule
 	 */
-	public Expression getBuyRule() {
+	public IExpression getBuyRule() {
 		return buyRule;
 	}
 
@@ -262,7 +262,7 @@ public class Individual implements Comparable {
 	 *
 	 * @return sell rule
 	 */
-	public Expression getSellRule() {
+	public IExpression getSellRule() {
 		return sellRule;
 	}
 
@@ -343,14 +343,14 @@ public class Individual implements Comparable {
 	}
 
 	// Recombine the two expressions using the given mutator to generate mutations
-	private Expression recombine(Mutator mutator, Expression destination, Expression source) {
-		Expression destinationSubTree = mutator.findRandomSite(destination);
-		Expression sourceSubTree = mutator.findRandomSite(source, destinationSubTree.getType());
+	private IExpression recombine(Mutator mutator, IExpression destination, IExpression source) {
+		IExpression destinationSubTree = mutator.findRandomSite(destination);
+		IExpression sourceSubTree = mutator.findRandomSite(source, destinationSubTree.getType());
 
 		// It's possible that there is no match in the source for the given type.
 		if (sourceSubTree != null) {
 			assert sourceSubTree.getType() == destinationSubTree.getType();
-			destination = mutator.insert(destination, destinationSubTree, (Expression) sourceSubTree.clone());
+			destination = mutator.insert(destination, destinationSubTree, (IExpression) sourceSubTree.clone());
 		}
 
 		return destination;
@@ -362,8 +362,8 @@ public class Individual implements Comparable {
 		try {
 			// Check that both the buy and sell rules are both booleans and
 			// that their subtrees have proper types.
-			assert buyRule.checkType() == Expression.BOOLEAN_TYPE;
-			assert sellRule.checkType() == Expression.BOOLEAN_TYPE;
+			assert buyRule.checkType() == IExpression.BOOLEAN_TYPE;
+			assert sellRule.checkType() == IExpression.BOOLEAN_TYPE;
 
 		} catch (TypeMismatchException e) {
 			assert false;

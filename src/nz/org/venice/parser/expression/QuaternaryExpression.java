@@ -18,14 +18,14 @@
 
 package nz.org.venice.parser.expression;
 
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 
 /**
  * Abstract base class for all expressions requiring four arguments.
  */
 abstract public class QuaternaryExpression extends AbstractExpression {
 
-	private Expression children[] = new Expression[4];
+	private IExpression children[] = new IExpression[4];
 
 	/**
 	 * Create a new quaternary expression with the given four arguments.
@@ -35,8 +35,8 @@ abstract public class QuaternaryExpression extends AbstractExpression {
 	 * @param arg3 the third argument
 	 * @param arg4 the fourth argument
 	 */
-	public QuaternaryExpression(Expression arg1, Expression arg2, Expression arg3, Expression arg4) {
-		super(new Expression[] { arg1, arg2, arg3, arg4 });
+	public QuaternaryExpression(IExpression arg1, IExpression arg2, IExpression arg3, IExpression arg4) {
+		super(new IExpression[] { arg1, arg2, arg3, arg4 });
 		assert arg1 != null && arg2 != null && arg3 != null && arg4 != null;
 
 		// setChild(arg1, 0);

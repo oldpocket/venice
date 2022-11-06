@@ -37,7 +37,7 @@ import java.util.prefs.Preferences;
 import nz.org.venice.macro.StoredMacro;
 import nz.org.venice.main.Main;
 import nz.org.venice.main.ModuleFrame;
-import nz.org.venice.portfolio.Account;
+import nz.org.venice.portfolio.IAccount;
 import nz.org.venice.portfolio.CashAccount;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.portfolio.PortfolioParserException;
@@ -445,7 +445,7 @@ public class PreferencesManager {
 	 *
 	 * @param key a key which identifies which page settings to load.
 	 * @return mapping of settings.
-	 * @see nz.org.venice.analyser.AnalyserPage
+	 * @see nz.org.venice.analyser.IAnalyserPage
 	 */
 	public static HashMap getAnalyserPageSettings(String key) {
 
@@ -474,7 +474,7 @@ public class PreferencesManager {
 	 *
 	 * @param key      a key which identifies which page settings to save.
 	 * @param settings the settings to save.
-	 * @see nz.org.venice.analyser.AnalyserPage
+	 * @see nz.org.venice.analyser.IAnalyserPage
 	 */
 	public static void putAnalyserPageSettings(String key, HashMap settings) {
 		Preferences p = getUserNode("/analyser/" + key);
@@ -851,7 +851,7 @@ public class PreferencesManager {
 
 			for (int i = 0; i < accountNames.length; i++) {
 				Preferences accountPrefs = p.node("accounts").node(accountNames[i]);
-				Account account;
+				IAccount account;
 
 				String accountType = accountPrefs.get("type", "share");
 				if (accountType.equals("share")) {

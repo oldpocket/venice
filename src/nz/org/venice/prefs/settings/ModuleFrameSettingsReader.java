@@ -32,7 +32,7 @@ import java.io.InputStream;
  */
 public class ModuleFrameSettingsReader {
 
-	static Settings moduleSettings;
+	static ISettings moduleSettings;
 	static ModuleFrameSettings settings;
 
 	/**

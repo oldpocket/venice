@@ -19,10 +19,10 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -44,13 +44,13 @@ public class FunctionExpression extends BinaryExpression {
 	 * @param parameterList List of DefineParameterExpressions
 	 * @param body          the Expression representing the funciton body
 	 */
-	public FunctionExpression(String name, int type, Expression parameterList, Expression body) {
+	public FunctionExpression(String name, int type, IExpression parameterList, IExpression body) {
 		super(parameterList, body);
 		this.name = name;
 		this.type = type;
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		// This expression defines the expression only; evaluating the expression
@@ -84,14 +84,14 @@ public class FunctionExpression extends BinaryExpression {
 	}
 
 	public String toString() {
-		Expression parameterList = getChild(0);
-		Expression body = getChild(1);
+		IExpression parameterList = getChild(0);
+		IExpression body = getChild(1);
 
 		return getType() + " " + getName() + "(" + parameterList.toString() + " " + ")" + "{" + body.toString() + "}";
 	}
 
 	public int checkType() throws TypeMismatchException {
-		Expression body = getChild(1);
+		IExpression body = getChild(1);
 
 		// This will catch errors of returning the wrong type for the definition
 		// e.g. float function f { return true}
@@ -122,8 +122,8 @@ public class FunctionExpression extends BinaryExpression {
 	 * @return a Clone of the FunctionExpression object
 	 */
 	public Object clone() {
-		return new FunctionExpression(getName(), getType(), (Expression) getChild(0).clone(),
-				(Expression) getChild(1).clone());
+		return new FunctionExpression(getName(), getType(), (IExpression) getChild(0).clone(),
+				(IExpression) getChild(1).clone());
 	}
 
 }

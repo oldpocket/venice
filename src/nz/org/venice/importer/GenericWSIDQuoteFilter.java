@@ -19,7 +19,7 @@
 package nz.org.venice.importer;
 
 import nz.org.venice.quote.IDQuote;
-import nz.org.venice.quote.IDQuoteFilter;
+import nz.org.venice.quote.IIDQuoteFilter;
 import nz.org.venice.quote.QuoteFormatException;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.SymbolFormatException;
@@ -44,7 +44,7 @@ import nz.org.venice.util.TradingTimeFormatException;
  * @author Andrew Leppard
  */
 
-public class GenericWSIDQuoteFilter implements IDQuoteFilter {
+public class GenericWSIDQuoteFilter implements IIDQuoteFilter {
 
 	/**
 	 * Creates an instance of the filter.

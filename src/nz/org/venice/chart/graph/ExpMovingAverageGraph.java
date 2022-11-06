@@ -27,7 +27,7 @@ import java.util.List;
 import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
 import nz.org.venice.chart.GraphableQuoteFunctionSource;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.quote.QuoteFunctions;
 import nz.org.venice.util.Locale;
@@ -51,7 +51,7 @@ public class ExpMovingAverageGraph extends AbstractGraph {
 	 *
 	 * @param source the source to create a moving average from
 	 */
-	public ExpMovingAverageGraph(GraphSource source) {
+	public ExpMovingAverageGraph(IGraphSource source) {
 		super(source);
 		setSettings(new HashMap());
 	}
@@ -62,7 +62,7 @@ public class ExpMovingAverageGraph extends AbstractGraph {
 	 * @param source   the source to create a moving average from
 	 * @param settings the settings of the graph
 	 */
-	public ExpMovingAverageGraph(GraphSource source, HashMap settings) {
+	public ExpMovingAverageGraph(IGraphSource source, HashMap settings) {
 		super(source);
 		setSettings(settings);
 
@@ -149,7 +149,7 @@ public class ExpMovingAverageGraph extends AbstractGraph {
 	 * @param settings the initial settings
 	 * @return user interface
 	 */
-	public GraphUI getUI(HashMap settings) {
+	public IGraphUI getUI(HashMap settings) {
 		return new ExpMovingAverageGraphUI(settings);
 	}
 }

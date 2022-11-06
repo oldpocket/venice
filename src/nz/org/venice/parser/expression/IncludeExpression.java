@@ -22,7 +22,7 @@ import java.util.List;
 
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -49,7 +49,7 @@ public class IncludeExpression extends ClauseExpression {
 
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		// Execute all the sub-expressions in this clause and return the value

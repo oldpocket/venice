@@ -29,21 +29,21 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.ExpressionFactory;
 import nz.org.venice.parser.ParseMetadata;
 import nz.org.venice.util.VeniceLog;
 
 /**
  * The abstract base class for all expressions in the <i>Gondola</i> language.
- * This class implements the {@link Expression} interface and provides functions
+ * This class implements the {@link IExpression} interface and provides functions
  * for managing an expression's child nodes. E.g. the expression
  * <code>4+5</code> would consist of three nodes. The plus being the root node,
  * which would have two child nodes of <code>4</code> and <code>5</code>.
  *
- * @see Expression
+ * @see IExpression
  */
-public abstract class AbstractExpression implements Expression {
+public abstract class AbstractExpression implements IExpression {
 
 	// Constants that manage the USA/Australian/UK localization
 	// the goal is forcing that localization also for others languages
@@ -52,10 +52,10 @@ public abstract class AbstractExpression implements Expression {
 			new DecimalFormatSymbols(Locale.ENGLISH));
 
 	// Pointer to parent node (if any)
-	private Expression parent;
+	private IExpression parent;
 
 	// Array of children.
-	private final Expression children[];
+	private final IExpression children[];
 
 	private static java.util.logging.Handler handler;
 	private static java.util.logging.Logger logger;
@@ -80,7 +80,7 @@ public abstract class AbstractExpression implements Expression {
 	 *
 	 * @param children An array of the children of the expression.
 	 */
-	public AbstractExpression(Expression[] children) {
+	public AbstractExpression(IExpression[] children) {
 		for (int i = 0; i < children.length; i++) {
 			assert children[i] != null;
 			children[i].setParent(this);
@@ -96,9 +96,9 @@ public abstract class AbstractExpression implements Expression {
 	 * @param children A List of the children of the expression.
 	 */
 	public AbstractExpression(List children) {
-		this.children = new Expression[children.size()];
+		this.children = new IExpression[children.size()];
 		for (int i = 0; i < children.size(); i++) {
-			Expression child = (Expression) children.get(i);
+			IExpression child = (IExpression) children.get(i);
 			child.setParent(this);
 			this.children[i] = child;
 		}
@@ -110,7 +110,7 @@ public abstract class AbstractExpression implements Expression {
 	/**
 	 * Get the parent of this node.
 	 */
-	public Expression getParent() {
+	public IExpression getParent() {
 		return parent;
 	}
 
@@ -119,7 +119,7 @@ public abstract class AbstractExpression implements Expression {
 	 *
 	 * @param parent the new parent.
 	 */
-	public void setParent(Expression parent) {
+	public void setParent(IExpression parent) {
 		assert parent != this;
 		assert parent != null;
 
@@ -132,7 +132,7 @@ public abstract class AbstractExpression implements Expression {
 	 *
 	 * @return child at given index.
 	 */
-	public Expression getChild(int index) {
+	public IExpression getChild(int index) {
 		assert index <= getChildCount();
 
 		return children[index];
@@ -147,7 +147,7 @@ public abstract class AbstractExpression implements Expression {
 		return getParent() == null;
 	}
 
-	public Expression setChild(Expression child, int index) {
+	public IExpression setChild(IExpression child, int index) {
 		assert index <= getChildCount();
 		assert child != this;
 
@@ -161,11 +161,11 @@ public abstract class AbstractExpression implements Expression {
 	 * @param child the new child.
 	 * @param index the index of the new child.
 	 */
-	public void setChildMutableVersion(Expression child, int index) {
+	public void setChildMutableVersion(IExpression child, int index) {
 		assert index <= getChildCount();
 		assert child != this;
 
-		Expression oldParent = null;
+		IExpression oldParent = null;
 
 		VeniceLog.getInstance().log("setChild: Index = " + index + " child = " + child);
 
@@ -233,19 +233,19 @@ public abstract class AbstractExpression implements Expression {
 	// This version replaces the expression with new children
 	// instead of setting child to null/replacing and avoiding the problem
 	// of nulls in the expression tree.
-	public Expression simplify() {
+	public IExpression simplify() {
 
-		Expression[] newChildren = new Expression[getChildCount()];
+		IExpression[] newChildren = new IExpression[getChildCount()];
 
 		for (int i = 0; i < getChildCount(); i++) {
-			Expression newChild = children[i].simplify();
+			IExpression newChild = children[i].simplify();
 			if (newChild == null) {
 				assert false;
 			}
 			newChildren[i] = newChild;
 		}
 
-		Expression rv = ExpressionFactory.newExpression(this, newChildren);
+		IExpression rv = ExpressionFactory.newExpression(this, newChildren);
 
 		return rv;
 	}
@@ -256,7 +256,7 @@ public abstract class AbstractExpression implements Expression {
 	 * expression tree would be simplified to <code>a</code>.
 	 */
 	// Deprecated
-	public Expression simplifyMutableVersion() {
+	public IExpression simplifyMutableVersion() {
 		assert validTree() == true;
 
 		VeniceLog.getInstance().log("Simplify: Type = " + getClass().getName() + " val = " + toString());
@@ -264,8 +264,8 @@ public abstract class AbstractExpression implements Expression {
 		// Simplify child arguments
 		if (getChildCount() > 0) {
 			for (int i = 0; i < getChildCount(); i++) {
-				Expression childi = getChild(i);
-				Expression simplified = childi.simplify();
+				IExpression childi = getChild(i);
+				IExpression simplified = childi.simplify();
 				setChildMutableVersion(simplified, i);
 			}
 		}
@@ -282,7 +282,7 @@ public abstract class AbstractExpression implements Expression {
 	 * @return index of the child expression or <code>-1</code> if it could not be
 	 *         found
 	 */
-	public int getIndex(Expression child) {
+	public int getIndex(IExpression child) {
 		for (int index = 0; index < getChildCount(); index++) {
 			if (getChild(index) == child)
 				return index;
@@ -394,9 +394,9 @@ public abstract class AbstractExpression implements Expression {
 	public boolean equals(Object object) {
 
 		// Top level nodes the sames?
-		if (!(object instanceof Expression))
+		if (!(object instanceof IExpression))
 			return false;
-		Expression expression = (Expression) object;
+		IExpression expression = (IExpression) object;
 
 		if (getClass() != expression.getClass())
 			return false;
@@ -453,7 +453,7 @@ public abstract class AbstractExpression implements Expression {
 		int count = 1;
 
 		for (int i = 0; i < getChildCount(); i++) {
-			Expression child = getChild(i);
+			IExpression child = getChild(i);
 
 			count += child.size();
 		}
@@ -476,7 +476,7 @@ public abstract class AbstractExpression implements Expression {
 			count = 1;
 
 		for (int i = 0; i < getChildCount(); i++) {
-			Expression child = getChild(i);
+			IExpression child = getChild(i);
 
 			count += child.size(type);
 		}
@@ -495,7 +495,7 @@ public abstract class AbstractExpression implements Expression {
 		return list.iterator();
 	}
 
-	private void buildIterationList(List list, Expression expression) {
+	private void buildIterationList(List list, IExpression expression) {
 		list.add(expression);
 
 		for (int i = 0; i < expression.getChildCount(); i++)
@@ -516,7 +516,7 @@ public abstract class AbstractExpression implements Expression {
 
 	public String printParents() {
 		String rv = "";
-		Expression parent = getParent();
+		IExpression parent = getParent();
 		while (parent != null) {
 			// nz.org.venice.parser.expression = 32 chars
 			rv += parent.getClass().getName().substring(32) + ".";

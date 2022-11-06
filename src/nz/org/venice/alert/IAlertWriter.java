@@ -24,11 +24,11 @@ package nz.org.venice.alert;
  *
  * @author Mark Hummel
  * @see Alert
- * @see AlertReader
+ * @see IAlertReader
  * @see AlertModule
  */
 
-public interface AlertWriter {
+public interface IAlertWriter {
 
 	/**
 	 * 

@@ -148,7 +148,7 @@ public class Portfolio implements Cloneable {
 	 *
 	 * @param account the new account to add
 	 */
-	public void addAccount(Account account) {
+	public void addAccount(IAccount account) {
 		accounts.add(account);
 	}
 
@@ -201,7 +201,7 @@ public class Portfolio implements Cloneable {
 
 			// Now update accounts
 			for (Iterator iterator = accounts.iterator(); iterator.hasNext();) {
-				Account account = (Account) iterator.next();
+				IAccount account = (IAccount) iterator.next();
 
 				// Is this account involved in the transaction? If it
 				// it is we'll need to update it
@@ -234,17 +234,17 @@ public class Portfolio implements Cloneable {
 		// the cloned portfolio
 		for (Iterator accountIterator = accounts.iterator(); accountIterator.hasNext();) {
 
-			Account account = (Account) accountIterator.next();
+			IAccount account = (IAccount) accountIterator.next();
 			Object clonedAccount;
 
-			if (account.getType() == Account.SHARE_ACCOUNT) {
+			if (account.getType() == IAccount.SHARE_ACCOUNT) {
 				clonedAccount = ((ShareAccount) account).clone();
 			} else {
-				assert account.getType() == Account.CASH_ACCOUNT;
+				assert account.getType() == IAccount.CASH_ACCOUNT;
 				clonedAccount = ((CashAccount) account).clone();
 			}
 
-			clonedPortfolio.addAccount((Account) clonedAccount);
+			clonedPortfolio.addAccount((IAccount) clonedAccount);
 		}
 
 		// Now clone the transactions
@@ -295,14 +295,14 @@ public class Portfolio implements Cloneable {
 	/**
 	 * Return the number of accounts of the given type the portfolio has
 	 *
-	 * @param type account type, e.g. {@link Account#CASH_ACCOUNT}
+	 * @param type account type, e.g. {@link IAccount#CASH_ACCOUNT}
 	 * @return number of accounts of the given type
 	 */
 	public int countAccounts(int type) {
 		int count = 0;
 
 		for (Iterator iterator = accounts.iterator(); iterator.hasNext();) {
-			Account account = (Account) iterator.next();
+			IAccount account = (IAccount) iterator.next();
 			if (account.getType() == type)
 				count++;
 		}
@@ -317,9 +317,9 @@ public class Portfolio implements Cloneable {
 	 * @return the account with the same name as given or <code>null</code> if it
 	 *         could not be found
 	 */
-	public Account findAccountByName(String name) {
+	public IAccount findAccountByName(String name) {
 		for (Iterator iterator = accounts.iterator(); iterator.hasNext();) {
-			Account account = (Account) iterator.next();
+			IAccount account = (IAccount) iterator.next();
 
 			if (account.getName().equals(name))
 				return account;
@@ -422,7 +422,7 @@ public class Portfolio implements Cloneable {
 		// A portfolio with no transactions has no value or stock so
 		// remove them from accounts
 		for (Iterator iterator = accounts.iterator(); iterator.hasNext();) {
-			Account account = (Account) iterator.next();
+			IAccount account = (IAccount) iterator.next();
 			account.removeAllTransactions();
 		}
 	}
@@ -441,7 +441,7 @@ public class Portfolio implements Cloneable {
 		Money value = new Money(currency, 0.0D);
 
 		for (Iterator iterator = accounts.iterator(); iterator.hasNext();) {
-			Account account = (Account) iterator.next();
+			IAccount account = (IAccount) iterator.next();
 
 			// Convert the value into the portoflio's default currency if necessary
 			value = exchangeRateCache.add(date, value, account.getValue(quoteBundle, date));
@@ -465,7 +465,7 @@ public class Portfolio implements Cloneable {
 		Money value = new Money(currency, 0.0D);
 
 		for (Iterator iterator = accounts.iterator(); iterator.hasNext();) {
-			Account account = (Account) iterator.next();
+			IAccount account = (IAccount) iterator.next();
 
 			// Convert the value into the default portoflio's currency if necessary
 			value = exchangeRateCache.add(date, value, account.getValue(quoteBundle, dateOffset));
@@ -483,9 +483,9 @@ public class Portfolio implements Cloneable {
 		Set stocksHeld = new HashSet();
 
 		for (Iterator iterator = accounts.iterator(); iterator.hasNext();) {
-			Account account = (Account) iterator.next();
+			IAccount account = (IAccount) iterator.next();
 
-			if (account.getType() == Account.SHARE_ACCOUNT) {
+			if (account.getType() == IAccount.SHARE_ACCOUNT) {
 				ShareAccount shareAccount = (ShareAccount) account;
 
 				stocksHeld.addAll(shareAccount.getStockHoldings().keySet());
@@ -505,9 +505,9 @@ public class Portfolio implements Cloneable {
 		Money value = new Money(currency, 0.0D);
 
 		for (Iterator iterator = accounts.iterator(); iterator.hasNext();) {
-			Account account = (Account) iterator.next();
+			IAccount account = (IAccount) iterator.next();
 
-			if (account.getType() == Account.CASH_ACCOUNT) {
+			if (account.getType() == IAccount.CASH_ACCOUNT) {
 				CashAccount cashAccount = (CashAccount) account;
 
 				// Convert the cash value into the default portoflio's currency if necessary
@@ -529,9 +529,9 @@ public class Portfolio implements Cloneable {
 		Money value = new Money(currency, 0.0D);
 
 		for (Iterator iterator = accounts.iterator(); iterator.hasNext();) {
-			Account account = (Account) iterator.next();
+			IAccount account = (IAccount) iterator.next();
 
-			if (account.getType() == Account.SHARE_ACCOUNT)
+			if (account.getType() == IAccount.SHARE_ACCOUNT)
 				// Convert the share value into the default portoflio's currency if necessary
 				value = exchangeRateCache.add(date, value, account.getValue(quoteBundle, date));
 		}

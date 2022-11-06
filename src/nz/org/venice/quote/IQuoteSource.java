@@ -31,7 +31,7 @@ import nz.org.venice.util.TradingDate;
  *
  * @author Andrew Leppard
  */
-public interface QuoteSource {
+public interface IQuoteSource {
 
 	/**
 	 * Returns the company name associated with the given symbol.

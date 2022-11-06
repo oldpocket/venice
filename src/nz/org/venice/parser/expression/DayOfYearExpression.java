@@ -20,7 +20,7 @@ package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.TradingDate;
 
@@ -34,7 +34,7 @@ public class DayOfYearExpression extends TerminalExpression {
 		// nothing to do
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) {
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day) {
 		TradingDate date = quoteBundle.offsetToDate(day);
 		return date.getDayOfYear();
 	}

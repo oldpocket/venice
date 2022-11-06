@@ -29,7 +29,7 @@ import java.util.List;
 
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.ui.DesktopManager;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.util.Currency;
 import nz.org.venice.util.DatabaseManager;
@@ -56,12 +56,12 @@ import nz.org.venice.util.TradingDate;
  * </pre>
  *
  * @author Andrew Leppard
- * @see Quote
+ * @see IQuote
  * @see EODQuote
  * @see EODQuoteRange
  * @see EODQuoteBundle
  */
-public class DatabaseQuoteSource implements QuoteSource {
+public class DatabaseQuoteSource implements IQuoteSource {
 	private DatabaseManager manager = null;
 	private boolean checkedTables = false;
 
@@ -70,7 +70,7 @@ public class DatabaseQuoteSource implements QuoteSource {
 	private TradingDate lastDate = null;
 
 	// Fields for samples mode
-	private EODQuoteFilter filter;
+	private IEODQuoteFilter filter;
 	private List fileURLs;
 
 	// Column numbers
@@ -334,7 +334,7 @@ public class DatabaseQuoteSource implements QuoteSource {
 		boolean success;
 
 		// This query might take a while...
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 		progress.setNote(Locale.getString("LOADING_QUOTES"));
 		progress.setIndeterminate(true);
 
@@ -351,7 +351,7 @@ public class DatabaseQuoteSource implements QuoteSource {
 	 *
 	 * @return <code>true</code> iff this function was successful.
 	 */
-	private boolean executeSQLString(ProgressDialog progress, String SQLString) {
+	private boolean executeSQLString(IProgressDialog progress, String SQLString) {
 
 		if (manager.getConnection()) {
 			try {
@@ -694,7 +694,7 @@ public class DatabaseQuoteSource implements QuoteSource {
 		if (manager.getConnection()) {
 
 			// This might take a while
-			ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+			IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 			progress.setIndeterminate(true);
 			progress.show(Locale.getString("GETTING_DATES"));
 			progress.setNote(Locale.getString("GETTING_DATES"));

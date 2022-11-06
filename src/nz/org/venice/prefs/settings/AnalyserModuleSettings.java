@@ -34,7 +34,7 @@ import nz.org.venice.analyser.ANNModule;
 import nz.org.venice.analyser.GAModule;
 import nz.org.venice.analyser.GPModule;
 import nz.org.venice.analyser.PaperTradeModule;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 
 public class AnalyserModuleSettings extends AbstractSettings {
 
@@ -46,7 +46,7 @@ public class AnalyserModuleSettings extends AbstractSettings {
 	 */
 
 	public AnalyserModuleSettings(int type) {
-		super(Settings.ANALYSER, type);
+		super(ISettings.ANALYSER, type);
 	}
 
 	/**
@@ -56,18 +56,18 @@ public class AnalyserModuleSettings extends AbstractSettings {
 	 * @return An Analyser Module
 	 */
 
-	public Module getModule(JDesktopPane desktop) {
+	public IModule getModule(JDesktopPane desktop) {
 		switch (getType()) {
-		case Settings.PAPERTRADEMODULE:
+		case ISettings.PAPERTRADEMODULE:
 			return new PaperTradeModule(desktop);
 
-		case Settings.GPMODULE:
+		case ISettings.GPMODULE:
 			return new GPModule(desktop);
 
-		case Settings.GAMODULE:
+		case ISettings.GAMODULE:
 			return new GAModule(desktop);
 
-		case Settings.ANNMODULE:
+		case ISettings.ANNMODULE:
 			return new ANNModule(desktop);
 		}
 		return null;

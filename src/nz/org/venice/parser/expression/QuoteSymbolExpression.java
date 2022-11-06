@@ -19,11 +19,11 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.Quote;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuote;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.SymbolFormatException;
 import nz.org.venice.util.Locale;
@@ -33,7 +33,7 @@ import nz.org.venice.util.Locale;
  * to that of the implicit symbol.
  * 
  */
-public class QuoteSymbolExpression extends UnaryExpression implements QuoteSymbol {
+public class QuoteSymbolExpression extends UnaryExpression implements IQuoteSymbol {
 
 	// Quote kind - Quote.DAY_OPEN, Quote.DAY_CLOSE, Quote.DAY_LOW, etc...
 	private int quoteKind;
@@ -41,24 +41,24 @@ public class QuoteSymbolExpression extends UnaryExpression implements QuoteSymbo
 	/**
 	 * Create a new quote expression.
 	 *
-	 * @param quoteKind Kind of quote. One of {@link Quote#DAY_OPEN},
-	 *                  {@link Quote#DAY_CLOSE}, {@link Quote#DAY_LOW},
-	 *                  {@link Quote#DAY_HIGH} or {@link Quote#DAY_VOLUME}
+	 * @param quoteKind Kind of quote. One of {@link IQuote#DAY_OPEN},
+	 *                  {@link IQuote#DAY_CLOSE}, {@link IQuote#DAY_LOW},
+	 *                  {@link IQuote#DAY_HIGH} or {@link IQuote#DAY_VOLUME}
 	 */
 
 	public QuoteSymbolExpression(int quoteKind) {
 		super(null);
-		assert (quoteKind == Quote.DAY_OPEN || quoteKind == Quote.DAY_CLOSE || quoteKind == Quote.DAY_LOW
-				|| quoteKind == Quote.DAY_HIGH || quoteKind == Quote.DAY_VOLUME);
+		assert (quoteKind == IQuote.DAY_OPEN || quoteKind == IQuote.DAY_CLOSE || quoteKind == IQuote.DAY_LOW
+				|| quoteKind == IQuote.DAY_HIGH || quoteKind == IQuote.DAY_VOLUME);
 
 		this.quoteKind = quoteKind;
 
 	}
 
-	public QuoteSymbolExpression(int quoteKind, Expression symbolExpression) {
+	public QuoteSymbolExpression(int quoteKind, IExpression symbolExpression) {
 		super(symbolExpression);
-		assert (quoteKind == Quote.DAY_OPEN || quoteKind == Quote.DAY_CLOSE || quoteKind == Quote.DAY_LOW
-				|| quoteKind == Quote.DAY_HIGH || quoteKind == Quote.DAY_VOLUME);
+		assert (quoteKind == IQuote.DAY_OPEN || quoteKind == IQuote.DAY_CLOSE || quoteKind == IQuote.DAY_LOW
+				|| quoteKind == IQuote.DAY_HIGH || quoteKind == IQuote.DAY_VOLUME);
 
 		this.quoteKind = quoteKind;
 
@@ -67,9 +67,9 @@ public class QuoteSymbolExpression extends UnaryExpression implements QuoteSymbo
 	/**
 	 * Get the quote kind.
 	 *
-	 * @return the quote kind, one of: {@link Quote#DAY_OPEN},
-	 *         {@link Quote#DAY_CLOSE}, {@link Quote#DAY_HIGH},
-	 *         {@link Quote#DAY_LOW} or {@link Quote#DAY_VOLUME}.
+	 * @return the quote kind, one of: {@link IQuote#DAY_OPEN},
+	 *         {@link IQuote#DAY_CLOSE}, {@link IQuote#DAY_HIGH},
+	 *         {@link IQuote#DAY_LOW} or {@link IQuote#DAY_VOLUME}.
 	 */
 	public int getQuoteKind() {
 		return quoteKind;
@@ -81,7 +81,7 @@ public class QuoteSymbolExpression extends UnaryExpression implements QuoteSymbo
 	 * @return {@link #FLOAT_QUOTE_TYPE} or {@link #INTEGER_QUOTE_TYPE}.
 	 */
 	public int getType() {
-		if (getQuoteKind() == Quote.DAY_VOLUME)
+		if (getQuoteKind() == IQuote.DAY_VOLUME)
 			return INTEGER_QUOTE_TYPE;
 		else
 			return FLOAT_QUOTE_TYPE;
@@ -97,7 +97,7 @@ public class QuoteSymbolExpression extends UnaryExpression implements QuoteSymbo
 		}
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		try {
@@ -116,22 +116,22 @@ public class QuoteSymbolExpression extends UnaryExpression implements QuoteSymbo
 
 	public String toString() {
 		switch (quoteKind) {
-		case Quote.DAY_OPEN:
+		case IQuote.DAY_OPEN:
 			return "open";
-		case Quote.DAY_CLOSE:
+		case IQuote.DAY_CLOSE:
 			return "close";
-		case Quote.DAY_HIGH:
+		case IQuote.DAY_HIGH:
 			return "high";
-		case Quote.DAY_LOW:
+		case IQuote.DAY_LOW:
 			return "low";
 		default:
-			assert quoteKind == Quote.DAY_VOLUME;
+			assert quoteKind == IQuote.DAY_VOLUME;
 			return "volume";
 		}
 	}
 
 	public Object clone() {
-		return new QuoteSymbolExpression(quoteKind, (Expression) getChild(0).clone());
+		return new QuoteSymbolExpression(quoteKind, (IExpression) getChild(0).clone());
 	}
 
 	public int checkType() {

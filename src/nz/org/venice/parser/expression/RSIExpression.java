@@ -19,11 +19,11 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.Quote;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuote;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.QuoteBundleFunctionSource;
 import nz.org.venice.quote.QuoteFunctions;
 import nz.org.venice.quote.QuoteFunctions.RSIData;
@@ -36,11 +36,11 @@ import nz.org.venice.quote.Symbol;
  */
 public class RSIExpression extends TernaryExpression {
 
-	public RSIExpression(Expression days, Expression lag, Expression smoothed) {
+	public RSIExpression(IExpression days, IExpression lag, IExpression smoothed) {
 		super(days, lag, smoothed);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		// Extract arguments
@@ -64,7 +64,7 @@ public class RSIExpression extends TernaryExpression {
 		// offset
 		// and increase the period by one day, as the RSI calculation needs an extra day
 		// over the period.
-		QuoteBundleFunctionSource source = new QuoteBundleFunctionSource(quoteBundle, symbol, Quote.DAY_CLOSE, day,
+		QuoteBundleFunctionSource source = new QuoteBundleFunctionSource(quoteBundle, symbol, IQuote.DAY_CLOSE, day,
 				offset - 1, period - 1);
 		double rv;
 		// FIXME - Currently there's no mechanism for a Gondola expression
@@ -82,8 +82,8 @@ public class RSIExpression extends TernaryExpression {
 	}
 
 	public String toString() {
-		Expression periodExpression = getChild(0);
-		Expression lagExpression = getChild(1);
+		IExpression periodExpression = getChild(0);
+		IExpression lagExpression = getChild(1);
 
 		String periodExpressionString = (periodExpression != null) ? periodExpression.toString() : "(null)";
 
@@ -114,7 +114,7 @@ public class RSIExpression extends TernaryExpression {
 	}
 
 	public Object clone() {
-		return new RSIExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone(),
-				(Expression) getChild(2).clone());
+		return new RSIExpression((IExpression) getChild(0).clone(), (IExpression) getChild(1).clone(),
+				(IExpression) getChild(2).clone());
 	}
 }

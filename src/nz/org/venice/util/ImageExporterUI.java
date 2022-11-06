@@ -27,11 +27,11 @@
 package nz.org.venice.util;
 
 import nz.org.venice.ui.DesktopManager;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 
 public class ImageExporterUI {
-	private ProgressDialog progress = null;
+	private IProgressDialog progress = null;
 	private Thread mainThread;
 
 	public ImageExporterUI() {

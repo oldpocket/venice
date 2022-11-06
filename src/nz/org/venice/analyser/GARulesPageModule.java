@@ -45,8 +45,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import nz.org.venice.main.Module;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.main.IModule;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.AbstractTableModel;
 import nz.org.venice.ui.Column;
@@ -54,7 +54,7 @@ import nz.org.venice.ui.MenuHelper;
 import nz.org.venice.ui.TextsEditorDialog;
 import nz.org.venice.util.Locale;
 
-public class GARulesPageModule extends AbstractTable implements Module {
+public class GARulesPageModule extends AbstractTable implements IModule {
 
 	public static int PARAMETER_COLUMN = 0;
 	public final static int MIN_PARAMETER_COLUMN = 1;
@@ -72,7 +72,7 @@ public class GARulesPageModule extends AbstractTable implements Module {
 
 	private JDesktopPane desktop;
 	private Model model;
-	private Settings settings;
+	private ISettings settings;
 
 	// Menus
 	private JMenuBar menuBar;
@@ -434,7 +434,7 @@ public class GARulesPageModule extends AbstractTable implements Module {
 		return true;
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 

@@ -53,10 +53,10 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.tree.TreePath;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.prefs.settings.HelpModuleSettings;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.ui.TextDialog;
 import nz.org.venice.util.Locale;
 
@@ -67,7 +67,7 @@ import nz.org.venice.util.Locale;
  *
  * @see HelpPage
  */
-public class HelpModule extends JPanel implements Module {
+public class HelpModule extends JPanel implements IModule {
 
 	// ToolBar Images - these are from LibreOffice
 	private String backImage = "resources/lc_navigateback.png";
@@ -550,7 +550,7 @@ public class HelpModule extends JPanel implements Module {
 		return index;
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 

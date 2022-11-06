@@ -389,11 +389,11 @@ public class Token {
 
 			// Any values are considered to be integers, unless we find a decimal
 			// point.
-			int valueType = Expression.INTEGER_TYPE;
+			int valueType = IExpression.INTEGER_TYPE;
 
 			do {
 				if (string.charAt(0) == '.')
-					valueType = Expression.FLOAT_TYPE;
+					valueType = IExpression.FLOAT_TYPE;
 
 				numberString = numberString.concat(string.substring(0, 1));
 				string = string.substring(1);

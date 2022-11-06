@@ -34,7 +34,7 @@ import java.util.List;
 
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.quote.IDQuote;
-import nz.org.venice.quote.IDQuoteFilter;
+import nz.org.venice.quote.IIDQuoteFilter;
 import nz.org.venice.quote.ImportExportException;
 import nz.org.venice.quote.QuoteFormatException;
 import nz.org.venice.quote.Symbol;
@@ -75,7 +75,7 @@ public class GenericWSIDQuoteImport {
 
 		List quotes = new ArrayList();
 		String URLString = constructURL(symbols, suffix);
-		IDQuoteFilter filter = new GenericWSIDQuoteFilter();
+		IIDQuoteFilter filter = new GenericWSIDQuoteFilter();
 
 		PreferencesManager.ProxyPreferences proxyPreferences = PreferencesManager.getProxySettings();
 

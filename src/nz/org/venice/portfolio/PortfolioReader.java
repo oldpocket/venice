@@ -268,7 +268,7 @@ public class PortfolioReader {
 			throw new PortfolioParserException(error);
 		}
 
-		Account account = portfolio.findAccountByName(accountName);
+		IAccount account = portfolio.findAccountByName(accountName);
 
 		if (account == null)
 			throw new PortfolioParserException(Locale.getString("UNKNOWN_ACCOUNT", accountName));
@@ -302,7 +302,7 @@ public class PortfolioReader {
 			throw new PortfolioParserException(error);
 		}
 
-		Account account = portfolio.findAccountByName(accountName);
+		IAccount account = portfolio.findAccountByName(accountName);
 
 		if (account == null)
 			throw new PortfolioParserException(Locale.getString("UNKNOWN_ACCOUNT", accountName));

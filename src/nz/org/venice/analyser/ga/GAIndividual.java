@@ -24,7 +24,7 @@ package nz.org.venice.analyser.ga;
 
 import java.util.Random;
 
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.util.Money;
 
@@ -147,7 +147,7 @@ public class GAIndividual {
 			up = low;
 			low = tmp;
 		}
-		if (type == Expression.INTEGER_TYPE) {
+		if (type == IExpression.INTEGER_TYPE) {
 			int retValueInt = (new Double(low)).intValue()
 					+ random.nextInt((new Double(up)).intValue() + 1 - (new Double(low)).intValue());
 			retValue = (double) retValueInt;

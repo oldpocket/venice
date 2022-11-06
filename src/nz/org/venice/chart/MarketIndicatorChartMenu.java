@@ -24,7 +24,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import nz.org.venice.chart.graph.Graph;
+import nz.org.venice.chart.graph.IGraph;
 import nz.org.venice.util.Locale;
 
 /**
@@ -36,14 +36,14 @@ import nz.org.venice.util.Locale;
  */
 public class MarketIndicatorChartMenu extends JMenu {
 
-	private Graph graph = null;
+	private IGraph graph = null;
 
 	/**
 	 * Create a new menu for the given market indicator graph.
 	 *
 	 * @param listener the chart module to listen for when the graph is removed.
 	 */
-	public MarketIndicatorChartMenu(final ChartModule listener, Graph graph) {
+	public MarketIndicatorChartMenu(final ChartModule listener, IGraph graph) {
 		super(graph.getName());
 
 		this.graph = graph;

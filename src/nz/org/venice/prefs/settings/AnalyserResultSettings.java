@@ -37,14 +37,14 @@ import nz.org.venice.analyser.ANNResultModule;
 import nz.org.venice.analyser.GAResultModule;
 import nz.org.venice.analyser.GPResultModule;
 import nz.org.venice.analyser.PaperTradeResultModule;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 
 public class AnalyserResultSettings extends AbstractSettings {
 
 	private Vector results;
 
 	public AnalyserResultSettings(int type) {
-		super(Settings.ANALYSER, type);
+		super(ISettings.ANALYSER, type);
 	}
 
 	/**
@@ -83,18 +83,18 @@ public class AnalyserResultSettings extends AbstractSettings {
 	 * Return an analyser results module based on the analyser result settings.
 	 */
 
-	public Module getModule(JDesktopPane desktop) {
+	public IModule getModule(JDesktopPane desktop) {
 		switch (getType()) {
-		case Settings.PAPERTRADERESULTS:
+		case ISettings.PAPERTRADERESULTS:
 			return new PaperTradeResultModule(this);
 
-		case Settings.GPRESULTS:
+		case ISettings.GPRESULTS:
 			return new GPResultModule(this);
 
-		case Settings.GARESULTS:
+		case ISettings.GARESULTS:
 			return new GAResultModule(this);
 
-		case Settings.ANNRESULTS:
+		case ISettings.ANNRESULTS:
 			return new ANNResultModule(this);
 		}
 		return null;

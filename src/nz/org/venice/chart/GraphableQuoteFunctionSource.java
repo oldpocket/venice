@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.quote.QuoteFunctionSource;
+import nz.org.venice.quote.IQuoteFunctionSource;
 import nz.org.venice.util.TradingDate;
 
 /**
@@ -53,7 +53,7 @@ import nz.org.venice.util.TradingDate;
  * @author Andrew Leppard
  * @see nz.org.venice.quote.QuoteFunctions
  */
-public class GraphableQuoteFunctionSource implements QuoteFunctionSource {
+public class GraphableQuoteFunctionSource implements IQuoteFunctionSource {
 
 	// The graphable containing the quotes
 	private Graphable graphable;

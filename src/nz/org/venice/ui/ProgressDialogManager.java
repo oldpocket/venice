@@ -77,7 +77,7 @@ import java.util.Hashtable;
  * shown to the user.
  * <p>
  *
- * @see ProgressDialog
+ * @see IProgressDialog
  * @see PrimaryProgressDialog
  * @see SecondaryProgressDialog
  */
@@ -102,7 +102,7 @@ public class ProgressDialogManager {
 	 * @see PrimaryProgressDialog
 	 * @see SecondaryProgressDialog
 	 */
-	public static ProgressDialog getProgressDialog() {
+	public static IProgressDialog getProgressDialog() {
 		return getProgressDialog(true);
 	}
 
@@ -118,7 +118,7 @@ public class ProgressDialogManager {
 	 * @see PrimaryProgressDialog
 	 * @see SecondaryProgressDialog
 	 */
-	public static ProgressDialog getProgressDialog(boolean isCancelButtonToBePainted) {
+	public static IProgressDialog getProgressDialog(boolean isCancelButtonToBePainted) {
 		PrimaryProgressDialog primaryProgressDialog = (PrimaryProgressDialog) cachedPrimaryProgressDialogs
 				.get(Thread.currentThread());
 
@@ -138,7 +138,7 @@ public class ProgressDialogManager {
 			// nested dialogs which isn't supported.
 			assert cachedSecondaryProgressDialogs.get(Thread.currentThread()) == null;
 
-			ProgressDialog secondaryProgressDialog = new SecondaryProgressDialog(primaryProgressDialog);
+			IProgressDialog secondaryProgressDialog = new SecondaryProgressDialog(primaryProgressDialog);
 			cachedSecondaryProgressDialogs.put(Thread.currentThread(), secondaryProgressDialog);
 			return secondaryProgressDialog;
 		}
@@ -156,11 +156,11 @@ public class ProgressDialogManager {
 	/**
 	 * Closes and removes the progress dialog associated with the current thread.
 	 */
-	public static void closeProgressDialog(ProgressDialog progressDialog) {
+	public static void closeProgressDialog(IProgressDialog progressDialog) {
 
 		// Remove dialog from appropriate list
 		if (progressDialog instanceof PrimaryProgressDialog) {
-			ProgressDialog removedProgressDialog = (ProgressDialog) cachedPrimaryProgressDialogs
+			IProgressDialog removedProgressDialog = (IProgressDialog) cachedPrimaryProgressDialogs
 					.remove(Thread.currentThread());
 			assert removedProgressDialog == progressDialog;
 
@@ -168,7 +168,7 @@ public class ProgressDialogManager {
 			assert cachedSecondaryProgressDialogs.get(Thread.currentThread()) == null;
 		} else {
 			assert progressDialog instanceof SecondaryProgressDialog;
-			ProgressDialog removedProgressDialog = (ProgressDialog) cachedSecondaryProgressDialogs
+			IProgressDialog removedProgressDialog = (IProgressDialog) cachedSecondaryProgressDialogs
 					.remove(Thread.currentThread());
 			assert removedProgressDialog == progressDialog;
 

@@ -33,7 +33,7 @@ import java.util.Vector;
 
 import javax.swing.JComponent;
 
-import nz.org.venice.chart.graph.Graph;
+import nz.org.venice.chart.graph.IGraph;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
@@ -100,7 +100,7 @@ public class Chart extends JComponent implements MouseListener {
 
 			while (graphIterator.hasNext()) {
 
-				Graph graph = (Graph) graphIterator.next();
+				IGraph graph = (IGraph) graphIterator.next();
 				Set xRange = graph.getXRange();
 				graphXRangeIterators.add(xRange.iterator());
 			}
@@ -226,7 +226,7 @@ public class Chart extends JComponent implements MouseListener {
 			Iterator innerIterator = ((Vector) iterator.next()).iterator();
 
 			while (innerIterator.hasNext()) {
-				x = ((Graph) innerIterator.next()).getStartX();
+				x = ((IGraph) innerIterator.next()).getStartX();
 				if (startX == null || x.compareTo(startX) < 0)
 					startX = x;
 			}
@@ -251,7 +251,7 @@ public class Chart extends JComponent implements MouseListener {
 
 			while (innerIterator.hasNext()) {
 
-				x = ((Graph) innerIterator.next()).getEndX();
+				x = ((IGraph) innerIterator.next()).getEndX();
 
 				if (endX == null || x.compareTo(endX) > 0)
 					endX = x;
@@ -268,7 +268,7 @@ public class Chart extends JComponent implements MouseListener {
 	 * @param enabled <code>true</code> to turn on graph annotations;
 	 *                <code>false</code> to turn them off
 	 */
-	public void handleAnnotation(Graph graph, boolean enabled) {
+	public void handleAnnotation(IGraph graph, boolean enabled) {
 		if (enabled)
 			annotatedGraphs.put(graph, new Boolean(true));
 		else
@@ -282,7 +282,7 @@ public class Chart extends JComponent implements MouseListener {
 	 * @return <code>true</code> if the graph is displaying its annotations;
 	 *         <code>false</code> otherwise
 	 */
-	public boolean isAnnotated(Graph graph) {
+	public boolean isAnnotated(IGraph graph) {
 		if (annotatedGraphs.get(graph) != null)
 			return true;
 		else
@@ -296,7 +296,7 @@ public class Chart extends JComponent implements MouseListener {
 	 * @param graph the new graph to chart
 	 * @param index the level index
 	 */
-	public void add(Graph graph, int index) {
+	public void add(IGraph graph, int index) {
 
 		// Make sure it has at least one value
 		assert graph.getXRange().size() > 0;
@@ -343,11 +343,11 @@ public class Chart extends JComponent implements MouseListener {
 	 *
 	 * @param graph the graph to remove
 	 */
-	public void remove(Graph graph) {
+	public void remove(IGraph graph) {
 
 		// Find and remove first (only) matching graph
 		boolean found = false;
-		Graph traverse;
+		IGraph traverse;
 		Iterator iterator = levels.iterator();
 		Vector innerVector;
 		Iterator innerIterator;
@@ -357,7 +357,7 @@ public class Chart extends JComponent implements MouseListener {
 			innerIterator = innerVector.iterator();
 
 			while (innerIterator.hasNext()) {
-				traverse = (Graph) innerIterator.next();
+				traverse = (IGraph) innerIterator.next();
 
 				// Found one to remove?
 				if (traverse == graph) {
@@ -391,11 +391,11 @@ public class Chart extends JComponent implements MouseListener {
 	 * @param oldGraph the graph to remove
 	 * @param newGraph the replacemnet graph
 	 */
-	public void replace(Graph oldGraph, Graph newGraph) {
+	public void replace(IGraph oldGraph, IGraph newGraph) {
 
 		// Find the first matching graph
 		boolean found = false;
-		Graph traverse;
+		IGraph traverse;
 		ListIterator iterator = levels.listIterator();
 		Vector innerVector;
 		ListIterator innerIterator;
@@ -405,7 +405,7 @@ public class Chart extends JComponent implements MouseListener {
 			innerIterator = innerVector.listIterator();
 
 			while (innerIterator.hasNext()) {
-				traverse = (Graph) innerIterator.next();
+				traverse = (IGraph) innerIterator.next();
 
 				// Found one to replace?
 				if (traverse == oldGraph) {
@@ -436,7 +436,7 @@ public class Chart extends JComponent implements MouseListener {
 	 * @param graph the graph to query
 	 * @return the colour the graph may be drawn as
 	 */
-	public Color getGraphColour(Graph graph) {
+	public Color getGraphColour(IGraph graph) {
 		return gui.getGraphColour(graph, this);
 	}
 
@@ -896,7 +896,7 @@ public class Chart extends JComponent implements MouseListener {
 			Iterator graphIterator = graphs.iterator();
 
 			while (graphIterator.hasNext()) {
-				Graph graph = (Graph) graphIterator.next();
+				IGraph graph = (IGraph) graphIterator.next();
 
 				symbols.addElement(graph.getSourceName());
 			}
@@ -925,7 +925,7 @@ public class Chart extends JComponent implements MouseListener {
 		return gui.getImage();
 	}
 
-	public boolean dataAvailable(Graph g) {
+	public boolean dataAvailable(IGraph g) {
 		if (g.dataAvailable(getXRange())) {
 			return true;
 		} else {
@@ -942,7 +942,7 @@ public class Chart extends JComponent implements MouseListener {
 			Iterator graphIterator = graphs.iterator();
 
 			while (graphIterator.hasNext()) {
-				Graph graph = (Graph) graphIterator.next();
+				IGraph graph = (IGraph) graphIterator.next();
 
 				if (dataAvailable(graph)) {
 					return true;

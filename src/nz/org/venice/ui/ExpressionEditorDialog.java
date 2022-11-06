@@ -50,7 +50,7 @@ import nz.org.venice.util.Locale;
  * @author Andrew Leppard
  * @see nz.org.venice.prefs.StoredExpression
  * @see nz.org.venice.prefs.EquationPage
- * @see nz.org.venice.parser.Expression
+ * @see nz.org.venice.parser.IExpression
  */
 public class ExpressionEditorDialog {
 

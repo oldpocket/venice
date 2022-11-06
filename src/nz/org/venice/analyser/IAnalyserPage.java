@@ -31,7 +31,7 @@ import javax.swing.JComponent;
  * @see PaperTradeModule
  * @see GPModule
  */
-public interface AnalyserPage {
+public interface IAnalyserPage {
 
 	/**
 	 * Save the user interface values to preferences.

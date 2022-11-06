@@ -65,7 +65,7 @@ import nz.org.venice.util.Locale;
  *
  * @author Andrew Leppard
  */
-public class GPPage extends Page implements AnalyserPage {
+public class GPPage extends Page implements IAnalyserPage {
 
 	// Swing components
 	private JTextField generationsTextField;

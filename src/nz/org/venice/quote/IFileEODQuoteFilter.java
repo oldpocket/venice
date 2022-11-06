@@ -22,14 +22,14 @@
  * a function to get the importer needed by the filter.
  *
  * @author Guillermo Bonvehi (gbonvehi)
- * @see EODQuoteFilter
+ * @see IEODQuoteFilter
  */
 
 package nz.org.venice.quote;
 
 import nz.org.venice.util.Report;
 
-public interface IFileEODQuoteFilter extends EODQuoteFilter {
+public interface IFileEODQuoteFilter extends IEODQuoteFilter {
 	/**
 	 * Return the an instance of the importer.
 	 *

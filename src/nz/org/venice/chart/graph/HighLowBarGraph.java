@@ -25,7 +25,7 @@ import java.util.List;
 
 import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.util.Locale;
 
 /**
@@ -49,7 +49,7 @@ public class HighLowBarGraph extends AbstractGraph {
 	 * @param dayHigh  source containing the day high values
 	 * @param dayClose source containing the day close values
 	 */
-	public HighLowBarGraph(GraphSource dayLow, GraphSource dayHigh, GraphSource dayClose) {
+	public HighLowBarGraph(IGraphSource dayLow, IGraphSource dayHigh, IGraphSource dayClose) {
 		super(dayClose);
 
 		this.dayLow = dayLow.getGraphable();
@@ -149,7 +149,7 @@ public class HighLowBarGraph extends AbstractGraph {
 
 			// Its our graph if its within TOOL_TIP_BUFFER pixels of the
 			// line from day low to day high
-			if (y >= (dayLowYCoordinate - Graph.TOOL_TIP_BUFFER) && y <= (dayHighYCoordinate + Graph.TOOL_TIP_BUFFER))
+			if (y >= (dayLowYCoordinate - IGraph.TOOL_TIP_BUFFER) && y <= (dayHighYCoordinate + IGraph.TOOL_TIP_BUFFER))
 				return getSource().getToolTipText(x);
 		}
 		return null;

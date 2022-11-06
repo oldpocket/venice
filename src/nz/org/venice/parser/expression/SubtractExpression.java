@@ -19,9 +19,9 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -29,20 +29,20 @@ import nz.org.venice.quote.Symbol;
  */
 public class SubtractExpression extends ArithmeticExpression {
 
-	public SubtractExpression(Expression left, Expression right) {
+	public SubtractExpression(IExpression left, IExpression right) {
 		super(left, right);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		return getChild(0).evaluate(variables, quoteBundle, symbol, day)
 				- getChild(1).evaluate(variables, quoteBundle, symbol, day);
 	}
 
-	public Expression simplify() {
+	public IExpression simplify() {
 		// First perform arithmetic simplifications
-		Expression simplified = super.simplify();
+		IExpression simplified = super.simplify();
 
 		if (simplified.equals(this)) {
 			NumberExpression left = (simplified.getChild(0) instanceof NumberExpression
@@ -68,6 +68,6 @@ public class SubtractExpression extends ArithmeticExpression {
 	}
 
 	public Object clone() {
-		return new SubtractExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone());
+		return new SubtractExpression((IExpression) getChild(0).clone(), (IExpression) getChild(1).clone());
 	}
 }

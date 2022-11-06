@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import nz.org.venice.analyser.ga.GAIndividual;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.portfolio.Transaction;
 import nz.org.venice.quote.EODQuoteBundle;
@@ -38,8 +38,8 @@ import nz.org.venice.util.TradingDate;
 
 public class GAResult {
 	private GAIndividual individual;
-	private Expression buyRule;
-	private Expression sellRule;
+	private IExpression buyRule;
+	private IExpression sellRule;
 	private EODQuoteBundle quoteBundle;
 	private Money initialCapital;
 	private Money tradeCost;
@@ -47,7 +47,7 @@ public class GAResult {
 	private TradingDate startDate;
 	private TradingDate endDate;
 
-	public GAResult(GAIndividual individual, Expression buyRule, Expression sellRule, EODQuoteBundle quoteBundle,
+	public GAResult(GAIndividual individual, IExpression buyRule, IExpression sellRule, EODQuoteBundle quoteBundle,
 			Money initialCapital, Money tradeCost, int generation, TradingDate startDate, TradingDate endDate) {
 		this.individual = individual;
 		this.buyRule = buyRule;
@@ -89,7 +89,7 @@ public class GAResult {
 		String temp = buyRule.toString();
 		String retValue = null;
 		for (int ii = 0; ii < individual.size(); ii++) {
-			if (individual.type(ii) == Expression.FLOAT_TYPE)
+			if (individual.type(ii) == IExpression.FLOAT_TYPE)
 				retValue = temp.replaceAll(individual.parameter(ii), Double.toString((individual.value(ii))));
 			else
 				retValue = temp.replaceAll(individual.parameter(ii),
@@ -103,7 +103,7 @@ public class GAResult {
 		String temp = sellRule.toString();
 		String retValue = null;
 		for (int ii = 0; ii < individual.size(); ii++) {
-			if (individual.type(ii) == Expression.FLOAT_TYPE)
+			if (individual.type(ii) == IExpression.FLOAT_TYPE)
 				retValue = temp.replaceAll(individual.parameter(ii), Double.toString((individual.value(ii))));
 			else
 				retValue = temp.replaceAll(individual.parameter(ii),

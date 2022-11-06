@@ -26,7 +26,7 @@
  *
  * @author mhummel
  * @see Symbol
- * @see QuoteSource
+ * @see IQuoteSource
  * @see IndexPreferencesPage
  */
 

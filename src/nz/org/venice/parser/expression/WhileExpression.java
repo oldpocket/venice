@@ -22,10 +22,10 @@ import java.util.UUID;
 
 import nz.org.venice.parser.AnalyserGuard;
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -58,12 +58,12 @@ public class WhileExpression extends BinaryExpression {
 	 * @param condition loop condition test.
 	 * @param command   the command to loop.
 	 */
-	public WhileExpression(Expression condition, Expression command) {
+	public WhileExpression(IExpression condition, IExpression command) {
 		super(condition, command);
 		id = UUID.randomUUID();
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		double value = 0.0D;
@@ -72,7 +72,7 @@ public class WhileExpression extends BinaryExpression {
 		AnalyserGuard.getInstance().startLoop(this, loopId, symbol, day);
 
 		// Now loop running the command until the condition is no longer true
-		while (getChild(CONDITION).evaluate(variables, quoteBundle, symbol, day) >= Expression.TRUE_LEVEL) {
+		while (getChild(CONDITION).evaluate(variables, quoteBundle, symbol, day) >= IExpression.TRUE_LEVEL) {
 			// Execute command
 			value = getChild(COMMAND).evaluate(variables, quoteBundle, symbol, day);
 			// Don't want to run forever - if the limit is exceeded
@@ -120,6 +120,6 @@ public class WhileExpression extends BinaryExpression {
 	}
 
 	public Object clone() {
-		return new WhileExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone());
+		return new WhileExpression((IExpression) getChild(0).clone(), (IExpression) getChild(1).clone());
 	}
 }

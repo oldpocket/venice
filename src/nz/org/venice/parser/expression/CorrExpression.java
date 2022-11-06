@@ -19,10 +19,10 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.QuoteBundleFunctionSource;
 import nz.org.venice.quote.QuoteFunctions;
 import nz.org.venice.quote.Symbol;
@@ -45,16 +45,16 @@ public class CorrExpression extends QuaternaryExpression {
 	 * @param days   the number of days to correlate over
 	 * @param lag    the offset from the current day
 	 */
-	public CorrExpression(Expression symbol, Expression quote, Expression days, Expression lag) {
+	public CorrExpression(IExpression symbol, IExpression quote, IExpression days, IExpression lag) {
 		super(symbol, quote, days, lag);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		// Get and check arguments
 		String correlatedSymbolString = ((StringExpression) getChild(0)).getText();
-		QuoteSymbol quoteChild = (QuoteSymbol) getChild(1);
+		IQuoteSymbol quoteChild = (IQuoteSymbol) getChild(1);
 		int quoteKind = quoteChild.getQuoteKind();
 		Symbol explicitSymbol = (quoteChild.getSymbol() != null) ? quoteChild.getSymbol() : symbol;
 
@@ -119,7 +119,7 @@ public class CorrExpression extends QuaternaryExpression {
 	}
 
 	public Object clone() {
-		return new CorrExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone(),
-				(Expression) getChild(2).clone(), (Expression) getChild(3).clone());
+		return new CorrExpression((IExpression) getChild(0).clone(), (IExpression) getChild(1).clone(),
+				(IExpression) getChild(2).clone(), (IExpression) getChild(3).clone());
 	}
 }

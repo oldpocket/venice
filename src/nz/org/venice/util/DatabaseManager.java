@@ -43,7 +43,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import nz.org.venice.quote.DatabaseQuoteSource;
-import nz.org.venice.quote.EODQuoteFilter;
+import nz.org.venice.quote.IEODQuoteFilter;
 import nz.org.venice.quote.EODQuoteRange;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.ui.DesktopManager;
@@ -194,7 +194,7 @@ public class DatabaseManager {
 	private String fileName;
 
 	// Fields for samples mode
-	private EODQuoteFilter filter;
+	private IEODQuoteFilter filter;
 	private List fileURLs;
 
 	// HashMap containing queries read from sql library

@@ -23,7 +23,7 @@ import java.awt.Graphics;
 import java.util.List;
 
 import nz.org.venice.chart.GraphTools;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 
 /**
  * Simple line graph. This graph is used to draw any kind of line such as day
@@ -46,7 +46,7 @@ public class LineGraph extends AbstractGraph {
 	 * @param name      the graph name
 	 * @param isPrimary is this a primary graph?
 	 */
-	public LineGraph(GraphSource source, String name, boolean isPrimary) {
+	public LineGraph(IGraphSource source, String name, boolean isPrimary) {
 		super(source);
 		this.name = name;
 		this.isPrimary = isPrimary;
@@ -68,7 +68,7 @@ public class LineGraph extends AbstractGraph {
 		if (y != null) {
 			int yOfGraph = yoffset - GraphTools.scaleAndFitPoint(y.doubleValue(), bottomLineValue, verticalScale);
 			// Its our graph *only* if its within 5 pixels
-			if (Math.abs(yCoordinate - yOfGraph) < Graph.TOOL_TIP_BUFFER)
+			if (Math.abs(yCoordinate - yOfGraph) < IGraph.TOOL_TIP_BUFFER)
 				return getSource().getToolTipText(x);
 		}
 		return null;

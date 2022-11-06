@@ -38,7 +38,7 @@ import nz.org.venice.util.Locale;
  * @author Mark Hummel
  * @see SupportAndResistenceGraph
  */
-public class SRGraphUI implements GraphUI {
+public class SRGraphUI implements IGraphUI {
 
 	// String name of settings
 	public final static String LAG = "Lag";

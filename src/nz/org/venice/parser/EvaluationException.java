@@ -211,7 +211,7 @@ public class EvaluationException extends ExpressionException {
 		super(reason);
 	}
 
-	public void setMessage(Expression e, String label, double value) {
+	public void setMessage(IExpression e, String label, double value) {
 		message = super.getReason();
 		if (e.getParseMetadata() != null) {
 			String lineNumber = e.getParseMetadata().getLineForExpression(e);

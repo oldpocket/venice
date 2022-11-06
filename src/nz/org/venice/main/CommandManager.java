@@ -36,9 +36,9 @@ import nz.org.venice.alert.AlertDialog;
 import nz.org.venice.alert.AlertException;
 import nz.org.venice.alert.AlertManager;
 import nz.org.venice.alert.AlertModule;
-import nz.org.venice.alert.AlertReader;
+import nz.org.venice.alert.IAlertReader;
 import nz.org.venice.alert.AlertTriggeredDialog;
-import nz.org.venice.alert.AlertWriter;
+import nz.org.venice.alert.IAlertWriter;
 import nz.org.venice.analyser.ANNModule;
 import nz.org.venice.analyser.ANNResultModule;
 import nz.org.venice.analyser.GAModule;
@@ -54,11 +54,11 @@ import nz.org.venice.chart.ChartTracking;
 import nz.org.venice.chart.graph.AdvanceDeclineGraph;
 import nz.org.venice.chart.graph.BarChartGraph;
 import nz.org.venice.chart.graph.CandleStickGraph;
-import nz.org.venice.chart.graph.Graph;
+import nz.org.venice.chart.graph.IGraph;
 import nz.org.venice.chart.graph.HighLowBarGraph;
 import nz.org.venice.chart.graph.LineGraph;
 import nz.org.venice.chart.graph.PointAndFigureGraph;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.chart.source.OHLCVIndexQuoteGraphSource;
 import nz.org.venice.chart.source.OHLCVQuoteGraphSource;
 import nz.org.venice.chart.source.PortfolioGraphSource;
@@ -76,7 +76,7 @@ import nz.org.venice.quote.ExportQuoteModule;
 import nz.org.venice.quote.IDQuoteSyncModule;
 import nz.org.venice.quote.ImportQuoteModule;
 import nz.org.venice.quote.MixedQuoteBundle;
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.table.PortfolioTableModule;
@@ -88,7 +88,7 @@ import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.ui.ExpressionQuery;
 import nz.org.venice.ui.GPLViewDialog;
 import nz.org.venice.ui.MainMenu;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.ui.SymbolListDialog;
 import nz.org.venice.ui.TextDialog;
@@ -267,7 +267,7 @@ public class CommandManager {
 		EODQuoteBundle quoteBundle = null;
 		EODQuoteRange quoteRange = null;
 		QuoteModule table = null;
-		ProgressDialog progressDialog = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progressDialog = ProgressDialogManager.getProgressDialog();
 		progressDialog.show(title);
 		boolean singleDate = false;
 
@@ -300,7 +300,7 @@ public class CommandManager {
 		EODQuoteBundle quoteBundle = null;
 		EODQuoteRange quoteRange = null;
 		TrackedQuoteModule table = null;
-		ProgressDialog progressDialog = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progressDialog = ProgressDialogManager.getProgressDialog();
 		progressDialog.show(title);
 		boolean singleDate = false;
 
@@ -368,8 +368,8 @@ public class CommandManager {
 	public void tableAlerts() {
 		Thread thread = new Thread(new Runnable() {
 			public void run() {
-				AlertReader ar = AlertManager.getReader();
-				AlertWriter aw = AlertManager.getWriter();
+				IAlertReader ar = AlertManager.getReader();
+				IAlertWriter aw = AlertManager.getWriter();
 				AlertModule alertModule;
 
 				if (ar == null) {
@@ -404,8 +404,8 @@ public class CommandManager {
 					symbolsCopy = symbols;
 				}
 
-				AlertReader ar = AlertManager.getReader();
-				AlertWriter aw = AlertManager.getWriter();
+				IAlertReader ar = AlertManager.getReader();
+				IAlertWriter aw = AlertManager.getWriter();
 				AlertModule alertModule;
 
 				if (ar == null) {
@@ -429,7 +429,7 @@ public class CommandManager {
 	public void newAlert(final Symbol symbol) {
 		Thread showAddDialog = new Thread() {
 			public void run() {
-				AlertWriter alertWriter = AlertManager.getWriter();
+				IAlertWriter alertWriter = AlertManager.getWriter();
 				AlertDialog dialog = new AlertDialog(desktop, symbol, alertWriter);
 
 				dialog.newAlert();
@@ -498,7 +498,7 @@ public class CommandManager {
 
 			public void run() {
 				Thread thread = Thread.currentThread();
-				ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+				IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 
 				progress.show(Locale.getString("OPEN_PORTFOLIO", portfolioName));
 
@@ -539,7 +539,7 @@ public class CommandManager {
 
 			public void run() {
 				Thread thread = Thread.currentThread();
-				ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+				IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 
 				progress.show(Locale.getString("OPEN_PORTFOLIO", portfolio.getName()));
 
@@ -698,7 +698,7 @@ public class CommandManager {
 
 			public void run() {
 				Thread thread = Thread.currentThread();
-				ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+				IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 
 				progress.show(Locale.getString("OPEN_WATCH_SCREEN", watchScreen.getName()));
 
@@ -826,13 +826,13 @@ public class CommandManager {
 		ChartModule chart = new ChartModule(desktop);
 
 		Thread thread = Thread.currentThread();
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 
 		progress.show(Locale.getString("GRAPH_PORTFOLIO", portfolio.getName()));
 
 		List symbolsTraded = portfolio.getSymbolsTraded();
 		PortfolioGraphSource portfolioGraphSource = null;
-		Graph graph = null;
+		IGraph graph = null;
 
 		// If the portfolio has traded symbols and the caller has not supplied a
 		// quote bundle, then load one now.
@@ -895,7 +895,7 @@ public class CommandManager {
 			TradingDate endDate) {
 
 		Thread thread = Thread.currentThread();
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 
 		progress.show(Locale.getString("TABLE_PORTFOLIO", portfolio.getName()));
 
@@ -940,7 +940,7 @@ public class CommandManager {
 
 			public void run() {
 				Thread thread = Thread.currentThread();
-				Graph graph = new AdvanceDeclineGraph();
+				IGraph graph = new AdvanceDeclineGraph();
 
 				if (!thread.isInterrupted()) {
 					ChartModule chart = new ChartModule(desktop);
@@ -1055,12 +1055,12 @@ public class CommandManager {
 		if (symbols != null) {
 			ChartModule chart = new ChartModule(desktop);
 			Thread thread = Thread.currentThread();
-			ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+			IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 
 			Iterator iterator = symbols.iterator();
 			EODQuoteBundle quoteBundle = null;
 
-			Graph graph = null;
+			IGraph graph = null;
 
 			String title = symbols.toString();
 			title = title.substring(1, title.length() - 1);
@@ -1115,11 +1115,11 @@ public class CommandManager {
 		if (symbols != null) {
 			ChartModule chart = new ChartModule(desktop, true);
 			Thread thread = Thread.currentThread();
-			ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+			IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 			Iterator iterator = symbols.iterator();
 			EODQuoteBundle quoteBundle = null;
-			GraphSource dayClose = null;
-			Graph graph = null;
+			IGraphSource dayClose = null;
+			IGraph graph = null;
 
 			String title = symbols.toString();
 			title = title.substring(1, title.length() - 1);
@@ -1343,23 +1343,23 @@ public class CommandManager {
 	/*
 	 * Return a new graph according to the default.
 	 */
-	public Graph getNewGraph(EODQuoteBundle quoteBundle, boolean index) {
-		GraphSource dayOpen = null, dayClose = null, dayHigh = null, dayLow = null;
+	public IGraph getNewGraph(EODQuoteBundle quoteBundle, boolean index) {
+		IGraphSource dayOpen = null, dayClose = null, dayHigh = null, dayLow = null;
 
 		String defaultChart = PreferencesManager.getDefaultChart();
-		Graph graph;
+		IGraph graph;
 
 		// This would be nicer as a set of Ternary ops
 		if (index) {
-			dayOpen = new OHLCVIndexQuoteGraphSource(quoteBundle, Quote.DAY_OPEN);
-			dayClose = new OHLCVIndexQuoteGraphSource(quoteBundle, Quote.DAY_CLOSE);
-			dayHigh = new OHLCVIndexQuoteGraphSource(quoteBundle, Quote.DAY_HIGH);
-			dayLow = new OHLCVIndexQuoteGraphSource(quoteBundle, Quote.DAY_LOW);
+			dayOpen = new OHLCVIndexQuoteGraphSource(quoteBundle, IQuote.DAY_OPEN);
+			dayClose = new OHLCVIndexQuoteGraphSource(quoteBundle, IQuote.DAY_CLOSE);
+			dayHigh = new OHLCVIndexQuoteGraphSource(quoteBundle, IQuote.DAY_HIGH);
+			dayLow = new OHLCVIndexQuoteGraphSource(quoteBundle, IQuote.DAY_LOW);
 		} else {
-			dayOpen = new OHLCVQuoteGraphSource(quoteBundle, Quote.DAY_OPEN);
-			dayClose = new OHLCVQuoteGraphSource(quoteBundle, Quote.DAY_CLOSE);
-			dayHigh = new OHLCVQuoteGraphSource(quoteBundle, Quote.DAY_HIGH);
-			dayLow = new OHLCVQuoteGraphSource(quoteBundle, Quote.DAY_LOW);
+			dayOpen = new OHLCVQuoteGraphSource(quoteBundle, IQuote.DAY_OPEN);
+			dayClose = new OHLCVQuoteGraphSource(quoteBundle, IQuote.DAY_CLOSE);
+			dayHigh = new OHLCVQuoteGraphSource(quoteBundle, IQuote.DAY_HIGH);
+			dayLow = new OHLCVQuoteGraphSource(quoteBundle, IQuote.DAY_LOW);
 		}
 
 		if (defaultChart.compareTo("BAR_CHART") == 0) {

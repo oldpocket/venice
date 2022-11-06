@@ -30,7 +30,7 @@ package nz.org.venice.prefs.settings;
 
 import javax.swing.JDesktopPane;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.portfolio.PortfolioModule;
 import nz.org.venice.prefs.PreferencesException;
@@ -51,7 +51,7 @@ public class PortfolioModuleSettings extends AbstractSettings {
 	 */
 
 	public PortfolioModuleSettings() {
-		super(Settings.PORTFOLIO, Settings.PORTFOLIOMODULE);
+		super(ISettings.PORTFOLIO, ISettings.PORTFOLIOMODULE);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class PortfolioModuleSettings extends AbstractSettings {
 	 * @param title The Title of the PortfolioModule
 	 */
 	public PortfolioModuleSettings(String title) {
-		super(Settings.PORTFOLIO, Settings.PORTFOLIOMODULE);
+		super(ISettings.PORTFOLIO, ISettings.PORTFOLIOMODULE);
 		super.setTitle(title);
 	}
 
@@ -114,7 +114,7 @@ public class PortfolioModuleSettings extends AbstractSettings {
 	 * 
 	 */
 
-	public Module getModule(JDesktopPane desktop) {
+	public IModule getModule(JDesktopPane desktop) {
 
 		try {
 			portfolio = PreferencesManager.getPortfolio(getTitle());

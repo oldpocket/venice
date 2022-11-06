@@ -19,9 +19,9 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -29,11 +29,11 @@ import nz.org.venice.quote.Symbol;
  */
 public class NotEqualExpression extends ComparisionExpression {
 
-	public NotEqualExpression(Expression left, Expression right) {
+	public NotEqualExpression(IExpression left, IExpression right) {
 		super(left, right);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		if (getChild(0).evaluate(variables, quoteBundle, symbol, day) != getChild(1).evaluate(variables, quoteBundle,
@@ -43,9 +43,9 @@ public class NotEqualExpression extends ComparisionExpression {
 			return FALSE;
 	}
 
-	public Expression simplify() {
+	public IExpression simplify() {
 		// First perform comparision simplifications
-		Expression simplified = super.simplify();
+		IExpression simplified = super.simplify();
 
 		// If we haven't simplified the whole expression away and
 		// the left and right arguments are the same expression
@@ -75,8 +75,8 @@ public class NotEqualExpression extends ComparisionExpression {
 	}
 
 	public int hashCode() {
-		Expression child1 = getChild(0);
-		Expression child2 = getChild(1);
+		IExpression child1 = getChild(0);
+		IExpression child2 = getChild(1);
 
 		assert child1 != null;
 		assert child2 != null;
@@ -89,6 +89,6 @@ public class NotEqualExpression extends ComparisionExpression {
 	}
 
 	public Object clone() {
-		return new NotEqualExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone());
+		return new NotEqualExpression((IExpression) getChild(0).clone(), (IExpression) getChild(1).clone());
 	}
 }

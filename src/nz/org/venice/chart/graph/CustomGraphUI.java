@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 
 import nz.org.venice.chart.Graphable;
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.ExpressionException;
 import nz.org.venice.parser.Parser;
 import nz.org.venice.parser.Variables;
@@ -47,7 +47,7 @@ import nz.org.venice.util.WeekendDateException;
  * @author Andrew Leppard
  * @see CustomGraph
  */
-public class CustomGraphUI implements GraphUI {
+public class CustomGraphUI implements IGraphUI {
 
 	// Variables to allow us to run the expression to check it for errors
 	private Graphable source;
@@ -103,7 +103,7 @@ public class CustomGraphUI implements GraphUI {
 		// verify the expression, the other time to graph the values.
 		try {
 			String indicatorText = getIndicatorText(settings);
-			Expression indicator = Parser.parse(indicatorText);
+			IExpression indicator = Parser.parse(indicatorText);
 			createCustom(indicator, source, quoteBundle, symbol);
 
 			// If it didn't throw an exception then it is fine
@@ -167,7 +167,7 @@ public class CustomGraphUI implements GraphUI {
 	 *                                expression
 	 * @return the custom graph
 	 */
-	public static Graphable createCustom(Expression indicator, Graphable source, EODQuoteBundle quoteBundle,
+	public static Graphable createCustom(IExpression indicator, Graphable source, EODQuoteBundle quoteBundle,
 			Symbol symbol) throws EvaluationException {
 
 		Graphable indicatorGraphable = new Graphable();

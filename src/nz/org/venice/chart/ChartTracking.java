@@ -33,14 +33,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import nz.org.venice.chart.graph.Graph;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.graph.IGraph;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.table.TrackedQuoteModule;
 import nz.org.venice.ui.ModuleEvent;
-import nz.org.venice.ui.ModuleListener;
+import nz.org.venice.ui.IModuleListener;
 
-public class ChartTracking implements ModuleListener {
+public class ChartTracking implements IModuleListener {
 
 	boolean active;
 	ArrayList xrangeList;
@@ -49,7 +49,7 @@ public class ChartTracking implements ModuleListener {
 	ListIterator positions;
 
 	Symbol symbol;
-	Graph primaryGraph = null;
+	IGraph primaryGraph = null;
 	ChartModule chartModule;
 	Chart chart;
 	TrackedQuoteModule table;
@@ -74,8 +74,8 @@ public class ChartTracking implements ModuleListener {
 		List graphs = (List) chart.getLevels().get(0);
 		Iterator graphIterator = graphs.iterator();
 		while (graphIterator.hasNext()) {
-			Graph graph = (Graph) graphIterator.next();
-			if (graph.getSourceType() != GraphSource.SYMBOL) {
+			IGraph graph = (IGraph) graphIterator.next();
+			if (graph.getSourceType() != IGraphSource.SYMBOL) {
 				continue;
 			}
 			if (graph.getSourceName().equals(symbol.toString())) {

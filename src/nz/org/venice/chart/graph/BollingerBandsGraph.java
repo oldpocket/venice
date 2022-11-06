@@ -27,7 +27,7 @@ import java.util.List;
 import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
 import nz.org.venice.chart.GraphableQuoteFunctionSource;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.quote.QuoteFunctions;
 import nz.org.venice.util.Locale;
@@ -53,7 +53,7 @@ public class BollingerBandsGraph extends AbstractGraph {
 	 *
 	 * @param source the source to create a standard deviation from
 	 */
-	public BollingerBandsGraph(GraphSource source) {
+	public BollingerBandsGraph(IGraphSource source) {
 		super(source);
 		setSettings(new HashMap());
 	}
@@ -63,7 +63,7 @@ public class BollingerBandsGraph extends AbstractGraph {
 	 *
 	 * @param source the source to create a standard deviation from
 	 */
-	public BollingerBandsGraph(GraphSource source, HashMap settings) {
+	public BollingerBandsGraph(IGraphSource source, HashMap settings) {
 		super(source);
 		setSettings(settings);
 		super.setSettings(settings);
@@ -115,7 +115,7 @@ public class BollingerBandsGraph extends AbstractGraph {
 	 * @param settings the initial settings
 	 * @return user interface
 	 */
-	public GraphUI getUI(HashMap settings) {
+	public IGraphUI getUI(HashMap settings) {
 		return new PeriodGraphUI(settings);
 	}
 

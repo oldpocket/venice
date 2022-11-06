@@ -42,17 +42,17 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import nz.org.venice.main.CommandManager;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.ExpressionException;
 import nz.org.venice.parser.Parser;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.prefs.settings.QuoteModuleSettings;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.quote.EODQuoteBundle;
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.Column;
@@ -71,7 +71,7 @@ import nz.org.venice.util.WeekendDateException;
  *
  * @author Andrew Leppard
  */
-public class QuoteModule extends AbstractTable implements Module, ActionListener {
+public class QuoteModule extends AbstractTable implements IModule, ActionListener {
 
 	// Main menu items
 	private JMenuBar menuBar;
@@ -228,7 +228,7 @@ public class QuoteModule extends AbstractTable implements Module, ActionListener
 
 		// Traverse all symbols on all dates
 		while (iterator.hasNext()) {
-			Quote quote = (Quote) iterator.next();
+			IQuote quote = (IQuote) iterator.next();
 
 			if (!singleDate || (lastDate.equals(quote.getDate())))
 				quotes.add(quote);
@@ -247,7 +247,7 @@ public class QuoteModule extends AbstractTable implements Module, ActionListener
 			return extractAllQuotes(quoteBundle);
 
 		// First parse the expression
-		Expression expression = null;
+		IExpression expression = null;
 
 		try {
 			expression = Parser.parse(filterExpressionString);
@@ -264,7 +264,7 @@ public class QuoteModule extends AbstractTable implements Module, ActionListener
 		try {
 			// Traverse all symbols on all dates
 			while (iterator.hasNext()) {
-				Quote quote = (Quote) iterator.next();
+				IQuote quote = (IQuote) iterator.next();
 				Symbol symbol = quote.getSymbol();
 				TradingDate date = quote.getDate();
 				int dateOffset = 0;
@@ -276,7 +276,7 @@ public class QuoteModule extends AbstractTable implements Module, ActionListener
 				}
 
 				if (!singleDate || (lastDate.equals(quote.getDate()))) {
-					if (expression.evaluate(new Variables(), quoteBundle, symbol, dateOffset) >= Expression.TRUE_LEVEL)
+					if (expression.evaluate(new Variables(), quoteBundle, symbol, dateOffset) >= IExpression.TRUE_LEVEL)
 						quotes.add(quote);
 				}
 			}
@@ -395,7 +395,7 @@ public class QuoteModule extends AbstractTable implements Module, ActionListener
 					int i = 0;
 
 					for (Iterator iterator = quotes.iterator(); iterator.hasNext(); i++) {
-						Quote quote = (Quote) iterator.next();
+						IQuote quote = (IQuote) iterator.next();
 
 						if (symbol.equals(quote.getSymbol())) {
 							// Select row and make it visible
@@ -564,7 +564,7 @@ public class QuoteModule extends AbstractTable implements Module, ActionListener
 			assert false;
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 

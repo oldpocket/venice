@@ -69,9 +69,9 @@ public class PortfolioWriter {
 
 			portfolioElement.appendChild(accountsElement);
 			for (Iterator iterator = portfolio.getAccounts().iterator(); iterator.hasNext();) {
-				Account account = (Account) iterator.next();
+				IAccount account = (IAccount) iterator.next();
 				Element accountElement = (Element) document
-						.createElement((account.getType() == Account.CASH_ACCOUNT ? "cash" : "share"));
+						.createElement((account.getType() == IAccount.CASH_ACCOUNT ? "cash" : "share"));
 				accountElement.setAttribute("name", account.getName());
 				accountElement.setAttribute("currency", account.getCurrency().getCurrencyCode());
 				accountsElement.appendChild(accountElement);

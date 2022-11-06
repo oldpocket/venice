@@ -29,11 +29,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.prefs.settings.PortfolioTableModuleSettings;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.MenuHelper;
@@ -45,7 +45,7 @@ import nz.org.venice.util.Locale;
  * @author Andrew Leppard
  * @see PortfolioModel
  */
-public class PortfolioTableModule extends AbstractTable implements Module, ActionListener {
+public class PortfolioTableModule extends AbstractTable implements IModule, ActionListener {
 
 	// Menu
 	private JMenuBar menuBar;
@@ -183,7 +183,7 @@ public class PortfolioTableModule extends AbstractTable implements Module, Actio
 			assert false;
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 

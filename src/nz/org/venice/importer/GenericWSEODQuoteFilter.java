@@ -19,7 +19,7 @@
 package nz.org.venice.importer;
 
 import nz.org.venice.quote.EODQuote;
-import nz.org.venice.quote.EODQuoteFilter;
+import nz.org.venice.quote.IEODQuoteFilter;
 import nz.org.venice.quote.QuoteFormatException;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
@@ -44,7 +44,7 @@ import nz.org.venice.util.TradingDateFormatException;
  * @author Andrew Leppard
  */
 
-public class GenericWSEODQuoteFilter implements EODQuoteFilter {
+public class GenericWSEODQuoteFilter implements IEODQuoteFilter {
 
 	private Symbol symbol;
 

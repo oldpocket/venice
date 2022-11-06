@@ -34,7 +34,7 @@ import javax.swing.JPopupMenu;
 import nz.org.venice.main.CommandManager;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.ui.AbstractTable;
@@ -122,7 +122,7 @@ public class StockHoldingTable extends AbstractTable {
 
 			case (MARKET_PRICE_COLUMN):
 				try {
-					return new QuoteFormat(quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date));
+					return new QuoteFormat(quoteBundle.getQuote(symbol, IQuote.DAY_CLOSE, date));
 				} catch (MissingQuoteException e) {
 					return new QuoteFormat(0.0D);
 				}
@@ -130,7 +130,7 @@ public class StockHoldingTable extends AbstractTable {
 			case (MARKET_VALUE_COLUMN):
 				try {
 					return new Money(currency,
-							quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date) * stockHolding.getShares());
+							quoteBundle.getQuote(symbol, IQuote.DAY_CLOSE, date) * stockHolding.getShares());
 				} catch (MissingQuoteException e) {
 					return new Money(currency, 0.0D);
 				}
@@ -138,7 +138,7 @@ public class StockHoldingTable extends AbstractTable {
 			case (PERCENT_RETURN_COLUMN):
 				try {
 					return new ChangeFormat(stockHolding.getCost(),
-							quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date));
+							quoteBundle.getQuote(symbol, IQuote.DAY_CLOSE, date));
 				} catch (MissingQuoteException e) {
 					return new ChangeFormat(1.0D, 1.0D);
 				}
@@ -149,13 +149,13 @@ public class StockHoldingTable extends AbstractTable {
 					// yesterday's day close and today's day close. If we don't
 					// have yesterday's day close available, we just use today's
 					// day open. These first two should always work.
-					double finalQuote = quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date);
-					double initialQuote = quoteBundle.getQuote(symbol, Quote.DAY_OPEN, date);
+					double finalQuote = quoteBundle.getQuote(symbol, IQuote.DAY_CLOSE, date);
+					double initialQuote = quoteBundle.getQuote(symbol, IQuote.DAY_OPEN, date);
 
 					// There might not be any quotes for yesterday, so don't throw an
 					// assert if we can't get any.
 					try {
-						initialQuote = quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date.previous(1));
+						initialQuote = quoteBundle.getQuote(symbol, IQuote.DAY_CLOSE, date.previous(1));
 					} catch (MissingQuoteException e) {
 						// No big deal - we default to day open
 					}
@@ -173,13 +173,13 @@ public class StockHoldingTable extends AbstractTable {
 					// yesterday's day close and today's day close. If we don't
 					// have yesterday's day close available, we just use today's
 					// day open. These first two should always work.
-					double finalQuote = quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date);
-					double initialQuote = quoteBundle.getQuote(symbol, Quote.DAY_OPEN, date);
+					double finalQuote = quoteBundle.getQuote(symbol, IQuote.DAY_CLOSE, date);
+					double initialQuote = quoteBundle.getQuote(symbol, IQuote.DAY_OPEN, date);
 
 					// There might not be any quotes for yesterday, so don't throw an
 					// assert if we can't get any.
 					try {
-						initialQuote = quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date.previous(1));
+						initialQuote = quoteBundle.getQuote(symbol, IQuote.DAY_CLOSE, date.previous(1));
 					} catch (MissingQuoteException e) {
 						// No big deal - we default to day open
 					}

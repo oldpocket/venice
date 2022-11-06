@@ -50,14 +50,14 @@ import javax.swing.border.TitledBorder;
 import nz.org.venice.importer.FloatEODQuoteImport;
 import nz.org.venice.importer.GenericWSEODQuoteImport;
 import nz.org.venice.main.CommandManager;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.prefs.ProxyPage;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.ui.GridBagHelper;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.ui.TextViewDialog;
 import nz.org.venice.util.Locale;
@@ -76,7 +76,7 @@ import nz.org.venice.util.TradingDateFormatException;
  * @see FileEODQuoteImport
  * @see GenericWSEODQuoteImport
  */
-public class ImportQuoteModule extends JPanel implements Module {
+public class ImportQuoteModule extends JPanel implements IModule {
 
 	private JDesktopPane desktop;
 	private PropertyChangeSupport propertySupport;
@@ -97,7 +97,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 	private TradingDate endDate;
 	private String prefixOrSuffix;
 	private List symbols;
-	private Settings settings;
+	private ISettings settings;
 
 	// Parsed fields for file import
 	private IFileEODQuoteFilter filter;
@@ -155,7 +155,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 			String selectedFilter = p.get("fileFilter", "MetaStock");
 
 			for (Iterator iterator = formats.iterator(); iterator.hasNext();) {
-				EODQuoteFilter filter = (EODQuoteFilter) iterator.next();
+				IEODQuoteFilter filter = (IEODQuoteFilter) iterator.next();
 				formatComboBox.addItem(filter.getName());
 				if (filter.getName().equals(selectedFilter))
 					formatComboBox.setSelectedItem(filter.getName());
@@ -372,7 +372,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 			propertySupport.firePropertyChange(ModuleFrame.WINDOW_CLOSE_PROPERTY, 0, 1);
 
 			// Now set up progress dialog to display the file by file progress
-			ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+			IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 			progress.setIndeterminate(false);
 			progress.setMaximum(files.length);
 			progress.setProgress(0);
@@ -501,7 +501,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 		String suffix = prefixOrSuffix;
 
 		// Now set up progress dialog to display the symbol by symbol progress
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 		progress.setIndeterminate(false);
 		progress.setMaximum(symbols.size());
 		progress.setProgress(0);
@@ -565,7 +565,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 		ProxyPage.setupNetworking();
 
 		// Now set up progress dialog to display the symbol by symbol progress
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 		progress.setIndeterminate(false);
 		progress.setMaximum(dates.size());
 		progress.setProgress(0);
@@ -788,7 +788,7 @@ public class ImportQuoteModule extends JPanel implements Module {
 		// Same as hitting cancel - do not save anything
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 }

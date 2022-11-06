@@ -60,7 +60,7 @@ import nz.org.venice.util.Money;
  *
  * @author Andrew Leppard
  */
-public class PortfolioPage extends Page implements AnalyserPage {
+public class PortfolioPage extends Page implements IAnalyserPage {
 
 	// Swing components
 	private JRadioButton numberStocksButton;

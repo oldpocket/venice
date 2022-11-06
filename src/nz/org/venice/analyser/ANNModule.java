@@ -39,22 +39,22 @@ import javax.swing.SwingUtilities;
 
 import nz.org.venice.analyser.ann.ArtificialNeuralNetwork;
 import nz.org.venice.main.CommandManager;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.prefs.settings.AnalyserModuleSettings;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.quote.EODQuoteBundle;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
 
-public class ANNModule extends Page implements Module {
+public class ANNModule extends Page implements IModule {
 
 	private PropertyChangeSupport propertySupport;
 	private EODQuoteBundle quoteBundle;
@@ -174,7 +174,7 @@ public class ANNModule extends Page implements Module {
 		ANNTrainingPage.save(getClass().getName());
 		ANNNetworkTypePage.save(getClass().getName());
 
-		settings = new AnalyserModuleSettings(Settings.ANNMODULE);
+		settings = new AnalyserModuleSettings(ISettings.ANNMODULE);
 	}
 
 	public String getTitle() {
@@ -304,7 +304,7 @@ public class ANNModule extends Page implements Module {
 	private ANNResult paperTrade(EODQuoteBundle quoteBundle, String quoteRangeDescription, OrderCache orderCache,
 			TradingDate startDate, TradingDate endDate, Money initialCapital, int mode, Money stockValue,
 			int numberStocks, Money tradeCost, Variables variables, String tradeValueBuy, String tradeValueSell,
-			ProgressDialog progress, Expression[] inputExpressions, ArtificialNeuralNetwork artificialNeuralNetwork)
+			IProgressDialog progress, IExpression[] inputExpressions, ArtificialNeuralNetwork artificialNeuralNetwork)
 			throws EvaluationException {
 
 		Portfolio portfolio;
@@ -327,10 +327,10 @@ public class ANNModule extends Page implements Module {
 	/*
 	 * Do the training of artificial neural network
 	 */
-	private void paperTraining(ProgressDialog progress, EODQuoteBundle quoteBundle, String quoteRangeDescription,
+	private void paperTraining(IProgressDialog progress, EODQuoteBundle quoteBundle, String quoteRangeDescription,
 			OrderCache orderCache, TradingDate startDate, TradingDate endDate, Money initialCapital, int mode,
 			Money stockValue, int numberStocks, Money tradeCost, Variables variables, String tradeValueBuy,
-			String tradeValueSell, ANNTrainingPage ANNTrainingPage, Expression[] inputExpressions,
+			String tradeValueSell, ANNTrainingPage ANNTrainingPage, IExpression[] inputExpressions,
 			ArtificialNeuralNetwork artificialNeuralNetwork) throws EvaluationException {
 
 		Portfolio portfolio;
@@ -352,7 +352,7 @@ public class ANNModule extends Page implements Module {
 	 * trade got with current artificial neural network.
 	 */
 	private List getANNResults() {
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog(false);
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog(false);
 
 		Thread thread = Thread.currentThread();
 		progress.setIndeterminate(true);
@@ -379,7 +379,7 @@ public class ANNModule extends Page implements Module {
 		String tradeValueSell = tradeValuePage.getTradeValueSell();
 
 		// We get the ANN and its input expressions
-		Expression[] inputExpressions = ANNPage.getInputExpressions();
+		IExpression[] inputExpressions = ANNPage.getInputExpressions();
 		ArtificialNeuralNetwork artificialNeuralNetwork = ANNNetworkTypePage.getANN();
 		artificialNeuralNetwork.setBuyThreshold(ANNPage.getBuyThreshold());
 		artificialNeuralNetwork.setSellThreshold(ANNPage.getSellThreshold());
@@ -417,7 +417,7 @@ public class ANNModule extends Page implements Module {
 	 * Train the neural network according to the input from ANN Page GUI
 	 */
 	private void trainANN() {
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 		// We set the progress bar so that the ANN can manage it independently
 		// We update it each ANN training cycle.
 		ANNNetworkTypePage.setProgressBar(progress);
@@ -447,7 +447,7 @@ public class ANNModule extends Page implements Module {
 		String tradeValueSell = tradeValuePage.getTradeValueSell();
 
 		// We get the ANN and its input expressions
-		Expression[] inputExpressions = ANNPage.getInputExpressions();
+		IExpression[] inputExpressions = ANNPage.getInputExpressions();
 		ArtificialNeuralNetwork artificialNeuralNetwork = ANNNetworkTypePage.getANN();
 		artificialNeuralNetwork.setBuyThreshold(ANNPage.getBuyThreshold());
 		artificialNeuralNetwork.setSellThreshold(ANNPage.getSellThreshold());
@@ -507,7 +507,7 @@ public class ANNModule extends Page implements Module {
 		});
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 }

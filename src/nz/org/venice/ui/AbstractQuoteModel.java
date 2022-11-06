@@ -24,7 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.util.Locale;
 
 /**
@@ -44,7 +44,7 @@ public abstract class AbstractQuoteModel extends AbstractTableModel {
 	public final static int EXPRESSION_COLUMN_COUNT = 5;
 
 	// Quote bundle
-	private QuoteBundle quoteBundle;
+	private IQuoteBundle quoteBundle;
 
 	// List of quotes to be displayed in table
 	private List quotes;
@@ -56,13 +56,13 @@ public abstract class AbstractQuoteModel extends AbstractTableModel {
 	 * Create a new quote table model with no columns.
 	 *
 	 * @param quoteBundle           Quote bundle
-	 * @param quotes                A list of {@link nz.org.venice.quote.Quote}s
+	 * @param quotes                A list of {@link nz.org.venice.quote.IQuote}s
 	 *                              which contain the quote symbols and dates to
 	 *                              table.
 	 * @param firstExpressionColumn The column number of the first expression
 	 *                              column.
 	 */
-	public AbstractQuoteModel(QuoteBundle quoteBundle, List quotes, int firstExpressionColumn) {
+	public AbstractQuoteModel(IQuoteBundle quoteBundle, List quotes, int firstExpressionColumn) {
 		super();
 		this.quoteBundle = quoteBundle;
 		this.quotes = quotes;
@@ -88,7 +88,7 @@ public abstract class AbstractQuoteModel extends AbstractTableModel {
 	 */
 	public void setExpressionColumns(ExpressionColumn[] expressionColumns) {
 		Thread thread = Thread.currentThread();
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 		progress.setIndeterminate(true);
 		progress.show(Locale.getString("APPLYING_EQUATIONS"));
 

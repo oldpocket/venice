@@ -31,7 +31,7 @@ import nz.org.venice.util.TradingDate;
  *
  * @author Andrew Leppard
  */
-public interface Account {
+public interface IAccount {
 
 	/**
 	 * Account is a cash account (bank account, cash management account etc)

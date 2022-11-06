@@ -24,7 +24,7 @@ import java.util.List;
 import nz.org.venice.quote.EODQuote;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
@@ -38,7 +38,7 @@ import nz.org.venice.util.Locale;
  * @see AbstractTable
  * @see Column
  * @see ExpressionColumn
- * @see nz.org.venice.quote.QuoteBundle
+ * @see nz.org.venice.quote.IQuoteBundle
  */
 public class EODQuoteModel extends AbstractQuoteModel {
 
@@ -161,7 +161,7 @@ public class EODQuoteModel extends AbstractQuoteModel {
 			double initialQuote = quote.getDayOpen();
 
 			try {
-				initialQuote = quoteBundle.getQuote(quote.getSymbol(), Quote.DAY_CLOSE, quote.getDate().previous(1));
+				initialQuote = quoteBundle.getQuote(quote.getSymbol(), IQuote.DAY_CLOSE, quote.getDate().previous(1));
 			} catch (MissingQuoteException e) {
 				// No big deal - we default to day open
 			}
@@ -174,7 +174,7 @@ public class EODQuoteModel extends AbstractQuoteModel {
 			initialQuote = quote.getDayOpen();
 
 			try {
-				initialQuote = quoteBundle.getQuote(quote.getSymbol(), Quote.DAY_CLOSE, quote.getDate().previous(1));
+				initialQuote = quoteBundle.getQuote(quote.getSymbol(), IQuote.DAY_CLOSE, quote.getDate().previous(1));
 			} catch (MissingQuoteException e) {
 				// No big deal - we default to day open
 			}

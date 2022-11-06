@@ -30,7 +30,7 @@ import java.util.EventListener;
  * @see IDQuoteCache
  * @see QuoteEvent
  */
-public interface QuoteListener extends EventListener {
+public interface IQuoteListener extends EventListener {
 
 	/**
 	 * Called when a new intra-day quote has been downloaded.

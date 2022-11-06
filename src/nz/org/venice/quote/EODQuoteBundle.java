@@ -62,7 +62,7 @@ import nz.org.venice.util.WeekendDateException;
  * @see IDQuoteBundle
  * @see Symbol
  */
-public class EODQuoteBundle implements QuoteBundle {
+public class EODQuoteBundle implements IQuoteBundle {
 
 	// Quotes contained in this bundle
 	private EODQuoteRange quoteRange;
@@ -111,9 +111,9 @@ public class EODQuoteBundle implements QuoteBundle {
 	 * expanded to include it.
 	 *
 	 * @param symbol     the stock symbol
-	 * @param quoteType  the quote type, one of {@link Quote#DAY_OPEN},
-	 *                   {@link Quote#DAY_CLOSE}, {@link Quote#DAY_LOW},
-	 *                   {@link Quote#DAY_HIGH}, {@link Quote#DAY_VOLUME}
+	 * @param quoteType  the quote type, one of {@link IQuote#DAY_OPEN},
+	 *                   {@link IQuote#DAY_CLOSE}, {@link IQuote#DAY_LOW},
+	 *                   {@link IQuote#DAY_HIGH}, {@link IQuote#DAY_VOLUME}
 	 * @param dateOffset fast access date offset, see {@link EODQuoteCache}
 	 * @return the quote
 	 * @exception MissingQuoteException if the quote was not found
@@ -160,9 +160,9 @@ public class EODQuoteBundle implements QuoteBundle {
 		return quote;
 	}
 
-	public Quote getQuote(Symbol symbol, int dateOffset) throws MissingQuoteException {
+	public IQuote getQuote(Symbol symbol, int dateOffset) throws MissingQuoteException {
 
-		Quote quote = null;
+		IQuote quote = null;
 
 		// First try the quote cache.
 		try {
@@ -205,9 +205,9 @@ public class EODQuoteBundle implements QuoteBundle {
 	 * prevent the GP accessing 'future' dates.
 	 *
 	 * @param symbol    the stock symbol
-	 * @param quoteType the quote type, one of {@link Quote#DAY_OPEN},
-	 *                  {@link Quote#DAY_CLOSE}, {@link Quote#DAY_LOW},
-	 *                  {@link Quote#DAY_HIGH}, {@link Quote#DAY_VOLUME}
+	 * @param quoteType the quote type, one of {@link IQuote#DAY_OPEN},
+	 *                  {@link IQuote#DAY_CLOSE}, {@link IQuote#DAY_LOW},
+	 *                  {@link IQuote#DAY_HIGH}, {@link IQuote#DAY_VOLUME}
 	 * @param today     fast access date offset of current date, see
 	 *                  {@link EODQuoteCache}
 	 * @param offset    offset from current date
@@ -226,9 +226,9 @@ public class EODQuoteBundle implements QuoteBundle {
 	 * Get a stock quote.
 	 *
 	 * @param symbol    the stock symbol
-	 * @param quoteType the quote type, one of {@link Quote#DAY_OPEN},
-	 *                  {@link Quote#DAY_CLOSE}, {@link Quote#DAY_LOW},
-	 *                  {@link Quote#DAY_HIGH}, {@link Quote#DAY_VOLUME}
+	 * @param quoteType the quote type, one of {@link IQuote#DAY_OPEN},
+	 *                  {@link IQuote#DAY_CLOSE}, {@link IQuote#DAY_LOW},
+	 *                  {@link IQuote#DAY_HIGH}, {@link IQuote#DAY_VOLUME}
 	 * @param date      the date
 	 * @return the quote
 	 * @exception MissingQuoteException if the quote was not found
@@ -250,9 +250,9 @@ public class EODQuoteBundle implements QuoteBundle {
 	 * Get a stock quote nearest to the given offset.
 	 * 
 	 * @param symbol     the stock symbol
-	 * @param quoteType  the quote type, one of {@link Quote#DAY_OPEN},
-	 *                   {@link Quote#DAY_CLOSE}, {@link Quote#DAY_LOW},
-	 *                   {@link Quote#DAY_HIGH}, {@link Quote#DAY_VOLUME}
+	 * @param quoteType  the quote type, one of {@link IQuote#DAY_OPEN},
+	 *                   {@link IQuote#DAY_CLOSE}, {@link IQuote#DAY_LOW},
+	 *                   {@link IQuote#DAY_HIGH}, {@link IQuote#DAY_VOLUME}
 	 * @param dateOffset fast access date offset, see {@link EODQuoteCache}
 	 * @return the quote nearest to the given dateOffset
 	 * @exception MissingQuoteException if the quote was not found
@@ -345,7 +345,7 @@ public class EODQuoteBundle implements QuoteBundle {
 	 * order, all the quotes in this bundle.
 	 *
 	 * @return iterator over the quotes
-	 * @see Quote
+	 * @see IQuote
 	 */
 	public Iterator iterator() {
 		return new EODQuoteBundleIterator(this);
@@ -610,7 +610,7 @@ public class EODQuoteBundle implements QuoteBundle {
 	 * @return fast access offset
 	 * @exception WeekendDateException if the date falls on a weekend.
 	 */
-	public int getOffset(Quote quote) throws WeekendDateException {
+	public int getOffset(IQuote quote) throws WeekendDateException {
 
 		return dateToOffset(quote.getDate());
 	}

@@ -45,7 +45,7 @@ import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.VeniceLog;
 
-public class GPPageInitialPopulation extends Page implements AnalyserPage {
+public class GPPageInitialPopulation extends Page implements IAnalyserPage {
 
 	private final static String format = GPModuleConstants.format;
 	private final static double PERCENT_DOUBLE = GPModuleConstants.PERCENT_DOUBLE;

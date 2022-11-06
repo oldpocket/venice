@@ -30,7 +30,7 @@ package nz.org.venice.prefs.settings;
 
 import javax.swing.JDesktopPane;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.prefs.PreferencesException;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.quote.MixedQuoteBundle;
@@ -47,7 +47,7 @@ public class WatchScreenSettings extends AbstractSettings {
 	 */
 
 	public WatchScreenSettings() {
-		super(Settings.TABLE, Settings.WATCHSCREENMODULE);
+		super(ISettings.TABLE, ISettings.WATCHSCREENMODULE);
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class WatchScreenSettings extends AbstractSettings {
 	 * @param title The title of the WatchScreen
 	 */
 	public WatchScreenSettings(String title) {
-		super(Settings.TABLE, Settings.WATCHSCREENMODULE);
+		super(ISettings.TABLE, ISettings.WATCHSCREENMODULE);
 		super.setTitle(title);
 	}
 
@@ -69,7 +69,7 @@ public class WatchScreenSettings extends AbstractSettings {
 	 * @return A WatchScreenModule
 	 */
 
-	public Module getModule(JDesktopPane desktop) {
+	public IModule getModule(JDesktopPane desktop) {
 
 		try {
 			WatchScreen watchScreen = PreferencesManager.getWatchScreen(getTitle());

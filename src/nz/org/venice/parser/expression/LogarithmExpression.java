@@ -19,10 +19,10 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -34,11 +34,11 @@ public class LogarithmExpression extends UnaryExpression {
 	 * An expression which performs logarithm function <code>log</code> on the
 	 * sub-expressions.
 	 */
-	public LogarithmExpression(Expression arg) {
+	public LogarithmExpression(IExpression arg) {
 		super(arg);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		double number = getChild(0).evaluate(variables, quoteBundle, symbol, day);
@@ -52,9 +52,9 @@ public class LogarithmExpression extends UnaryExpression {
 		}
 	}
 
-	public Expression simplify() {
+	public IExpression simplify() {
 		// First simplify child argument
-		Expression simplified = super.simplify();
+		IExpression simplified = super.simplify();
 
 		// If the child argument is a constant we can precompute.
 		if (simplified.getChild(0) instanceof NumberExpression) {
@@ -101,6 +101,6 @@ public class LogarithmExpression extends UnaryExpression {
 	}
 
 	public Object clone() {
-		return new LogarithmExpression((Expression) getChild(0).clone());
+		return new LogarithmExpression((IExpression) getChild(0).clone());
 	}
 }

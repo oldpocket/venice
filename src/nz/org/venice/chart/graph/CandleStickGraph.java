@@ -25,7 +25,7 @@ import java.util.List;
 
 import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.util.Locale;
 
 /**
@@ -50,7 +50,7 @@ public class CandleStickGraph extends AbstractGraph {
 	 * @param dayHigh  source containing the day high values
 	 * @param dayClose source containing the day close values
 	 */
-	public CandleStickGraph(GraphSource dayOpen, GraphSource dayLow, GraphSource dayHigh, GraphSource dayClose) {
+	public CandleStickGraph(IGraphSource dayOpen, IGraphSource dayLow, IGraphSource dayHigh, IGraphSource dayClose) {
 		super(dayClose);
 
 		this.dayOpen = dayOpen.getGraphable();
@@ -162,7 +162,7 @@ public class CandleStickGraph extends AbstractGraph {
 			// line from day low to day high
 //	    if(y >= (dayLowYCoordinate - Graph.TOOL_TIP_BUFFER) &&
 //	       y <= (dayHighYCoordinate + Graph.TOOL_TIP_BUFFER))
-			if (y <= (dayLowYCoordinate + Graph.TOOL_TIP_BUFFER) && y >= (dayHighYCoordinate - Graph.TOOL_TIP_BUFFER))
+			if (y <= (dayLowYCoordinate + IGraph.TOOL_TIP_BUFFER) && y >= (dayHighYCoordinate - IGraph.TOOL_TIP_BUFFER))
 				return getSource().getToolTipText(x);
 		}
 		return null;

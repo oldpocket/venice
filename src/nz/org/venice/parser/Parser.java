@@ -129,7 +129,7 @@ public class Parser {
 	 * @return the parsed expression.
 	 * @exception ExpressionException if there was an error parsing the expression.
 	 */
-	public static Expression parse(Variables variables, String string) throws ExpressionException {
+	public static IExpression parse(Variables variables, String string) throws ExpressionException {
 
 		return parse(variables, string, false);
 	}
@@ -141,7 +141,7 @@ public class Parser {
 	 * @return the parsed expression.
 	 * @exception ExpressionException if there was an error parsing the expression.
 	 */
-	public static Expression parse(String string) throws ExpressionException {
+	public static IExpression parse(String string) throws ExpressionException {
 		return parse(new Variables(), string, false);
 	}
 
@@ -149,7 +149,7 @@ public class Parser {
 	// rules. Otherwise parse metadata from a previous "run" will be available
 	// and that will break things like parameter count checking.
 
-	private static Expression parse(Variables variables, String string, boolean internal) throws ExpressionException {
+	private static IExpression parse(Variables variables, String string, boolean internal) throws ExpressionException {
 		if (string == null || string.equals("")) {
 			throw new ExpressionException(Locale.getString("MISSING_EQUATION_NAME"));
 		}
@@ -161,7 +161,7 @@ public class Parser {
 		TokenStack tokens = lexicalAnalysis(variables, string);
 
 		// Translate stack of tokens to expression
-		Expression expression = parseRootExpression(variables, tokens, internal);
+		IExpression expression = parseRootExpression(variables, tokens, internal);
 
 		// There should be no more tokens
 		if (tokens.size() > 0)
@@ -224,11 +224,11 @@ public class Parser {
 		return tokens;
 	}
 
-	private static Expression parseRootExpression(Variables variables, TokenStack tokens) throws ParserException {
+	private static IExpression parseRootExpression(Variables variables, TokenStack tokens) throws ParserException {
 		return Parser.parseRootExpression(variables, tokens, false);
 	}
 
-	private static Expression parseRootExpression(Variables variables, TokenStack tokens, boolean internal)
+	private static IExpression parseRootExpression(Variables variables, TokenStack tokens, boolean internal)
 			throws ParserException {
 
 		List subExpressions = new ArrayList();
@@ -261,14 +261,14 @@ public class Parser {
 				throw new ParserException(Locale.getString("UNKNOWN_IDENTIFIER_ERROR", includeName));
 			} else {
 				try {
-					Expression includedExpression = Parser.parse(variables, includedStoredExpression.expression, true);
+					IExpression includedExpression = Parser.parse(variables, includedStoredExpression.expression, true);
 
 					// Included Expression different to ClauseExpression
 					// in that variables defined and set stay in scope.
 					// Allows an included function to access an included variable
 
 					for (int i = 0; i < includedExpression.getChildCount(); i++) {
-						Expression c = includedExpression.getChild(i);
+						IExpression c = includedExpression.getChild(i);
 						includedExpressions.add(c);
 					}
 
@@ -299,15 +299,15 @@ public class Parser {
 			// int dummyvar = 0
 			// float function myfunc(int myparm) { ...
 			parseTree.put(subExpressions.get(0), head);
-			return (Expression) subExpressions.get(0);
+			return (IExpression) subExpressions.get(0);
 		} else {
-			Expression clauseExpression = new ClauseExpression(subExpressions);
+			IExpression clauseExpression = new ClauseExpression(subExpressions);
 			parseTree.put(clauseExpression, head);
 			return clauseExpression;
 		}
 	}
 
-	private static Expression parseExpression(Variables variables, TokenStack tokens) throws ParserException {
+	private static IExpression parseExpression(Variables variables, TokenStack tokens) throws ParserException {
 
 		Token head = tokens.get();
 
@@ -334,30 +334,30 @@ public class Parser {
 
 			// Finally group all these sub-expressions together into a "clause" which
 			// will execute the expressions sequentially.
-			Expression clauseExpression = new ClauseExpression(subExpressions);
+			IExpression clauseExpression = new ClauseExpression(subExpressions);
 			parseTree.put(clauseExpression, head);
 			return clauseExpression;
 		}
 
 		// Otherwise parse a single sub-expression
 		else {
-			Expression subExpression = parseSubExpression(variables, tokens);
+			IExpression subExpression = parseSubExpression(variables, tokens);
 			parseTree.put(subExpression, head);
 			return subExpression;
 		}
 	}
 
-	private static Expression parseSubExpression(Variables variables, TokenStack tokens) throws ParserException {
+	private static IExpression parseSubExpression(Variables variables, TokenStack tokens) throws ParserException {
 
 		Token head = tokens.get();
-		Expression left = parseBooleanExpression(variables, tokens);
+		IExpression left = parseBooleanExpression(variables, tokens);
 
 		if (tokens.match(Token.AND_TOKEN) || tokens.match(Token.OR_TOKEN)) {
 
 			Token operation = tokens.pop();
-			Expression right = parseBooleanExpression(variables, tokens);
+			IExpression right = parseBooleanExpression(variables, tokens);
 
-			Expression subExpression = ExpressionFactory.newExpression(operation, left, right);
+			IExpression subExpression = ExpressionFactory.newExpression(operation, left, right);
 			parseTree.put(subExpression, head);
 			return subExpression;
 		}
@@ -365,20 +365,20 @@ public class Parser {
 		return left;
 	}
 
-	private static Expression parseBooleanExpression(Variables variables, TokenStack tokens) throws ParserException {
+	private static IExpression parseBooleanExpression(Variables variables, TokenStack tokens) throws ParserException {
 
 		Token head = tokens.get();
-		Expression left = parseAddExpression(variables, tokens);
+		IExpression left = parseAddExpression(variables, tokens);
 
 		if (tokens.match(Token.EQUAL_TOKEN) || tokens.match(Token.NOT_EQUAL_TOKEN)
 				|| tokens.match(Token.LESS_THAN_EQUAL_TOKEN) || tokens.match(Token.LESS_THAN_TOKEN)
 				|| tokens.match(Token.GREATER_THAN_TOKEN) || tokens.match(Token.GREATER_THAN_EQUAL_TOKEN)) {
 
 			Token operation = tokens.pop();
-			Expression right = parseAddExpression(variables, tokens);
+			IExpression right = parseAddExpression(variables, tokens);
 			parseTree.put(right, operation);
 
-			Expression boolExpression = ExpressionFactory.newExpression(operation, left, right);
+			IExpression boolExpression = ExpressionFactory.newExpression(operation, left, right);
 			parseTree.put(boolExpression, head);
 
 			return boolExpression;
@@ -387,17 +387,17 @@ public class Parser {
 		return left;
 	}
 
-	private static Expression parseAddExpression(Variables variables, TokenStack tokens) throws ParserException {
+	private static IExpression parseAddExpression(Variables variables, TokenStack tokens) throws ParserException {
 
 		Token head = tokens.get();
-		Expression left = parseMultiplyExpression(variables, tokens);
+		IExpression left = parseMultiplyExpression(variables, tokens);
 
 		if (tokens.match(Token.ADD_TOKEN) || tokens.match(Token.SUBTRACT_TOKEN)) {
 			Token operation = tokens.pop();
-			Expression right = parseMultiplyExpression(variables, tokens);
+			IExpression right = parseMultiplyExpression(variables, tokens);
 			parseTree.put(right, operation);
 
-			Expression addExpression = ExpressionFactory.newExpression(operation, left, right);
+			IExpression addExpression = ExpressionFactory.newExpression(operation, left, right);
 			parseTree.put(addExpression, head);
 			return addExpression;
 
@@ -406,18 +406,18 @@ public class Parser {
 		return left;
 	}
 
-	private static Expression parseMultiplyExpression(Variables variables, TokenStack tokens) throws ParserException {
+	private static IExpression parseMultiplyExpression(Variables variables, TokenStack tokens) throws ParserException {
 
 		Token head = tokens.get();
-		Expression left = parseFactor(variables, tokens);
+		IExpression left = parseFactor(variables, tokens);
 
 		if (tokens.match(Token.MULTIPLY_TOKEN) || tokens.match(Token.DIVIDE_TOKEN)) {
 
 			Token operation = tokens.pop();
-			Expression right = parseFactor(variables, tokens);
+			IExpression right = parseFactor(variables, tokens);
 			parseTree.put(right, operation);
 
-			Expression multExpression = ExpressionFactory.newExpression(operation, left, right);
+			IExpression multExpression = ExpressionFactory.newExpression(operation, left, right);
 			parseTree.put(multExpression, head);
 
 			return multExpression;
@@ -426,9 +426,9 @@ public class Parser {
 		return left;
 	}
 
-	private static Expression parseFactor(Variables variables, TokenStack tokens) throws ParserException {
+	private static IExpression parseFactor(Variables variables, TokenStack tokens) throws ParserException {
 
-		Expression expression;
+		IExpression expression;
 		Token head = tokens.get();
 
 		// NUMBER
@@ -489,7 +489,7 @@ public class Parser {
 		return expression;
 	}
 
-	private static Expression parseVariable(Variables variables, TokenStack tokens) throws ParserException {
+	private static IExpression parseVariable(Variables variables, TokenStack tokens) throws ParserException {
 
 		Token token = tokens.pop();
 		assert token.getType() == Token.VARIABLE_TOKEN;
@@ -510,8 +510,8 @@ public class Parser {
 			if (variable.isFunction())
 				throw new ParserException(Locale.getString("VARIABLE_IS_FUNCTION"));
 
-			Expression value = parseSubExpression(variables, tokens);
-			Expression setVarExpression = new SetVariableExpression(token.getVariableName(), variable.getType(), value);
+			IExpression value = parseSubExpression(variables, tokens);
+			IExpression setVarExpression = new SetVariableExpression(token.getVariableName(), variable.getType(), value);
 
 			parseTree.put(setVarExpression, token);
 			return setVarExpression;
@@ -521,7 +521,7 @@ public class Parser {
 
 				parseLeftParenthesis(variables, tokens);
 
-				Expression parameterExpression = null;
+				IExpression parameterExpression = null;
 
 				while (!tokens.match(Token.RIGHT_PARENTHESIS_TOKEN)) {
 					parameterExpression = parseSubExpression(variables, tokens);
@@ -543,26 +543,26 @@ public class Parser {
 
 				parseRightParenthesis(variables, tokens);
 
-				Expression parameterListExpression = new ClauseExpression(parameterList);
+				IExpression parameterListExpression = new ClauseExpression(parameterList);
 
-				Expression evalFunctionExpression = new EvalFunctionExpression(variable.getName(), variable.getType(),
+				IExpression evalFunctionExpression = new EvalFunctionExpression(variable.getName(), variable.getType(),
 						parameterListExpression);
 
 				parseTree.put(evalFunctionExpression, token);
 				return evalFunctionExpression;
 			} else {
-				Expression getVarExpression = new GetVariableExpression(token.getVariableName(), variable.getType());
+				IExpression getVarExpression = new GetVariableExpression(token.getVariableName(), variable.getType());
 				parseTree.put(getVarExpression, token);
 				return getVarExpression;
 			}
 		}
 	}
 
-	private static Expression parseDefineVariable(Variables variables, TokenStack tokens) throws ParserException {
+	private static IExpression parseDefineVariable(Variables variables, TokenStack tokens) throws ParserException {
 
 		String name;
 		boolean isConstant = false;
-		Expression value = null;
+		IExpression value = null;
 		int type;
 		Token token, head;
 
@@ -577,11 +577,11 @@ public class Parser {
 		head = token;
 
 		if (token.getType() == Token.BOOLEAN_TOKEN)
-			type = Expression.BOOLEAN_TYPE;
+			type = IExpression.BOOLEAN_TYPE;
 		else if (token.getType() == Token.FLOAT_TOKEN)
-			type = Expression.FLOAT_TYPE;
+			type = IExpression.FLOAT_TYPE;
 		else if (token.getType() == Token.INTEGER_TOKEN)
-			type = Expression.INTEGER_TYPE;
+			type = IExpression.INTEGER_TYPE;
 		else
 			throw new ParserException(Locale.getString("EXPECTED_VARIABLE_TYPE_ERROR"));
 
@@ -616,7 +616,7 @@ public class Parser {
 		if (parameterMap.get(name) == null) {
 			variables.add(name, type, isConstant);
 		}
-		Expression defVarExpression = new DefineVariableExpression(name, type, isConstant, value);
+		IExpression defVarExpression = new DefineVariableExpression(name, type, isConstant, value);
 
 		parseTree.put(defVarExpression, head);
 
@@ -624,11 +624,11 @@ public class Parser {
 
 	}
 
-	private static Expression parseQuote(Variables variables, TokenStack tokens) throws ParserException {
+	private static IExpression parseQuote(Variables variables, TokenStack tokens) throws ParserException {
 
 		Token quote = tokens.pop();
-		Expression expression;
-		Expression symbol = null;
+		IExpression expression;
+		IExpression symbol = null;
 
 		// Has the user supplied an explicit symbol?
 		if (tokens.match(Token.LEFT_PARENTHESIS_TOKEN)) {
@@ -653,12 +653,12 @@ public class Parser {
 		return expression;
 	}
 
-	private static Expression parseString(Variables variables, TokenStack tokens) throws ParserException {
+	private static IExpression parseString(Variables variables, TokenStack tokens) throws ParserException {
 
 		Token string = tokens.pop();
 
 		if (string.getType() == Token.STRING_TOKEN) {
-			Expression strExpression = ExpressionFactory.newExpression(string);
+			IExpression strExpression = ExpressionFactory.newExpression(string);
 			parseTree.put(strExpression, string);
 			return strExpression;
 		} else {
@@ -666,13 +666,13 @@ public class Parser {
 		}
 	}
 
-	private static Expression parseNumber(Variables variables, TokenStack tokens) throws ParserException {
+	private static IExpression parseNumber(Variables variables, TokenStack tokens) throws ParserException {
 
 		Token number = tokens.pop();
 		boolean negate = false;
 
 		if (number.getType() == Token.TRUE_TOKEN || number.getType() == Token.FALSE_TOKEN) {
-			Expression numExpression = ExpressionFactory.newExpression(number);
+			IExpression numExpression = ExpressionFactory.newExpression(number);
 			parseTree.put(numExpression, number);
 			return numExpression;
 		}
@@ -687,7 +687,7 @@ public class Parser {
 			if (number.getType() == Token.NUMBER_TOKEN) {
 				if (negate)
 					number.negate();
-				Expression numExpression = ExpressionFactory.newExpression(number);
+				IExpression numExpression = ExpressionFactory.newExpression(number);
 				parseTree.put(numExpression, number);
 				return numExpression;
 			} else
@@ -695,13 +695,13 @@ public class Parser {
 		}
 	}
 
-	private static Expression parseFunction(Variables variables, TokenStack tokens) throws ParserException {
+	private static IExpression parseFunction(Variables variables, TokenStack tokens) throws ParserException {
 
-		Expression expression;
-		Expression arg1 = null;
-		Expression arg2 = null;
-		Expression arg3 = null;
-		Expression arg4 = null;
+		IExpression expression;
+		IExpression arg1 = null;
+		IExpression arg2 = null;
+		IExpression arg3 = null;
+		IExpression arg4 = null;
 
 		Token function = tokens.pop();
 
@@ -948,51 +948,51 @@ public class Parser {
 		return expression;
 	}
 
-	private static Expression parseDayQuoteFunction(Variables variables, TokenStack tokens) throws ParserException {
+	private static IExpression parseDayQuoteFunction(Variables variables, TokenStack tokens) throws ParserException {
 
 		Token head = tokens.get();
-		Expression lagExpression = new LagExpression(parseQuote(variables, tokens), new NumberExpression(0));
+		IExpression lagExpression = new LagExpression(parseQuote(variables, tokens), new NumberExpression(0));
 
 		parseTree.put(lagExpression, head);
 		return lagExpression;
 	}
 
-	private static Expression parseFlowControl(Variables variables, TokenStack tokens) throws ParserException {
+	private static IExpression parseFlowControl(Variables variables, TokenStack tokens) throws ParserException {
 
 		Token token = tokens.pop();
-		Expression flowExpression;
+		IExpression flowExpression;
 
 		// All control flow functions have a left parenthesis after the function.
 		parseLeftParenthesis(variables, tokens);
 
 		if (token.getType() == Token.IF_TOKEN) {
-			Expression condition = parseSubExpression(variables, tokens);
+			IExpression condition = parseSubExpression(variables, tokens);
 			parseRightParenthesis(variables, tokens);
-			Expression ifTrue = parseExpression(variables, tokens);
+			IExpression ifTrue = parseExpression(variables, tokens);
 			parseElse(variables, tokens);
-			Expression ifFalse = parseExpression(variables, tokens);
+			IExpression ifFalse = parseExpression(variables, tokens);
 			flowExpression = ExpressionFactory.newExpression(token, condition, ifTrue, ifFalse);
 		} else if (token.getType() == Token.WHILE_TOKEN) {
-			Expression condition = parseSubExpression(variables, tokens);
+			IExpression condition = parseSubExpression(variables, tokens);
 			parseRightParenthesis(variables, tokens);
-			Expression command = parseExpression(variables, tokens);
+			IExpression command = parseExpression(variables, tokens);
 			flowExpression = ExpressionFactory.newExpression(token, condition, command);
 		} else {
 			assert token.getType() == Token.FOR_TOKEN;
-			Expression initial = parseSubExpression(variables, tokens);
+			IExpression initial = parseSubExpression(variables, tokens);
 			parseSemicolon(variables, tokens);
-			Expression condition = parseSubExpression(variables, tokens);
+			IExpression condition = parseSubExpression(variables, tokens);
 			parseSemicolon(variables, tokens);
-			Expression loop = parseSubExpression(variables, tokens);
+			IExpression loop = parseSubExpression(variables, tokens);
 			parseRightParenthesis(variables, tokens);
-			Expression command = parseExpression(variables, tokens);
+			IExpression command = parseExpression(variables, tokens);
 			flowExpression = ExpressionFactory.newExpression(token, initial, condition, loop, command);
 		}
 		parseTree.put(flowExpression, token);
 		return flowExpression;
 	}
 
-	private static Expression parseUserFunction(Variables variables, TokenStack tokens, int type)
+	private static IExpression parseUserFunction(Variables variables, TokenStack tokens, int type)
 			throws ParserException {
 
 		Token token = tokens.pop();
@@ -1011,7 +1011,7 @@ public class Parser {
 
 		// parameterExpression will be replaced if parameters are defined
 		// otherwise a terminal expression which will then be ignored is used.
-		Expression parameterExpression = new NumberExpression(0);
+		IExpression parameterExpression = new NumberExpression(0);
 
 		parseLeftParenthesis(variables, tokens);
 		if (!tokens.match(Token.RIGHT_PARENTHESIS_TOKEN)) {
@@ -1026,7 +1026,7 @@ public class Parser {
 
 		boolean inClause = true;
 		while (inClause) {
-			Expression se = parseSubExpression(variables, tokens);
+			IExpression se = parseSubExpression(variables, tokens);
 			functionBodyList.add(se);
 
 			// If there are no more symbols then we are mising the matching "}"
@@ -1040,15 +1040,15 @@ public class Parser {
 			}
 		}
 
-		Expression functionBody = new ClauseExpression(functionBodyList);
-		Expression userFunction = new FunctionExpression(functionName.getVariableName(), type, parameterExpression,
+		IExpression functionBody = new ClauseExpression(functionBodyList);
+		IExpression userFunction = new FunctionExpression(functionName.getVariableName(), type, parameterExpression,
 				functionBody);
 
 		parseTree.put(userFunction, token);
 		return userFunction;
 	}
 
-	private static Expression parseParameters(Variables variables, TokenStack tokens, String functionName)
+	private static IExpression parseParameters(Variables variables, TokenStack tokens, String functionName)
 			throws ParserException {
 
 		Token token = tokens.pop();
@@ -1059,11 +1059,11 @@ public class Parser {
 		while (token.getType() != Token.RIGHT_PARENTHESIS_TOKEN) {
 
 			if (token.getType() == Token.BOOLEAN_TOKEN)
-				type = Expression.BOOLEAN_TYPE;
+				type = IExpression.BOOLEAN_TYPE;
 			else if (token.getType() == Token.FLOAT_TOKEN)
-				type = Expression.FLOAT_TYPE;
+				type = IExpression.FLOAT_TYPE;
 			else if (token.getType() == Token.INTEGER_TOKEN)
-				type = Expression.INTEGER_TYPE;
+				type = IExpression.INTEGER_TYPE;
 			else
 				throw new ParserException(Locale.getString("EXPECTED_VARIABLE_TYPE_ERROR"));
 
@@ -1074,7 +1074,7 @@ public class Parser {
 			else
 				throw new ParserException(Locale.getString("ILLEGAL_VARIABLE_NAME_ERROR"));
 
-			Expression parameterExpression = new DefineParameterExpression(name, type);
+			IExpression parameterExpression = new DefineParameterExpression(name, type);
 
 			// Check that if the parameter is repeated, it's not doing so
 			// as part of the same signature.
@@ -1103,7 +1103,7 @@ public class Parser {
 			token = tokens.pop();
 		}
 
-		Expression parameterList = new ClauseExpression(parameterExpressions);
+		IExpression parameterList = new ClauseExpression(parameterExpressions);
 		parseTree.put(parameterList, token);
 
 		return parameterList;

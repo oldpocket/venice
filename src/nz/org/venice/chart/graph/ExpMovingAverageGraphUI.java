@@ -34,7 +34,7 @@ import nz.org.venice.util.Locale;
  * @author Andrew Leppard
  * @see ExpMovingAverageGraph
  */
-public class ExpMovingAverageGraphUI implements GraphUI {
+public class ExpMovingAverageGraphUI implements IGraphUI {
 
 	// The graph's user interface
 	private JPanel panel;

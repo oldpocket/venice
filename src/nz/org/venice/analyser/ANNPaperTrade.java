@@ -24,7 +24,7 @@ import java.util.List;
 
 import nz.org.venice.analyser.ann.ArtificialNeuralNetwork;
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.ExpressionFactory;
 import nz.org.venice.parser.ImplicitVariables;
 import nz.org.venice.parser.Variables;
@@ -32,9 +32,9 @@ import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.portfolio.StockHolding;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.Symbol;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
@@ -105,7 +105,7 @@ public class ANNPaperTrade extends PaperTrade {
 	 * @param artificialNeuralNetwork the ANN object
 	 */
 	private static void sellTrades(Environment environment, EODQuoteBundle quoteBundle, Variables variables,
-			int dateOffset, Money tradeCost, List symbols, OrderCache orderCache, Expression[] inputExpressions,
+			int dateOffset, Money tradeCost, List symbols, OrderCache orderCache, IExpression[] inputExpressions,
 			ArtificialNeuralNetwork artificialNeuralNetwork) throws EvaluationException {
 
 		// Iterate through our stock holdings and see if we should sell any
@@ -142,7 +142,7 @@ public class ANNPaperTrade extends PaperTrade {
 				// set tradeValueWanted = 0 and sell at open price.
 				double tradeValueWanted = 0;
 				if (!environment.tradeValueSell.equals("open")) {
-					Expression tradeValueSellExpression = ExpressionFactory.newExpression(environment.tradeValueSell);
+					IExpression tradeValueSellExpression = ExpressionFactory.newExpression(environment.tradeValueSell);
 					tradeValueWanted = tradeValueSellExpression.evaluate(variables, environment.quoteBundle, symbol,
 							dateOffset);
 				}
@@ -182,7 +182,7 @@ public class ANNPaperTrade extends PaperTrade {
 	 */
 	private static void buyTrades(Environment environment, EODQuoteBundle quoteBundle, Variables variables,
 			int dateOffset, Money tradeCost, List symbols, OrderCache orderCache, Money stockValue,
-			Expression[] inputExpressions, ArtificialNeuralNetwork artificialNeuralNetwork) throws EvaluationException {
+			IExpression[] inputExpressions, ArtificialNeuralNetwork artificialNeuralNetwork) throws EvaluationException {
 
 		variables.setValue("held", 0);
 		variables.setValue("stockcapital", 0);
@@ -211,7 +211,7 @@ public class ANNPaperTrade extends PaperTrade {
 					// set tradeValueWanted = 0 and buy at open price.
 					double tradeValueWanted = 0;
 					if (!environment.tradeValueBuy.equals("open")) {
-						Expression tradeValueBuyExpression = ExpressionFactory.newExpression(environment.tradeValueBuy);
+						IExpression tradeValueBuyExpression = ExpressionFactory.newExpression(environment.tradeValueBuy);
 						tradeValueWanted = tradeValueBuyExpression.evaluate(variables, environment.quoteBundle, symbol,
 								dateOffset);
 					}
@@ -276,8 +276,8 @@ public class ANNPaperTrade extends PaperTrade {
 	 */
 	public static Portfolio paperTrade(String portfolioName, EODQuoteBundle quoteBundle, Variables variables,
 			OrderCache orderCache, TradingDate startDate, TradingDate endDate, Money capital, Money stockValue,
-			Money tradeCost, String tradeValueBuy, String tradeValueSell, ProgressDialog progress,
-			Expression[] inputExpressions, ArtificialNeuralNetwork artificialNeuralNetwork) throws EvaluationException {
+			Money tradeCost, String tradeValueBuy, String tradeValueSell, IProgressDialog progress,
+			IExpression[] inputExpressions, ArtificialNeuralNetwork artificialNeuralNetwork) throws EvaluationException {
 
 		// Set up environment for paper trading
 		ANNPaperTrade paperTrade = new ANNPaperTrade();
@@ -353,8 +353,8 @@ public class ANNPaperTrade extends PaperTrade {
 	 */
 	public static void paperTraining(String portfolioName, EODQuoteBundle quoteBundle, Variables variables,
 			OrderCache orderCache, TradingDate startDate, TradingDate endDate, Money capital, Money stockValue,
-			Money tradeCost, String tradeValueBuy, String tradeValueSell, ProgressDialog progress,
-			ANNTrainingPage ANNTrainingPage, Expression[] inputExpressions,
+			Money tradeCost, String tradeValueBuy, String tradeValueSell, IProgressDialog progress,
+			ANNTrainingPage ANNTrainingPage, IExpression[] inputExpressions,
 			ArtificialNeuralNetwork artificialNeuralNetwork) throws EvaluationException {
 
 		// Total cycles to train ANN
@@ -453,8 +453,8 @@ public class ANNPaperTrade extends PaperTrade {
 	 */
 	public static void paperTraining(String portfolioName, EODQuoteBundle quoteBundle, Variables variables,
 			OrderCache orderCache, TradingDate startDate, TradingDate endDate, Money capital, int numberStocks,
-			Money tradeCost, String tradeValueBuy, String tradeValueSell, ProgressDialog progress,
-			ANNTrainingPage ANNTrainingPage, Expression[] inputExpressions,
+			Money tradeCost, String tradeValueBuy, String tradeValueSell, IProgressDialog progress,
+			ANNTrainingPage ANNTrainingPage, IExpression[] inputExpressions,
 			ArtificialNeuralNetwork artificialNeuralNetwork) throws EvaluationException {
 
 		// Total cycles to train ANN
@@ -564,8 +564,8 @@ public class ANNPaperTrade extends PaperTrade {
 	 */
 	public static Portfolio paperTrade(String portfolioName, EODQuoteBundle quoteBundle, Variables variables,
 			OrderCache orderCache, TradingDate startDate, TradingDate endDate, Money capital, int numberStocks,
-			Money tradeCost, String tradeValueBuy, String tradeValueSell, ProgressDialog progress,
-			Expression[] inputExpressions, ArtificialNeuralNetwork artificialNeuralNetwork) throws EvaluationException {
+			Money tradeCost, String tradeValueBuy, String tradeValueSell, IProgressDialog progress,
+			IExpression[] inputExpressions, ArtificialNeuralNetwork artificialNeuralNetwork) throws EvaluationException {
 
 		// Set up environment for paper trading
 		ANNPaperTrade paperTrade = new ANNPaperTrade();
@@ -630,7 +630,7 @@ public class ANNPaperTrade extends PaperTrade {
 	 * Set the information for the tip of the next day.
 	 */
 	private static void setTip(Environment environment, EODQuoteBundle quoteBundle, Variables variables, int dateOffset,
-			Money tradeCost, List symbols, OrderCache orderCache, Expression[] inputExpressions,
+			Money tradeCost, List symbols, OrderCache orderCache, IExpression[] inputExpressions,
 			ArtificialNeuralNetwork artificialNeuralNetwork) {
 
 		symbolStock = new String[symbols.size()];
@@ -648,7 +648,7 @@ public class ANNPaperTrade extends PaperTrade {
 	}
 
 	private static void setSellTip(Environment environment, EODQuoteBundle quoteBundle, Variables variables,
-			int dateOffset, Money tradeCost, List symbols, OrderCache orderCache, Expression[] inputExpressions,
+			int dateOffset, Money tradeCost, List symbols, OrderCache orderCache, IExpression[] inputExpressions,
 			ArtificialNeuralNetwork artificialNeuralNetwork) {
 
 		// Count the sell tip for the next day
@@ -704,7 +704,7 @@ public class ANNPaperTrade extends PaperTrade {
 				// set the price to zero (sell at open price).
 				sellValue[index] = 0;
 				if (!environment.tradeValueSell.equals("open")) {
-					Expression tradeValueSellExpression = ExpressionFactory.newExpression(environment.tradeValueSell);
+					IExpression tradeValueSellExpression = ExpressionFactory.newExpression(environment.tradeValueSell);
 					sellValue[index] = tradeValueSellExpression.evaluate(variables, environment.quoteBundle, symbol,
 							dateOffset);
 				}
@@ -717,7 +717,7 @@ public class ANNPaperTrade extends PaperTrade {
 	}
 
 	private static void setBuyTip(Environment environment, EODQuoteBundle quoteBundle, Variables variables,
-			int dateOffset, Money tradeCost, List symbols, OrderCache orderCache, Expression[] inputExpressions,
+			int dateOffset, Money tradeCost, List symbols, OrderCache orderCache, IExpression[] inputExpressions,
 			ArtificialNeuralNetwork artificialNeuralNetwork) {
 
 		// Count the buy tip for the next day
@@ -765,7 +765,7 @@ public class ANNPaperTrade extends PaperTrade {
 				// set this price to zero (buy at open price).
 				buyValue[index] = 0;
 				if (!environment.tradeValueBuy.equals("open")) {
-					Expression tradeValueBuyExpression = ExpressionFactory.newExpression(environment.tradeValueBuy);
+					IExpression tradeValueBuyExpression = ExpressionFactory.newExpression(environment.tradeValueBuy);
 					buyValue[index] = tradeValueBuyExpression.evaluate(variables, environment.quoteBundle, symbol,
 							dateOffset);
 				}
@@ -785,7 +785,7 @@ public class ANNPaperTrade extends PaperTrade {
 	 */
 	private static void setANNTrainingParameters(double[] ANNInputArrayRow, double[] ANNOutputDesiredArrayRow,
 			Environment environment, EODQuoteBundle quoteBundle, Variables variables, int dateOffset, Symbol symbol,
-			Expression[] inputExpressions, ArtificialNeuralNetwork artificialNeuralNetwork, double minEarningPercentage,
+			IExpression[] inputExpressions, ArtificialNeuralNetwork artificialNeuralNetwork, double minEarningPercentage,
 			int windowForecast) {
 
 		/* Input parameters for the ANN */
@@ -810,12 +810,12 @@ public class ANNPaperTrade extends PaperTrade {
 		double closePrice = 0;
 		try {
 			// Get the open price
-			openPrice = environment.quoteBundle.getQuote(symbol, Quote.DAY_OPEN, dateOffset + 1);
+			openPrice = environment.quoteBundle.getQuote(symbol, IQuote.DAY_OPEN, dateOffset + 1);
 			// Loop for all the days in the window forecast
 			for (int ii = 1; ii < windowForecast + 1; ii++) {
 				if ((dateOffset + ii) <= environment.endDateOffset) {
 					// Get the close price, ii days after the trading day.
-					closePrice = environment.quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, dateOffset + ii);
+					closePrice = environment.quoteBundle.getQuote(symbol, IQuote.DAY_CLOSE, dateOffset + ii);
 					double earn = (100.0D * (closePrice - openPrice) / openPrice);
 					// if we earn in the ii trading day,
 					// then set the buy signal to true.

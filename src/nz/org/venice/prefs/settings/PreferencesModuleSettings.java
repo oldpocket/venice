@@ -29,21 +29,21 @@ package nz.org.venice.prefs.settings;
 
 import javax.swing.JDesktopPane;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.prefs.PreferencesModule;
 
 public class PreferencesModuleSettings extends AbstractSettings {
 
 	public PreferencesModuleSettings() {
-		super(Settings.PREFERENCES, Settings.PREFERENCESMODULE);
+		super(ISettings.PREFERENCES, ISettings.PREFERENCESMODULE);
 	}
 
 	public PreferencesModuleSettings(String title) {
-		super(Settings.PREFERENCES, Settings.PREFERENCESMODULE);
+		super(ISettings.PREFERENCES, ISettings.PREFERENCESMODULE);
 		super.setTitle(title);
 	}
 
-	public Module getModule(JDesktopPane desktop) {
+	public IModule getModule(JDesktopPane desktop) {
 		return new PreferencesModule(desktop);
 	}
 

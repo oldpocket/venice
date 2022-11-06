@@ -50,10 +50,10 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import nz.org.venice.chart.graph.Graph;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.graph.IGraph;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.main.CommandManager;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.prefs.PreferencesException;
@@ -62,14 +62,14 @@ import nz.org.venice.prefs.settings.ChartModuleSettings;
 import nz.org.venice.prefs.settings.GraphSettings;
 import nz.org.venice.prefs.settings.GraphSettingsGroup;
 import nz.org.venice.prefs.settings.MenuSettings;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.EODQuoteRange;
 import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.SymbolFormatException;
 import nz.org.venice.ui.DesktopManager;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.ui.SymbolListDialog;
 import nz.org.venice.util.Locale;
@@ -164,10 +164,10 @@ import nz.org.venice.util.TradingDate;
  * <i>Annotations</i> to display for the graph.
  * </dl>
  *
- * @see Graph
+ * @see IGraph
  */
 
-public class ChartModule extends JPanel implements Module, MouseListener, MouseMotionListener, ActionListener {
+public class ChartModule extends JPanel implements IModule, MouseListener, MouseMotionListener, ActionListener {
 	// Constants
 	private static int TOOLBAR_GRAPHIC_SIZE = 12;
 
@@ -281,7 +281,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 
 			EODQuoteBundle primaryQuoteBundle = getQuoteBundle(symbol, settingsGroup.getGraphSettings());
 
-			Graph primaryGraph = getGraph(primaryGraphSettings, primaryQuoteBundle, symbol);
+			IGraph primaryGraph = getGraph(primaryGraphSettings, primaryQuoteBundle, symbol);
 
 			java.util.List subGraphSettingsList = settingsGroup.getSubGraphSettingsList();
 
@@ -300,7 +300,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 
 				EODQuoteBundle subQuoteBundle = getQuoteBundle(symbol, graphSettings);
 
-				Graph newGraph = getGraph(graphSettings, subQuoteBundle, symbol);
+				IGraph newGraph = getGraph(graphSettings, subQuoteBundle, symbol);
 
 				if (newGraph != null) {
 					graphMenuMap.put(newGraph.getName(), newGraph);
@@ -311,7 +311,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 			menuSettings.setTitle(primaryGraph.getSourceName());
 			menuSettings.setMap(graphMenuMap);
 
-			if (primaryGraph.getSourceType() == GraphSource.SYMBOL) {
+			if (primaryGraph.getSourceType() == IGraphSource.SYMBOL) {
 				try {
 					Symbol s = Symbol.find(symbol);
 
@@ -319,7 +319,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 				} catch (SymbolFormatException sfe) {
 
 				}
-			} else if (primaryGraph.getSourceType() == GraphSource.PORTFOLIO) {
+			} else if (primaryGraph.getSourceType() == IGraphSource.PORTFOLIO) {
 				try {
 					Portfolio portfolio = PreferencesManager.getPortfolio(symbol);
 					add(primaryGraph, portfolio, primaryQuoteBundle, levelIndex, menuSettings);
@@ -336,7 +336,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 				GraphSettingsGroup graphSettingsGroup = (GraphSettingsGroup) graphIterator.next();
 				GraphSettings graphSettings = graphSettingsGroup.getGraphSettings();
 
-				Graph newGraph = (Graph) graphMenuMap.get(graphSettings.getTitle());
+				IGraph newGraph = (IGraph) graphMenuMap.get(graphSettings.getTitle());
 				append(newGraph, graphSettingsGroup.getLevelIndex());
 
 			}
@@ -559,7 +559,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 	 * @param graph the new graph to add
 	 * @param level graph level to add the new graph
 	 */
-	public void add(Graph graph, Symbol symbol, EODQuoteBundle quoteBundle, int level) {
+	public void add(IGraph graph, Symbol symbol, EODQuoteBundle quoteBundle, int level) {
 
 		// Make sure it has at least one value
 		assert graph.getXRange().size() > 0;
@@ -581,7 +581,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 	 * @param level        graph level to add the new graph
 	 * @param menuSettings The menusettings for the graph
 	 */
-	public void add(Graph graph, Symbol symbol, EODQuoteBundle quoteBundle, int level, MenuSettings menuSettings) {
+	public void add(IGraph graph, Symbol symbol, EODQuoteBundle quoteBundle, int level, MenuSettings menuSettings) {
 
 		// Make sure it has at least one value
 		assert graph.getXRange().size() > 0;
@@ -602,9 +602,9 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 		Iterator iterator = symbols.iterator();
 
 		final Thread thread = Thread.currentThread();
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 		EODQuoteBundle quoteBundle = null;
-		Graph graph = null;
+		IGraph graph = null;
 
 		while (iterator.hasNext()) {
 			final Symbol symbol = (Symbol) iterator.next();
@@ -619,7 +619,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 
 			if (!thread.isInterrupted()) {
 
-				final Graph finalGraph = graph;
+				final IGraph finalGraph = graph;
 				final EODQuoteBundle finalQuoteBundle = quoteBundle;
 
 				// Invokes on dispatch thread
@@ -662,7 +662,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 			Iterator graphIterator = graphs.iterator();
 
 			while (graphIterator.hasNext()) {
-				Graph graph = (Graph) graphIterator.next();
+				IGraph graph = (IGraph) graphIterator.next();
 
 				if (name.equals(graph.getSourceName()))
 					return true;
@@ -681,7 +681,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 	 * @param quoteBundle the quote bundle
 	 * @param level       specified level
 	 */
-	public void add(Graph graph, Portfolio portfolio, EODQuoteBundle quoteBundle, int level) {
+	public void add(IGraph graph, Portfolio portfolio, EODQuoteBundle quoteBundle, int level) {
 
 		// Add graph to chart
 		chart.add(graph, level);
@@ -700,7 +700,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 	 * @param quoteBundle the quote bundle
 	 * @param level       specified level
 	 */
-	public void add(Graph graph, Portfolio portfolio, EODQuoteBundle quoteBundle, int level,
+	public void add(IGraph graph, Portfolio portfolio, EODQuoteBundle quoteBundle, int level,
 			MenuSettings menuSettings) {
 
 		// Add graph to chart
@@ -712,7 +712,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 		addMenu(menu);
 	}
 
-	public void addMarketIndicator(Graph graph) {
+	public void addMarketIndicator(IGraph graph) {
 		chart.add(graph, 0);
 		addMenu(new MarketIndicatorChartMenu(this, graph));
 	}
@@ -725,7 +725,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 	 * @param level graph level to add the new graph
 	 * @see #add
 	 */
-	public void append(Graph graph, int level) {
+	public void append(IGraph graph, int level) {
 		// Add graph to chart to given level, redraw chart but dont add it
 		// to menu as it is already there
 
@@ -740,7 +740,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 	 * @param graph the new graph to add.
 	 * @see #add
 	 */
-	public void append(Graph graph) {
+	public void append(IGraph graph) {
 		// Add graph at a new graph level, redraw chart but dont add graph to
 		// menu as it is already there
 		append(graph, chart.getLevels().size());
@@ -752,7 +752,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 	 * @param oldGraph the graph to remove
 	 * @param newGraph the new graph to replace the old one.
 	 */
-	public void replaceGraph(Graph oldGraph, Graph newGraph) {
+	public void replaceGraph(IGraph oldGraph, IGraph newGraph) {
 		chart.replace(oldGraph, newGraph);
 	}
 
@@ -762,7 +762,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 	 *
 	 * @param graph the graph to remove.
 	 */
-	public void remove(Graph graph) {
+	public void remove(IGraph graph) {
 		// Remove graph from chart, redraw chart and dont remove any
 		// menus
 		chart.remove(graph);
@@ -796,7 +796,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 			Iterator graphIterator = graphs.iterator();
 
 			while (graphIterator.hasNext()) {
-				Graph graph = (Graph) graphIterator.next();
+				IGraph graph = (IGraph) graphIterator.next();
 
 				if (name.equals(graph.getSourceName()))
 					graphsToRemove.add(graph);
@@ -805,7 +805,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 
 		Iterator graphToRemoveIterator = graphsToRemove.iterator();
 		while (graphToRemoveIterator.hasNext()) {
-			chart.remove((Graph) graphToRemoveIterator.next());
+			chart.remove((IGraph) graphToRemoveIterator.next());
 		}
 
 		// Remove from menu bar
@@ -838,7 +838,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 	 * @param enabled set to true if the graph should handle annotations false
 	 *                otherwise.
 	 */
-	public void handleAnnotation(Graph graph, boolean enabled) {
+	public void handleAnnotation(IGraph graph, boolean enabled) {
 		chart.handleAnnotation(graph, enabled);
 	}
 
@@ -1248,7 +1248,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 					Iterator graphIterator = graphList.iterator();
 
 					while (graphIterator.hasNext()) {
-						Graph graph = (Graph) graphIterator.next();
+						IGraph graph = (IGraph) graphIterator.next();
 
 						// Check if the graph setting have already been added
 						String graphSymbol = (String) symbolList.get(symbolIndex);
@@ -1267,12 +1267,12 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 							/*
 							 * Exclude Index graphs because of a bug in retrieving quotes.
 							 */
-							if (graph.getSourceType() != GraphSource.ADVANCEDECLINE
-									&& graph.getSourceType() != GraphSource.INDEX) {
+							if (graph.getSourceType() != IGraphSource.ADVANCEDECLINE
+									&& graph.getSourceType() != IGraphSource.INDEX) {
 								graphSettings.setSourceType(graph.getSourceType());
 								graphSettings.setSettings(graph.getSettings());
 
-								if (graph.getSourceType() == GraphSource.INDEX) {
+								if (graph.getSourceType() == IGraphSource.INDEX) {
 									Vector settingsSymbolList = new Vector();
 									String sourceName = graph.getSourceName();
 
@@ -1359,18 +1359,18 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 		return chart.getImage();
 	}
 
-	public boolean isDataAvailable(Graph g) {
+	public boolean isDataAvailable(IGraph g) {
 		return chart.dataAvailable(g);
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 
 	private EODQuoteBundle getQuoteBundle(String symbol, GraphSettings graphSettings) {
 
 		switch (graphSettings.getSourceType()) {
-		case GraphSource.SYMBOL:
+		case IGraphSource.SYMBOL:
 			try {
 				Symbol s = Symbol.find(symbol);
 
@@ -1382,7 +1382,7 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 
 			}
 			break;
-		case GraphSource.PORTFOLIO:
+		case IGraphSource.PORTFOLIO:
 			try {
 				Portfolio portfolio = PreferencesManager.getPortfolio(symbol);
 
@@ -1405,12 +1405,12 @@ public class ChartModule extends JPanel implements Module, MouseListener, MouseM
 		return null;
 	}
 
-	private Graph getGraph(GraphSettings graphSettings, EODQuoteBundle bundle, String symbol) {
-		Graph rv = null;
+	private IGraph getGraph(GraphSettings graphSettings, EODQuoteBundle bundle, String symbol) {
+		IGraph rv = null;
 
-		if (graphSettings.getSourceType() == GraphSource.SYMBOL) {
+		if (graphSettings.getSourceType() == IGraphSource.SYMBOL) {
 			rv = graphSettings.getGraph(bundle);
-		} else if (graphSettings.getSourceType() == GraphSource.PORTFOLIO) {
+		} else if (graphSettings.getSourceType() == IGraphSource.PORTFOLIO) {
 			try {
 				Portfolio portfolio = PreferencesManager.getPortfolio(symbol);
 				rv = graphSettings.getGraph(bundle, portfolio);

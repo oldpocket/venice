@@ -19,9 +19,9 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -29,20 +29,20 @@ import nz.org.venice.quote.Symbol;
  */
 public class MultiplyExpression extends ArithmeticExpression {
 
-	public MultiplyExpression(Expression left, Expression right) {
+	public MultiplyExpression(IExpression left, IExpression right) {
 		super(left, right);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		return getChild(0).evaluate(variables, quoteBundle, symbol, day)
 				* getChild(1).evaluate(variables, quoteBundle, symbol, day);
 	}
 
-	public Expression simplify() {
+	public IExpression simplify() {
 		// First perform arithmetic simplifications
-		Expression simplified = super.simplify();
+		IExpression simplified = super.simplify();
 
 		NumberExpression left = null;
 		NumberExpression right = null;
@@ -95,8 +95,8 @@ public class MultiplyExpression extends ArithmeticExpression {
 	}
 
 	public int hashCode() {
-		Expression child1 = getChild(0);
-		Expression child2 = getChild(1);
+		IExpression child1 = getChild(0);
+		IExpression child2 = getChild(1);
 
 		assert child1 != null;
 		assert child2 != null;
@@ -109,6 +109,6 @@ public class MultiplyExpression extends ArithmeticExpression {
 	}
 
 	public Object clone() {
-		return new MultiplyExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone());
+		return new MultiplyExpression((IExpression) getChild(0).clone(), (IExpression) getChild(1).clone());
 	}
 }

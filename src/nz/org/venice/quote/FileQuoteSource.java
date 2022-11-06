@@ -29,7 +29,7 @@ import java.util.List;
 
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.ui.DesktopManager;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.util.Currency;
 import nz.org.venice.util.Locale;
@@ -53,11 +53,11 @@ import nz.org.venice.util.TradingDate;
  *      }
  * </pre>
  *
- * @see Quote
+ * @see IQuote
  * @see EODQuoteRange
  * @see EODQuoteBundle
  */
-public class FileQuoteSource implements QuoteSource {
+public class FileQuoteSource implements IQuoteSource {
 	// Only display this many errors about not being able to load files.
 	// This prevents the user from being swamped with error messages.
 	private final static int MAXIMUM_ERRORS = 5;
@@ -73,7 +73,7 @@ public class FileQuoteSource implements QuoteSource {
 	private TradingDate firstDate = null;
 
 	// Filter to convert data into quote
-	private EODQuoteFilter filter;
+	private IEODQuoteFilter filter;
 
 	/**
 	 * Creates a new quote source using the list of files specified in the user
@@ -192,7 +192,7 @@ public class FileQuoteSource implements QuoteSource {
 		int errorCount = 0;
 
 		// Indexing might take a while
-		ProgressDialog p = ProgressDialogManager.getProgressDialog();
+		IProgressDialog p = ProgressDialogManager.getProgressDialog();
 		p.setMaster(true);
 		p.setMaximum(fileURLs.size());
 		p.setProgress(0);
@@ -366,7 +366,7 @@ public class FileQuoteSource implements QuoteSource {
 
 			// This query might take a while...
 			Thread thread = Thread.currentThread();
-			ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+			IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 			progress.setNote(Locale.getString("LOADING_QUOTES"));
 			progress.setIndeterminate(true);
 

@@ -33,7 +33,7 @@ import java.awt.Rectangle;
 public class ModuleFrameSettings extends AbstractSettings {
 	Rectangle bounds;
 	String moduleKey;
-	Settings moduleSettings;
+	ISettings moduleSettings;
 
 	/**
 	 *
@@ -42,7 +42,7 @@ public class ModuleFrameSettings extends AbstractSettings {
 	 */
 
 	public ModuleFrameSettings() {
-		super(Settings.FRAME, Settings.MODULE);
+		super(ISettings.FRAME, ISettings.MODULE);
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class ModuleFrameSettings extends AbstractSettings {
 	 */
 
 	public ModuleFrameSettings(String key) {
-		super(Settings.FRAME, Settings.MODULE, key);
+		super(ISettings.FRAME, ISettings.MODULE, key);
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class ModuleFrameSettings extends AbstractSettings {
 	 * @return The module settings as a Settings object.
 	 *
 	 */
-	public Settings getModuleSettings() {
+	public ISettings getModuleSettings() {
 		return moduleSettings;
 	}
 
@@ -108,7 +108,7 @@ public class ModuleFrameSettings extends AbstractSettings {
 	 * @param moduleSettings The module settings.
 	 */
 
-	public void setModuleSettings(Settings moduleSettings) {
+	public void setModuleSettings(ISettings moduleSettings) {
 		this.moduleSettings = moduleSettings;
 	}
 

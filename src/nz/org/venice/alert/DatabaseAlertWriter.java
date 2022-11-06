@@ -34,11 +34,11 @@ import nz.org.venice.util.Locale;
  * stored.
  * 
  * @author Mark Hummel
- * @see AlertReader
- * @see AlertWriter
+ * @see IAlertReader
+ * @see IAlertWriter
  */
 
-public class DatabaseAlertWriter implements AlertWriter {
+public class DatabaseAlertWriter implements IAlertWriter {
 
 	private DatabaseManager manager;
 

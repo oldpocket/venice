@@ -22,10 +22,10 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.VeniceLog;
 
@@ -41,8 +41,8 @@ import nz.org.venice.util.VeniceLog;
 
 public class LoggingExpression extends UnaryExpression {
 
-	private Expression mandatoryArg;
-	private Expression[] optionalArgs;
+	private IExpression mandatoryArg;
+	private IExpression[] optionalArgs;
 	private final int argCount;
 
 	/**
@@ -53,7 +53,7 @@ public class LoggingExpression extends UnaryExpression {
 	 *                     message defined in arg.
 	 */
 
-	public LoggingExpression(Expression arg, Expression[] optionalArgs) {
+	public LoggingExpression(IExpression arg, IExpression[] optionalArgs) {
 		super(arg);
 		this.mandatoryArg = arg;
 		this.optionalArgs = optionalArgs;
@@ -78,7 +78,7 @@ public class LoggingExpression extends UnaryExpression {
 	 * @return 0.0
 	 */
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		Date date = new Date();
@@ -97,7 +97,7 @@ public class LoggingExpression extends UnaryExpression {
 		return 0.0;
 	}
 
-	private String appendMessage(Expression mesg, Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	private String appendMessage(IExpression mesg, Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 		String rv = "";
 		if (mesg instanceof StringExpression) {
@@ -141,7 +141,7 @@ public class LoggingExpression extends UnaryExpression {
 	 *
 	 * @return child at given index.
 	 */
-	public Expression getChild(int child) {
+	public IExpression getChild(int child) {
 		assert child <= argCount;
 
 		if (child == 0) {

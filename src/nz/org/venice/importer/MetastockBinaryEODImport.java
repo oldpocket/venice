@@ -30,7 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import nz.org.venice.quote.EODQuote;
-import nz.org.venice.quote.EODQuoteFilter;
+import nz.org.venice.quote.IEODQuoteFilter;
 import nz.org.venice.quote.IFileEODQuoteImport;
 import nz.org.venice.quote.QuoteFormatException;
 import nz.org.venice.quote.Symbol;
@@ -51,7 +51,7 @@ public class MetastockBinaryEODImport implements IFileEODQuoteImport {
 
 	private boolean run;
 
-	public MetastockBinaryEODImport(Report report, EODQuoteFilter filter) {
+	public MetastockBinaryEODImport(Report report, IEODQuoteFilter filter) {
 		this.report = report;
 		this.reset();
 	}

@@ -30,7 +30,7 @@ import nz.org.venice.parser.EvaluationException;
  * @author Andrew Leppard
  * @see QuoteFunctions
  */
-public interface QuoteFunctionSource {
+public interface IQuoteFunctionSource {
 
 	/**
 	 * Return the quote value on the given date. The quote function source contains

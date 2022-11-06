@@ -27,7 +27,7 @@ import nz.org.venice.util.TradingDate;
  *
  * @author Andrew Leppard
  */
-public interface Quote {
+public interface IQuote {
 
 	/**
 	 * Represents day close quote for end-of-day quotes or last quote for intra-day

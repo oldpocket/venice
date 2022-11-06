@@ -62,7 +62,7 @@ public class AnalyserGuard {
 	 *                     exceeded doesn't trigger if some progress is being made.
 	 */
 
-	public boolean evaluationTimeElapsed(Expression expression, UUID expressionID, Symbol symbol, int day) {
+	public boolean evaluationTimeElapsed(IExpression expression, UUID expressionID, Symbol symbol, int day) {
 		String key = getKey(expression, expressionID, symbol, day);
 		Long startTimeLong = (Long) loopExpressionMap.get(key);
 
@@ -91,7 +91,7 @@ public class AnalyserGuard {
 	 *                     exceeded doesn't trigger if some progress is being made.
 	 */
 
-	public boolean stackDepthLimitExceeded(Expression expression, UUID expressionID, Symbol symbol, int day) {
+	public boolean stackDepthLimitExceeded(IExpression expression, UUID expressionID, Symbol symbol, int day) {
 
 		if (true)
 			return false;
@@ -120,7 +120,7 @@ public class AnalyserGuard {
 	 *                     exceeded doesn't trigger if some progress is being made.
 	 */
 
-	public void startLoop(Expression expression, UUID expressionID, Symbol symbol, int day) {
+	public void startLoop(IExpression expression, UUID expressionID, Symbol symbol, int day) {
 		long now = System.currentTimeMillis();
 
 		String key = getKey(expression, expressionID, symbol, day);
@@ -140,7 +140,7 @@ public class AnalyserGuard {
 	 * @param day          Integer offset of the quote bundle. Included so the limit
 	 *                     exceeded doesn't trigger if some progress is being made.
 	 */
-	public void finishLoop(Expression expression, UUID expressionID, Symbol symbol, int day) {
+	public void finishLoop(IExpression expression, UUID expressionID, Symbol symbol, int day) {
 		String key = getKey(expression, expressionID, symbol, day);
 
 		assert loopExpressionMap.get(key) != null;
@@ -156,7 +156,7 @@ public class AnalyserGuard {
 	 * @param day          Integer offset of the quote bundle. Included so the limit
 	 *                     exceeded doesn't trigger if some progress is being made.
 	 */
-	public void startFunction(Expression expression, UUID expressionID, Symbol symbol, int day) {
+	public void startFunction(IExpression expression, UUID expressionID, Symbol symbol, int day) {
 
 		String key = getKey(expression, expressionID, symbol, day);
 		Integer stackDepthInt = (Integer) functionExpressionMap.get(key);
@@ -176,7 +176,7 @@ public class AnalyserGuard {
 	 * @param day          Integer offset of the quote bundle. Included so the limit
 	 *                     exceeded doesn't trigger if some progress is being made.
 	 */
-	public void finishFunction(Expression expression, UUID expressionID, Symbol symbol, int day) {
+	public void finishFunction(IExpression expression, UUID expressionID, Symbol symbol, int day) {
 
 		String key = getKey(expression, expressionID, symbol, day);
 		Integer stackDepthInt = (Integer) functionExpressionMap.get(key);
@@ -207,7 +207,7 @@ public class AnalyserGuard {
 		maxStackDepth = depth;
 	}
 
-	private String getKey(Expression expression, UUID expressionID, Symbol symbol, int day) {
+	private String getKey(IExpression expression, UUID expressionID, Symbol symbol, int day) {
 		String rv = expression.hashCode() + " " + expressionID + " " + symbol + " " + day;
 		return rv;
 	}

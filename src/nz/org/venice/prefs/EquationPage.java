@@ -44,7 +44,7 @@ import nz.org.venice.util.Locale;
  *
  * @author Daniel Makovec
  */
-public class EquationPage extends JPanel implements PreferencesPage {
+public class EquationPage extends JPanel implements IPreferencesPage {
 	/** The desktop that new windows are opened upon */
 	private JDesktopPane desktop;
 

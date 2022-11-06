@@ -35,7 +35,7 @@ import nz.org.venice.util.Locale;
  *
  * @author Andrew Leppard
  */
-public class PeriodGraphUI implements GraphUI {
+public class PeriodGraphUI implements IGraphUI {
 
 	// The graph's user interface
 	private JPanel panel;

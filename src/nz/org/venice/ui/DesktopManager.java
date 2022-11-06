@@ -31,7 +31,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.prefs.PreferencesException;
 import nz.org.venice.prefs.PreferencesManager;
@@ -94,8 +94,8 @@ public class DesktopManager extends javax.swing.DefaultDesktopManager implements
 	 *
 	 * @param moduleListener the object to be informed about module events.
 	 */
-	public void addModuleListener(ModuleListener moduleListener) {
-		moduleListeners.add(ModuleListener.class, moduleListener);
+	public void addModuleListener(IModuleListener moduleListener) {
+		moduleListeners.add(IModuleListener.class, moduleListener);
 	}
 
 	/**
@@ -104,8 +104,8 @@ public class DesktopManager extends javax.swing.DefaultDesktopManager implements
 	 * @param moduleListener the object to no longer be informed about module
 	 *                       events.
 	 */
-	public void removeModuleListener(ModuleListener moduleListener) {
-		moduleListeners.remove(ModuleListener.class, moduleListener);
+	public void removeModuleListener(IModuleListener moduleListener) {
+		moduleListeners.remove(IModuleListener.class, moduleListener);
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class DesktopManager extends javax.swing.DefaultDesktopManager implements
 	 *
 	 * @param module that has been added.
 	 */
-	private void fireModuleAdded(Module module) {
+	private void fireModuleAdded(IModule module) {
 		ModuleEvent event = null;
 
 		// Guaranteed to return a non-null array
@@ -121,11 +121,11 @@ public class DesktopManager extends javax.swing.DefaultDesktopManager implements
 		// Process the listeners last to first, notifying
 		// those that are interested in this event
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
-			if (listeners[i] == ModuleListener.class) {
+			if (listeners[i] == IModuleListener.class) {
 				// Lazily create the event:
 				if (event == null)
 					event = new ModuleEvent(module);
-				((ModuleListener) listeners[i + 1]).moduleAdded(event);
+				((IModuleListener) listeners[i + 1]).moduleAdded(event);
 			}
 		}
 	}
@@ -135,7 +135,7 @@ public class DesktopManager extends javax.swing.DefaultDesktopManager implements
 	 *
 	 * @param module that has been removed.
 	 */
-	public void fireModuleRemoved(Module module) {
+	public void fireModuleRemoved(IModule module) {
 		ModuleEvent event = null;
 
 		// Guaranteed to return a non-null array
@@ -143,11 +143,11 @@ public class DesktopManager extends javax.swing.DefaultDesktopManager implements
 		// Process the listeners last to first, notifying
 		// those that are interested in this event
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
-			if (listeners[i] == ModuleListener.class) {
+			if (listeners[i] == IModuleListener.class) {
 				// Lazily create the event:
 				if (event == null)
 					event = new ModuleEvent(module);
-				((ModuleListener) listeners[i + 1]).moduleRemoved(event);
+				((IModuleListener) listeners[i + 1]).moduleRemoved(event);
 			}
 		}
 	}
@@ -157,7 +157,7 @@ public class DesktopManager extends javax.swing.DefaultDesktopManager implements
 	 *
 	 * @param module that has been renamed.
 	 */
-	public void fireModuleRenamed(Module module) {
+	public void fireModuleRenamed(IModule module) {
 		ModuleEvent event = null;
 
 		// Guaranteed to return a non-null array
@@ -165,11 +165,11 @@ public class DesktopManager extends javax.swing.DefaultDesktopManager implements
 		// Process the listeners last to first, notifying
 		// those that are interested in this event
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
-			if (listeners[i] == ModuleListener.class) {
+			if (listeners[i] == IModuleListener.class) {
 				// Lazily create the event:
 				if (event == null)
 					event = new ModuleEvent(module);
-				((ModuleListener) listeners[i + 1]).moduleRenamed(event);
+				((IModuleListener) listeners[i + 1]).moduleRenamed(event);
 			}
 		}
 	}
@@ -466,7 +466,7 @@ public class DesktopManager extends javax.swing.DefaultDesktopManager implements
 	 * @param module the module to render in the frame
 	 * @return module frame
 	 */
-	public ModuleFrame newFrame(Module module) {
+	public ModuleFrame newFrame(IModule module) {
 		return newFrame(module, false, false, true);
 	}
 
@@ -479,7 +479,7 @@ public class DesktopManager extends javax.swing.DefaultDesktopManager implements
 	 * @param resizable  is the frame allowed to be resized?
 	 * @return module frame
 	 */
-	public ModuleFrame newFrame(Module module, boolean centre, boolean honourSize, boolean resizable) {
+	public ModuleFrame newFrame(IModule module, boolean centre, boolean honourSize, boolean resizable) {
 
 		ModuleFrame frame = new ModuleFrame(this, module, centre, honourSize, resizable);
 		
@@ -539,7 +539,7 @@ public class DesktopManager extends javax.swing.DefaultDesktopManager implements
 
 			if (frame instanceof ModuleFrame) {
 				ModuleFrame moduleFrame = (ModuleFrame) frame;
-				Module module = moduleFrame.getModule();
+				IModule module = moduleFrame.getModule();
 				module.save();
 				// Save the geometry of the frame so that it can be reconconstructed
 				// when Venice is restarted.

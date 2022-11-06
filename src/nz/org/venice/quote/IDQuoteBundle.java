@@ -48,7 +48,7 @@ import nz.org.venice.util.TradingDate;
  * @see EODQuoteBundle
  * @see Symbol
  */
-public class IDQuoteBundle implements QuoteBundle {
+public class IDQuoteBundle implements IQuoteBundle {
 
 	// Current date of all intra-day quotes
 	private TradingDate date;
@@ -102,9 +102,9 @@ public class IDQuoteBundle implements QuoteBundle {
 		return quote;
 	}
 
-	public Quote getQuote(Symbol symbol, int timeOffset) throws MissingQuoteException {
+	public IQuote getQuote(Symbol symbol, int timeOffset) throws MissingQuoteException {
 
-		Quote quote;
+		IQuote quote;
 
 		try {
 			quote = quoteCache.getQuote(symbol, timeOffset);
@@ -157,7 +157,7 @@ public class IDQuoteBundle implements QuoteBundle {
 	 * @param quote quote
 	 * @return fast access offset
 	 */
-	public int getOffset(Quote quote) {
+	public int getOffset(IQuote quote) {
 		throw new UnsupportedOperationException();
 	}
 

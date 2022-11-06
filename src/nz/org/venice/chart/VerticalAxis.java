@@ -21,7 +21,7 @@ package nz.org.venice.chart;
 import java.awt.Font;
 import java.awt.Graphics;
 
-import nz.org.venice.chart.graph.Graph;
+import nz.org.venice.chart.graph.IGraph;
 
 public class VerticalAxis {
 
@@ -138,7 +138,7 @@ public class VerticalAxis {
 		return scale;
 	}
 
-	public void drawGridAndLabels(Graphics g, Graph graph, String title, int xoffset, int yoffset, int width) {
+	public void drawGridAndLabels(Graphics g, IGraph graph, String title, int xoffset, int yoffset, int width) {
 
 		String yLabel;
 		int yLabelWidth;

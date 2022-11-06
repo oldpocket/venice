@@ -19,10 +19,10 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -34,19 +34,19 @@ public class FloorExpression extends UnaryExpression {
 	 * An expression which performs exponential function <code>floor</code> on the
 	 * sub-expressions.
 	 */
-	public FloorExpression(Expression arg) {
+	public FloorExpression(IExpression arg) {
 		super(arg);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		return Math.floor(getChild(0).evaluate(variables, quoteBundle, symbol, day));
 	}
 
-	public Expression simplify() {
+	public IExpression simplify() {
 		// First simplify child argument
-		Expression simplified = super.simplify();
+		IExpression simplified = super.simplify();
 
 		// If the child argument is a constant we can precompute.
 		if (simplified.getChild(0) instanceof NumberExpression) {
@@ -94,6 +94,6 @@ public class FloorExpression extends UnaryExpression {
 	}
 
 	public Object clone() {
-		return new FloorExpression((Expression) getChild(0).clone());
+		return new FloorExpression((IExpression) getChild(0).clone());
 	}
 }

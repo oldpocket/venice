@@ -18,7 +18,7 @@
 
 package nz.org.venice.parser.expression;
 
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 
 /**
  * Abstract base class for all expressions requiring a single argument.
@@ -30,8 +30,8 @@ abstract public class UnaryExpression extends AbstractExpression {
 	 *
 	 * @param sub the sub argument
 	 */
-	public UnaryExpression(Expression sub) {
-		super(new Expression[] { sub });
+	public UnaryExpression(IExpression sub) {
+		super(new IExpression[] { sub });
 		assert sub != null;
 		// setChild(sub, 0);
 	}

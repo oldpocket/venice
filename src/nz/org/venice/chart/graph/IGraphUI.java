@@ -41,11 +41,11 @@ import javax.swing.JPanel;
  *
  * @author Andrew Leppard
  * @see AbstractGraph
- * @see Graph
+ * @see IGraph
  * @see nz.org.venice.chart.GraphSettingsDialog
- * @see nz.org.venice.chart.source.GraphSource
+ * @see nz.org.venice.chart.source.IGraphSource
  */
-public interface GraphUI {
+public interface IGraphUI {
 
 	/**
 	 * Return the current settings displayed in the user interface.

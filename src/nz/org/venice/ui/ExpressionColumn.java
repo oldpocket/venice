@@ -24,10 +24,10 @@ import java.util.List;
 import java.util.Map;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.Quote;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuote;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.WeekendDateException;
@@ -50,7 +50,7 @@ public class ExpressionColumn extends Column implements Cloneable {
 	private String expressionText;
 
 	// Compiled expression
-	private Expression expression;
+	private IExpression expression;
 
 	// A map which allows you to find the result of an expression for a given symbol
 	// on a given trading date. The map is a mapping of the concatenation of
@@ -70,7 +70,7 @@ public class ExpressionColumn extends Column implements Cloneable {
 	 * @param expression     Compiled expression.
 	 */
 	public ExpressionColumn(int number, String fullName, String shortName, int visible, String expressionText,
-			Expression expression) {
+			IExpression expression) {
 		super(number, fullName, shortName, ExpressionResult.class, visible);
 		this.expressionText = expressionText;
 		this.expression = expression;
@@ -100,7 +100,7 @@ public class ExpressionColumn extends Column implements Cloneable {
 	 *
 	 * @return Compiled expression.
 	 */
-	public Expression getExpression() {
+	public IExpression getExpression() {
 		return expression;
 	}
 
@@ -109,7 +109,7 @@ public class ExpressionColumn extends Column implements Cloneable {
 	 *
 	 * @param expression Compiled expression.
 	 */
-	public void setExpression(Expression expression) {
+	public void setExpression(IExpression expression) {
 		this.expression = expression;
 	}
 
@@ -122,19 +122,19 @@ public class ExpressionColumn extends Column implements Cloneable {
 	 * to calculate the quote change values.
 	 *
 	 * @param quoteBundle Quote Bundle containing quotes
-	 * @param quotes      A list of {@link Quote}s which contain the symbols and
+	 * @param quotes      A list of {@link IQuote}s which contain the symbols and
 	 *                    dates to evaluate. A result will be calculated for each
 	 *                    quote in the list.
 	 * @throws EvaluationException If there was an error evaluating an expression,
 	 *                             such as divide by zero.
-	 * @see Quote
+	 * @see IQuote
 	 */
-	public void calculate(QuoteBundle quoteBundle, List quotes) throws EvaluationException {
+	public void calculate(IQuoteBundle quoteBundle, List quotes) throws EvaluationException {
 		results = new HashMap();
 
 		if (expression != null) {
 			for (Iterator iterator = quotes.iterator(); iterator.hasNext();) {
-				Quote quote = (Quote) iterator.next();
+				IQuote quote = (IQuote) iterator.next();
 
 				try {
 					int offset = quoteBundle.getOffset(quote);

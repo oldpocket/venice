@@ -41,10 +41,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.prefs.PreferencesManager;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingTime;
@@ -57,7 +57,7 @@ import nz.org.venice.util.TradingTimeFormatException;
  * @author Andrew Leppard
  * @see IDQuoteSync
  */
-public class IDQuoteSyncModule extends JPanel implements Module {
+public class IDQuoteSyncModule extends JPanel implements IModule {
 
 	private JDesktopPane desktop;
 	private PropertyChangeSupport propertySupport;
@@ -82,7 +82,7 @@ public class IDQuoteSyncModule extends JPanel implements Module {
 
 	// Preferences
 	private PreferencesManager.IDQuoteSyncPreferences prefs = null;
-	private Settings settings;
+	private ISettings settings;
 
 	/**
 	 * Create a new Intra-day quote sync module.
@@ -375,7 +375,7 @@ public class IDQuoteSyncModule extends JPanel implements Module {
 		// Same as hitting cancel - do not save anything
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 }

@@ -19,9 +19,9 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -29,11 +29,11 @@ import nz.org.venice.quote.Symbol;
  */
 public class AndExpression extends LogicExpression {
 
-	public AndExpression(Expression left, Expression right) {
+	public AndExpression(IExpression left, IExpression right) {
 		super(left, right);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		if (getChild(0).evaluate(variables, quoteBundle, symbol, day) >= TRUE_LEVEL
@@ -43,9 +43,9 @@ public class AndExpression extends LogicExpression {
 			return FALSE;
 	}
 
-	public Expression simplify() {
+	public IExpression simplify() {
 		// First simplify all the child arguments
-		Expression simplified = super.simplify();
+		IExpression simplified = super.simplify();
 
 		NumberExpression left = (simplified.getChild(0) instanceof NumberExpression
 				? (NumberExpression) simplified.getChild(0)
@@ -94,8 +94,8 @@ public class AndExpression extends LogicExpression {
 	}
 
 	public int hashCode() {
-		Expression child1 = getChild(0);
-		Expression child2 = getChild(1);
+		IExpression child1 = getChild(0);
+		IExpression child2 = getChild(1);
 
 		assert child1 != null;
 		assert child2 != null;
@@ -108,6 +108,6 @@ public class AndExpression extends LogicExpression {
 	}
 
 	public Object clone() {
-		return new AndExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone());
+		return new AndExpression((IExpression) getChild(0).clone(), (IExpression) getChild(1).clone());
 	}
 }

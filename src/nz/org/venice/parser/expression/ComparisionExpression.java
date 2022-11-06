@@ -19,7 +19,7 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 
 /**
@@ -31,7 +31,7 @@ abstract public class ComparisionExpression extends BinaryExpression {
 	/**
 	 * Create a new comparision expression with the given left and right arguments.
 	 */
-	public ComparisionExpression(Expression left, Expression right) {
+	public ComparisionExpression(IExpression left, IExpression right) {
 		super(left, right);
 	}
 
@@ -61,10 +61,10 @@ abstract public class ComparisionExpression extends BinaryExpression {
 		}
 	}
 
-	public Expression simplify() {
+	public IExpression simplify() {
 
 		// First simplify all the child arguments
-		Expression simplified = super.simplify();
+		IExpression simplified = super.simplify();
 
 		// If both the child arguments are constant we can precompute.
 		if (simplified.getChild(0) instanceof NumberExpression && simplified.getChild(1) instanceof NumberExpression) {

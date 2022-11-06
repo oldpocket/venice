@@ -30,7 +30,7 @@ import nz.org.venice.parser.EvaluationException;
  * charting functions.
  *
  * @author Andrew Leppard
- * @see QuoteFunctionSource
+ * @see IQuoteFunctionSource
  */
 public class QuoteFunctions {
 
@@ -82,7 +82,7 @@ public class QuoteFunctions {
 	 *                                allowed access to a quote. See
 	 *                                {@link nz.org.venice.analyser.gp.GPQuoteBundle}.
 	 */
-	static public double sd(QuoteFunctionSource source, int period) throws EvaluationException {
+	static public double sd(IQuoteFunctionSource source, int period) throws EvaluationException {
 
 		double average = avg(source, period);
 		double deviationSum = 0.0D;
@@ -134,7 +134,7 @@ public class QuoteFunctions {
 	 *                                allowed access to a quote. See
 	 *                                {@link nz.org.venice.analyser.gp.GPQuoteBundle}.
 	 */
-	static public double avg(QuoteFunctionSource source, int period) throws EvaluationException {
+	static public double avg(IQuoteFunctionSource source, int period) throws EvaluationException {
 
 		double avg = 0.0D;
 		int actualPeriod = 0;
@@ -204,7 +204,7 @@ public class QuoteFunctions {
 	 *                                allowed access to a quote. See
 	 *                                {@link nz.org.venice.analyser.gp.GPQuoteBundle}.
 	 */
-	static public double corr(QuoteFunctionSource x, QuoteFunctionSource y, int period) throws EvaluationException {
+	static public double corr(IQuoteFunctionSource x, IQuoteFunctionSource y, int period) throws EvaluationException {
 
 		double r = 0.0D;
 		double ex = avg(x, period);
@@ -278,7 +278,7 @@ public class QuoteFunctions {
 	 *                                allowed access to a quote. See
 	 *                                {@link nz.org.venice.analyser.gp.GPQuoteBundle}.
 	 */
-	static public RSIData smoothRSI(QuoteFunctionSource source, int period, RSIData previousData)
+	static public RSIData smoothRSI(IQuoteFunctionSource source, int period, RSIData previousData)
 			throws EvaluationException {
 		double sumGains = 0.0;
 		double sumLosses = 0.0;
@@ -364,7 +364,7 @@ public class QuoteFunctions {
 	 *                                allowed access to a quote. See
 	 *                                {@link nz.org.venice.analyser.gp.GPQuoteBundle}.
 	 */
-	static public double rsi(QuoteFunctionSource source, int period) throws EvaluationException {
+	static public double rsi(IQuoteFunctionSource source, int period) throws EvaluationException {
 
 		double sumGain = 0.0D;
 		double sumLoss = 0.0D;
@@ -428,7 +428,7 @@ public class QuoteFunctions {
 	 */
 	// This is the original rsi computation which had no support for
 	// smoothing
-	static public double rsi_old(QuoteFunctionSource source, int period) throws EvaluationException {
+	static public double rsi_old(IQuoteFunctionSource source, int period) throws EvaluationException {
 
 		double sumGain = 0.0D;
 		double sumLoss = 0.0D;
@@ -516,7 +516,7 @@ public class QuoteFunctions {
 
 	// Build a list of proper (ie no NaN) quotes for calculating RSI values
 	// 0 <= list.size() <= period
-	private static ArrayList rsiData(QuoteFunctionSource source, int period) throws EvaluationException {
+	private static ArrayList rsiData(IQuoteFunctionSource source, int period) throws EvaluationException {
 
 		ArrayList data = new ArrayList();
 		double previous = Double.NaN;
@@ -562,7 +562,7 @@ public class QuoteFunctions {
 	 *                                allowed access to a quote. See
 	 *                                {@link nz.org.venice.analyser.gp.GPQuoteBundle}.
 	 */
-	static public double ema(QuoteFunctionSource source, int period, double smoothingConstant)
+	static public double ema(IQuoteFunctionSource source, int period, double smoothingConstant)
 			throws EvaluationException {
 
 		double EMA = 0.0D;
@@ -607,7 +607,7 @@ public class QuoteFunctions {
 	 *                                allowed access to a quote. See
 	 *                                {@link nz.org.venice.analyser.gp.GPQuoteBundle}.
 	 */
-	static public double macd(QuoteFunctionSource sourceSlow, QuoteFunctionSource sourceFast)
+	static public double macd(IQuoteFunctionSource sourceSlow, IQuoteFunctionSource sourceFast)
 			throws EvaluationException {
 
 		double MACD = 0.0D;
@@ -639,7 +639,7 @@ public class QuoteFunctions {
 	 *                                allowed access to a quote. See
 	 *                                {@link nz.org.venice.analyser.gp.GPQuoteBundle}.
 	 */
-	static public double momentum(QuoteFunctionSource source, int period) throws EvaluationException {
+	static public double momentum(IQuoteFunctionSource source, int period) throws EvaluationException {
 
 		double momentum = 0.0D;
 		double value;
@@ -684,8 +684,8 @@ public class QuoteFunctions {
 	 *                                allowed access to a quote. See
 	 *                                {@link nz.org.venice.analyser.gp.GPQuoteBundle}.
 	 */
-	static public int obv(QuoteFunctionSource sourceOpen, QuoteFunctionSource sourceClose,
-			QuoteFunctionSource sourceVolume, int range, int initialValue) throws EvaluationException {
+	static public int obv(IQuoteFunctionSource sourceOpen, IQuoteFunctionSource sourceClose,
+			IQuoteFunctionSource sourceVolume, int range, int initialValue) throws EvaluationException {
 
 		int OBV = initialValue;
 
@@ -723,7 +723,7 @@ public class QuoteFunctions {
 	 *                                allowed access to a quote. See
 	 *                                {@link nz.org.venice.analyser.gp.GPQuoteBundle}.
 	 */
-	static public double bollingerUpper(QuoteFunctionSource source, int period) throws EvaluationException {
+	static public double bollingerUpper(IQuoteFunctionSource source, int period) throws EvaluationException {
 
 		double sd = sd(source, period);
 		double avg = avg(source, period);
@@ -748,7 +748,7 @@ public class QuoteFunctions {
 	 *                                allowed access to a quote. See
 	 *                                {@link nz.org.venice.analyser.gp.GPQuoteBundle}.
 	 */
-	static public double bollingerLower(QuoteFunctionSource source, int period) throws EvaluationException {
+	static public double bollingerLower(IQuoteFunctionSource source, int period) throws EvaluationException {
 
 		double sd = sd(source, period);
 		double avg = avg(source, period);
@@ -772,7 +772,7 @@ public class QuoteFunctions {
 	 * 
 	 */
 
-	static public double bestFit(QuoteFunctionSource source, int period) throws EvaluationException {
+	static public double bestFit(IQuoteFunctionSource source, int period) throws EvaluationException {
 
 		double value;
 		int i;
@@ -814,7 +814,7 @@ public class QuoteFunctions {
 	 * (Round off error?)
 	 */
 
-	static public double bestFit2(QuoteFunctionSource source, int period) throws EvaluationException {
+	static public double bestFit2(IQuoteFunctionSource source, int period) throws EvaluationException {
 		/*
 		 * formula num = sum [ (xi * yi)/n] - x_y_ (x_ = mean of x) den = sum [xi * xi]
 		 * /n - x_ * x_;
@@ -873,7 +873,7 @@ public class QuoteFunctions {
 	 * 
 	 */
 
-	static public double[] bestFitFunction(QuoteFunctionSource source, int start, int period)
+	static public double[] bestFitFunction(IQuoteFunctionSource source, int start, int period)
 			throws EvaluationException {
 
 		double value;

@@ -28,22 +28,22 @@ upsets averages and skews other rules.
  * @author Mark Hummel
  **/
 
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 public class DataCheckExpression extends BinaryExpression {
-	public DataCheckExpression(Expression symbol, Expression arg) {
+	public DataCheckExpression(IExpression symbol, IExpression arg) {
 		super(symbol, arg);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
-		QuoteSymbol quoteChild = (QuoteSymbol) getChild(0);
+		IQuoteSymbol quoteChild = (IQuoteSymbol) getChild(0);
 		int quoteKind = quoteChild.getQuoteKind();
 		Symbol explicitSymbol = (quoteChild.getSymbol() != null) ? quoteChild.getSymbol() : symbol;
 
@@ -57,14 +57,14 @@ public class DataCheckExpression extends BinaryExpression {
 
 		try {
 			quoteBundle.getQuote(explicitSymbol, quoteKind, day + offset);
-			return Expression.TRUE;
+			return IExpression.TRUE;
 		} catch (MissingQuoteException e) {
 			try {
 				quoteBundle.getNearestQuote(explicitSymbol, quoteKind, day + offset);
 
-				return Expression.TRUE;
+				return IExpression.TRUE;
 			} catch (MissingQuoteException e2) {
-				return Expression.FALSE;
+				return IExpression.FALSE;
 			}
 		}
 	}

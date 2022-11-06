@@ -26,7 +26,7 @@ import java.util.List;
 
 import nz.org.venice.chart.BasicChartUI;
 import nz.org.venice.chart.GraphTools;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.util.Locale;
 
@@ -47,7 +47,7 @@ public class FiboGraph extends AbstractGraph {
 	 *
 	 * @param source the EOD source
 	 */
-	public FiboGraph(GraphSource source) {
+	public FiboGraph(IGraphSource source) {
 		super(source);
 		// setSettings(new HashMap());
 	}
@@ -58,7 +58,7 @@ public class FiboGraph extends AbstractGraph {
 	 * @param source   the EOD source
 	 * @param settings the settings of the graph
 	 */
-	public FiboGraph(GraphSource source, HashMap settings) {
+	public FiboGraph(IGraphSource source, HashMap settings) {
 		super(source);
 		setSettings(settings);
 	}
@@ -135,7 +135,7 @@ public class FiboGraph extends AbstractGraph {
 	 * @param settings the initial settings
 	 * @return user interface
 	 */
-	public GraphUI getUI(HashMap settings) {
+	public IGraphUI getUI(HashMap settings) {
 		return new FiboGraphUI(settings);
 	}
 

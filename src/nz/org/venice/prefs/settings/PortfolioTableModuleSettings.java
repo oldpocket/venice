@@ -30,7 +30,7 @@ package nz.org.venice.prefs.settings;
 
 import javax.swing.JDesktopPane;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.prefs.PreferencesException;
 import nz.org.venice.prefs.PreferencesManager;
@@ -48,7 +48,7 @@ public class PortfolioTableModuleSettings extends AbstractSettings {
 	 */
 
 	public PortfolioTableModuleSettings() {
-		super(Settings.TABLE, Settings.PORTFOLIOTABLEMODULE);
+		super(ISettings.TABLE, ISettings.PORTFOLIOTABLEMODULE);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class PortfolioTableModuleSettings extends AbstractSettings {
 	 * @param title The title of the WatchScreen
 	 */
 	public PortfolioTableModuleSettings(String title) {
-		super(Settings.TABLE, Settings.PORTFOLIOTABLEMODULE);
+		super(ISettings.TABLE, ISettings.PORTFOLIOTABLEMODULE);
 		super.setTitle(title);
 	}
 
@@ -70,7 +70,7 @@ public class PortfolioTableModuleSettings extends AbstractSettings {
 	 * @return A WatchScreenModule
 	 */
 
-	public Module getModule(JDesktopPane desktop) {
+	public IModule getModule(JDesktopPane desktop) {
 
 		try {
 			Portfolio portfolio = PreferencesManager.getPortfolio(getTitle());

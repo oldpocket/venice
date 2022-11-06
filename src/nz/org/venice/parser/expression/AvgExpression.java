@@ -19,10 +19,10 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.QuoteBundleFunctionSource;
 import nz.org.venice.quote.QuoteFunctions;
 import nz.org.venice.quote.Symbol;
@@ -43,14 +43,14 @@ public class AvgExpression extends TernaryExpression {
 	 * @param days  the number of days to average over
 	 * @param lag   the offset from the current day
 	 */
-	public AvgExpression(Expression quote, Expression days, Expression lag) {
+	public AvgExpression(IExpression quote, IExpression days, IExpression lag) {
 		super(quote, days, lag);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
-		QuoteSymbol quoteChild = (QuoteSymbol) getChild(0);
+		IQuoteSymbol quoteChild = (IQuoteSymbol) getChild(0);
 
 		// Extract arguments
 		int period = (int) getChild(1).evaluate(variables, quoteBundle, symbol, day);
@@ -109,7 +109,7 @@ public class AvgExpression extends TernaryExpression {
 	}
 
 	public Object clone() {
-		return new AvgExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone(),
-				(Expression) getChild(2).clone());
+		return new AvgExpression((IExpression) getChild(0).clone(), (IExpression) getChild(1).clone(),
+				(IExpression) getChild(2).clone());
 	}
 }

@@ -21,7 +21,7 @@ package nz.org.venice.parser;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -38,7 +38,7 @@ import nz.org.venice.quote.Symbol;
  * this class.
  */
 
-public interface Expression extends Cloneable {
+public interface IExpression extends Cloneable {
 
 	/**
 	 * Type is undefined. Initial or default value only. Shouldn't be returned
@@ -90,7 +90,7 @@ public interface Expression extends Cloneable {
 	 * @throws EvaluationException if the expression performs an illegal operation
 	 *                             such as divide by zero.
 	 */
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException;
 
 	/**
@@ -129,14 +129,14 @@ public interface Expression extends Cloneable {
 	 *
 	 * @return the parent.
 	 */
-	public Expression getParent();
+	public IExpression getParent();
 
 	/**
 	 * Set the parent of this node.
 	 *
 	 * @param parent the parent.
 	 */
-	public void setParent(Expression parent);
+	public void setParent(IExpression parent);
 
 	public Object clone();
 
@@ -160,7 +160,7 @@ public interface Expression extends Cloneable {
 	 * @param index the argument index
 	 * @return the argument
 	 */
-	public Expression getChild(int index);
+	public IExpression getChild(int index);
 
 	/**
 	 * Set the argument.
@@ -168,14 +168,14 @@ public interface Expression extends Cloneable {
 	 * @param child new argument expression
 	 * @param index index of the argument expression
 	 */
-	public Expression setChild(Expression child, int index);
+	public IExpression setChild(IExpression child, int index);
 
 	/**
 	 * Perform simplifications and optimisations on the expression tree. For
 	 * example, if the expression tree was <code>a and true</code> then the
 	 * expression tree would be simplified to <code>a</code>.
 	 */
-	public Expression simplify();
+	public IExpression simplify();
 
 	/**
 	 * Return the index of the given argument in the expression. We override this
@@ -187,7 +187,7 @@ public interface Expression extends Cloneable {
 	 * @return index of the child expression or <code>-1</code> if it could not be
 	 *         found
 	 */
-	public int getIndex(Expression expression);
+	public int getIndex(IExpression expression);
 
 	/**
 	 * Returns whether this expression tree and the given expression tree are

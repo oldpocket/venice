@@ -43,22 +43,22 @@ import javax.swing.SwingUtilities;
 import nz.org.venice.analyser.ga.GAIndividual;
 import nz.org.venice.analyser.ga.GeneticAlgorithm;
 import nz.org.venice.main.CommandManager;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.ImplicitVariables;
 import nz.org.venice.parser.Variable;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.prefs.settings.AnalyserModuleSettings;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.quote.EODQuoteBundle;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
 
-public class GAModule extends JPanel implements Module {
+public class GAModule extends JPanel implements IModule {
 
 	private PropertyChangeSupport propertySupport;
 	private JDesktopPane desktop;
@@ -158,7 +158,7 @@ public class GAModule extends JPanel implements Module {
 		tradeValuePage.save(getClass().getName());
 		GAPage.save(getClass().getName());
 
-		settings = new AnalyserModuleSettings(Settings.GAMODULE);
+		settings = new AnalyserModuleSettings(ISettings.GAMODULE);
 	}
 
 	public String getTitle() {
@@ -260,7 +260,7 @@ public class GAModule extends JPanel implements Module {
 	}
 
 	private void geneticAlgorithm() {
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 
 		Thread thread = Thread.currentThread();
 		progress.setIndeterminate(true);
@@ -295,8 +295,8 @@ public class GAModule extends JPanel implements Module {
 			variables.add(lowestGAIndividual.parameter(ii), lowestGAIndividual.type(ii), Variable.CONSTANT);
 
 		// Get the expression for the buy and sell rules
-		Expression buyRule = GARulesPage.getBuyRule();
-		Expression sellRule = GARulesPage.getSellRule();
+		IExpression buyRule = GARulesPage.getBuyRule();
+		IExpression sellRule = GARulesPage.getSellRule();
 
 		// Get the quote bundle
 		quoteBundle = new EODQuoteBundle(quoteRangePage.getQuoteRange());
@@ -404,7 +404,7 @@ public class GAModule extends JPanel implements Module {
 		});
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 }

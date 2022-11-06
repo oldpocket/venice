@@ -30,7 +30,7 @@ import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
 import nz.org.venice.chart.PFData;
 import nz.org.venice.chart.PFGraphable;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.quote.QuoteFunctions;
 import nz.org.venice.ui.QuoteFormat;
 import nz.org.venice.util.Locale;
@@ -54,7 +54,7 @@ public class PointAndFigureGraph extends AbstractGraph {
 	 *
 	 * @param source the source to create the point and figure from
 	 */
-	public PointAndFigureGraph(GraphSource source) {
+	public PointAndFigureGraph(IGraphSource source) {
 		super(source);
 		setSettings(new HashMap());
 	}
@@ -65,7 +65,7 @@ public class PointAndFigureGraph extends AbstractGraph {
 	 * @param source   the source to create the point and figure from
 	 * @param settings the settings for the graph
 	 */
-	public PointAndFigureGraph(GraphSource source, HashMap settings) {
+	public PointAndFigureGraph(IGraphSource source, HashMap settings) {
 		super(source);
 		super.setSettings(settings);
 
@@ -450,7 +450,7 @@ public class PointAndFigureGraph extends AbstractGraph {
 	 * @param settings the initial settings
 	 * @return user interface
 	 */
-	public GraphUI getUI(HashMap settings) {
+	public IGraphUI getUI(HashMap settings) {
 		return new PointAndFigureGraphUI(settings, calculateDefaultPriceReversalScale(),
 				calculateDefaultBoxPriceScale());
 	}

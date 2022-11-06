@@ -38,7 +38,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.ExpressionException;
 import nz.org.venice.parser.Parser;
 import nz.org.venice.prefs.PreferencesManager;
@@ -81,7 +81,7 @@ import nz.org.venice.util.WeekendDateException;
  *
  * @author Andrew Leppard
  */
-public class QuoteRangePage extends Page implements AnalyserPage {
+public class QuoteRangePage extends Page implements IAnalyserPage {
 
 	// Period types
 
@@ -136,7 +136,7 @@ public class QuoteRangePage extends Page implements AnalyserPage {
 
 	// Parsed data
 	private EODQuoteRange quoteRange;
-	private Expression orderByExpression;
+	private IExpression orderByExpression;
 	private TradingDate startDate;
 	private TradingDate endDate;
 	private int dateRangePeriod;

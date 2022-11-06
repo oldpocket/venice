@@ -35,7 +35,7 @@ import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.util.Locale;
 
-public class ANNTrainingPage extends Page implements AnalyserPage {
+public class ANNTrainingPage extends Page implements IAnalyserPage {
 
 	private JTextField learningRateTextRow;
 	private JTextField momentumTextRow;

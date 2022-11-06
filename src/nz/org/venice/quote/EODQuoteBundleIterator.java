@@ -104,7 +104,7 @@ public class EODQuoteBundleIterator implements Iterator {
 			// it starts on a certain date (i.e. the first date in the cache),
 			// but it might not have any quotes until a much later date.
 			try {
-				double volume = quoteBundle.getQuote(nextSymbol, Quote.DAY_VOLUME, nextDate);
+				double volume = quoteBundle.getQuote(nextSymbol, IQuote.DAY_VOLUME, nextDate);
 				found = true;
 			} catch (MissingQuoteException e) {
 				found = false;
@@ -130,7 +130,7 @@ public class EODQuoteBundleIterator implements Iterator {
 			}
 
 			try {
-				Quote quote = quoteBundle.getQuote(nextSymbol, dateOffset);
+				IQuote quote = quoteBundle.getQuote(nextSymbol, dateOffset);
 				findNext();
 
 				return (Object) quote;

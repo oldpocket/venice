@@ -25,9 +25,9 @@ import java.util.List;
 
 import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.ExpressionException;
 import nz.org.venice.parser.Parser;
 import nz.org.venice.quote.EODQuoteBundle;
@@ -40,7 +40,7 @@ import nz.org.venice.util.Locale;
  *
  * @author Andrew Leppard
  * @see CustomGraphUI
- * @see nz.org.venice.parser.Expression
+ * @see nz.org.venice.parser.IExpression
  */
 public class CustomGraph extends AbstractGraph {
 
@@ -64,7 +64,7 @@ public class CustomGraph extends AbstractGraph {
 	 * @param symbol      the symbol to apply the expression
 	 * @param quoteBundle the quote bundle containing the quotes
 	 */
-	public CustomGraph(GraphSource source, Symbol symbol, EODQuoteBundle quoteBundle) {
+	public CustomGraph(IGraphSource source, Symbol symbol, EODQuoteBundle quoteBundle) {
 		super(source);
 		this.symbol = symbol;
 		this.quoteBundle = quoteBundle;
@@ -83,7 +83,7 @@ public class CustomGraph extends AbstractGraph {
 	 * @param quoteBundle the quote bundle containing the quotes
 	 * @param settings    the settings for the graph
 	 */
-	public CustomGraph(GraphSource source, Symbol symbol, EODQuoteBundle quoteBundle, HashMap settings) {
+	public CustomGraph(IGraphSource source, Symbol symbol, EODQuoteBundle quoteBundle, HashMap settings) {
 		super(source);
 		this.symbol = symbol;
 		this.quoteBundle = quoteBundle;
@@ -94,7 +94,7 @@ public class CustomGraph extends AbstractGraph {
 			String indicatorText = CustomGraphUI.getIndicatorText(settings);
 
 			if (indicatorText.length() > 0) {
-				Expression indicator = Parser.parse(indicatorText);
+				IExpression indicator = Parser.parse(indicatorText);
 
 				// Create indicator graphable
 				indicatorGraphable = createCustom(indicator, getSource().getGraphable(), quoteBundle, symbol);
@@ -133,7 +133,7 @@ public class CustomGraph extends AbstractGraph {
 	 * @exception EvaluationException if there was an error evaluating the equation
 	 * @return the custom graph
 	 */
-	public static Graphable createCustom(Expression indicator, Graphable source, EODQuoteBundle quoteBundle,
+	public static Graphable createCustom(IExpression indicator, Graphable source, EODQuoteBundle quoteBundle,
 			Symbol symbol) {
 		try {
 			return CustomGraphUI.createCustom(indicator, source, quoteBundle, symbol);
@@ -152,7 +152,7 @@ public class CustomGraph extends AbstractGraph {
 			String indicatorText = CustomGraphUI.getIndicatorText(settings);
 
 			if (indicatorText.length() > 0) {
-				Expression indicator = Parser.parse(indicatorText);
+				IExpression indicator = Parser.parse(indicatorText);
 
 				// Create indicator graphable
 				indicatorGraphable = createCustom(indicator, getSource().getGraphable(), quoteBundle, symbol);
@@ -169,7 +169,7 @@ public class CustomGraph extends AbstractGraph {
 	 * @param settings the initial settings
 	 * @return user interface
 	 */
-	public GraphUI getUI(HashMap settings) {
+	public IGraphUI getUI(HashMap settings) {
 		return new CustomGraphUI(getSettings(), getSource().getGraphable(), quoteBundle, symbol);
 	}
 

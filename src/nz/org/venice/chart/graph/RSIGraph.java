@@ -28,7 +28,7 @@ import nz.org.venice.chart.BasicChartUI;
 import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
 import nz.org.venice.chart.GraphableQuoteFunctionSource;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.quote.QuoteFunctions;
@@ -53,7 +53,7 @@ public class RSIGraph extends AbstractGraph {
 	 *
 	 * @param source the source to create a standard deviation from
 	 */
-	public RSIGraph(GraphSource source) {
+	public RSIGraph(IGraphSource source) {
 		super(source);
 		setSettings(new HashMap());
 	}
@@ -64,7 +64,7 @@ public class RSIGraph extends AbstractGraph {
 	 * @param source   the source to create a standard deviation from
 	 * @param settings the settings for this graph
 	 */
-	public RSIGraph(GraphSource source, HashMap settings) {
+	public RSIGraph(IGraphSource source, HashMap settings) {
 		super(source);
 		setSettings(settings);
 	}
@@ -189,7 +189,7 @@ public class RSIGraph extends AbstractGraph {
 	 * @param settings the initial settings
 	 * @return user interface
 	 */
-	public GraphUI getUI(HashMap settings) {
+	public IGraphUI getUI(HashMap settings) {
 		return new RSIGraphUI(settings);
 	}
 }

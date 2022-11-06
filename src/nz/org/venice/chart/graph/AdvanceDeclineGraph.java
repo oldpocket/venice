@@ -30,10 +30,10 @@ import java.util.Vector;
 
 import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.quote.QuoteSourceManager;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
@@ -44,7 +44,7 @@ import nz.org.venice.util.TradingDate;
  * lived. If the market is going up and the advance/decline line is going down,
  * there is something wrong.
  */
-public class AdvanceDeclineGraph implements Graph {
+public class AdvanceDeclineGraph implements IGraph {
 
 	private Graphable advanceDecline;
 
@@ -165,7 +165,7 @@ public class AdvanceDeclineGraph implements Graph {
 	 *
 	 * @return an array of doubles representing the minor deltas of the default
 	 *         <code>GraphSource</code>
-	 * @see Graph#getAcceptableMajorDeltas
+	 * @see IGraph#getAcceptableMajorDeltas
 	 */
 	public double[] getAcceptableMinorDeltas() {
 		double[] minor = { 1D, 1.1D, 1.25D, 1.3333D, 1.5D, 2D, 2.25D, 2.5D, 3D, 3.3333D, 4D, 5D, 6D, 6.5D, 7D, 7.5D, 8D,
@@ -207,7 +207,7 @@ public class AdvanceDeclineGraph implements Graph {
 		List dates = TradingDate.dateRangeToList(firstDate, lastDate);
 
 		Thread thread = Thread.currentThread();
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 		progress.setIndeterminate(false);
 		progress.setMaximum(dates.size());
 		progress.setProgress(0);
@@ -254,7 +254,7 @@ public class AdvanceDeclineGraph implements Graph {
 		// ignore
 	}
 
-	public GraphUI getUI(HashMap settings) {
+	public IGraphUI getUI(HashMap settings) {
 		// No user interface
 		return null;
 	}
@@ -273,7 +273,7 @@ public class AdvanceDeclineGraph implements Graph {
 	}
 
 	public int getSourceType() {
-		return GraphSource.ADVANCEDECLINE;
+		return IGraphSource.ADVANCEDECLINE;
 	}
 
 	public boolean isPrimary() {

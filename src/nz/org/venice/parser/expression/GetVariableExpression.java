@@ -21,7 +21,7 @@ package nz.org.venice.parser.expression;
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.parser.Variable;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
 
@@ -41,7 +41,7 @@ public class GetVariableExpression extends TerminalExpression {
 		this.type = type;
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		Variable variable = variables.get(name);

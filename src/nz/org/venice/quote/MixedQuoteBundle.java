@@ -48,10 +48,10 @@ import nz.org.venice.util.WeekendDateException;
  * @author Andrew Leppard
  * @see EODQuote
  * @see IDQuote
- * @see Quote
+ * @see IQuote
  * @see Symbol
  */
-public class MixedQuoteBundle implements QuoteBundle {
+public class MixedQuoteBundle implements IQuoteBundle {
 
 	// Contains the end of day quotes
 	private EODQuoteBundle eodQuoteBundle;
@@ -89,9 +89,9 @@ public class MixedQuoteBundle implements QuoteBundle {
 			return eodQuoteBundle.getQuote(symbol, quoteType, dateOffset);
 	}
 
-	public Quote getQuote(Symbol symbol, int offset) throws MissingQuoteException {
+	public IQuote getQuote(Symbol symbol, int offset) throws MissingQuoteException {
 
-		Quote quote = null;
+		IQuote quote = null;
 
 		if (useIDQuotes()) {
 			// lastOffset == -1 when there are no intraday quotes available
@@ -183,7 +183,7 @@ public class MixedQuoteBundle implements QuoteBundle {
 	 * @return fast access offset
 	 * @exception WeekendDateException if the date falls on a weekend.
 	 */
-	public int getOffset(Quote quote) throws WeekendDateException {
+	public int getOffset(IQuote quote) throws WeekendDateException {
 		assert quote != null;
 
 		if (quote.getDate().after(eodQuoteBundle.getLastDate()))

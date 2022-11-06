@@ -30,7 +30,7 @@ package nz.org.venice.prefs.settings;
 
 import javax.swing.JDesktopPane;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.portfolio.PortfolioModule;
 import nz.org.venice.portfolio.TransactionModule;
@@ -51,7 +51,7 @@ public class TransactionModuleSettings extends AbstractSettings {
 	 */
 
 	public TransactionModuleSettings() {
-		super(Settings.PORTFOLIO, Settings.TRANSACTIONMODULE);
+		super(ISettings.PORTFOLIO, ISettings.TRANSACTIONMODULE);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class TransactionModuleSettings extends AbstractSettings {
 	 */
 
 	public TransactionModuleSettings(String title) {
-		super(Settings.PORTFOLIO, Settings.TRANSACTIONMODULE);
+		super(ISettings.PORTFOLIO, ISettings.TRANSACTIONMODULE);
 		super.setTitle(title);
 		portfolioName = title;
 	}
@@ -97,7 +97,7 @@ public class TransactionModuleSettings extends AbstractSettings {
 	 * @return A TransactionModule
 	 */
 
-	public Module getModule(JDesktopPane desktop) {
+	public IModule getModule(JDesktopPane desktop) {
 		PortfolioModule portfolioModule;
 
 		try {

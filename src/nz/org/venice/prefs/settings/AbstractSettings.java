@@ -22,17 +22,17 @@ import javax.swing.JDesktopPane;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 
 /**
  * This class can save the toplevel Module data which is common to all modules.
  * 
  * @author Mark Hummel
- * @see Settings
- * @see SettingsWriter
+ * @see ISettings
+ * @see ISettingsWriter
  */
 
-public abstract class AbstractSettings implements Settings {
+public abstract class AbstractSettings implements ISettings {
 
 	private int group;
 	private int type;
@@ -108,7 +108,7 @@ public abstract class AbstractSettings implements Settings {
 		return key;
 	}
 
-	public Module getModule(JDesktopPane desktop) {
+	public IModule getModule(JDesktopPane desktop) {
 		return null;
 	}
 

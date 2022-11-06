@@ -21,7 +21,7 @@ package nz.org.venice.ui;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.ExpressionException;
 import nz.org.venice.parser.Parser;
 
@@ -64,7 +64,7 @@ public class ExpressionQuery {
 	 */
 	public static String getExpression(JDesktopPane parent, String title, String prompt, String defaultExpression) {
 
-		Expression expression = null;
+		IExpression expression = null;
 		boolean invalidResponse;
 		String expressionString = defaultExpression;
 

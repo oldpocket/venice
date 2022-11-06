@@ -35,10 +35,10 @@ import nz.org.venice.util.TradingDateFormatException;
  * Retrieve alerts stored in the local filesystem.
  * 
  * @author Mark Hummel
- * @see AlertReader
+ * @see IAlertReader
  */
 
-public class FileAlertReader implements AlertReader {
+public class FileAlertReader implements IAlertReader {
 
 	public FileAlertReader() {
 

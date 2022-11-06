@@ -38,10 +38,10 @@ import nz.org.venice.util.TradingDateFormatException;
  * Retrieve alerts stored in the database.
  * 
  * @author Mark Hummel
- * @see AlertReader
+ * @see IAlertReader
  */
 
-public class DatabaseAlertReader implements AlertReader {
+public class DatabaseAlertReader implements IAlertReader {
 
 	private DatabaseManager manager;
 	private HashMap alertMap; // When the alerts are read, cache the uuids

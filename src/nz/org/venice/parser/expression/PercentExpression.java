@@ -19,10 +19,10 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -36,11 +36,11 @@ public class PercentExpression extends BinaryExpression {
 	 * @param left  calculate the percent of this number
 	 * @param right the percent value to calculate
 	 */
-	public PercentExpression(Expression left, Expression right) {
+	public PercentExpression(IExpression left, IExpression right) {
 		super(left, right);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		double value = getChild(0).evaluate(variables, quoteBundle, symbol, day);
@@ -48,9 +48,9 @@ public class PercentExpression extends BinaryExpression {
 		return value * percent / 100;
 	}
 
-	public Expression simplify() {
+	public IExpression simplify() {
 		// First simplify all the child arguments
-		Expression simplified = super.simplify();
+		IExpression simplified = super.simplify();
 
 		// If both the child arguments are constant we can precompute.
 		if (simplified.getChild(0) instanceof NumberExpression && simplified.getChild(1) instanceof NumberExpression) {
@@ -112,7 +112,7 @@ public class PercentExpression extends BinaryExpression {
 		for (int i = 0; i < childCount; i++) {
 			if (getChild(i) != null) {
 				type = getChild(i).getType();
-				if (type == Expression.FLOAT_TYPE) {
+				if (type == IExpression.FLOAT_TYPE) {
 					return type;
 				}
 			}
@@ -121,7 +121,7 @@ public class PercentExpression extends BinaryExpression {
 	}
 
 	public Object clone() {
-		return new PercentExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone());
+		return new PercentExpression((IExpression) getChild(0).clone(), (IExpression) getChild(1).clone());
 	}
 
 }

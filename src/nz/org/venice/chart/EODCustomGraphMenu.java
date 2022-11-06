@@ -33,8 +33,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import nz.org.venice.chart.graph.CustomGraph;
-import nz.org.venice.chart.graph.Graph;
-import nz.org.venice.chart.graph.GraphUI;
+import nz.org.venice.chart.graph.IGraph;
+import nz.org.venice.chart.graph.IGraphUI;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
@@ -78,10 +78,10 @@ public class EODCustomGraphMenu extends JMenu implements ActionListener {
 		final EODCustomGraphMenu parent = this;
 		addItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				final Graph graph = GraphFactory.newGraph(Locale.getString("CUSTOM"), index, quoteBundle, symbol);
+				final IGraph graph = GraphFactory.newGraph(Locale.getString("CUSTOM"), index, quoteBundle, symbol);
 
 				final CustomGraph customGraph = (CustomGraph) graph;
-				final GraphUI graphUI = graph.getUI(settings);
+				final IGraphUI graphUI = graph.getUI(settings);
 
 				final GraphSettingsDialog dialog = new GraphSettingsDialog(graphUI, graph.getName(), true);
 
@@ -115,7 +115,7 @@ public class EODCustomGraphMenu extends JMenu implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		JMenuItem deletedItem = (JMenuItem) e.getSource();
-		Graph graph = (Graph) graphItemMap.get(deletedItem);
+		IGraph graph = (IGraph) graphItemMap.get(deletedItem);
 		graphItemMap.remove(deletedItem);
 		deleteMenu.remove(deletedItem);
 		listener.remove(graph);

@@ -29,7 +29,7 @@ import nz.org.venice.util.WeekendDateException;
  * @author Andrew Leppard
  */
 
-public interface QuoteBundle {
+public interface IQuoteBundle {
 
 	/**
 	 * Get a stock quote. This function has been primarily created for Gondola
@@ -38,9 +38,9 @@ public interface QuoteBundle {
 	 * dates.
 	 *
 	 * @param symbol    the stock symbol
-	 * @param quoteType the quote type, e.g. {@link Quote#DAY_OPEN},
-	 *                  {@link Quote#DAY_CLOSE}, {@link Quote#DAY_LOW},
-	 *                  {@link Quote#DAY_HIGH}, {@link Quote#DAY_VOLUME}
+	 * @param quoteType the quote type, e.g. {@link IQuote#DAY_OPEN},
+	 *                  {@link IQuote#DAY_CLOSE}, {@link IQuote#DAY_LOW},
+	 *                  {@link IQuote#DAY_HIGH}, {@link IQuote#DAY_VOLUME}
 	 * @param now       fast access offset of current quote, for end-of-day quotes
 	 *                  this is the fast access date offset (see
 	 *                  {@link EODQuoteCache}). For intra-day quotes, it is the fast
@@ -61,9 +61,9 @@ public interface QuoteBundle {
 	 * expanded to include it.
 	 *
 	 * @param symbol    the stock symbol
-	 * @param quoteType the quote type, one of {@link Quote#DAY_OPEN},
-	 *                  {@link Quote#DAY_CLOSE}, {@link Quote#DAY_LOW},
-	 *                  {@link Quote#DAY_HIGH}, {@link Quote#DAY_VOLUME}
+	 * @param quoteType the quote type, one of {@link IQuote#DAY_OPEN},
+	 *                  {@link IQuote#DAY_CLOSE}, {@link IQuote#DAY_LOW},
+	 *                  {@link IQuote#DAY_HIGH}, {@link IQuote#DAY_VOLUME}
 	 * @param offset    fast access offset of current quote, for end-of-day quotes
 	 *                  this is the fast access date offset (see
 	 *                  {@link EODQuoteCache}). For intra-day quotes, it is the fast
@@ -77,9 +77,9 @@ public interface QuoteBundle {
 	 * Get a stock quote nearest to the given offset.
 	 *
 	 * @param symbol    the stock symbol
-	 * @param quoteType the quote type, one of {@link Quote#DAY_OPEN},
-	 *                  {@link Quote#DAY_CLOSE}, {@link Quote#DAY_LOW},
-	 *                  {@link Quote#DAY_HIGH}, {@link Quote#DAY_VOLUME}
+	 * @param quoteType the quote type, one of {@link IQuote#DAY_OPEN},
+	 *                  {@link IQuote#DAY_CLOSE}, {@link IQuote#DAY_LOW},
+	 *                  {@link IQuote#DAY_HIGH}, {@link IQuote#DAY_VOLUME}
 	 * @param offset    fast access offset of current quote, for end-of-day quotes
 	 *                  this is the fast access date offset (see
 	 *                  {@link EODQuoteCache}). For intra-day quotes, it is the fast
@@ -103,7 +103,7 @@ public interface QuoteBundle {
 	 * @return the quote
 	 * @exception MissingQuoteException if the quote was not found
 	 */
-	public Quote getQuote(Symbol symbol, int offset) throws MissingQuoteException;
+	public IQuote getQuote(Symbol symbol, int offset) throws MissingQuoteException;
 
 	/**
 	 * Convert between a fast access offset to an actual date. Intra-day quotes will
@@ -122,7 +122,7 @@ public interface QuoteBundle {
 	 * @param quote quote
 	 * @return fast access offset
 	 */
-	public int getOffset(Quote quote) throws WeekendDateException;
+	public int getOffset(IQuote quote) throws WeekendDateException;
 
 	/**
 	 * Return the fast access offset for the earliest quote in the bundle.

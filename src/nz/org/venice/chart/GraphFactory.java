@@ -34,7 +34,7 @@ import nz.org.venice.chart.graph.CountbackLineGraph;
 import nz.org.venice.chart.graph.CustomGraph;
 import nz.org.venice.chart.graph.ExpMovingAverageGraph;
 import nz.org.venice.chart.graph.FiboGraph;
-import nz.org.venice.chart.graph.Graph;
+import nz.org.venice.chart.graph.IGraph;
 import nz.org.venice.chart.graph.HighLowBarGraph;
 import nz.org.venice.chart.graph.KDGraph;
 import nz.org.venice.chart.graph.LineGraph;
@@ -48,11 +48,11 @@ import nz.org.venice.chart.graph.RSIGraph;
 import nz.org.venice.chart.graph.StandardDeviationGraph;
 import nz.org.venice.chart.graph.SupportAndResistenceGraph;
 import nz.org.venice.chart.source.Adjustment;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.chart.source.OHLCVIndexQuoteGraphSource;
 import nz.org.venice.chart.source.OHLCVQuoteGraphSource;
 import nz.org.venice.quote.EODQuoteBundle;
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
 
@@ -79,7 +79,7 @@ public class GraphFactory {
 	 * @return a new Graph
 	 */
 
-	public static Graph newGraph(String graphName, boolean index, EODQuoteBundle quoteBundle, Symbol symbol) {
+	public static IGraph newGraph(String graphName, boolean index, EODQuoteBundle quoteBundle, Symbol symbol) {
 		return newGraph(graphName, index, quoteBundle, symbol, null);
 	}
 
@@ -95,12 +95,12 @@ public class GraphFactory {
 	 *                    data before graphing.
 	 * @return a new Graph
 	 */
-	public static Graph newGraph(String graphName, boolean index, EODQuoteBundle quoteBundle, Symbol symbol,
+	public static IGraph newGraph(String graphName, boolean index, EODQuoteBundle quoteBundle, Symbol symbol,
 			Adjustment adjust) {
 
-		Graph graph = null;
+		IGraph graph = null;
 
-		GraphSource[] sources = getSources(graphName, quoteBundle, index, adjust);
+		IGraphSource[] sources = getSources(graphName, quoteBundle, index, adjust);
 
 		if (graphName == Locale.getString("BAR_CHART")) {
 			graph = new BarChartGraph(sources[DAY_OPEN], sources[DAY_HIGH], sources[DAY_LOW], sources[DAY_CLOSE]);
@@ -182,9 +182,9 @@ public class GraphFactory {
 
 	}
 
-	private static GraphSource[] getSources(String graphName, EODQuoteBundle quoteBundle, boolean index,
+	private static IGraphSource[] getSources(String graphName, EODQuoteBundle quoteBundle, boolean index,
 			Adjustment adjust) {
-		GraphSource[] sources = new GraphSource[SOURCE_LEN];
+		IGraphSource[] sources = new IGraphSource[SOURCE_LEN];
 
 		sources[DAY_OPEN] = null;
 		sources[DAY_HIGH] = null;
@@ -300,27 +300,27 @@ public class GraphFactory {
 	 * compiler to optimize away the redundant calls.
 	 */
 
-	private static GraphSource getDayOpen(EODQuoteBundle quoteBundle, boolean index) {
-		return getQuoteType(quoteBundle, Quote.DAY_OPEN, index);
+	private static IGraphSource getDayOpen(EODQuoteBundle quoteBundle, boolean index) {
+		return getQuoteType(quoteBundle, IQuote.DAY_OPEN, index);
 	}
 
-	private static GraphSource getDayHigh(EODQuoteBundle quoteBundle, boolean index) {
-		return getQuoteType(quoteBundle, Quote.DAY_HIGH, index);
+	private static IGraphSource getDayHigh(EODQuoteBundle quoteBundle, boolean index) {
+		return getQuoteType(quoteBundle, IQuote.DAY_HIGH, index);
 	}
 
-	private static GraphSource getDayLow(EODQuoteBundle quoteBundle, boolean index) {
-		return getQuoteType(quoteBundle, Quote.DAY_LOW, index);
+	private static IGraphSource getDayLow(EODQuoteBundle quoteBundle, boolean index) {
+		return getQuoteType(quoteBundle, IQuote.DAY_LOW, index);
 	}
 
-	private static GraphSource getDayClose(EODQuoteBundle quoteBundle, boolean index) {
-		return getQuoteType(quoteBundle, Quote.DAY_CLOSE, index);
+	private static IGraphSource getDayClose(EODQuoteBundle quoteBundle, boolean index) {
+		return getQuoteType(quoteBundle, IQuote.DAY_CLOSE, index);
 	}
 
-	private static GraphSource getVolume(EODQuoteBundle quoteBundle, boolean index) {
-		return getQuoteType(quoteBundle, Quote.DAY_VOLUME, index);
+	private static IGraphSource getVolume(EODQuoteBundle quoteBundle, boolean index) {
+		return getQuoteType(quoteBundle, IQuote.DAY_VOLUME, index);
 	}
 
-	private static GraphSource getQuoteType(EODQuoteBundle quoteBundle, int quoteType, boolean index) {
+	private static IGraphSource getQuoteType(EODQuoteBundle quoteBundle, int quoteType, boolean index) {
 
 		if (index) {
 			return new OHLCVIndexQuoteGraphSource(quoteBundle, quoteType);

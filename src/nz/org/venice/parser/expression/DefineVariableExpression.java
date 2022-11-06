@@ -19,10 +19,10 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
 
@@ -36,7 +36,7 @@ public class DefineVariableExpression extends UnaryExpression {
 	private int type;
 	private boolean isConstant;
 
-	public DefineVariableExpression(String name, int type, boolean isConstant, Expression value) {
+	public DefineVariableExpression(String name, int type, boolean isConstant, IExpression value) {
 		super(value);
 
 		assert name != null && name.length() > 0;
@@ -46,7 +46,7 @@ public class DefineVariableExpression extends UnaryExpression {
 		this.isConstant = isConstant;
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		double value = getChild(0).evaluate(variables, quoteBundle, symbol, day);
@@ -126,6 +126,6 @@ public class DefineVariableExpression extends UnaryExpression {
 	}
 
 	public Object clone() {
-		return new DefineVariableExpression(getName(), getType(), isConstant(), (Expression) getChild(0).clone());
+		return new DefineVariableExpression(getName(), getType(), isConstant(), (IExpression) getChild(0).clone());
 	}
 }

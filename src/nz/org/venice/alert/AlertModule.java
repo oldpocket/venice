@@ -36,10 +36,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.prefs.settings.AbstractSettings;
 import nz.org.venice.prefs.settings.AlertModuleSettings;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.AbstractTableModel;
@@ -56,7 +56,7 @@ import nz.org.venice.util.TradingDate;
  * @author Mark Hummel
  * @see Alert
  */
-public class AlertModule extends AbstractTable implements Module, ActionListener {
+public class AlertModule extends AbstractTable implements IModule, ActionListener {
 
 	private static final int SYMBOL_COLUMN = 0;
 	private static final int START_DATE_COLUMN = 1;
@@ -79,8 +79,8 @@ public class AlertModule extends AbstractTable implements Module, ActionListener
 	private JMenuItem enableAlert;
 	private JMenuItem disableAlert;
 
-	private AlertReader alertReader;
-	private AlertWriter alertWriter;
+	private IAlertReader alertReader;
+	private IAlertWriter alertWriter;
 	private List symbols;
 	private List alerts;
 	private Model model;
@@ -174,7 +174,7 @@ public class AlertModule extends AbstractTable implements Module, ActionListener
 	 * Create an alert module.
 	 *
 	 */
-	public AlertModule(JDesktopPane desktop, AlertReader alertReader, AlertWriter alertWriter) throws AlertException {
+	public AlertModule(JDesktopPane desktop, IAlertReader alertReader, IAlertWriter alertWriter) throws AlertException {
 		assert alertReader != null;
 		assert alertWriter != null;
 		this.alertReader = alertReader;
@@ -194,7 +194,7 @@ public class AlertModule extends AbstractTable implements Module, ActionListener
 		resort();
 	}
 
-	public AlertModule(JDesktopPane desktop, List symbols, AlertReader alertReader, AlertWriter alertWriter)
+	public AlertModule(JDesktopPane desktop, List symbols, IAlertReader alertReader, IAlertWriter alertWriter)
 			throws AlertException {
 
 		assert alertReader != null;
@@ -496,7 +496,7 @@ public class AlertModule extends AbstractTable implements Module, ActionListener
 		propertySupport.removePropertyChangeListener(listener);
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 }

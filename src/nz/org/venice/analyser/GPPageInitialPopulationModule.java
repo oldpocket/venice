@@ -43,8 +43,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import nz.org.venice.main.Module;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.main.IModule;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.AbstractTableModel;
 import nz.org.venice.ui.Column;
@@ -55,7 +55,7 @@ import nz.org.venice.ui.TextsEditorDialog;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.VeniceLog;
 
-public class GPPageInitialPopulationModule extends AbstractTable implements Module {
+public class GPPageInitialPopulationModule extends AbstractTable implements IModule {
 	private PropertyChangeSupport propertySupport;
 
 	public static final int BUY_RULE_COLUMN = 0;
@@ -77,7 +77,7 @@ public class GPPageInitialPopulationModule extends AbstractTable implements Modu
 	private int[] perc = new int[0];
 	private long seed = System.currentTimeMillis();
 	private Random random = new Random(seed);
-	private Settings settings;
+	private ISettings settings;
 
 	// Menus
 	private JMenuBar menuBar;
@@ -914,7 +914,7 @@ public class GPPageInitialPopulationModule extends AbstractTable implements Modu
 		return true;
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 

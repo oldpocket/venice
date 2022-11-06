@@ -25,7 +25,7 @@ import java.util.List;
 
 import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.util.Locale;
 
 /**
@@ -52,7 +52,7 @@ public class OBVGraph extends AbstractGraph {
 	 * @param close  the day close price
 	 * @param volume the day volume
 	 */
-	public OBVGraph(GraphSource open, GraphSource close, GraphSource volume) {
+	public OBVGraph(IGraphSource open, IGraphSource close, IGraphSource volume) {
 
 		// Use same axis as volume
 		super(volume);

@@ -102,19 +102,19 @@ public class IDQuoteCache {
 
 		public double getQuote(int quote) {
 			switch (quote) {
-			case (Quote.DAY_OPEN):
+			case (IQuote.DAY_OPEN):
 				return (double) day_open;
-			case (Quote.DAY_CLOSE):
+			case (IQuote.DAY_CLOSE):
 				return (double) day_close;
-			case (Quote.DAY_LOW):
+			case (IQuote.DAY_LOW):
 				return (double) day_low;
-			case (Quote.DAY_HIGH):
+			case (IQuote.DAY_HIGH):
 				return (double) day_high;
-			case (Quote.DAY_VOLUME):
+			case (IQuote.DAY_VOLUME):
 				return (double) day_volume;
-			case (Quote.BID):
+			case (IQuote.BID):
 				return (double) bid;
-			case (Quote.ASK):
+			case (IQuote.ASK):
 				return (double) ask;
 			default:
 				assert false;
@@ -157,10 +157,10 @@ public class IDQuoteCache {
 	 * Get a quote from the cache.
 	 *
 	 * @param symbol     the symbol to load
-	 * @param quoteType  the quote type, one of {@link Quote#DAY_OPEN},
-	 *                   {@link Quote#DAY_CLOSE}, {@link Quote#DAY_LOW},
-	 *                   {@link Quote#DAY_HIGH}, {@link Quote#DAY_VOLUME},
-	 *                   {@link Quote#BID}, {@link Quote#ASK}.
+	 * @param quoteType  the quote type, one of {@link IQuote#DAY_OPEN},
+	 *                   {@link IQuote#DAY_CLOSE}, {@link IQuote#DAY_LOW},
+	 *                   {@link IQuote#DAY_HIGH}, {@link IQuote#DAY_VOLUME},
+	 *                   {@link IQuote#BID}, {@link IQuote#ASK}.
 	 * @param timeOffset fast access time offset
 	 * @return the quote
 	 * @exception QuoteNotLoadedException if the quote was not in the cache
@@ -316,8 +316,8 @@ public class IDQuoteCache {
 	 *
 	 * @param quoteListener the class to be informed about new intra-day quotes
 	 */
-	public void addQuoteListener(QuoteListener quoteListener) {
-		quoteListeners.add(QuoteListener.class, quoteListener);
+	public void addQuoteListener(IQuoteListener quoteListener) {
+		quoteListeners.add(IQuoteListener.class, quoteListener);
 	}
 
 	/**
@@ -325,8 +325,8 @@ public class IDQuoteCache {
 	 *
 	 * @param quoteListener the object to remove
 	 */
-	public void removeQuoteListener(QuoteListener quoteListener) {
-		quoteListeners.remove(QuoteListener.class, quoteListener);
+	public void removeQuoteListener(IQuoteListener quoteListener) {
+		quoteListeners.remove(IQuoteListener.class, quoteListener);
 	}
 
 	/**
@@ -334,11 +334,11 @@ public class IDQuoteCache {
 	 * have arrived, that the quotes are now available.
 	 */
 	private void fireQuotesAdded() {
-		EventListener[] listeners = quoteListeners.getListeners(QuoteListener.class);
+		EventListener[] listeners = quoteListeners.getListeners(IQuoteListener.class);
 		QuoteEvent event = new QuoteEvent(this);
 
 		for (int i = 0; i < listeners.length; i++) {
-			QuoteListener listener = (QuoteListener) listeners[i];
+			IQuoteListener listener = (IQuoteListener) listeners[i];
 			listener.newQuotes(event);
 		}
 	}

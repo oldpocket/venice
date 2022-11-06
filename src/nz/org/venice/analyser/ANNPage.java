@@ -36,12 +36,12 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.border.TitledBorder;
 
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.util.Locale;
 
-public class ANNPage extends Page implements AnalyserPage {
+public class ANNPage extends Page implements IAnalyserPage {
 
 	private JTextField buyThresholdTextRow;
 	private JTextField sellThresholdTextRow;
@@ -187,7 +187,7 @@ public class ANNPage extends Page implements AnalyserPage {
 	 *
 	 * @return the array of expressions
 	 */
-	public Expression[] getInputExpressions() {
+	public IExpression[] getInputExpressions() {
 		return ANNPageModule.getInputExpressions();
 	}
 

@@ -33,12 +33,12 @@ import nz.org.venice.prefs.PreferencesManager;
  * </pre>
  * 
  * @author Andrew Leppard
- * @see QuoteSource
+ * @see IQuoteSource
  */
 public class QuoteSourceManager {
 
 	// Singleton instance of QuoteSource class
-	private static QuoteSource sourceInstance = null;
+	private static IQuoteSource sourceInstance = null;
 
 	private QuoteSourceManager() {
 		// declared here so constructor is not public
@@ -52,7 +52,7 @@ public class QuoteSourceManager {
 	 *
 	 * @param source the new quote source
 	 */
-	public static void setSource(QuoteSource source) {
+	public static void setSource(IQuoteSource source) {
 		if (sourceInstance != null)
 			sourceInstance.shutdown();
 
@@ -85,7 +85,7 @@ public class QuoteSourceManager {
 	 *
 	 * @return quote source
 	 */
-	public static synchronized QuoteSource getSource() {
+	public static synchronized IQuoteSource getSource() {
 		if (sourceInstance == null) {
 			int quoteSource = PreferencesManager.getQuoteSource();
 

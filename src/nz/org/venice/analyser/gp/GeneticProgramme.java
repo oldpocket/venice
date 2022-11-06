@@ -26,7 +26,7 @@ import nz.org.venice.analyser.GPGondolaSelection;
 import nz.org.venice.analyser.GPModuleConstants;
 import nz.org.venice.analyser.OrderCache;
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.VeniceLog;
@@ -170,7 +170,7 @@ public class GeneticProgramme {
 	/**
 	 * Run one iteration of the GP. This will create a single valid individual.
 	 */
-	public void nextIndividual(Expression buyRule, Expression sellRule, int mutations) {
+	public void nextIndividual(IExpression buyRule, IExpression sellRule, int mutations) {
 		boolean validIndividual = false;
 		// consider if you try to create an individual twice,
 		// the second time we create it with random mutations, because
@@ -298,7 +298,7 @@ public class GeneticProgramme {
 	 *
 	 * @return the new individual
 	 */
-	private Individual createIndividual(Expression buyRule, Expression sellRule, int mutations, boolean twice) {
+	private Individual createIndividual(IExpression buyRule, IExpression sellRule, int mutations, boolean twice) {
 		// The first generation we use the rules as defined
 		// in Initial Population Section.
 		if (generation == 1)
@@ -311,8 +311,8 @@ public class GeneticProgramme {
 			if ((buyRule == null) || (sellRule == null)) {
 				return new Individual(buyRuleMutator, sellRuleMutator);
 			} else {
-				Expression newBuyExpression;
-				Expression newSellExpression;
+				IExpression newBuyExpression;
+				IExpression newSellExpression;
 				if (twice) {
 
 					newBuyExpression = buyRuleMutator.mutate(buyRule, MUTATION_PERCENT);

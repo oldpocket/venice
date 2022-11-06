@@ -31,7 +31,7 @@ import nz.org.venice.util.TradingDate;
  *
  * @author Andrew Leppard
  */
-public class EODQuote implements Quote {
+public class EODQuote implements IQuote {
 	private Symbol symbol;
 	private TradingDate date;
 	private long day_volume;

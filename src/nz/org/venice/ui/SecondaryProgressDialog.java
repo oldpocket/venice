@@ -24,7 +24,7 @@ package nz.org.venice.ui;
  * See {@link ProgressDialogManager} for details about using progress dialogs in
  * venice.
  */
-public class SecondaryProgressDialog implements ProgressDialog {
+public class SecondaryProgressDialog implements IProgressDialog {
 
 	// Actual dialog we are proxying
 	private PrimaryProgressDialog primaryProgressDialog;

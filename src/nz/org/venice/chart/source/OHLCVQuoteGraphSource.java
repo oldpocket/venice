@@ -23,7 +23,7 @@ import java.util.Iterator;
 import nz.org.venice.chart.Graphable;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.ui.QuoteFormat;
 import nz.org.venice.util.Money;
@@ -37,7 +37,7 @@ import nz.org.venice.util.TradingDate;
  */
 
 // rename to EODQuoteGraphSource?
-public class OHLCVQuoteGraphSource implements GraphSource {
+public class OHLCVQuoteGraphSource implements IGraphSource {
 
 	private EODQuoteBundle quoteBundle;
 	private int quote;
@@ -48,9 +48,9 @@ public class OHLCVQuoteGraphSource implements GraphSource {
 	 * Create a new graph source from the quote bundle with the given quote type.
 	 *
 	 * @param quoteBundle the quote bundle containing stock quotes
-	 * @param quote       the quote kind, one of: {@link Quote#DAY_OPEN},
-	 *                    {@link Quote#DAY_CLOSE}, {@link Quote#DAY_HIGH} or
-	 *                    {@link Quote#DAY_LOW}
+	 * @param quote       the quote kind, one of: {@link IQuote#DAY_OPEN},
+	 *                    {@link IQuote#DAY_CLOSE}, {@link IQuote#DAY_HIGH} or
+	 *                    {@link IQuote#DAY_LOW}
 	 */
 	public OHLCVQuoteGraphSource(EODQuoteBundle quoteBundle, int quote) {
 		this.quote = quote;
@@ -87,7 +87,7 @@ public class OHLCVQuoteGraphSource implements GraphSource {
 	}
 
 	public int getType() {
-		return GraphSource.SYMBOL;
+		return IGraphSource.SYMBOL;
 	}
 
 	// FIXME For some reason, adjustments aren't reversible,
@@ -160,14 +160,14 @@ public class OHLCVQuoteGraphSource implements GraphSource {
 		TradingDate date = (TradingDate) x;
 
 		try {
-			if (quote == Quote.DAY_VOLUME) {
+			if (quote == IQuote.DAY_VOLUME) {
 				return new String("<html>" + symbol + ", " + date.toLongString() + "<p>"
-						+ Math.round(quoteBundle.getQuote(symbol, Quote.DAY_VOLUME, date)) + "</html>");
+						+ Math.round(quoteBundle.getQuote(symbol, IQuote.DAY_VOLUME, date)) + "</html>");
 			} else {
-				double dayLow = quoteBundle.getQuote(symbol, Quote.DAY_LOW, date);
-				double dayHigh = quoteBundle.getQuote(symbol, Quote.DAY_HIGH, date);
-				double dayOpen = quoteBundle.getQuote(symbol, Quote.DAY_OPEN, date);
-				double dayClose = quoteBundle.getQuote(symbol, Quote.DAY_CLOSE, date);
+				double dayLow = quoteBundle.getQuote(symbol, IQuote.DAY_LOW, date);
+				double dayHigh = quoteBundle.getQuote(symbol, IQuote.DAY_HIGH, date);
+				double dayOpen = quoteBundle.getQuote(symbol, IQuote.DAY_OPEN, date);
+				double dayClose = quoteBundle.getQuote(symbol, IQuote.DAY_CLOSE, date);
 
 				return new String("<html>" + symbol + ", " + date.toLongString() + "<p>" + "<font color=red>"
 						+ QuoteFormat.quoteToString(dayLow) + " </font>" + "<font color=green>"
@@ -180,7 +180,7 @@ public class OHLCVQuoteGraphSource implements GraphSource {
 	}
 
 	public String getYLabel(double value) {
-		if (quote == Quote.DAY_VOLUME) {
+		if (quote == IQuote.DAY_VOLUME) {
 			final double BILLION = 1000000000D;
 			final double MILLION = 1000000D;
 			String extension = "";
@@ -201,7 +201,7 @@ public class OHLCVQuoteGraphSource implements GraphSource {
 
 	public double[] getAcceptableMajorDeltas() {
 
-		if (quote == Quote.DAY_VOLUME) {
+		if (quote == IQuote.DAY_VOLUME) {
 			double[] major = { 10D, 100D, 1000D, // 1T
 					10000D, 100000D, 1000000D, // 1M
 					10000000D, 100000000D, 1000000000D, // 1B
@@ -220,7 +220,7 @@ public class OHLCVQuoteGraphSource implements GraphSource {
 	}
 
 	public double[] getAcceptableMinorDeltas() {
-		if (quote == Quote.DAY_VOLUME) {
+		if (quote == IQuote.DAY_VOLUME) {
 			double[] minor = { 1D, 1.5D, 2D, 2.5D, 3D, 4D, 5D, 6D, 8D };
 			return minor;
 		} else {

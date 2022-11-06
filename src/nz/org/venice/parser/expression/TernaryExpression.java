@@ -18,14 +18,14 @@
 
 package nz.org.venice.parser.expression;
 
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 
 /**
  * Abstract base class for all expressions requiring three arguments.
  */
 abstract public class TernaryExpression extends AbstractExpression {
 
-	private Expression children[] = new Expression[3];
+	private IExpression children[] = new IExpression[3];
 
 	/**
 	 * Create a new ternary expression with the given three arguments.
@@ -34,8 +34,8 @@ abstract public class TernaryExpression extends AbstractExpression {
 	 * @param arg2 the second argument
 	 * @param arg3 the third argument
 	 */
-	public TernaryExpression(Expression arg1, Expression arg2, Expression arg3) {
-		super(new Expression[] { arg1, arg2, arg3 });
+	public TernaryExpression(IExpression arg1, IExpression arg2, IExpression arg3) {
+		super(new IExpression[] { arg1, arg2, arg3 });
 		assert arg1 != null && arg2 != null && arg3 != null;
 		// setChild(arg1, 0);
 		// setChild(arg2, 1);

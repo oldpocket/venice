@@ -34,17 +34,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 
-import nz.org.venice.chart.graph.Graph;
-import nz.org.venice.chart.graph.GraphUI;
+import nz.org.venice.chart.graph.IGraph;
+import nz.org.venice.chart.graph.IGraphUI;
 import nz.org.venice.chart.source.Adjustment;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.chart.source.OHLCVIndexQuoteGraphSource;
 import nz.org.venice.chart.source.OHLCVQuoteGraphSource;
 import nz.org.venice.main.CommandManager;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.prefs.settings.MenuSettings;
 import nz.org.venice.quote.EODQuoteBundle;
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.ui.AdjustPriceDataDialog;
 import nz.org.venice.ui.ConfirmDialog;
@@ -81,7 +81,7 @@ public class EODQuoteChartMenu extends JMenu {
 	private HashMap map = new HashMap();
 
 	// Current view graph displayed
-	private Graph currentViewGraph = null;
+	private IGraph currentViewGraph = null;
 	private JRadioButtonMenuItem currentViewMenuItem = null;
 
 	// Name of menu / graph source
@@ -91,11 +91,11 @@ public class EODQuoteChartMenu extends JMenu {
 	private Symbol symbol = null;
 
 	// Cached graph sources shared between indicators
-	private GraphSource dayOpenGraphSource = null;
-	private GraphSource dayHighGraphSource = null;
-	private GraphSource dayLowGraphSource = null;
-	private GraphSource dayCloseGraphSource = null;
-	private GraphSource dayVolumeGraphSource = null;
+	private IGraphSource dayOpenGraphSource = null;
+	private IGraphSource dayHighGraphSource = null;
+	private IGraphSource dayLowGraphSource = null;
+	private IGraphSource dayCloseGraphSource = null;
+	private IGraphSource dayVolumeGraphSource = null;
 
 	private JMenu graphMenu = null;
 
@@ -114,7 +114,7 @@ public class EODQuoteChartMenu extends JMenu {
 	 * @param symbol      the symbol being graphed
 	 * @param graph       the graph we are associated with
 	 */
-	public EODQuoteChartMenu(final ChartModule listener, EODQuoteBundle quoteBundle, Symbol symbol, Graph graph,
+	public EODQuoteChartMenu(final ChartModule listener, EODQuoteBundle quoteBundle, Symbol symbol, IGraph graph,
 			boolean indexChart) {
 		super(graph.getSourceName());
 		menuName = graph.getSourceName();
@@ -128,7 +128,7 @@ public class EODQuoteChartMenu extends JMenu {
 		buildMenu();
 	}
 
-	public EODQuoteChartMenu(final ChartModule listener, EODQuoteBundle quoteBundle, Symbol symbol, Graph graph,
+	public EODQuoteChartMenu(final ChartModule listener, EODQuoteBundle quoteBundle, Symbol symbol, IGraph graph,
 			boolean indexChart, MenuSettings settings) {
 		super(settings.getTitle());
 		menuName = settings.getTitle();
@@ -146,7 +146,7 @@ public class EODQuoteChartMenu extends JMenu {
 		Iterator iterator = map.keySet().iterator();
 		while (iterator.hasNext()) {
 			String key = (String) iterator.next();
-			Graph value = (Graph) map.get(key);
+			IGraph value = (IGraph) map.get(key);
 
 			selectMenuItem(value.getName());
 		}
@@ -351,7 +351,7 @@ public class EODQuoteChartMenu extends JMenu {
 
 						HashMap replacementMap = new HashMap();
 
-						Graph newGraph = GraphFactory.newGraph(currentViewGraph.getName(), indexChart, quoteBundle,
+						IGraph newGraph = GraphFactory.newGraph(currentViewGraph.getName(), indexChart, quoteBundle,
 								symbol, adjustment);
 
 						replacementMap.put(currentViewGraph, newGraph);
@@ -359,7 +359,7 @@ public class EODQuoteChartMenu extends JMenu {
 						Iterator graphIterator = map.keySet().iterator();
 						while (graphIterator.hasNext()) {
 							String name = (String) graphIterator.next();
-							Graph oldGraph = (Graph) map.get(name);
+							IGraph oldGraph = (IGraph) map.get(name);
 
 							newGraph = GraphFactory.newGraph(name, indexChart, quoteBundle, symbol, adjustment);
 							replacementMap.put(oldGraph, newGraph);
@@ -367,8 +367,8 @@ public class EODQuoteChartMenu extends JMenu {
 
 						graphIterator = replacementMap.keySet().iterator();
 						while (graphIterator.hasNext()) {
-							Graph oldGraph = (Graph) graphIterator.next();
-							newGraph = (Graph) replacementMap.get(oldGraph);
+							IGraph oldGraph = (IGraph) graphIterator.next();
+							newGraph = (IGraph) replacementMap.get(oldGraph);
 							listener.replaceGraph(oldGraph, newGraph);
 						}
 						listener.redraw();
@@ -416,9 +416,9 @@ public class EODQuoteChartMenu extends JMenu {
 				// hold up the dispatch thread. See O'Reilley Swing pg 1138-9.
 				Thread thread = new Thread() {
 					public void run() {
-						HashMap settings = (map.get(text) != null) ? ((Graph) map.get(text)).getSettings()
+						HashMap settings = (map.get(text) != null) ? ((IGraph) map.get(text)).getSettings()
 								: new HashMap();
-						Graph graph = getGraph(text, settings);
+						IGraph graph = getGraph(text, settings);
 						if (graph != null) {
 
 							// Remove last graph first
@@ -491,10 +491,10 @@ public class EODQuoteChartMenu extends JMenu {
 							 * delete.
 							 */
 
-							HashMap settings = (map.get(text) != null) ? ((Graph) map.get(text)).getSettings()
+							HashMap settings = (map.get(text) != null) ? ((IGraph) map.get(text)).getSettings()
 									: new HashMap();
 
-							Graph graph = getGraph(text, settings);
+							IGraph graph = getGraph(text, settings);
 							if (graph != null) {
 								// Graph not in the map, means it's
 								// being added for the first time.
@@ -534,13 +534,13 @@ public class EODQuoteChartMenu extends JMenu {
 	 *
 	 * @return graph souce
 	 */
-	private GraphSource getDayOpen() {
+	private IGraphSource getDayOpen() {
 
 		if (dayOpenGraphSource == null)
 			if (indexChart) {
-				dayOpenGraphSource = new OHLCVIndexQuoteGraphSource(quoteBundle, Quote.DAY_OPEN);
+				dayOpenGraphSource = new OHLCVIndexQuoteGraphSource(quoteBundle, IQuote.DAY_OPEN);
 			} else {
-				dayOpenGraphSource = new OHLCVQuoteGraphSource(quoteBundle, Quote.DAY_OPEN);
+				dayOpenGraphSource = new OHLCVQuoteGraphSource(quoteBundle, IQuote.DAY_OPEN);
 			}
 		return dayOpenGraphSource;
 	}
@@ -550,12 +550,12 @@ public class EODQuoteChartMenu extends JMenu {
 	 *
 	 * @return graph souce
 	 */
-	private GraphSource getDayHigh() {
+	private IGraphSource getDayHigh() {
 		if (dayHighGraphSource == null)
 			if (indexChart) {
-				dayHighGraphSource = new OHLCVIndexQuoteGraphSource(quoteBundle, Quote.DAY_HIGH);
+				dayHighGraphSource = new OHLCVIndexQuoteGraphSource(quoteBundle, IQuote.DAY_HIGH);
 			} else {
-				dayHighGraphSource = new OHLCVQuoteGraphSource(quoteBundle, Quote.DAY_HIGH);
+				dayHighGraphSource = new OHLCVQuoteGraphSource(quoteBundle, IQuote.DAY_HIGH);
 			}
 
 		return dayHighGraphSource;
@@ -566,12 +566,12 @@ public class EODQuoteChartMenu extends JMenu {
 	 *
 	 * @return graph souce
 	 */
-	private GraphSource getDayLow() {
+	private IGraphSource getDayLow() {
 		if (dayLowGraphSource == null)
 			if (indexChart) {
-				dayLowGraphSource = new OHLCVIndexQuoteGraphSource(quoteBundle, Quote.DAY_LOW);
+				dayLowGraphSource = new OHLCVIndexQuoteGraphSource(quoteBundle, IQuote.DAY_LOW);
 			} else {
-				dayLowGraphSource = new OHLCVQuoteGraphSource(quoteBundle, Quote.DAY_LOW);
+				dayLowGraphSource = new OHLCVQuoteGraphSource(quoteBundle, IQuote.DAY_LOW);
 			}
 		return dayLowGraphSource;
 	}
@@ -581,12 +581,12 @@ public class EODQuoteChartMenu extends JMenu {
 	 *
 	 * @return graph souce
 	 */
-	private GraphSource getDayClose() {
+	private IGraphSource getDayClose() {
 		if (dayCloseGraphSource == null)
 			if (indexChart) {
-				dayCloseGraphSource = new OHLCVIndexQuoteGraphSource(quoteBundle, Quote.DAY_CLOSE);
+				dayCloseGraphSource = new OHLCVIndexQuoteGraphSource(quoteBundle, IQuote.DAY_CLOSE);
 			} else {
-				dayCloseGraphSource = new OHLCVQuoteGraphSource(quoteBundle, Quote.DAY_CLOSE);
+				dayCloseGraphSource = new OHLCVQuoteGraphSource(quoteBundle, IQuote.DAY_CLOSE);
 			}
 		return dayCloseGraphSource;
 	}
@@ -596,12 +596,12 @@ public class EODQuoteChartMenu extends JMenu {
 	 *
 	 * @return graph souce
 	 */
-	private GraphSource getDayVolume() {
+	private IGraphSource getDayVolume() {
 		if (dayVolumeGraphSource == null) {
 			if (indexChart) {
-				dayVolumeGraphSource = new OHLCVIndexQuoteGraphSource(quoteBundle, Quote.DAY_VOLUME);
+				dayVolumeGraphSource = new OHLCVIndexQuoteGraphSource(quoteBundle, IQuote.DAY_VOLUME);
 			} else {
-				dayVolumeGraphSource = new OHLCVQuoteGraphSource(quoteBundle, Quote.DAY_VOLUME);
+				dayVolumeGraphSource = new OHLCVQuoteGraphSource(quoteBundle, IQuote.DAY_VOLUME);
 			}
 		}
 		return dayVolumeGraphSource;
@@ -616,10 +616,10 @@ public class EODQuoteChartMenu extends JMenu {
 	 * @return the instance of the graph or <code>null</code> if the operation is
 	 *         cancelled
 	 */
-	private Graph getGraph(final String text, final HashMap settings) {
-		Graph graph = GraphFactory.newGraph(text, indexChart, quoteBundle, symbol);
+	private IGraph getGraph(final String text, final HashMap settings) {
+		IGraph graph = GraphFactory.newGraph(text, indexChart, quoteBundle, symbol);
 
-		GraphUI graphUI = null;
+		IGraphUI graphUI = null;
 		if (graph != null) {
 			graphUI = graph.getUI(settings);
 		}
@@ -664,7 +664,7 @@ public class EODQuoteChartMenu extends JMenu {
 	 *
 	 * @param graph the graph
 	 */
-	private synchronized void addGraph(Graph graph) {
+	private synchronized void addGraph(IGraph graph) {
 		String mapIdentifier = graph.getName();
 		map.put(mapIdentifier, graph);
 
@@ -675,7 +675,7 @@ public class EODQuoteChartMenu extends JMenu {
 		listener.redraw();
 	}
 
-	private synchronized void updateGraph(Graph graph) {
+	private synchronized void updateGraph(IGraph graph) {
 		/*
 		 * There's a race here somewhere Steps to reproduce: 1. Open a graph 2. Select
 		 * an indicator 3. Change the type of graph (e.g. from line to bar) 4. Update
@@ -701,7 +701,7 @@ public class EODQuoteChartMenu extends JMenu {
 	 * @param mapIdentifier name of graph
 	 */
 	private void removeGraph(String mapIdentifier) {
-		Graph graph = (Graph) map.get(mapIdentifier);
+		IGraph graph = (IGraph) map.get(mapIdentifier);
 		map.remove(mapIdentifier);
 
 		// Remove graph

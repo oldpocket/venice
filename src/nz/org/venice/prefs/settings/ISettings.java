@@ -29,9 +29,9 @@ package nz.org.venice.prefs.settings;
 import javax.swing.JDesktopPane;
 import javax.swing.JScrollPane;
 
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 
-public interface Settings {
+public interface ISettings {
 
 	// Groups
 	public static final int FRAME = 0;
@@ -133,7 +133,7 @@ public interface Settings {
 	 *
 	 * Return a Module based on the settings.
 	 */
-	public Module getModule(JDesktopPane desktop);
+	public IModule getModule(JDesktopPane desktop);
 
 	public void setScrollBarValues(JScrollPane scrollPane);
 

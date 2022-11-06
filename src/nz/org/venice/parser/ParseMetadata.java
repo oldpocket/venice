@@ -57,15 +57,15 @@ public class ParseMetadata {
 	 * 
 	 */
 
-	public Expression getFunctionBody(String functionName) {
+	public IExpression getFunctionBody(String functionName) {
 
 		if (bodyCache.get(functionName) != null) {
-			return (Expression) bodyCache.get(functionName);
+			return (IExpression) bodyCache.get(functionName);
 		}
 
 		Iterator iterator = parseTree.keySet().iterator();
 		while (iterator.hasNext()) {
-			Expression e = (Expression) iterator.next();
+			IExpression e = (IExpression) iterator.next();
 
 			if (e instanceof FunctionExpression) {
 				String funcName = ((FunctionExpression) e).getName();
@@ -82,10 +82,10 @@ public class ParseMetadata {
 	 * @return The list of parameters for a given function
 	 * @param functionName The name of the function.
 	 */
-	public Expression getParameterNames(String functionName) {
+	public IExpression getParameterNames(String functionName) {
 		Iterator iterator = parseTree.keySet().iterator();
 		while (iterator.hasNext()) {
-			Expression e = (Expression) iterator.next();
+			IExpression e = (IExpression) iterator.next();
 			Token t = (Token) parseTree.get(e);
 
 			if (e instanceof FunctionExpression) {
@@ -101,7 +101,7 @@ public class ParseMetadata {
 	/**
 	 * @return the line number as a string where a given expression appears
 	 */
-	public String getLineForExpression(Expression expression) {
+	public String getLineForExpression(IExpression expression) {
 		Token token = (Token) parseTree.get(expression);
 		assert token != null;
 

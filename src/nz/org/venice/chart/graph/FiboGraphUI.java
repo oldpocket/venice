@@ -33,7 +33,7 @@ import nz.org.venice.util.Locale;
  * 
  * @author Andrew Goh
  */
-public class FiboGraphUI implements GraphUI {
+public class FiboGraphUI implements IGraphUI {
 
 	// The graph's user interface
 	private JPanel panel;

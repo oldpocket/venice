@@ -25,11 +25,11 @@ import java.util.UUID;
 
 import nz.org.venice.parser.AnalyserGuard;
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variable;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.Locale;
 
@@ -59,7 +59,7 @@ public class EvalFunctionExpression extends UnaryExpression {
 	 * @param parameterList A clause expression which contains the value of the
 	 *                      parameters passed to the function.
 	 */
-	public EvalFunctionExpression(String name, int type, Expression parameterList) {
+	public EvalFunctionExpression(String name, int type, IExpression parameterList) {
 		super(parameterList);
 		this.name = name;
 		this.type = type;
@@ -69,7 +69,7 @@ public class EvalFunctionExpression extends UnaryExpression {
 		id = UUID.randomUUID();
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		AnalyserGuard.getInstance().startFunction(this, id, symbol, day);
@@ -92,7 +92,7 @@ public class EvalFunctionExpression extends UnaryExpression {
 
 		}
 
-		Expression body = getParseMetadata().getFunctionBody(name);
+		IExpression body = getParseMetadata().getFunctionBody(name);
 
 		double rv = 0.0;
 		rv = body.evaluate(parameters, quoteBundle, symbol, day);
@@ -139,7 +139,7 @@ public class EvalFunctionExpression extends UnaryExpression {
 	}
 
 	public String toString() {
-		Expression parameterList = getChild(0);
+		IExpression parameterList = getChild(0);
 
 		// don't want to include the body here because of recursive functions
 		return getType() + " " + getName() + "(" + parameterList.toString() + " " + ")" + "{body}";
@@ -149,9 +149,9 @@ public class EvalFunctionExpression extends UnaryExpression {
 		if (checkParameters()) {
 			return getType();
 		} else {
-			Expression parameterNamesList = getParseMetadata().getParameterNames(name);
+			IExpression parameterNamesList = getParseMetadata().getParameterNames(name);
 
-			Expression parameterValuesList = getChild(0);
+			IExpression parameterValuesList = getChild(0);
 			String types = parameterValuesList.toString();
 			String expectedTypes = parameterNamesList.toString();
 
@@ -178,15 +178,15 @@ public class EvalFunctionExpression extends UnaryExpression {
 	 * @return a Clone of the EvalExpression object.
 	 */
 	public Object clone() {
-		return new EvalFunctionExpression(getName(), getType(), (Expression) getChild(0).clone());
+		return new EvalFunctionExpression(getName(), getType(), (IExpression) getChild(0).clone());
 	}
 
 	// Check that the types of the parameters defined match the types of the
 	// values sent.
 	private boolean checkParameters() {
-		Expression parameterNamesList = getParseMetadata().getParameterNames(name);
+		IExpression parameterNamesList = getParseMetadata().getParameterNames(name);
 
-		Expression parameterValuesList = getChild(0);
+		IExpression parameterValuesList = getChild(0);
 
 		assert parameterNamesList != null;
 
@@ -206,7 +206,7 @@ public class EvalFunctionExpression extends UnaryExpression {
 		for (int i = 0; i < parameterNamesList.getChildCount(); i++) {
 			DefineParameterExpression paramDef = (DefineParameterExpression) parameterNamesList.getChild(i);
 
-			Expression paramVal = parameterValuesList.getChild(i);
+			IExpression paramVal = parameterValuesList.getChild(i);
 
 			if (paramDef.getType() != paramVal.getType()) {
 				return false;
@@ -216,15 +216,15 @@ public class EvalFunctionExpression extends UnaryExpression {
 	}
 
 	// Add/Replace variables into parameters and set their values
-	private void setupParameters(Variables parameters, QuoteBundle quoteBundle, Symbol symbol, int day)
+	private void setupParameters(Variables parameters, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		// AI functions shouldn't generate these expressions.
 		assert getParseMetadata() != null;
 
-		Expression parameterNamesList = getParseMetadata().getParameterNames(name);
+		IExpression parameterNamesList = getParseMetadata().getParameterNames(name);
 
-		Expression parameterValuesList = getChild(0);
+		IExpression parameterValuesList = getChild(0);
 
 		// This should have been checked on parse, but extra checks to avoid
 		// index out of bounds exceptions won't hurt.

@@ -23,7 +23,7 @@ import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.EODQuoteCache;
 import nz.org.venice.quote.EODQuoteRange;
 import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -61,9 +61,9 @@ public class GPQuoteBundle extends EODQuoteBundle {
 	 * prevent the GP accessing 'future' dates.
 	 *
 	 * @param symbol    the stock symbol
-	 * @param quoteType the quote type, one of {@link Quote#DAY_OPEN},
-	 *                  {@link Quote#DAY_CLOSE}, {@link Quote#DAY_LOW},
-	 *                  {@link Quote#DAY_HIGH}, {@link Quote#DAY_VOLUME}
+	 * @param quoteType the quote type, one of {@link IQuote#DAY_OPEN},
+	 *                  {@link IQuote#DAY_CLOSE}, {@link IQuote#DAY_LOW},
+	 *                  {@link IQuote#DAY_HIGH}, {@link IQuote#DAY_VOLUME}
 	 * @param today     fast access date offset of current date, see
 	 *                  {@link EODQuoteCache}
 	 * @param offset    offset from current date

@@ -29,10 +29,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import nz.org.venice.chart.graph.BarGraph;
-import nz.org.venice.chart.graph.Graph;
+import nz.org.venice.chart.graph.IGraph;
 import nz.org.venice.chart.graph.LineGraph;
 import nz.org.venice.chart.source.PortfolioGraphSource;
-import nz.org.venice.portfolio.Account;
+import nz.org.venice.portfolio.IAccount;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.prefs.settings.MenuSettings;
 import nz.org.venice.quote.EODQuoteBundle;
@@ -57,7 +57,7 @@ public class PortfolioChartMenu extends JMenu implements ActionListener {
 	private JMenuItem removeMenu;
 
 	private EODQuoteBundle quoteBundle;
-	private Graph graph;
+	private IGraph graph;
 	private ChartModule listener;
 	private HashMap map = new HashMap();
 
@@ -70,7 +70,7 @@ public class PortfolioChartMenu extends JMenu implements ActionListener {
 	 * @param listener the chart module associated with the menu
 	 * @param graph    the graph we are associated with
 	 */
-	public PortfolioChartMenu(ChartModule listener, EODQuoteBundle quoteBundle, Portfolio portfolio, Graph graph) {
+	public PortfolioChartMenu(ChartModule listener, EODQuoteBundle quoteBundle, Portfolio portfolio, IGraph graph) {
 
 		super(graph.getSourceName());
 
@@ -91,7 +91,7 @@ public class PortfolioChartMenu extends JMenu implements ActionListener {
 	 * @param graph        the graph we are associated with
 	 * @param menuSettings the menuSettings for the menu
 	 */
-	public PortfolioChartMenu(ChartModule listener, EODQuoteBundle quoteBundle, Portfolio portfolio, Graph graph,
+	public PortfolioChartMenu(ChartModule listener, EODQuoteBundle quoteBundle, Portfolio portfolio, IGraph graph,
 			MenuSettings menuSettings) {
 
 		super(menuSettings.getTitle());
@@ -108,7 +108,7 @@ public class PortfolioChartMenu extends JMenu implements ActionListener {
 		Iterator iterator = map.keySet().iterator();
 		while (iterator.hasNext()) {
 			String key = (String) iterator.next();
-			Graph value = (Graph) map.get(key);
+			IGraph value = (IGraph) map.get(key);
 			selectMenuItem(value.getName());
 		}
 
@@ -130,7 +130,7 @@ public class PortfolioChartMenu extends JMenu implements ActionListener {
 
 		List accounts = portfolio.getAccounts();
 		for (Iterator iterator = accounts.iterator(); iterator.hasNext();) {
-			Account account = (Account) iterator.next();
+			IAccount account = (IAccount) iterator.next();
 			addMenuItem(account.getName());
 		}
 
@@ -215,14 +215,14 @@ public class PortfolioChartMenu extends JMenu implements ActionListener {
 	}
 
 	// Adds graph to chart
-	private void addGraph(Graph graph, String mapIdentifier) {
+	private void addGraph(IGraph graph, String mapIdentifier) {
 		map.put(mapIdentifier, graph);
 		listener.append(graph);
 		listener.redraw();
 	}
 
 	// Same as above but add at specific index
-	private void addGraph(Graph graph, String mapIdentifier, int index) {
+	private void addGraph(IGraph graph, String mapIdentifier, int index) {
 		map.put(mapIdentifier, graph);
 		listener.append(graph, index);
 		listener.redraw();
@@ -230,7 +230,7 @@ public class PortfolioChartMenu extends JMenu implements ActionListener {
 
 	// Removes graph from chart
 	private void removeGraph(String mapIdentifier) {
-		Graph graph = (Graph) map.get(mapIdentifier);
+		IGraph graph = (IGraph) map.get(mapIdentifier);
 		map.remove(mapIdentifier);
 
 		// Remove graph and annotation

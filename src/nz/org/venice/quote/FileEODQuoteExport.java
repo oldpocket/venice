@@ -47,7 +47,7 @@ public class FileEODQuoteExport {
 	 * @param quotes list of quotes to export
 	 * @exception IOException if there was an error writing the file
 	 */
-	public static void exportFile(EODQuoteFilter filter, File file, List quotes) throws IOException {
+	public static void exportFile(IEODQuoteFilter filter, File file, List quotes) throws IOException {
 
 		// Don't bother creating empty files
 		if (quotes.size() > 0) {

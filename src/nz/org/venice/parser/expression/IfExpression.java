@@ -19,10 +19,10 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -38,15 +38,15 @@ public class IfExpression extends TernaryExpression {
 	 * @param arg2 the expression to be executed if the test was {@link #TRUE}
 	 * @param arg3 the expression to be executed if the test was {@link #FALSE}
 	 */
-	public IfExpression(Expression arg1, Expression arg2, Expression arg3) {
+	public IfExpression(IExpression arg1, IExpression arg2, IExpression arg3) {
 		super(arg1, arg2, arg3);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		// if(...) then
-		if (getChild(0).evaluate(variables, quoteBundle, symbol, day) >= Expression.TRUE_LEVEL)
+		if (getChild(0).evaluate(variables, quoteBundle, symbol, day) >= IExpression.TRUE_LEVEL)
 			return getChild(1).evaluate(variables, quoteBundle, symbol, day);
 		// else
 		else
@@ -113,9 +113,9 @@ public class IfExpression extends TernaryExpression {
 
 	}
 
-	public Expression simplify() {
+	public IExpression simplify() {
 		// First simplify all the child arguments
-		Expression simplified = super.simplify();
+		IExpression simplified = super.simplify();
 
 		NumberExpression first = (simplified.getChild(0) instanceof NumberExpression
 				? (NumberExpression) simplified.getChild(0)
@@ -147,8 +147,8 @@ public class IfExpression extends TernaryExpression {
 	}
 
 	public Object clone() {
-		return new IfExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone(),
-				(Expression) getChild(2).clone());
+		return new IfExpression((IExpression) getChild(0).clone(), (IExpression) getChild(1).clone(),
+				(IExpression) getChild(2).clone());
 	}
 
 }

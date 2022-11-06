@@ -41,20 +41,20 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import nz.org.venice.main.CommandManager;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.prefs.PreferencesException;
 import nz.org.venice.prefs.PreferencesManager;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.prefs.settings.WatchScreenSettings;
 import nz.org.venice.quote.IDQuote;
 import nz.org.venice.quote.IDQuoteCache;
 import nz.org.venice.quote.IDQuoteSync;
 import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.quote.MixedQuoteBundle;
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.QuoteEvent;
-import nz.org.venice.quote.QuoteListener;
+import nz.org.venice.quote.IQuoteListener;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.Column;
@@ -76,7 +76,7 @@ import nz.org.venice.util.TradingTime;
  * @author Andrew Leppard
  * @see WatchScreen
  */
-public class WatchScreenModule extends AbstractTable implements Module, ActionListener {
+public class WatchScreenModule extends AbstractTable implements IModule, ActionListener {
 
 	// Main menu items
 	private JMenuBar menuBar;
@@ -138,7 +138,7 @@ public class WatchScreenModule extends AbstractTable implements Module, ActionLi
 		});
 
 		// Update the table on new intra-day quotes
-		IDQuoteCache.getInstance().addQuoteListener(new QuoteListener() {
+		IDQuoteCache.getInstance().addQuoteListener(new IQuoteListener() {
 			public void newQuotes(QuoteEvent event) {
 				updateTable();
 			}
@@ -529,7 +529,7 @@ public class WatchScreenModule extends AbstractTable implements Module, ActionLi
 
 		for (Iterator iterator = watchScreen.getSymbols().iterator(); iterator.hasNext();) {
 			Symbol symbol = (Symbol) iterator.next();
-			Quote quote;
+			IQuote quote;
 
 			try {
 				quote = quoteBundle.getQuote(symbol, dateOffset);
@@ -553,7 +553,7 @@ public class WatchScreenModule extends AbstractTable implements Module, ActionLi
 		model.fireTableDataChanged();
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 }

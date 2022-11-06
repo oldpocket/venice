@@ -35,7 +35,7 @@ import java.util.List;
 
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.quote.EODQuote;
-import nz.org.venice.quote.EODQuoteFilter;
+import nz.org.venice.quote.IEODQuoteFilter;
 import nz.org.venice.quote.ImportExportException;
 import nz.org.venice.quote.ImportQuoteModule;
 import nz.org.venice.quote.QuoteFormatException;
@@ -69,7 +69,7 @@ public class FloatEODQuoteImport {
 
 		List quotes = new ArrayList();
 		String urlString = constructURL(date);
-		EODQuoteFilter filter = new MetaStockQuoteFilter();
+		IEODQuoteFilter filter = new MetaStockQuoteFilter();
 
 		PreferencesManager.ProxyPreferences proxyPreferences = PreferencesManager.getProxySettings();
 

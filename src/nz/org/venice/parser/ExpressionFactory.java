@@ -78,7 +78,7 @@ import nz.org.venice.parser.expression.SumExpression;
 import nz.org.venice.parser.expression.TrendExpression;
 import nz.org.venice.parser.expression.WhileExpression;
 import nz.org.venice.parser.expression.YearExpression;
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 
 /**
  * Create an executable expression from the given token and arguments.
@@ -99,7 +99,7 @@ public class ExpressionFactory {
 	 * @param token the terminal expression, e.g. a number
 	 * @return an executable expression
 	 */
-	public static Expression newExpression(Token token) {
+	public static IExpression newExpression(Token token) {
 		return ExpressionFactory.newExpression(token, null, null, null, null);
 	}
 
@@ -110,7 +110,7 @@ public class ExpressionFactory {
 	 * @param arg1  the first argument
 	 * @return an executable expression
 	 */
-	public static Expression newExpression(Token token, Expression arg1) {
+	public static IExpression newExpression(Token token, IExpression arg1) {
 		return ExpressionFactory.newExpression(token, arg1, null, null, null);
 	}
 
@@ -122,7 +122,7 @@ public class ExpressionFactory {
 	 * @param arg2  the second argument
 	 * @return an executable expression
 	 */
-	public static Expression newExpression(Token token, Expression arg1, Expression arg2) {
+	public static IExpression newExpression(Token token, IExpression arg1, IExpression arg2) {
 		return ExpressionFactory.newExpression(token, arg1, arg2, null, null);
 	}
 
@@ -136,7 +136,7 @@ public class ExpressionFactory {
 	 * @param arg3  the third argument
 	 * @return an executable expression
 	 */
-	public static Expression newExpression(Token token, Expression arg1, Expression arg2, Expression arg3) {
+	public static IExpression newExpression(Token token, IExpression arg1, IExpression arg2, IExpression arg3) {
 		return ExpressionFactory.newExpression(token, arg1, arg2, arg3, null);
 	}
 
@@ -152,9 +152,9 @@ public class ExpressionFactory {
 	 * @param arg4  the fourth argument
 	 * @return an executable expression
 	 */
-	public static Expression newExpression(Token token, Expression arg1, Expression arg2, Expression arg3,
-			Expression arg4) {
-		Expression expression = null;
+	public static IExpression newExpression(Token token, IExpression arg1, IExpression arg2, IExpression arg3,
+			IExpression arg4) {
+		IExpression expression = null;
 
 		switch (token.getType()) {
 		case (Token.AND_TOKEN):
@@ -192,37 +192,37 @@ public class ExpressionFactory {
 			break;
 		case (Token.DAY_OPEN_TOKEN):
 			if (arg1 == null) {
-				expression = new QuoteExpression(Quote.DAY_OPEN);
+				expression = new QuoteExpression(IQuote.DAY_OPEN);
 			} else {
-				expression = new QuoteSymbolExpression(Quote.DAY_OPEN, arg1);
+				expression = new QuoteSymbolExpression(IQuote.DAY_OPEN, arg1);
 			}
 			break;
 		case (Token.DAY_CLOSE_TOKEN):
 			if (arg1 == null) {
-				expression = new QuoteExpression(Quote.DAY_CLOSE);
+				expression = new QuoteExpression(IQuote.DAY_CLOSE);
 			} else {
-				expression = new QuoteSymbolExpression(Quote.DAY_CLOSE, arg1);
+				expression = new QuoteSymbolExpression(IQuote.DAY_CLOSE, arg1);
 			}
 			break;
 		case (Token.DAY_LOW_TOKEN):
 			if (arg1 == null) {
-				expression = new QuoteExpression(Quote.DAY_LOW);
+				expression = new QuoteExpression(IQuote.DAY_LOW);
 			} else {
-				expression = new QuoteSymbolExpression(Quote.DAY_LOW, arg1);
+				expression = new QuoteSymbolExpression(IQuote.DAY_LOW, arg1);
 			}
 			break;
 		case (Token.DAY_HIGH_TOKEN):
 			if (arg1 == null) {
-				expression = new QuoteExpression(Quote.DAY_HIGH);
+				expression = new QuoteExpression(IQuote.DAY_HIGH);
 			} else {
-				expression = new QuoteSymbolExpression(Quote.DAY_HIGH, arg1);
+				expression = new QuoteSymbolExpression(IQuote.DAY_HIGH, arg1);
 			}
 			break;
 		case (Token.DAY_VOLUME_TOKEN):
 			if (arg1 == null) {
-				expression = new QuoteExpression(Quote.DAY_VOLUME);
+				expression = new QuoteExpression(IQuote.DAY_VOLUME);
 			} else {
-				expression = new QuoteSymbolExpression(Quote.DAY_VOLUME, arg1);
+				expression = new QuoteSymbolExpression(IQuote.DAY_VOLUME, arg1);
 			}
 			break;
 		case (Token.LAG_TOKEN):
@@ -253,10 +253,10 @@ public class ExpressionFactory {
 			expression = new NotEqualExpression(arg1, arg2);
 			break;
 		case (Token.TRUE_TOKEN):
-			expression = new NumberExpression(Expression.TRUE, Expression.BOOLEAN_TYPE);
+			expression = new NumberExpression(IExpression.TRUE, IExpression.BOOLEAN_TYPE);
 			break;
 		case (Token.FALSE_TOKEN):
-			expression = new NumberExpression(Expression.FALSE, Expression.BOOLEAN_TYPE);
+			expression = new NumberExpression(IExpression.FALSE, IExpression.BOOLEAN_TYPE);
 			break;
 		case (Token.NUMBER_TOKEN):
 			expression = new NumberExpression(token.getValue(), token.getValueType());
@@ -352,13 +352,13 @@ public class ExpressionFactory {
 			}
 			break;
 		case (Token.ALERT_TOKEN):
-			expression = new AlertExpression(arg1, new Expression[] { arg2, arg3, arg4 });
+			expression = new AlertExpression(arg1, new IExpression[] { arg2, arg3, arg4 });
 			break;
 		case (Token.HALT_TOKEN):
-			expression = new HaltExpression(arg1, new Expression[] { arg2, arg3, arg4 });
+			expression = new HaltExpression(arg1, new IExpression[] { arg2, arg3, arg4 });
 			break;
 		case (Token.LOGGING_TOKEN):
-			expression = new LoggingExpression(arg1, new Expression[] { arg2, arg3, arg4 });
+			expression = new LoggingExpression(arg1, new IExpression[] { arg2, arg3, arg4 });
 		case (Token.DATACHECK_TOKEN):
 			expression = new DataCheckExpression(arg1, arg2);
 			break;
@@ -371,18 +371,18 @@ public class ExpressionFactory {
 
 	// return null if an Expression can't be correctly generated from the input
 	// String
-	public static Expression newExpression(String inputExpressionString) {
-		Expression expression = null;
+	public static IExpression newExpression(String inputExpressionString) {
+		IExpression expression = null;
 
 		// We need to specify the variables that are given to the expression
 		// expressions so they can be parsed properly.
 		Variables variables = new Variables();
-		variables.add("held", Expression.INTEGER_TYPE, Variable.CONSTANT);
-		variables.add("order", Expression.INTEGER_TYPE, Variable.CONSTANT);
-		variables.add("daysfromstart", Expression.INTEGER_TYPE, Variable.CONSTANT);
-		variables.add("transactions", Expression.INTEGER_TYPE, Variable.CONSTANT);
-		variables.add("capital", Expression.FLOAT_TYPE, Variable.CONSTANT);
-		variables.add("stockcapital", Expression.FLOAT_TYPE, Variable.CONSTANT);
+		variables.add("held", IExpression.INTEGER_TYPE, Variable.CONSTANT);
+		variables.add("order", IExpression.INTEGER_TYPE, Variable.CONSTANT);
+		variables.add("daysfromstart", IExpression.INTEGER_TYPE, Variable.CONSTANT);
+		variables.add("transactions", IExpression.INTEGER_TYPE, Variable.CONSTANT);
+		variables.add("capital", IExpression.FLOAT_TYPE, Variable.CONSTANT);
+		variables.add("stockcapital", IExpression.FLOAT_TYPE, Variable.CONSTANT);
 
 		if (inputExpressionString.length() == 0) {
 			expression = null;
@@ -396,9 +396,9 @@ public class ExpressionFactory {
 		return expression;
 	}
 
-	public static Expression newExpression(Expression exp, Expression[] children) {
+	public static IExpression newExpression(IExpression exp, IExpression[] children) {
 
-		Expression expression;
+		IExpression expression;
 
 		if (exp instanceof AndExpression) {
 			expression = new AndExpression(children[0], children[1]);
@@ -519,9 +519,9 @@ public class ExpressionFactory {
 		return expression;
 	}
 
-	public static Expression setChild(Expression exp, Expression child, int index) {
+	public static IExpression setChild(IExpression exp, IExpression child, int index) {
 
-		Expression[] children = new Expression[exp.getChildCount()];
+		IExpression[] children = new IExpression[exp.getChildCount()];
 
 		children[index] = child;
 		for (int i = 0; i < exp.getChildCount(); i++) {
@@ -530,7 +530,7 @@ public class ExpressionFactory {
 			}
 		}
 
-		Expression rv = newExpression(exp, children);
+		IExpression rv = newExpression(exp, children);
 
 		return rv;
 	}

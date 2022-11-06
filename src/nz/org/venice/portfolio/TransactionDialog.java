@@ -128,7 +128,7 @@ public class TransactionDialog extends JInternalFrame implements ActionListener 
 
 		// If the portfolio only has a cash account then dont display
 		// the share transactions
-		if (portfolio.countAccounts(Account.SHARE_ACCOUNT) > 0) {
+		if (portfolio.countAccounts(IAccount.SHARE_ACCOUNT) > 0) {
 			boolean haveShares = (portfolio.getSymbolsTraded().size() > 0);
 
 			typeComboBox.addItem(Transaction.typeToString(Transaction.ACCUMULATE));
@@ -145,7 +145,7 @@ public class TransactionDialog extends JInternalFrame implements ActionListener 
 			if (haveShares)
 				typeComboBox.addItem(Transaction.typeToString(Transaction.REDUCE));
 
-			if (portfolio.countAccounts(Account.CASH_ACCOUNT) >= 2)
+			if (portfolio.countAccounts(IAccount.CASH_ACCOUNT) >= 2)
 				typeComboBox.addItem(Transaction.typeToString(Transaction.TRANSFER));
 
 			typeComboBox.addItem(Transaction.typeToString(Transaction.WITHDRAWAL));
@@ -154,7 +154,7 @@ public class TransactionDialog extends JInternalFrame implements ActionListener 
 			typeComboBox.addItem(Transaction.typeToString(Transaction.FEE));
 			typeComboBox.addItem(Transaction.typeToString(Transaction.INTEREST));
 
-			if (portfolio.countAccounts(Account.CASH_ACCOUNT) >= 2)
+			if (portfolio.countAccounts(IAccount.CASH_ACCOUNT) >= 2)
 				typeComboBox.addItem(Transaction.typeToString(Transaction.TRANSFER));
 
 			typeComboBox.addItem(Transaction.typeToString(Transaction.WITHDRAWAL));
@@ -193,7 +193,7 @@ public class TransactionDialog extends JInternalFrame implements ActionListener 
 		symbolTextField = null;
 
 		// Work out starting panel
-		if (portfolio.countAccounts(Account.SHARE_ACCOUNT) > 0)
+		if (portfolio.countAccounts(IAccount.SHARE_ACCOUNT) > 0)
 			transactionPanel = getAccumulatePanel();
 		else
 			transactionPanel = getCashPanel();
@@ -210,9 +210,9 @@ public class TransactionDialog extends JInternalFrame implements ActionListener 
 		cashAccountComboBox.setToolTipText(Locale.getString("TRANSACTION_CASH_ACCOUNT_TOOLTIP"));
 
 		while (iterator.hasNext()) {
-			Account account = (Account) iterator.next();
+			IAccount account = (IAccount) iterator.next();
 
-			if (account.getType() == Account.CASH_ACCOUNT)
+			if (account.getType() == IAccount.CASH_ACCOUNT)
 				cashAccountComboBox.addItem(account.getName());
 
 		}
@@ -228,9 +228,9 @@ public class TransactionDialog extends JInternalFrame implements ActionListener 
 		cashAccountComboBox2 = new JComboBox();
 
 		while (iterator.hasNext()) {
-			Account account = (Account) iterator.next();
+			IAccount account = (IAccount) iterator.next();
 
-			if (account.getType() == Account.CASH_ACCOUNT)
+			if (account.getType() == IAccount.CASH_ACCOUNT)
 				cashAccountComboBox2.addItem(account.getName());
 
 		}
@@ -254,9 +254,9 @@ public class TransactionDialog extends JInternalFrame implements ActionListener 
 		shareAccountComboBox.setToolTipText(Locale.getString("TRANSACTION_SHARE_ACCOUNT_TOOLTIP"));
 
 		while (iterator.hasNext()) {
-			Account account = (Account) iterator.next();
+			IAccount account = (IAccount) iterator.next();
 
-			if (account.getType() == Account.SHARE_ACCOUNT)
+			if (account.getType() == IAccount.SHARE_ACCOUNT)
 				shareAccountComboBox.addItem(account.getName());
 		}
 

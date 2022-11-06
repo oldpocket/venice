@@ -35,7 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.ExpressionException;
 import nz.org.venice.parser.ImplicitVariables;
 import nz.org.venice.parser.Parser;
@@ -73,7 +73,7 @@ import nz.org.venice.util.Locale;
  * @author Andrew Leppard
  * @see PaperTradeModule
  */
-public class RulesPage extends Page implements AnalyserPage {
+public class RulesPage extends Page implements IAnalyserPage {
 
 	// Swing components
 	private JCheckBox ruleFamilyEnabledCheckBox;
@@ -89,9 +89,9 @@ public class RulesPage extends Page implements AnalyserPage {
 	private JTextField cRangeTextField;
 
 	// Parsed input
-	private Expression buyRule;
+	private IExpression buyRule;
 
-	private Expression sellRule;
+	private IExpression sellRule;
 
 	private boolean isFamilyEnabled;
 
@@ -165,9 +165,9 @@ public class RulesPage extends Page implements AnalyserPage {
 		String sellRuleString = sellRuleExpressionComboBox.getExpressionText();
 
 		if (isFamilyEnabled) {
-			variables.add("a", Expression.INTEGER_TYPE, Variable.CONSTANT);
-			variables.add("b", Expression.INTEGER_TYPE, Variable.CONSTANT);
-			variables.add("c", Expression.INTEGER_TYPE, Variable.CONSTANT);
+			variables.add("a", IExpression.INTEGER_TYPE, Variable.CONSTANT);
+			variables.add("b", IExpression.INTEGER_TYPE, Variable.CONSTANT);
+			variables.add("c", IExpression.INTEGER_TYPE, Variable.CONSTANT);
 		}
 
 		ImplicitVariables.getInstance().setup(variables, true);
@@ -256,7 +256,7 @@ public class RulesPage extends Page implements AnalyserPage {
 	 *
 	 * @return the buy rule
 	 */
-	public Expression getBuyRule() {
+	public IExpression getBuyRule() {
 		return buyRule;
 	}
 
@@ -265,7 +265,7 @@ public class RulesPage extends Page implements AnalyserPage {
 	 *
 	 * @return the sell rule
 	 */
-	public Expression getSellRule() {
+	public IExpression getSellRule() {
 		return sellRule;
 	}
 

@@ -54,7 +54,7 @@ import nz.org.venice.util.Locale;
  *
  * @author Andrew Leppard
  */
-public class QuoteSourcePage extends JPanel implements PreferencesPage {
+public class QuoteSourcePage extends JPanel implements IPreferencesPage {
 	private JDesktopPane desktop;
 
 	// Widgets from database pane

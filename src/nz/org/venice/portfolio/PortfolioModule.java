@@ -46,12 +46,12 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
 import nz.org.venice.main.CommandManager;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.prefs.PreferencesException;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.prefs.settings.PortfolioModuleSettings;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.MissingQuoteException;
 import nz.org.venice.quote.QuoteSourceManager;
@@ -71,14 +71,14 @@ import nz.org.venice.util.Locale;
  *
  * @author Andrew Leppard
  */
-public class PortfolioModule extends JPanel implements Module, ActionListener {
+public class PortfolioModule extends JPanel implements IModule, ActionListener {
 
 	private PropertyChangeSupport propertySupport;
 
 	private JDesktopPane desktop;
 	private Portfolio portfolio;
 	private EODQuoteBundle quoteBundle;
-	private Settings settings;
+	private ISettings settings;
 
 	private JMenuBar menuBar;
 	private JMenuItem accountNewCashAccount;
@@ -200,7 +200,7 @@ public class PortfolioModule extends JPanel implements Module, ActionListener {
 
 	// You can only create transactions if youve got a cash account
 	private void checkMenuDisabledStatus() {
-		int hasCashAccount = portfolio.countAccounts(Account.CASH_ACCOUNT);
+		int hasCashAccount = portfolio.countAccounts(IAccount.CASH_ACCOUNT);
 
 		transactionNew.setEnabled(hasCashAccount > 0);
 		transactionShowHistory.setEnabled(hasCashAccount > 0);
@@ -231,7 +231,7 @@ public class PortfolioModule extends JPanel implements Module, ActionListener {
 
 			// First list share accounts
 			while (iterator.hasNext()) {
-				Account account = (Account) iterator.next();
+				IAccount account = (IAccount) iterator.next();
 				if (account instanceof ShareAccount) {
 					addLabel(account.getName() + " (" + account.getCurrency() + ")");
 
@@ -546,7 +546,7 @@ public class PortfolioModule extends JPanel implements Module, ActionListener {
 		if (dialog.showDialog()) {
 			String accountName = dialog.getAccountName();
 			Currency accountCurrency = dialog.getAccountCurrency();
-			Account account = new CashAccount(accountName, accountCurrency);
+			IAccount account = new CashAccount(accountName, accountCurrency);
 
 			// Get exchange rate before we add it to the table. Otherwise the
 			// table will initiate the request during rendering which is ugly.
@@ -566,7 +566,7 @@ public class PortfolioModule extends JPanel implements Module, ActionListener {
 		if (dialog.showDialog()) {
 			String accountName = dialog.getAccountName();
 			Currency accountCurrency = dialog.getAccountCurrency();
-			Account account = new ShareAccount(accountName, accountCurrency);
+			IAccount account = new ShareAccount(accountName, accountCurrency);
 
 			// Get exchange rate before we add it to the table. Otherwise the
 			// table will initiate the request during rendering which is ugly.
@@ -597,7 +597,7 @@ public class PortfolioModule extends JPanel implements Module, ActionListener {
 		}
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 }

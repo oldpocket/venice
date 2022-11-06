@@ -23,7 +23,7 @@ package nz.org.venice.portfolio;
  *
  * @author Andrew Leppard
  */
-public abstract class AbstractAccount implements Account, Comparable {
+public abstract class AbstractAccount implements IAccount, Comparable {
 
 	/**
 	 * Create a new account.
@@ -40,7 +40,7 @@ public abstract class AbstractAccount implements Account, Comparable {
 	 *         less than, equal to, or greater than the specified object.
 	 */
 	public int compareTo(Object object) {
-		Account account = (Account) object;
+		IAccount account = (IAccount) object;
 		return getName().compareTo(account.getName());
 	}
 }

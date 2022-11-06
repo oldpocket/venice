@@ -23,18 +23,18 @@ import java.util.Iterator;
 import java.util.List;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.Parser;
 import nz.org.venice.parser.ParserException;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.EODQuoteRange;
 import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.Quote;
-import nz.org.venice.quote.QuoteSource;
+import nz.org.venice.quote.IQuote;
+import nz.org.venice.quote.IQuoteSource;
 import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.quote.Symbol;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
@@ -54,25 +54,25 @@ import nz.org.venice.util.WeekendDateException;
  * 
  * @author Mark
  * @see Alert
- * @see AlertWriter
+ * @see IAlertWriter
  */
 public class AlertManager {
 
 	// Singleton instances of AlertManager class -
 	// an instance each for reading and writing alerts
-	private static AlertWriter destInstance = null;
-	private static AlertReader sourceInstance = null;
+	private static IAlertWriter destInstance = null;
+	private static IAlertReader sourceInstance = null;
 
 	private AlertManager() {
 		// declared here so constructor is not public
 	}
 
-	public static void setSourceInstance(AlertReader instance) {
+	public static void setSourceInstance(IAlertReader instance) {
 		sourceInstance = instance;
 	}
 
 	// Must read and write alerts from the same place.
-	public static synchronized AlertReader getReader() {
+	public static synchronized IAlertReader getReader() {
 		if (sourceInstance == null) {
 			String destination = PreferencesManager.getAlertDestination();
 
@@ -89,7 +89,7 @@ public class AlertManager {
 		return sourceInstance;
 	}
 
-	public static synchronized AlertWriter getWriter() {
+	public static synchronized IAlertWriter getWriter() {
 		if (destInstance == null) {
 			String destination = PreferencesManager.getAlertDestination();
 
@@ -108,15 +108,15 @@ public class AlertManager {
 	}
 
 	public static boolean alertsTriggered(List triggeredAlerts, List triggerValues) {
-		AlertReader reader = getReader();
+		IAlertReader reader = getReader();
 		List alerts;
-		QuoteSource quoteSource = QuoteSourceManager.getSource();
+		IQuoteSource quoteSource = QuoteSourceManager.getSource();
 		EODQuoteBundle quoteBundle = null;
 		boolean alertsTriggered = false;
 		TradingDate today = new TradingDate();
 
 		boolean interrupted = false;
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 		Thread thread = Thread.currentThread();
 
 		progress.show(Locale.getString("ALERT_CHECK"));
@@ -185,7 +185,7 @@ public class AlertManager {
 				Symbol symbol = alert.getSymbol();
 
 				int quoteType = (!alert.getField().equals(Alert.EXP_FIELD)) ? Alert.fieldToQuote(alert.getField())
-						: Quote.DAY_CLOSE;
+						: IQuote.DAY_CLOSE;
 
 				TradingDate lastDate = quoteBundle.getLastDate();
 				TradingDate firstDate = quoteBundle.getFirstDate();
@@ -267,7 +267,7 @@ public class AlertManager {
 			int offset = quoteBundle.dateToOffset(latestDate);
 
 			int quoteType = (!alert.getField().equals(Alert.EXP_FIELD)) ? Alert.fieldToQuote(alert.getField())
-					: Quote.DAY_CLOSE;
+					: IQuote.DAY_CLOSE;
 
 			double quote = quoteBundle.getQuote(alert.getSymbol(), quoteType, offset);
 
@@ -283,9 +283,9 @@ public class AlertManager {
 				break;
 			case Alert.GONDOLA_TRIGGER:
 				try {
-					Expression expression = Parser.parse(null, alert.getTargetExpression());
+					IExpression expression = Parser.parse(null, alert.getTargetExpression());
 
-					if (expression.evaluate(null, quoteBundle, alert.getSymbol(), 0) >= Expression.TRUE) {
+					if (expression.evaluate(null, quoteBundle, alert.getSymbol(), 0) >= IExpression.TRUE) {
 						rv = true;
 					} else {
 						rv = false;

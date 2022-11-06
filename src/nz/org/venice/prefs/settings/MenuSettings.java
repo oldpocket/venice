@@ -25,8 +25,8 @@ import java.util.List;
 import javax.swing.JDesktopPane;
 import javax.swing.JMenuItem;
 
-import nz.org.venice.chart.graph.Graph;
-import nz.org.venice.main.Module;
+import nz.org.venice.chart.graph.IGraph;
+import nz.org.venice.main.IModule;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -54,7 +54,7 @@ public class MenuSettings extends AbstractSettings {
 	 */
 
 	public MenuSettings(String key, String parent, String title) {
-		super(Settings.GRAPHS, Settings.MENUS, key);
+		super(ISettings.GRAPHS, ISettings.MENUS, key);
 		this.title = title;
 		map = new HashMap();
 	}
@@ -66,7 +66,7 @@ public class MenuSettings extends AbstractSettings {
 	 */
 
 	public MenuSettings() {
-		super(Settings.GRAPHS, Settings.MENUS);
+		super(ISettings.GRAPHS, ISettings.MENUS);
 		map = new HashMap();
 
 	}
@@ -123,7 +123,7 @@ public class MenuSettings extends AbstractSettings {
 
 		map = new HashMap();
 		while (iterator.hasNext()) {
-			Graph graph = (Graph) iterator.next();
+			IGraph graph = (IGraph) iterator.next();
 			String identifier = graph.getName();
 			map.put(identifier, graph);
 		}
@@ -133,7 +133,7 @@ public class MenuSettings extends AbstractSettings {
 		this.map = map;
 	}
 
-	public void addGraph(Graph graph) {
+	public void addGraph(IGraph graph) {
 		map.put(graph.getName(), graph);
 	}
 
@@ -149,7 +149,7 @@ public class MenuSettings extends AbstractSettings {
 	}
 
 	// Menu settings are data of the graph settings, so nothing is returned here
-	public Module getModule(JDesktopPane desktop) {
+	public IModule getModule(JDesktopPane desktop) {
 		return null;
 	}
 

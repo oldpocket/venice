@@ -45,13 +45,13 @@ import nz.org.venice.analyser.ann.ArtificialNeuralNetwork;
 import nz.org.venice.analyser.ann.FileExtensionException;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.ui.GridBagHelper;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.util.Locale;
 
 /**
  * @author Alberto Nacher
  */
-public class ANNNetworkTypePage extends Page implements AnalyserPage {
+public class ANNNetworkTypePage extends Page implements IAnalyserPage {
 	// The core object which manages the Joone ANN
 	private ArtificialNeuralNetwork artificialNeuralNetwork;
 
@@ -303,7 +303,7 @@ public class ANNNetworkTypePage extends Page implements AnalyserPage {
 	 * Set the progress bar, so that artificial neural network can manage it when
 	 * training cycle terminated event is raised.
 	 */
-	public void setProgressBar(ProgressDialog progress) {
+	public void setProgressBar(IProgressDialog progress) {
 		artificialNeuralNetwork.setProgressBar(progress);
 	}
 

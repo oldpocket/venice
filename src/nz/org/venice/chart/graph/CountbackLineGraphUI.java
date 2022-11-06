@@ -35,7 +35,7 @@ import nz.org.venice.util.Locale;
  * @author Mark Hummel
  * @see CountbackLineGraph
  */
-public class CountbackLineGraphUI implements GraphUI {
+public class CountbackLineGraphUI implements IGraphUI {
 
 	// The graph's user interface
 	private JPanel panel;

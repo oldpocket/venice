@@ -21,11 +21,11 @@ package nz.org.venice.analyser;
 import java.util.Comparator;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.quote.EODQuoteBundle;
 import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -89,7 +89,7 @@ public class OrderComparator implements Comparator {
 	private EODQuoteBundle quoteBundle;
 
 	// Equation used for order (only if orderByKey == EQUATION).
-	private Expression orderByEquation;
+	private IExpression orderByEquation;
 
 	// Method of ordering: NO_ORDER, STOCK_SYMBOL etc
 	private int orderByKey;
@@ -123,7 +123,7 @@ public class OrderComparator implements Comparator {
 	 * @param quoteBundle     quote data used for ordering
 	 * @param orderByEquation equation used for ordering
 	 */
-	public OrderComparator(EODQuoteBundle quoteBundle, Expression orderByEquation) {
+	public OrderComparator(EODQuoteBundle quoteBundle, IExpression orderByEquation) {
 		this.quoteBundle = quoteBundle;
 		this.orderByEquation = orderByEquation;
 		this.orderByKey = EQUATION;
@@ -184,47 +184,47 @@ public class OrderComparator implements Comparator {
 			case (STOCK_SYMBOL):
 				return symbol1.compareTo(symbol2);
 			case (DAY_VOLUME_INCREASING):
-				return compare(quoteBundle.getQuote(symbol1, Quote.DAY_VOLUME, dateOffset),
-						quoteBundle.getQuote(symbol2, Quote.DAY_VOLUME, dateOffset));
+				return compare(quoteBundle.getQuote(symbol1, IQuote.DAY_VOLUME, dateOffset),
+						quoteBundle.getQuote(symbol2, IQuote.DAY_VOLUME, dateOffset));
 			case (DAY_VOLUME_DECREASING):
-				return compare(quoteBundle.getQuote(symbol2, Quote.DAY_VOLUME, dateOffset),
-						quoteBundle.getQuote(symbol1, Quote.DAY_VOLUME, dateOffset));
+				return compare(quoteBundle.getQuote(symbol2, IQuote.DAY_VOLUME, dateOffset),
+						quoteBundle.getQuote(symbol1, IQuote.DAY_VOLUME, dateOffset));
 			case (DAY_LOW_INCREASING):
-				return compare(quoteBundle.getQuote(symbol1, Quote.DAY_LOW, dateOffset),
-						quoteBundle.getQuote(symbol2, Quote.DAY_LOW, dateOffset));
+				return compare(quoteBundle.getQuote(symbol1, IQuote.DAY_LOW, dateOffset),
+						quoteBundle.getQuote(symbol2, IQuote.DAY_LOW, dateOffset));
 			case (DAY_LOW_DECREASING):
-				return compare(quoteBundle.getQuote(symbol2, Quote.DAY_LOW, dateOffset),
-						quoteBundle.getQuote(symbol1, Quote.DAY_LOW, dateOffset));
+				return compare(quoteBundle.getQuote(symbol2, IQuote.DAY_LOW, dateOffset),
+						quoteBundle.getQuote(symbol1, IQuote.DAY_LOW, dateOffset));
 			case (DAY_HIGH_INCREASING):
-				return compare(quoteBundle.getQuote(symbol1, Quote.DAY_HIGH, dateOffset),
-						quoteBundle.getQuote(symbol2, Quote.DAY_HIGH, dateOffset));
+				return compare(quoteBundle.getQuote(symbol1, IQuote.DAY_HIGH, dateOffset),
+						quoteBundle.getQuote(symbol2, IQuote.DAY_HIGH, dateOffset));
 			case (DAY_HIGH_DECREASING):
-				return compare(quoteBundle.getQuote(symbol2, Quote.DAY_HIGH, dateOffset),
-						quoteBundle.getQuote(symbol1, Quote.DAY_HIGH, dateOffset));
+				return compare(quoteBundle.getQuote(symbol2, IQuote.DAY_HIGH, dateOffset),
+						quoteBundle.getQuote(symbol1, IQuote.DAY_HIGH, dateOffset));
 			case (DAY_OPEN_INCREASING):
-				return compare(quoteBundle.getQuote(symbol1, Quote.DAY_OPEN, dateOffset),
-						quoteBundle.getQuote(symbol2, Quote.DAY_OPEN, dateOffset));
+				return compare(quoteBundle.getQuote(symbol1, IQuote.DAY_OPEN, dateOffset),
+						quoteBundle.getQuote(symbol2, IQuote.DAY_OPEN, dateOffset));
 			case (DAY_OPEN_DECREASING):
-				return compare(quoteBundle.getQuote(symbol2, Quote.DAY_OPEN, dateOffset),
-						quoteBundle.getQuote(symbol1, Quote.DAY_OPEN, dateOffset));
+				return compare(quoteBundle.getQuote(symbol2, IQuote.DAY_OPEN, dateOffset),
+						quoteBundle.getQuote(symbol1, IQuote.DAY_OPEN, dateOffset));
 			case (DAY_CLOSE_INCREASING):
-				return compare(quoteBundle.getQuote(symbol1, Quote.DAY_CLOSE, dateOffset),
-						quoteBundle.getQuote(symbol2, Quote.DAY_CLOSE, dateOffset));
+				return compare(quoteBundle.getQuote(symbol1, IQuote.DAY_CLOSE, dateOffset),
+						quoteBundle.getQuote(symbol2, IQuote.DAY_CLOSE, dateOffset));
 			case (DAY_CLOSE_DECREASING):
-				return compare(quoteBundle.getQuote(symbol2, Quote.DAY_CLOSE, dateOffset),
-						quoteBundle.getQuote(symbol1, Quote.DAY_CLOSE, dateOffset));
+				return compare(quoteBundle.getQuote(symbol2, IQuote.DAY_CLOSE, dateOffset),
+						quoteBundle.getQuote(symbol1, IQuote.DAY_CLOSE, dateOffset));
 			case (CHANGE_INCREASING):
 				return compare(
-						quoteBundle.getQuote(symbol1, Quote.DAY_CLOSE, dateOffset)
-								/ quoteBundle.getQuote(symbol1, Quote.DAY_OPEN, dateOffset),
-						quoteBundle.getQuote(symbol2, Quote.DAY_CLOSE, dateOffset)
-								/ quoteBundle.getQuote(symbol2, Quote.DAY_OPEN, dateOffset));
+						quoteBundle.getQuote(symbol1, IQuote.DAY_CLOSE, dateOffset)
+								/ quoteBundle.getQuote(symbol1, IQuote.DAY_OPEN, dateOffset),
+						quoteBundle.getQuote(symbol2, IQuote.DAY_CLOSE, dateOffset)
+								/ quoteBundle.getQuote(symbol2, IQuote.DAY_OPEN, dateOffset));
 			case (CHANGE_DECREASING):
 				return compare(
-						quoteBundle.getQuote(symbol2, Quote.DAY_CLOSE, dateOffset)
-								/ quoteBundle.getQuote(symbol2, Quote.DAY_OPEN, dateOffset),
-						quoteBundle.getQuote(symbol1, Quote.DAY_CLOSE, dateOffset)
-								/ quoteBundle.getQuote(symbol1, Quote.DAY_OPEN, dateOffset));
+						quoteBundle.getQuote(symbol2, IQuote.DAY_CLOSE, dateOffset)
+								/ quoteBundle.getQuote(symbol2, IQuote.DAY_OPEN, dateOffset),
+						quoteBundle.getQuote(symbol1, IQuote.DAY_CLOSE, dateOffset)
+								/ quoteBundle.getQuote(symbol1, IQuote.DAY_OPEN, dateOffset));
 			case (EQUATION):
 				return compareByEquation(symbol1, symbol2);
 			default:

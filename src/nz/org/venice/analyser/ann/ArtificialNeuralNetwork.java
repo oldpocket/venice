@@ -52,7 +52,7 @@ import org.joone.io.MemoryInputSynapse;
 import org.joone.net.NeuralNet;
 import org.joone.net.NeuralNetLoader;
 
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.util.Locale;
 
 /**
@@ -61,7 +61,7 @@ import nz.org.venice.util.Locale;
 public class ArtificialNeuralNetwork implements NeuralNetListener {
 
 	private JDesktopPane desktop;
-	private ProgressDialog progress;
+	private IProgressDialog progress;
 
 	/* Neural network and objects related to it */
 	private NeuralNet nnet;
@@ -247,7 +247,7 @@ public class ArtificialNeuralNetwork implements NeuralNetListener {
 	 *
 	 * @param progress the progress bar shown to the user during training.
 	 */
-	public void setProgressBar(ProgressDialog progress) {
+	public void setProgressBar(IProgressDialog progress) {
 		this.progress = progress;
 	}
 

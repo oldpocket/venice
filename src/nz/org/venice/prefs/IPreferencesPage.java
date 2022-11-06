@@ -16,38 +16,34 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
 */
 
-package nz.org.venice.quote;
+package nz.org.venice.prefs;
+
+import javax.swing.JComponent;
 
 /**
- * Provides an interface for converting to/from a text string containing a
- * single intra-day quote from/to the internal stock quote object.
+ * Common interface for all preference pages displayed by the Preferences
+ * Module.
  *
- * @author Andrew Leppard
+ * @see PreferencesModule
  */
-public interface IDQuoteFilter {
+public interface IPreferencesPage {
 
 	/**
-	 * Return the name of the filter.
+	 * Return the window title.
 	 *
-	 * @return the name of the filter
+	 * @return the window title.
 	 */
-	public String getName();
+	public String getTitle();
 
 	/**
-	 * Parse the given text string and returns the stock quote or null if it did not
-	 * contain a valid quote.
-	 *
-	 * @param quoteLine a single line of text containing a quote.
-	 * @return the stock quote
-	 * @exception QuoteFormatException if the quote could not be parsed
+	 * Update the preferences file.
 	 */
-	public IDQuote toIDQuote(String quoteLine) throws QuoteFormatException;
+	public void save();
 
 	/**
-	 * Convert the given stock quote to a string line.
+	 * Return displayed component for this page.
 	 *
-	 * @param quote a stock quote
-	 * @return string version of the quote
+	 * @return the component to display.
 	 */
-	public String toString(IDQuote quote);
+	public JComponent getComponent();
 }

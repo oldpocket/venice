@@ -39,19 +39,19 @@ import nz.org.venice.analyser.gp.GPQuoteBundle;
 import nz.org.venice.analyser.gp.GeneticProgramme;
 import nz.org.venice.analyser.gp.Individual;
 import nz.org.venice.main.CommandManager;
-import nz.org.venice.main.Module;
+import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
 import nz.org.venice.parser.ExpressionFactory;
 import nz.org.venice.prefs.settings.AnalyserModuleSettings;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.quote.EODQuoteBundle;
-import nz.org.venice.ui.ProgressDialog;
+import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
 
-public class GPModule extends Page implements Module {
+public class GPModule extends Page implements IModule {
 
 	private PropertyChangeSupport propertySupport;
 	private JTabbedPane tabbedPane;
@@ -159,7 +159,7 @@ public class GPModule extends Page implements Module {
 		GPPageInitialPopulation.save(getClass().getName());
 		GPGondolaSelection.save(getClass().getName());
 
-		settings = new AnalyserModuleSettings(Settings.GPMODULE);
+		settings = new AnalyserModuleSettings(ISettings.GPMODULE);
 
 	}
 
@@ -235,7 +235,7 @@ public class GPModule extends Page implements Module {
 	}
 
 	private void geneticProgramme() {
-		ProgressDialog progress = ProgressDialogManager.getProgressDialog();
+		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
 
 		Thread thread = Thread.currentThread();
 		progress.setIndeterminate(true);
@@ -385,7 +385,7 @@ public class GPModule extends Page implements Module {
 		});
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 }

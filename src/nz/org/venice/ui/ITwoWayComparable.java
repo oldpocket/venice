@@ -30,7 +30,7 @@ package nz.org.venice.ui;
  *
  * @author Andrew Leppard
  */
-public interface TwoWayComparable {
+public interface ITwoWayComparable {
 
 	/**
 	 * Compare this object with the specified object.

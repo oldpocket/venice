@@ -44,7 +44,7 @@ public class FileEODQuoteImport implements IFileEODQuoteImport {
 	private static final int MAX_QUOTE_COUNT = 500;
 
 	private Report report;
-	private EODQuoteFilter filter;
+	private IEODQuoteFilter filter;
 	private File file;
 
 	private FileInputStream fileStream;
@@ -61,7 +61,7 @@ public class FileEODQuoteImport implements IFileEODQuoteImport {
 	 * @param report the report
 	 * @param filter the quote filter
 	 */
-	public FileEODQuoteImport(Report report, EODQuoteFilter filter) {
+	public FileEODQuoteImport(Report report, IEODQuoteFilter filter) {
 		this.report = report;
 		this.filter = filter;
 		this.file = null;

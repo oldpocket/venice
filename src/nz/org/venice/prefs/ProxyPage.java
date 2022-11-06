@@ -45,7 +45,7 @@ import nz.org.venice.util.Locale;
  *         Provides the function of handle authentication requests in proxy.
  * @author Bryan Lin 2004-9-11
  */
-public class ProxyPage extends JPanel implements PreferencesPage {
+public class ProxyPage extends JPanel implements IPreferencesPage {
 
 	private JDesktopPane desktop = null;
 	private PreferencesManager.ProxyPreferences proxyPreferences = null;

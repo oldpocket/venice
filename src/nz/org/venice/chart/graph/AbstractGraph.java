@@ -23,24 +23,24 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 
 /**
- * Set the default values for a graph based on a single {@link GraphSource}. All
- * graphs that are based on a single {@link GraphSource} object will almost
+ * Set the default values for a graph based on a single {@link IGraphSource}. All
+ * graphs that are based on a single {@link IGraphSource} object will almost
  * certainly want to use these default values. Graphs that use multiple
- * {@link GraphSource} objects will still probably want to extend this class and
+ * {@link IGraphSource} objects will still probably want to extend this class and
  * override any differences.
  *
  * @author Andrew Leppard
- * @see Graph
- * @see GraphUI
- * @see GraphSource
+ * @see IGraph
+ * @see IGraphUI
+ * @see IGraphSource
  */
-abstract public class AbstractGraph implements Graph {
+abstract public class AbstractGraph implements IGraph {
 
 	// We provide defaults based on a single GraphSource object.
-	private GraphSource source;
+	private IGraphSource source;
 
 	// Store the settings
 	private HashMap settings = new HashMap();
@@ -50,7 +50,7 @@ abstract public class AbstractGraph implements Graph {
 	 *
 	 * @param source default <code>GraphSource</code> to use
 	 */
-	public AbstractGraph(GraphSource source) {
+	public AbstractGraph(IGraphSource source) {
 		this.source = source;
 	}
 
@@ -59,7 +59,7 @@ abstract public class AbstractGraph implements Graph {
 	 *
 	 * @return the default <code>GraphSource</code>
 	 */
-	protected GraphSource getSource() {
+	protected IGraphSource getSource() {
 		return source;
 	}
 
@@ -183,7 +183,7 @@ abstract public class AbstractGraph implements Graph {
 	 *
 	 * @return an array of doubles representing the minor deltas of the default
 	 *         <code>GraphSource</code>
-	 * @see Graph#getAcceptableMajorDeltas
+	 * @see IGraph#getAcceptableMajorDeltas
 	 */
 	public double[] getAcceptableMinorDeltas() {
 		return source.getAcceptableMinorDeltas();
@@ -218,7 +218,7 @@ abstract public class AbstractGraph implements Graph {
 	 * @param settings initial settings (ignored)
 	 * @return <code>null</code>
 	 */
-	public GraphUI getUI(HashMap settings) {
+	public IGraphUI getUI(HashMap settings) {
 		// null indicates no UI
 		return null;
 	}

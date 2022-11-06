@@ -19,10 +19,10 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -34,19 +34,19 @@ public class CosineExpression extends UnaryExpression {
 	 * An expression which performs cosine function <code>cos</code> on the
 	 * sub-expressions.
 	 */
-	public CosineExpression(Expression arg) {
+	public CosineExpression(IExpression arg) {
 		super(arg);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		return Math.cos(getChild(0).evaluate(variables, quoteBundle, symbol, day));
 	}
 
-	public Expression simplify() {
+	public IExpression simplify() {
 		// First simplify child argument
-		Expression simplified = super.simplify();
+		IExpression simplified = super.simplify();
 
 		// If the child argument is a constant we can precompute.
 		if (simplified.getChild(0) instanceof NumberExpression) {
@@ -94,6 +94,6 @@ public class CosineExpression extends UnaryExpression {
 	}
 
 	public Object clone() {
-		return new CosineExpression((Expression) getChild(0).clone());
+		return new CosineExpression((IExpression) getChild(0).clone());
 	}
 }

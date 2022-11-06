@@ -20,11 +20,11 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
 import nz.org.venice.quote.MissingQuoteException;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -42,14 +42,14 @@ public class SumExpression extends TernaryExpression {
 	 * @param days  the number of days to sum over
 	 * @param lag   the offset from the current day
 	 */
-	public SumExpression(Expression quote, Expression days, Expression lag) {
+	public SumExpression(IExpression quote, IExpression days, IExpression lag) {
 		super(quote, days, lag);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
-		QuoteSymbol quoteChild = (QuoteSymbol) getChild(0);
+		IQuoteSymbol quoteChild = (IQuoteSymbol) getChild(0);
 		Symbol explicitSymbol = (quoteChild.getSymbol() != null) ? quoteChild.getSymbol() : symbol;
 
 		int period = (int) getChild(1).evaluate(variables, quoteBundle, explicitSymbol, day);
@@ -102,7 +102,7 @@ public class SumExpression extends TernaryExpression {
 		}
 	}
 
-	private double sum(QuoteBundle quoteBundle, Symbol symbol, int quote, int period, int day, int offset)
+	private double sum(IQuoteBundle quoteBundle, Symbol symbol, int quote, int period, int day, int offset)
 			throws EvaluationException {
 
 		double sum = 0.0D;
@@ -121,7 +121,7 @@ public class SumExpression extends TernaryExpression {
 	}
 
 	public Object clone() {
-		return new SumExpression((Expression) getChild(0).clone(), (Expression) getChild(1).clone(),
-				(Expression) getChild(2).clone());
+		return new SumExpression((IExpression) getChild(0).clone(), (IExpression) getChild(1).clone(),
+				(IExpression) getChild(2).clone());
 	}
 }

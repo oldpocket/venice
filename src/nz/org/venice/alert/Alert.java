@@ -26,7 +26,7 @@
 
 package nz.org.venice.alert;
 
-import nz.org.venice.quote.Quote;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.util.TradingDate;
 
@@ -141,15 +141,15 @@ public abstract class Alert {
 
 	public static int fieldToQuote(String field) {
 		if (field.equals(OPEN_FIELD)) {
-			return Quote.DAY_OPEN;
+			return IQuote.DAY_OPEN;
 		} else if (field.equals(CLOSE_FIELD)) {
-			return Quote.DAY_CLOSE;
+			return IQuote.DAY_CLOSE;
 		} else if (field.equals(HIGH_FIELD)) {
-			return Quote.DAY_HIGH;
+			return IQuote.DAY_HIGH;
 		} else if (field.equals(LOW_FIELD)) {
-			return Quote.DAY_LOW;
+			return IQuote.DAY_LOW;
 		} else if (field.equals(VOLUME_FIELD)) {
-			return Quote.DAY_VOLUME;
+			return IQuote.DAY_VOLUME;
 		} else {
 			assert false;
 			return -1;

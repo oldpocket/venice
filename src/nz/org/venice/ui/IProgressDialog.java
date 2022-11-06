@@ -27,7 +27,7 @@ package nz.org.venice.ui;
  * See {@link ProgressDialogManager} for details about using progress dialogs in
  * venice.
  */
-public interface ProgressDialog {
+public interface IProgressDialog {
 
 	/**
 	 * Close the dialog window.

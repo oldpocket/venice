@@ -18,7 +18,7 @@
 
 package nz.org.venice.parser.expression;
 
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 
 /**
  * Abstract base class for all expressions requiring two arguments.
@@ -31,8 +31,8 @@ abstract public class BinaryExpression extends AbstractExpression {
 	 * @param left  the left argument
 	 * @param right the right argument
 	 */
-	public BinaryExpression(Expression left, Expression right) {
-		super(new Expression[] { left, right });
+	public BinaryExpression(IExpression left, IExpression right) {
+		super(new IExpression[] { left, right });
 		assert left != null && right != null;
 
 		// setChild(left, 0);

@@ -40,10 +40,10 @@ import javax.swing.JPopupMenu;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import nz.org.venice.main.Module;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.main.IModule;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.ExpressionFactory;
-import nz.org.venice.prefs.settings.Settings;
+import nz.org.venice.prefs.settings.ISettings;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.AbstractTableModel;
 import nz.org.venice.ui.Column;
@@ -51,7 +51,7 @@ import nz.org.venice.ui.ExpressionEditorDialog;
 import nz.org.venice.ui.MenuHelper;
 import nz.org.venice.util.Locale;
 
-public class ANNPageModule extends AbstractTable implements Module {
+public class ANNPageModule extends AbstractTable implements IModule {
 	private PropertyChangeSupport propertySupport;
 
 	// numbers to identify columns of the table
@@ -74,10 +74,10 @@ public class ANNPageModule extends AbstractTable implements Module {
 
 	private Page page;
 	private Model model;
-	private Settings settings;
+	private ISettings settings;
 
 	// The input expressions of the ANN
-	private Expression[] inputExpressions;
+	private IExpression[] inputExpressions;
 
 	// Menus
 	private JMenuBar menuBar;
@@ -553,7 +553,7 @@ public class ANNPageModule extends AbstractTable implements Module {
 
 	public boolean parse() {
 		// Check if input strings are ok for parsing
-		inputExpressions = new Expression[model.getRowCount()];
+		inputExpressions = new IExpression[model.getRowCount()];
 
 		// At least one input expression must be added otherwise
 		// indexoutofbounds exceptions occur in Joone.
@@ -593,7 +593,7 @@ public class ANNPageModule extends AbstractTable implements Module {
 	 *
 	 * @return an expression array with input expressions of ANN
 	 */
-	public Expression[] getInputExpressions() {
+	public IExpression[] getInputExpressions() {
 		return inputExpressions;
 	}
 
@@ -621,7 +621,7 @@ public class ANNPageModule extends AbstractTable implements Module {
 		return true;
 	}
 
-	public Settings getSettings() {
+	public ISettings getSettings() {
 		return settings;
 	}
 

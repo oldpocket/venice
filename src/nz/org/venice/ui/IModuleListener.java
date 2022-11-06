@@ -16,37 +16,36 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
 */
 
-package nz.org.venice.quote;
+package nz.org.venice.ui;
+
+import java.util.EventListener;
 
 /**
- * Provides an interface for converting to/from a text string containing a
- * single end-of-day quote from/to the internal stock quote object.
+ * Interface for classes that are listening for module events. Module events are
+ * triggered when modules are added, removed or renamed.
  *
  * @author Andrew Leppard
  */
-public interface EODQuoteFilter {
-	/**
-	 * Return the name of the filter.
-	 *
-	 * @return the name of the filter
-	 */
-	public String getName();
+public interface IModuleListener extends EventListener {
 
 	/**
-	 * Parse the given text string and returns the stock quote or null if it did not
-	 * contain a valid quote.
+	 * Called when a module has been added
 	 *
-	 * @param quoteLine a single line of text containing a quote.
-	 * @return the stock quote
-	 * @exception QuoteFormatException if the quote could not be parsed
+	 * @param moduleEvent the module event
 	 */
-	public EODQuote toEODQuote(String quoteLine) throws QuoteFormatException;
+	public void moduleAdded(ModuleEvent moduleEvent);
 
 	/**
-	 * Convert the given stock quote to a string line.
+	 * Called when a module has been renamed
 	 *
-	 * @param quote a stock quote
-	 * @return string version of the quote
+	 * @param moduleEvent the module event
 	 */
-	public String toString(EODQuote quote);
+	public void moduleRenamed(ModuleEvent moduleEvent);
+
+	/**
+	 * Called when a module has been removed
+	 *
+	 * @param moduleEvent the module event
+	 */
+	public void moduleRemoved(ModuleEvent moduleEvent);
 }

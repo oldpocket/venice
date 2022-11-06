@@ -22,7 +22,7 @@ import java.util.Random;
 
 import nz.org.venice.parser.EvaluationException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -43,7 +43,7 @@ public class RandomWithoutSeedExpression extends TerminalExpression {
 		random = new Random();
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
 		return random.nextDouble();

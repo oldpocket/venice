@@ -19,10 +19,10 @@
 package nz.org.venice.parser.expression;
 
 import nz.org.venice.parser.EvaluationException;
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.TypeMismatchException;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -30,27 +30,27 @@ import nz.org.venice.quote.Symbol;
  */
 public class NotExpression extends UnaryExpression {
 
-	public NotExpression(Expression arg) {
+	public NotExpression(IExpression arg) {
 		super(arg);
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day)
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day)
 			throws EvaluationException {
 
-		if (getChild(0).evaluate(variables, quoteBundle, symbol, day) >= Expression.TRUE_LEVEL)
+		if (getChild(0).evaluate(variables, quoteBundle, symbol, day) >= IExpression.TRUE_LEVEL)
 			return FALSE;
 		else
 			return TRUE;
 	}
 
-	public Expression simplify() {
+	public IExpression simplify() {
 		// First simplify all the child arguments
-		Expression simplified = super.simplify();
+		IExpression simplified = super.simplify();
 
 		// If the child argument is a number expression we can precompute
 		if (simplified.getChild(0) instanceof NumberExpression) {
 			try {
-				Expression retExp = new NumberExpression(simplified.evaluate(null, null, null, 0), BOOLEAN_TYPE);
+				IExpression retExp = new NumberExpression(simplified.evaluate(null, null, null, 0), BOOLEAN_TYPE);
 
 				return retExp;
 			} catch (EvaluationException e) {
@@ -64,7 +64,7 @@ public class NotExpression extends UnaryExpression {
 		// not(x == y) -> x != y
 		else if (simplified.getChild(0) instanceof EqualThanExpression) {
 
-			Expression retExp = new NotEqualExpression(simplified.getChild(0).getChild(0),
+			IExpression retExp = new NotEqualExpression(simplified.getChild(0).getChild(0),
 					simplified.getChild(0).getChild(1));
 
 			return retExp;
@@ -80,7 +80,7 @@ public class NotExpression extends UnaryExpression {
 
 		// not(x > y) -> x <= y
 		else if (getChild(0) instanceof GreaterThanExpression) {
-			Expression retExp = new LessThanEqualExpression(simplified.getChild(0).getChild(0),
+			IExpression retExp = new LessThanEqualExpression(simplified.getChild(0).getChild(0),
 					simplified.getChild(0).getChild(1));
 			return retExp;
 		}
@@ -126,6 +126,6 @@ public class NotExpression extends UnaryExpression {
 	}
 
 	public Object clone() {
-		return new NotExpression((Expression) getChild(0).clone());
+		return new NotExpression((IExpression) getChild(0).clone());
 	}
 }

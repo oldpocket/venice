@@ -181,10 +181,10 @@ public class SortedTable extends JTable {
 				// a mirror image). An Example is columns with total columns that
 				// shoud always appear at the bottom.
 				try {
-					if (firstKey instanceof TwoWayComparable) {
+					if (firstKey instanceof ITwoWayComparable) {
 						// TODO: remove twoway comparable and use Reverse thing in collections.
-						TwoWayComparable firstComparable = (TwoWayComparable) firstKey;
-						TwoWayComparable secondComparable = (TwoWayComparable) secondKey;
+						ITwoWayComparable firstComparable = (ITwoWayComparable) firstKey;
+						ITwoWayComparable secondComparable = (ITwoWayComparable) secondKey;
 
 						return firstComparable.compareTo(secondComparable, sortDirection == SORT_UP);
 					} else {

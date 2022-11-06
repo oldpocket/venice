@@ -20,9 +20,9 @@ package nz.org.venice.parser.expression;
 
 import java.text.NumberFormat;
 
-import nz.org.venice.parser.Expression;
+import nz.org.venice.parser.IExpression;
 import nz.org.venice.parser.Variables;
-import nz.org.venice.quote.QuoteBundle;
+import nz.org.venice.quote.IQuoteBundle;
 import nz.org.venice.quote.Symbol;
 
 /**
@@ -59,14 +59,14 @@ public class NumberExpression extends TerminalExpression {
 	}
 
 	public NumberExpression(double value, int type) {
-		assert (type == Expression.BOOLEAN_TYPE || type == Expression.FLOAT_TYPE || type == Expression.INTEGER_TYPE
+		assert (type == IExpression.BOOLEAN_TYPE || type == IExpression.FLOAT_TYPE || type == IExpression.INTEGER_TYPE
 				|| typeModified == true);
 
 		this.value = value;
 		this.type = type;
 	}
 
-	public double evaluate(Variables variables, QuoteBundle quoteBundle, Symbol symbol, int day) {
+	public double evaluate(Variables variables, IQuoteBundle quoteBundle, Symbol symbol, int day) {
 		return value;
 	}
 
@@ -125,7 +125,7 @@ public class NumberExpression extends TerminalExpression {
 	 * @return <code>true<code> if the expression is a <code>NumberExpression</code>
 	 *         with the given value.
 	 */
-	public static boolean isConstant(Expression expression, int value) {
+	public static boolean isConstant(IExpression expression, int value) {
 		if (expression instanceof NumberExpression) {
 			NumberExpression numberExpression = (NumberExpression) expression;
 

@@ -21,7 +21,7 @@
  * For example, DAX, XAO etc
  *
  * @author mhummel
- * @see QuoteSource 
+ * @see IQuoteSource 
  */
 
 //In time when we unify the datastore we can then provide the option to store
@@ -47,13 +47,13 @@ import javax.swing.JTable;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
-import nz.org.venice.quote.QuoteSource;
+import nz.org.venice.quote.IQuoteSource;
 import nz.org.venice.quote.SymbolMetadata;
 import nz.org.venice.ui.AbstractTableModel;
 import nz.org.venice.ui.IndexEditorDialog;
 import nz.org.venice.util.Locale;
 
-public class IndexPreferencesPage extends JPanel implements PreferencesPage {
+public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 
 	private JDesktopPane desktop;
 	private JTable indexTable = null;

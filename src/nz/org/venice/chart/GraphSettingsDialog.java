@@ -30,7 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import nz.org.venice.chart.graph.GraphUI;
+import nz.org.venice.chart.graph.IGraphUI;
 import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.util.Locale;
 
@@ -41,7 +41,7 @@ import nz.org.venice.util.Locale;
  * user.
  *
  * @author Andrew Leppard
- * @see nz.org.venice.chart.graph.GraphUI
+ * @see nz.org.venice.chart.graph.IGraphUI
  */
 public class GraphSettingsDialog extends JInternalFrame {
 
@@ -64,7 +64,7 @@ public class GraphSettingsDialog extends JInternalFrame {
 	private int buttonPressed = DIALOG_IS_UP;
 
 	// The graph's user interface
-	private GraphUI graphUI;
+	private IGraphUI graphUI;
 
 	// Wether this is a new graph or an existing one
 	private boolean newGraph;
@@ -78,7 +78,7 @@ public class GraphSettingsDialog extends JInternalFrame {
 	 * @param graphUI the graph settings user interface
 	 * @param name    the name of the graph
 	 */
-	public GraphSettingsDialog(GraphUI graphUI, String name) {
+	public GraphSettingsDialog(IGraphUI graphUI, String name) {
 		super(name);
 
 		this.graphUI = graphUI;
@@ -94,7 +94,7 @@ public class GraphSettingsDialog extends JInternalFrame {
 	 * @param name     the name of the graph
 	 * @param newGraph wether this is a newly created graph
 	 */
-	public GraphSettingsDialog(GraphUI graphUI, String name, boolean newGraph) {
+	public GraphSettingsDialog(IGraphUI graphUI, String name, boolean newGraph) {
 		super(name);
 
 		this.graphUI = graphUI;
@@ -148,7 +148,7 @@ public class GraphSettingsDialog extends JInternalFrame {
 	 *
 	 * @param graphUI graph user interface
 	 */
-	private void buildUI(GraphUI graphUI) {
+	private void buildUI(IGraphUI graphUI) {
 		JButton addButton = new JButton(Locale.getString("ADD"));
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

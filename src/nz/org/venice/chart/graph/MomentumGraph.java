@@ -26,7 +26,7 @@ import java.util.List;
 
 import nz.org.venice.chart.GraphTools;
 import nz.org.venice.chart.Graphable;
-import nz.org.venice.chart.source.GraphSource;
+import nz.org.venice.chart.source.IGraphSource;
 import nz.org.venice.util.Locale;
 
 /**
@@ -47,7 +47,7 @@ public class MomentumGraph extends AbstractGraph {
 	 *
 	 * @param source the source to create a momentum graph from
 	 */
-	public MomentumGraph(GraphSource source) {
+	public MomentumGraph(IGraphSource source) {
 		super(source);
 		setSettings(new HashMap());
 	}
@@ -58,7 +58,7 @@ public class MomentumGraph extends AbstractGraph {
 	 * @param source   the source to create a momentum graph from
 	 * @param settings the settings of the new graph
 	 */
-	public MomentumGraph(GraphSource source, HashMap settings) {
+	public MomentumGraph(IGraphSource source, HashMap settings) {
 		super(source);
 		setSettings(settings);
 	}
@@ -159,7 +159,7 @@ public class MomentumGraph extends AbstractGraph {
 	 * @param settings the initial settings
 	 * @return user interface
 	 */
-	public GraphUI getUI(HashMap settings) {
+	public IGraphUI getUI(HashMap settings) {
 		return new PeriodGraphUI(settings);
 	}
 }

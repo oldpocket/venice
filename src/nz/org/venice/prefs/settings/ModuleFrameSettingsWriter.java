@@ -35,7 +35,7 @@ import nz.org.venice.util.ExchangeRateCache;
  *
  * @author Mark Hummel
  * @see nz.org.venice.prefs.PreferencesManager
- * @see SettingsWriter
+ * @see ISettingsWriter
  */
 public class ModuleFrameSettingsWriter {
 
@@ -54,7 +54,7 @@ public class ModuleFrameSettingsWriter {
 		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 
 		ModuleFrameSettings settings = new ModuleFrameSettings();
-		Settings moduleSettings = frame.getModule().getSettings();
+		ISettings moduleSettings = frame.getModule().getSettings();
 
 		if (moduleSettings != null) {
 
