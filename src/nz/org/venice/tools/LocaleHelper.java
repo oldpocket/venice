@@ -37,10 +37,10 @@ import java.util.Set;
  *
  * @author Andrew Leppard
  */
-public class Locale {
+public class LocaleHelper {
 
 	/** This class cannot be instantiated. */
-	private Locale() {
+	private LocaleHelper() {
 		assert false;
 	}
 
