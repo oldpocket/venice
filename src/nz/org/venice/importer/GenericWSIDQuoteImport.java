@@ -55,7 +55,7 @@ public class GenericWSIDQuoteImport {
 	// Service.
 	private final static String URL_PATTERN = ("s=" + SYMBOLS);
 
-	private final static String GENERIC_WS_URL_PATTERN = ("http://yfinance.lealis.com.br/id_quotes?" + URL_PATTERN);
+	private final static String GENERIC_WS_URL_PATTERN = ("http://aethiopicus.ddns.net:1414/~aethiopicus/yfinance/id_quotes?" + URL_PATTERN);
 
 	// This class is not instantiated.
 	private GenericWSIDQuoteImport() {

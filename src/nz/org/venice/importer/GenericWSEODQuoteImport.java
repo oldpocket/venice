@@ -72,7 +72,7 @@ public class GenericWSEODQuoteImport {
 	private final static String URL_PATTERN = ("symbol=" + SYMBOL + "&start_month=" + START_MONTH + "&start_day=" + START_DAY + "&start_year="
 			+ START_YEAR + "&end_month=" + END_MONTH + "&end_day=" + END_DAY + "&end_year=" + END_YEAR);
 
-	private final static String GENERIC_WS_URL_PATTERN = ("http://yfinance.lealis.com.br/eod_quotes?" + URL_PATTERN);
+	private final static String GENERIC_WS_URL_PATTERN = ("http://aethiopicus.ddns.net:1414/~aethiopicus/yfinance/eod_quotes?" + URL_PATTERN);
 
 	// This class is not instantiated.
 	private GenericWSEODQuoteImport() {
