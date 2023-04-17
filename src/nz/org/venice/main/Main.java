@@ -28,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -84,7 +85,7 @@ public class Main extends JFrame {
 	public static String COPYRIGHT_DATE_RANGE = "2003-19";
 
 	/** Copyright date range, e.g. "2003-5" */
-	public static String COPYRIGHT_DATE_NEW_RANGE = "2021-21";
+	public static String COPYRIGHT_DATE_NEW_RANGE = "2021-" + String.format("%ty", Year.now());;
 
 	/**
 	 * Get the main frame for the current application
@@ -95,7 +96,7 @@ public class Main extends JFrame {
 		return Main.venice;
 	}
 
-	// Set the codepage to get correct console output
+	// Set the code-page to get correct console output
 	private void setConsoleCodePage() {
 		String osName = System.getProperty("os.name");
 		String codePage = "";
