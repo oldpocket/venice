@@ -123,10 +123,6 @@ public class DatabaseManager {
 	private final static String DATE_INDEX_NAME = "date_index";
 	private final static String SYMBOL_INDEX_NAME = "symbol_index";
 
-	// Info table
-	public final static String LOOKUP_TABLE_NAME = "lookup";
-	public final static String NAME_FIELD = "name";
-
 	// Exchange rate table
 	public final static String EXCHANGE_TABLE_NAME = "exchange";
 
@@ -156,16 +152,6 @@ public class DatabaseManager {
 	public final static int ALERT_ENABLED_COLUMN = 10;
 	public final static int ALERT_DATESET_COLUMN = 11;
 
-	// column names for Share Table
-	public final static String ALERT_HOST_FIELD = "host";
-	public final static String ALERT_USER_FIELD = "username";
-	public final static String ALERT_SYMBOL_FIELD = "symbol";
-	public final static String ALERT_START_DATE_FIELD = "start_date";
-	public final static String ALERT_END_DATE_FIELD = "end_date";
-	public final static String ALERT_TARGET_FIELD = "target";
-	public final static String ALERT_BOUND_TYPE_FIELD = "bound_type";
-	public final static String ALERT_TARGET_TYPE_FIELD = "target_type";
-	public final static String ALERT_ENABLED_FIELD = "enabled";
 
 	// Maximum size of Gondola expression in alert
 	// On default mysql, max key len = 1000 bytes
@@ -193,8 +179,6 @@ public class DatabaseManager {
 	// Fields for internal mode
 	private String fileName;
 
-	// Fields for samples mode
-	private IEODQuoteFilter filter;
 	private List fileURLs;
 
 	// HashMap containing queries read from sql library
@@ -309,125 +293,6 @@ public class DatabaseManager {
 		return true;
 	}
 
-	// This function creates a new thread that monitors the current thread
-	// for the interrupt call. If the current thread is interrupted it
-	// will cancel the given SQL statement. If cancelOnInterrupt() is called,
-	// once the SQL statement has finisehd, you should make sure the
-	// thread is terminated by calling "interrupt" on the returned thread.
-	private Thread cancelOnInterrupt(final Statement statement) {
-		final Thread sqlThread = Thread.currentThread();
-
-		Thread thread = new Thread(new Runnable() {
-			public void run() {
-				Thread currentThread = Thread.currentThread();
-
-				while (true) {
-
-					try {
-						Thread.sleep(1000); // 1s
-					} catch (InterruptedException e) {
-						break;
-					}
-
-					if (currentThread.isInterrupted())
-						break;
-
-					if (sqlThread.isInterrupted()) {
-						try {
-							statement.cancel();
-						} catch (SQLException e) {
-							// It's not a big deal if we can't cancel it
-						}
-						break;
-					}
-				}
-			}
-		});
-
-		thread.start();
-		return thread;
-	}
-
-	// Creates an SQL statement that will return all the quotes in the given
-	// quote range.
-	private String buildSQLString(EODQuoteRange quoteRange) {
-		//
-		// 1. Create select line
-		//
-
-		String queryString = "SELECT * FROM " + SHARE_TABLE_NAME + " WHERE ";
-
-		//
-		// 2. Filter select by symbols we are looking for
-		//
-
-		String filterString = new String("");
-
-		if (quoteRange.getType() == EODQuoteRange.GIVEN_SYMBOLS) {
-			List symbols = quoteRange.getAllSymbols();
-
-			if (symbols.size() == 1) {
-				Symbol symbol = (Symbol) symbols.get(0);
-
-				filterString = filterString.concat(SYMBOL_FIELD + " = '" + symbol + "' ");
-			} else {
-				assert symbols.size() > 1;
-
-				filterString = filterString.concat(SYMBOL_FIELD + " IN (");
-				Iterator iterator = symbols.iterator();
-
-				while (iterator.hasNext()) {
-					Symbol symbol = (Symbol) iterator.next();
-
-					filterString = filterString.concat("'" + symbol + "'");
-
-					if (iterator.hasNext())
-						filterString = filterString.concat(", ");
-				}
-
-				filterString = filterString.concat(") ");
-			}
-		} else if (quoteRange.getType() == EODQuoteRange.ALL_SYMBOLS) {
-			// nothing to do
-		} else if (quoteRange.getType() == EODQuoteRange.ALL_ORDINARIES) {
-			filterString = filterString
-					.concat("LENGTH(" + SYMBOL_FIELD + ") = 3 AND " + left(SYMBOL_FIELD, 1) + " != 'X' ");
-		} else {
-			assert quoteRange.getType() == EODQuoteRange.MARKET_INDICES;
-
-			filterString = filterString
-					.concat("LENGTH(" + SYMBOL_FIELD + ") = 3 AND " + left(SYMBOL_FIELD, 1) + " = 'X' ");
-		}
-
-		//
-		// 3. Filter select by date range
-		//
-
-		// No dates in quote range, mean load quotes for all dates in the database
-		if (quoteRange.getFirstDate() == null) {
-			// nothing to do
-		}
-
-		// If they are the same its only one day
-		else if (quoteRange.getFirstDate().equals(quoteRange.getLastDate())) {
-			if (filterString.length() > 0)
-				filterString = filterString.concat("AND ");
-
-			filterString = filterString.concat(DATE_FIELD + " = '" + toSQLDateString(quoteRange.getFirstDate()) + "' ");
-		}
-
-		// Otherwise check within a range of dates
-		else {
-			if (filterString.length() > 0)
-				filterString = filterString.concat("AND ");
-
-			filterString = filterString.concat(DATE_FIELD + " >= '" + toSQLDateString(quoteRange.getFirstDate())
-					+ "' AND " + DATE_FIELD + " <= '" + toSQLDateString(quoteRange.getLastDate()) + "' ");
-		}
-
-		return queryString.concat(filterString);
-	}
-
 	/**
 	 * Create the share table.
 	 *
@@ -454,13 +319,6 @@ public class DatabaseManager {
 			statement.executeUpdate(
 					"CREATE INDEX " + SYMBOL_INDEX_NAME + " ON " + SHARE_TABLE_NAME + " (" + SYMBOL_FIELD + ")");
 
-			// Create the lookup table.
-			// statement.executeUpdate("CREATE " + getTableType() + " TABLE " +
-			// LOOKUP_TABLE_NAME + " (" +
-			// SYMBOL_FIELD + " VARCHAR(" + Symbol.MAXIMUM_SYMBOL_LENGTH +
-			// ") NOT NULL, " +
-			// NAME_FIELD + " VARCHAR(100), " +
-			// "PRIMARY KEY(" + SYMBOL_FIELD + "))");
 			success = true;
 		} catch (SQLException e) {
 			// Since hypersonic won't let us check if the table is already created,
@@ -544,9 +402,9 @@ public class DatabaseManager {
 	}
 
 	/**
-	 * Create the share table.
+	 * Create the alert tables.
 	 *
-	 * @return <code>true</code> iff this function was successful.
+	 * @return <code>true</code> if this function was successful.
 	 */
 
 	/*
@@ -569,7 +427,6 @@ public class DatabaseManager {
 	 * the fact that the user set a price alert, not an expression alert.
 	 * 
 	 */
-
 	private boolean createAlertTables() {
 		boolean success = false;
 
@@ -593,33 +450,6 @@ public class DatabaseManager {
 			}
 		}
 		return success;
-	}
-
-	public String addField(String field, String type, boolean last) {
-		String rv = (last) ? field + " " + type : field + " " + type + ",";
-		return rv;
-	}
-
-	public String addField(String field, String type) {
-		return addField(field, type, false);
-	}
-
-	public String addField(String field, boolean last) {
-		String rv = (last) ? field + " " : field + ",";
-		return rv;
-	}
-
-	public String addField(String field) {
-		return addField(field, false);
-	}
-
-	public String addQuotedField(String field, boolean last) {
-		String rv = (last) ? "'" + field + "' " : "'" + field + "',";
-		return rv;
-	}
-
-	public String addQuotedField(String field) {
-		return addQuotedField(field, false);
 	}
 
 	// Return true if the tables were created successfully
@@ -694,7 +524,6 @@ public class DatabaseManager {
 	 * close them to free up the resources. Although they will be eventually
 	 * reclaimed when Venice closes, running out of cursors is a risk.
 	 */
-
 	public void queryCleanup(String transactionName) throws SQLException {
 		List statementList = (List) transactionResourcesMap.get(transactionName);
 		if (statementList != null) {
@@ -833,7 +662,6 @@ public class DatabaseManager {
 	 *
 	 *         i.e. to insert or update two rows requires two SQL statements.
 	 */
-
 	public boolean supportForSingleRowUpdatesOnly() {
 		return (software == HSQLDB_SOFTWARE) ? true : false;
 	}
@@ -842,27 +670,9 @@ public class DatabaseManager {
 	 * @return true if the database supports transactions .
 	 *
 	 */
-
 	// Don't know yet if HSQLDB supports transactions
 	public boolean supportForTransactions() {
 		return true;
-	}
-
-	private String buildTransactionString(List queries) {
-		String queryString;
-		if (supportForTransactions()) {
-			queryString = "BEGIN;";
-		} else {
-			queryString = "";
-		}
-
-		Iterator iterator = queries.iterator();
-		while (iterator.hasNext()) {
-			String query = (String) iterator.next();
-			queryString += query;
-		}
-		queryString += "COMMIT;";
-		return queryString;
 	}
 
 	public void executeUpdateTransaction(String transactionName, List queries) throws SQLException {

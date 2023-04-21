@@ -34,22 +34,6 @@ import nz.org.venice.util.TradingDate;
 public interface IQuoteSource {
 
 	/**
-	 * Returns the company name associated with the given symbol.
-	 *
-	 * @param symbol the stock symbol
-	 * @return the company name
-	 */
-	public String getSymbolName(Symbol symbol);
-
-	/**
-	 * Returns the symbol associated with the given company.
-	 *
-	 * @param partialCompanyName a partial company name
-	 * @return the company symbol
-	 */
-	public Symbol getSymbol(String partialCompanyName);
-
-	/**
 	 * Returns whether we have any quotes for the given symbol.
 	 *
 	 * @param symbol the symbol we are searching for
