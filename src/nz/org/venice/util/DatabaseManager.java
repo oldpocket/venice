@@ -88,19 +88,16 @@ public class DatabaseManager {
 
 	// MySQL driver info
 	public final static String MYSQL_SOFTWARE = "mysql";
-	
 	// MySQL driver info
 	public final static String MARIADB_SOFTWARE = "mariadb";
-
 	// PostgreSQL driver info
 	public final static String POSTGRESQL_SOFTWARE = "postgresql";
-
 	// Hypersonic SQL driver info
 	public final static String HSQLDB_SOFTWARE = "hsql";
 
+	
 	// Shares table
 	public final static String SHARE_TABLE_NAME = "shares";
-
 	// Column names for Share Table
 	public final static String DATE_FIELD = "date";
 	public final static String SYMBOL_FIELD = "symbol";
@@ -109,16 +106,6 @@ public class DatabaseManager {
 	public final static String DAY_HIGH_FIELD = "high";
 	public final static String DAY_LOW_FIELD = "low";
 	public final static String DAY_VOLUME_FIELD = "volume";
-
-	// Column numbers for Share Table
-	public final static int DATE_COLUMN = 1;
-	public final static int SYMBOL_COLUMN = 2;
-	public final static int DAY_OPEN_COLUMN = 3;
-	public final static int DAY_CLOSE_COLUMN = 4;
-	public final static int DAY_HIGH_COLUMN = 5;
-	public final static int DAY_LOW_COLUMN = 6;
-	public final static int DAY_VOLUME_COLUMN = 7;
-
 	// Shares indices
 	private final static String DATE_INDEX_NAME = "date_index";
 	private final static String SYMBOL_INDEX_NAME = "symbol_index";
@@ -127,7 +114,6 @@ public class DatabaseManager {
 	public final static String EXCHANGE_TABLE_NAME = "exchange";
 
 	// Column names for Exchange Table
-	// DATE_FIELD
 	public final static String SOURCE_CURRENCY_FIELD = "source_currency";
 	public final static String DESTINATION_CURRENCY_FIELD = "destination_currency";
 	public final static String EXCHANGE_RATE_FIELD = "exchange_rate";
@@ -138,38 +124,44 @@ public class DatabaseManager {
 	public final static String GONDOLA_ALERT_TABLE_NAME = "alert_Gondola_targets";
 	public final static String START_DATE_ALERT_TABLE_NAME = "alert_start_dates";
 	public final static String END_DATE_ALERT_TABLE_NAME = "alert_end_dates";
+	// Column names for get all Alerts query
+	public final static String ALERT_UUID_COLUMN = "id";
+	public final static String ALERT_HOST_COLUMN = "host";
+	public final static String ALERT_USER_COLUMN = "username";
+	public final static String ALERT_SYMBOL_COLUMN = "symbol";
+	public final static String ALERT_START_DATE_COLUMN = "start_date";
+	public final static String ALERT_END_DATE_COLUMN = "no enddate";
+	public final static String ALERT_TARGET_COLUMN = "target";
+	public final static String ALERT_BOUND_TYPE_COLUMN = "boundType";
+	public final static String ALERT_TARGET_TYPE_COLUMN = "field";
+	public final static String ALERT_ENABLED_COLUMN = "enabled";
+	public final static String ALERT_DATESET_COLUMN = "date_set";
 
-	// Column numbers for get all Alerts query
-	public final static int ALERT_UUID_COLUMN = 1;
-	public final static int ALERT_HOST_COLUMN = 2;
-	public final static int ALERT_USER_COLUMN = 3;
-	public final static int ALERT_SYMBOL_COLUMN = 4;
-	public final static int ALERT_START_DATE_COLUMN = 5;
-	public final static int ALERT_END_DATE_COLUMN = 6;
-	public final static int ALERT_TARGET_COLUMN = 7;
-	public final static int ALERT_BOUND_TYPE_COLUMN = 8;
-	public final static int ALERT_TARGET_TYPE_COLUMN = 9;
-	public final static int ALERT_ENABLED_COLUMN = 10;
-	public final static int ALERT_DATESET_COLUMN = 11;
+	// ShareMetadata Table
+	public final static String SHARES_METADATA_TABLE_NAME = "shares_metadata"; 
+	// Column names for shares metadata table
+	public final static String METADATA_SYMBOL = "symbol";
+	public final static String METADATA_PREFIX = "prefix";
+	public final static String METADATA_POSFIX = "posfix";
+	public final static String METADATA_TYPE = "type";
+	public final static String METADATA_NAME = "name";
+	public final static String METADATA_SYNC_ID = "sync_intra_day";
 
-
+	
 	// Maximum size of Gondola expression in alert
 	// On default mysql, max key len = 1000 bytes
 	// After symbol, dates, and types we have 960 bytes left.
 	// Unix username max is 255, IIRC.
-
 	public final static int ALERT_MAX_TARGET_EXP_LEN = 450;
 	public final static int ALERT_MAX_HOST_LEN = 255;
 	public final static int ALERT_MAX_USER_LEN = 255;
 
 	// Database details
 	private int mode;
-
 	private String software;
 	private String driver;
 
 	// Fields for external mode
-
 	private String host;
 	private String port;
 	private String database;
@@ -178,14 +170,13 @@ public class DatabaseManager {
 
 	// Fields for internal mode
 	private String fileName;
-
 	private List fileURLs;
 
 	// HashMap containing queries read from sql library
 	private HashMap transactionMap;
 
 	// Map containing the db resources used by queries in the above map
-	private HashMap transactionResourcesMap;
+	 private HashMap transactionResourcesMap;
 
 	/**
 	 * Creates a new database connection.
@@ -452,6 +443,36 @@ public class DatabaseManager {
 		return success;
 	}
 
+	/**
+	 * Create the table for the shares metadata information.
+	 *
+	 * @return <code>true</code> if this function was successful.
+	 */
+	private boolean createSharesMetadataTable() {
+		boolean success = false;
+
+		try {
+			// Create the shares table.
+			success = connect();
+
+			if (success) {
+				final String queryLabel = "createTableMetadata";
+				List queries = (List) transactionMap.get(queryLabel);
+				executeUpdateTransaction(queryLabel, queries);
+				success = true;
+			}
+		} catch (SQLException e) {
+			// Since hypersonic won't let us check if the table is already created,
+			// we need to ignore the inevitable error about the table already being present.
+			if (software != HSQLDB_SOFTWARE)
+				DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
+			else {
+				success = true;
+			}
+		}
+		return success;
+	}
+	
 	// Return true if the tables were created successfully
 	// or if they already exist.
 	private boolean createTables() {
@@ -461,6 +482,7 @@ public class DatabaseManager {
 			boolean foundShareTable = false;
 			boolean foundExchangeTable = false;
 			boolean foundAlertTables = false;
+			boolean foundShareMetadataTable = false;
 
 			// Using a HashMap instead of adding four extra booleans
 			// to track all these tables. As they are found, they are removed
@@ -489,6 +511,9 @@ public class DatabaseManager {
 
 					if (traverseTables.equalsIgnoreCase(EXCHANGE_TABLE_NAME))
 						foundExchangeTable = true;
+					
+					if (traverseTables.equalsIgnoreCase(SHARES_METADATA_TABLE_NAME))
+						foundShareMetadataTable = true;
 
 					// Remove the table from the list of alert tables to
 					// find.
@@ -509,6 +534,8 @@ public class DatabaseManager {
 				success = createExchangeTable();
 			if (!foundAlertTables && success)
 				success = createAlertTables();
+			if (!foundShareMetadataTable && success)
+				success = createSharesMetadataTable();
 		} catch (SQLException e) {
 			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
 			success = false;

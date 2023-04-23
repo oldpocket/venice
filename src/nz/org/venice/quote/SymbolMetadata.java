@@ -32,27 +32,56 @@
 
 package nz.org.venice.quote;
 
+
+
 public class SymbolMetadata {
+	
+	public enum SymbolType {
+		EQUITY,
+		CRYPTO,
+		INDEX;
+	}
 
 	private final Symbol symbol;
+	private final String prefix;
+	private final String posfix;
+	private final SymbolType type;
 	private final String name;
-	private final boolean index;
+	private final boolean sync_intra_day;
 
 	/**
 	 * Construct a new index definition.
 	 * 
-	 * @param symbol The symbol (e.g. 'ASX', or 'DAX')
-	 * @param name   The name of the index (e.g. Australian Stock Exchange)
-	 * @param index  The optional location or top level index (ie NASDAQ, the ASX)
+	 * @param symbol  The symbol (e.g. 'BVSP', or 'PETR4')
+	 * @param prefix  Prefix of the symbol
+	 * @param posfix  Posfix of the symbol (e.g. '.SA')
+	 * @param type	  The type of the symbol (equity, crypto, index)
+	 * @param name    The name of the company or index related with the symbol
+	 * @param sync_id True if the symbol is synchronized during intra-day
 	 */
-
-	public SymbolMetadata(Symbol symbol, String name, boolean index) {
+	public SymbolMetadata(Symbol symbol, String prefix, String posfix, 
+			SymbolType type, String name, boolean sync_id) {
 		this.symbol = symbol;
+		this.prefix = prefix;
+		this.posfix = posfix;
+		this.type = type;
 		this.name = name;
-		this.index = index;
+		this.sync_intra_day = sync_id;
 	}
 
-	public SymbolMetadata(String symbolString, String name, boolean index) {
+	/**
+	 * Construct a new index definition.
+	 * 
+	 * @param symbolString  The symbol in a string format to search for
+	 * @param prefix  		Prefix of the symbol
+	 * @param posfix  		Posfix of the symbol (e.g. '.SA')
+	 * @param type	  		The type of the symbol (equity, crypto, index)
+	 * @param name    		The name of the company or index related with the symbol
+	 * @param sync_id 		True if the symbol is synchronized during intra-day
+	 */
+	public SymbolMetadata(String symbolString, String prefix, String posfix, 
+			SymbolType type, String name, boolean sync_id) {
+		
 		Symbol newSymbol = null;
 		try {
 			newSymbol = Symbol.find(symbolString);
@@ -61,43 +90,86 @@ public class SymbolMetadata {
 		} finally {
 
 		}
+		
 		this.symbol = newSymbol;
+		this.prefix = prefix;
+		this.posfix = posfix;
+		this.type = type;
 		this.name = name;
-		this.index = index;
+		this.sync_intra_day = sync_id;
+		
 	}
 
+	/**
+	 * Return prefix from the symbol.
+	 * 
+	 * @return prefix string
+	 */
+	public String getPrefix() {
+		return prefix;
+	}
+
+	/**
+	 * Return posfix from the symbol.
+	 * 
+	 * @return posfix string
+	 */
+	public String getPosfix() {
+		return posfix;
+	}
+	
 	/**
 	 * Return the symbol.
 	 * 
 	 * @return the symbol
 	 */
-
 	public Symbol getSymbol() {
 		return symbol;
 	}
-
+	
 	/**
-	 * Return the name of the index.
+	 * Return the name of the company or index.
 	 * 
 	 * @return name
 	 */
-
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * Return isIndex.
+	 * Return if this symbol is a INDEX
 	 * 
 	 * @return true if the symbol is an index.
 	 */
-
 	public boolean isIndex() {
-		return index;
+		return type == SymbolType.INDEX;
 	}
 
+	/**
+	 * Return the type of the symbol.
+	 * 
+	 * @return true if the symbol is an index.
+	 */
+	public SymbolType getType () {
+		return type;
+	}
+	
+	/**
+	 * Return if the symbol should be synchronized during intra-day
+	 * 
+	 * @return true if the symbol is an index.
+	 */
+	public boolean syncIntraDay() {
+		return sync_intra_day;
+	}
+	
+	/**
+	 * Return the full name of the symbol, with pre and posfix.
+	 * 
+	 * @return true if the symbol is an index.
+	 */
 	public String toString() {
-		return symbol.toString() + "," + name + "," + index;
+		return prefix.toString() + symbol.toString() + posfix.toString();
 	}
 
 }

@@ -88,17 +88,6 @@ public interface IQuoteSource {
 	public boolean isMarketIndex(Symbol symbol);
 
 	/**
-	 * Return the advance/decline for the given date. This returns the number of all
-	 * ordinary stocks that rose (day close > day open) - the number of all ordinary
-	 * stocks that fell.
-	 *
-	 * @param date the date
-	 * @return the difference between the number of advances and declines for date
-	 * @exception throw MissingQuoteException if the date isn't in the source
-	 */
-	public int getAdvanceDecline(TradingDate date) throws MissingQuoteException;
-
-	/**
 	 * Return the advance/decline for the given date range. This returns the number
 	 * of all ordinary stocks that rose (day close > day open) - the number of all
 	 * ordinary stocks that fell.

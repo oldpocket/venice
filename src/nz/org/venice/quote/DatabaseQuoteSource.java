@@ -73,12 +73,6 @@ public class DatabaseQuoteSource implements IQuoteSource {
 	private IEODQuoteFilter filter;
 	private List fileURLs;
 
-	// Column numbers
-	// DATE_COLUMN
-	// SOURCE_CURRENCY_COLUMN
-	// DESTINATION_CURRENCY_COLUMN
-	private final static int EXCHANGE_RATE_COLUMN = 4;
-
 	/**
 	 * Creates a new quote source to connect to an external database.
 	 *
@@ -291,13 +285,13 @@ public class DatabaseQuoteSource implements IQuoteSource {
 					EODQuoteCache quoteCache = EODQuoteCache.getInstance();
 
 					while (RS.next()) {
-						quoteCache.load(Symbol.find(RS.getString(DatabaseManager.SYMBOL_COLUMN).trim()),
-								new TradingDate(RS.getDate(DatabaseManager.DATE_COLUMN)),
-								RS.getLong(DatabaseManager.DAY_VOLUME_COLUMN),
-								RS.getFloat(DatabaseManager.DAY_LOW_COLUMN),
-								RS.getFloat(DatabaseManager.DAY_HIGH_COLUMN),
-								RS.getFloat(DatabaseManager.DAY_OPEN_COLUMN),
-								RS.getFloat(DatabaseManager.DAY_CLOSE_COLUMN));
+						quoteCache.load(Symbol.find(RS.getString(DatabaseManager.SYMBOL_FIELD).trim()),
+								new TradingDate(RS.getDate(DatabaseManager.DATE_FIELD)),
+								RS.getLong(DatabaseManager.DAY_VOLUME_FIELD),
+								RS.getFloat(DatabaseManager.DAY_LOW_FIELD),
+								RS.getFloat(DatabaseManager.DAY_HIGH_FIELD),
+								RS.getFloat(DatabaseManager.DAY_OPEN_FIELD),
+								RS.getFloat(DatabaseManager.DAY_CLOSE_FIELD));
 					}
 				}
 
@@ -649,81 +643,6 @@ public class DatabaseQuoteSource implements IQuoteSource {
 	 * ordinary stocks that rose (day close > day open) - the number of all ordinary
 	 * stocks that fell.
 	 *
-	 * @param date the date
-	 * @exception throws MissingQuoteException if the date wasn't in the source
-	 */
-	public int getAdvanceDecline(TradingDate date) throws MissingQuoteException {
-		if (!manager.getConnection())
-			return 0;
-
-		try {
-			//
-			// First get number of stocks where close > open
-			//
-
-			Statement statement = manager.createStatement();
-
-			String query = new String("SELECT COUNT(*) FROM " + DatabaseManager.SHARE_TABLE_NAME + " WHERE "
-					+ DatabaseManager.DATE_FIELD + " = '" + manager.toSQLDateString(date) + "' AND "
-					+ DatabaseManager.DAY_CLOSE_FIELD + " > " + DatabaseManager.DAY_OPEN_FIELD + " AND "
-					+ manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " != '^' ");
-
-			ResultSet RS = statement.executeQuery(query);
-			boolean isDatePresent = RS.next();
-			int advanceDecline = 0;
-
-			if (isDatePresent) {
-				advanceDecline = RS.getInt(1);
-				// Clean up after ourselves
-				RS.close();
-				statement.close();
-			} else {
-				// Clean up after ourselves
-				RS.close();
-				statement.close();
-
-				throw MissingQuoteException.getInstance();
-			}
-
-			//
-			// Now get number of stocks where close < open
-			//
-
-			statement = manager.createStatement();
-
-			query = new String("SELECT COUNT(*) FROM " + DatabaseManager.SHARE_TABLE_NAME + " WHERE "
-					+ DatabaseManager.DATE_FIELD + " = '" + manager.toSQLDateString(date) + "' AND "
-					+ DatabaseManager.DAY_CLOSE_FIELD + " < " + DatabaseManager.DAY_OPEN_FIELD + " AND "
-					+ manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " != '^' ");
-			RS = statement.executeQuery(query);
-			isDatePresent = RS.next();
-
-			if (isDatePresent) {
-				advanceDecline -= RS.getInt(1);
-				// Clean up after ourselves
-				RS.close();
-				statement.close();
-			} else {
-				// Clean up after ourselves
-				RS.close();
-				statement.close();
-
-				// Shouldn't happen!
-				assert false;
-			}
-
-			return advanceDecline;
-		} catch (SQLException e) {
-			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
-			return 0;
-		}
-	}
-
-	/**
-	 * Return the advance/decline for the given date. This returns the number of all
-	 * ordinary stocks that rose (day close > day open) - the number of all ordinary
-	 * stocks that fell.
-	 *
 	 * @param firstDate the first date in the range
 	 * @param lastDate  the last date in the range
 	 * @exception throw MissingQuoteException if none of the dates are in the source
@@ -813,118 +732,6 @@ public class DatabaseQuoteSource implements IQuoteSource {
 
 			return null;
 		} finally {
-		}
-	}
-
-	/**
-	 * Return the advance/decline for the given date. This returns the number of all
-	 * ordinary stocks that rose (day close > day open) - the number of all ordinary
-	 * stocks that fell.
-	 *
-	 * @param firstDate the first date in the range
-	 * @param lastDate  the last date in the range
-	 * @exception throw MissingQuoteException if none of the dates are in the source
-	 */
-	public HashMap getAdvanceDecline_oldversion(TradingDate firstDate, TradingDate lastDate)
-			throws MissingQuoteException {
-
-		if (!manager.getConnection())
-			return null;
-
-		try {
-			//
-			// First get number of stocks where close > open
-			//
-
-			Statement statement = manager.createStatement();
-
-			String query = new String("SELECT COUNT(*), date FROM " + DatabaseManager.SHARE_TABLE_NAME + " WHERE "
-					+ DatabaseManager.DATE_FIELD + " >= '" + manager.toSQLDateString(firstDate) + "' AND "
-					+ DatabaseManager.DATE_FIELD + " <= '" + manager.toSQLDateString(lastDate) + "' AND "
-					+ DatabaseManager.DAY_CLOSE_FIELD + " > " + DatabaseManager.DAY_OPEN_FIELD + " AND "
-					+ manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " != '^' GROUP BY " + DatabaseManager.DATE_FIELD
-					+ " ORDER BY " + DatabaseManager.DATE_FIELD + " ASC ");
-
-			ResultSet RS = statement.executeQuery(query);
-			boolean areDatesPresent = false;
-			HashMap advanceDeclineMap = new HashMap();
-			TradingDate firstDateFromQuery = (TradingDate) lastDate.clone();
-
-			boolean firstRow = true;
-			while (RS.next()) {
-				areDatesPresent = true;
-				int advanceDecline = 0;
-				TradingDate keyDate = new TradingDate(RS.getDate(2));
-				advanceDeclineMap.put(keyDate, new Integer(RS.getInt(1)));
-
-				if (firstRow) {
-					firstRow = false;
-					firstDateFromQuery = keyDate;
-				}
-			}
-
-			// Clean up after ourselves
-			RS.close();
-			statement.close();
-
-			if (!areDatesPresent) {
-				throw MissingQuoteException.getInstance();
-			}
-
-			//
-			// Now get number of stocks where close < open
-			//
-
-			statement = manager.createStatement();
-
-			query = new String("SELECT COUNT(*), date FROM " + DatabaseManager.SHARE_TABLE_NAME + " WHERE "
-					+ DatabaseManager.DATE_FIELD + " >= '" + manager.toSQLDateString(firstDate) + "' AND "
-					+ DatabaseManager.DATE_FIELD + " <= '" + manager.toSQLDateString(lastDate) + "' AND "
-					+ DatabaseManager.DAY_CLOSE_FIELD + " < " + DatabaseManager.DAY_OPEN_FIELD + " AND "
-					+ manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " != '^' GROUP BY " + DatabaseManager.DATE_FIELD
-					+ " ORDER BY " + DatabaseManager.DATE_FIELD + " ASC ");
-
-			RS = statement.executeQuery(query);
-			areDatesPresent = false;
-
-			firstRow = true;
-			firstDateFromQuery = (TradingDate) lastDate.clone();
-			while (RS.next()) {
-				areDatesPresent = true;
-				TradingDate keyDate = new TradingDate(RS.getDate(2));
-				Integer advanceVal = (Integer) (advanceDeclineMap.get(keyDate));
-
-				int advanceValue = (advanceVal != null) ? advanceVal.intValue() : 0;
-				advanceDeclineMap.put(keyDate, new Integer(advanceValue - RS.getInt(1)));
-				if (firstRow && !firstDateFromQuery.before(keyDate)) {
-					firstRow = false;
-					firstDateFromQuery = keyDate;
-				}
-			}
-
-			// Backfill map with 0 for all dates
-			// between firstDate and firstDateFromQuery
-
-			while (firstDate.before(firstDateFromQuery)) {
-				// Decrement the date first, otherwise the first
-				// data value will be zeroed.
-				firstDateFromQuery = firstDateFromQuery.previous(1);
-				advanceDeclineMap.put(firstDateFromQuery, new Integer(0));
-			}
-
-			// Clean up after ourselves
-			RS.close();
-			statement.close();
-
-			if (!areDatesPresent) {
-				// Shouldn't happen!
-				assert false;
-			}
-
-			return advanceDeclineMap;
-		} catch (SQLException e) {
-			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
-			return null;
 		}
 	}
 
@@ -1112,8 +919,8 @@ public class DatabaseQuoteSource implements IQuoteSource {
 			ResultSet RS = statement.executeQuery(query);
 
 			while (RS.next())
-				list.add(new ExchangeRate(new TradingDate(RS.getDate(DatabaseManager.DATE_COLUMN)), sourceCurrency,
-						destinationCurrency, RS.getDouble(EXCHANGE_RATE_COLUMN)));
+				list.add(new ExchangeRate(new TradingDate(RS.getDate(DatabaseManager.DATE_FIELD)), sourceCurrency,
+						destinationCurrency, RS.getDouble(DatabaseManager.EXCHANGE_RATE_FIELD)));
 		} catch (SQLException e) {
 			DesktopManager.showErrorMessage(Locale.getString("ERROR_TALKING_TO_DATABASE", e.getMessage()));
 		}

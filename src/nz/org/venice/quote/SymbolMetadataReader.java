@@ -56,9 +56,8 @@ public class SymbolMetadataReader {
 				String nameString = getValue(n, "name");
 				String isIndexString = getValue(n, "isIndex");
 
-				SymbolMetadata data = new SymbolMetadata(symbolString, nameString,
-						new Boolean(isIndexString).booleanValue());
-				symbolsMetadata.add(data);
+				// SymbolMetadata data = new SymbolMetadata(symbolString, nameString, new Boolean(isIndexString).booleanValue());
+				// symbolsMetadata.add(data);
 			}
 		} catch (SAXException e) {
 			throw new IOException(e.getMessage());

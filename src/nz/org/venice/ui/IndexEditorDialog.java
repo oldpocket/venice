@@ -31,24 +31,32 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import nz.org.venice.main.CommandManager;
 import nz.org.venice.quote.SymbolMetadata;
+import nz.org.venice.quote.SymbolMetadata.SymbolType;
 import nz.org.venice.util.Locale;
 
 public class IndexEditorDialog extends JInternalFrame implements ActionListener, KeyListener {
 	private boolean okClicked = false;
 	private boolean wasCancelled = false;
 
-	private SymbolMetadata indexSymbol = null;
+	private SymbolMetadata symbolMetadata = null;
 
 	private JTextField symbolField;
+	private JTextField prefixField;
+	private JTextField posfixField;
+	private JComboBox typeCombo; 
 	private JTextField nameField;
+	private JCheckBox syncIDCheck;
 
 	private JButton okButton;
 	private JButton cancelButton;
@@ -59,10 +67,10 @@ public class IndexEditorDialog extends JInternalFrame implements ActionListener,
 		initialise();
 	}
 
-	public IndexEditorDialog(SymbolMetadata indexSymbolEdit) {
+	public IndexEditorDialog(SymbolMetadata symbolMetadataEdit) {
 		super();
 
-		indexSymbol = indexSymbolEdit;
+		symbolMetadata = symbolMetadataEdit;
 
 		initialise();
 	}
@@ -73,7 +81,7 @@ public class IndexEditorDialog extends JInternalFrame implements ActionListener,
 
 	public SymbolMetadata getIndexSymbol() {
 		assert okClicked == true;
-		return indexSymbol;
+		return symbolMetadata;
 	}
 
 	private void initialise() {
@@ -110,21 +118,39 @@ public class IndexEditorDialog extends JInternalFrame implements ActionListener,
 
 		panel.setLayout(layout);
 
-		String symbolText = (indexSymbol != null) ? indexSymbol.getSymbol().toString() : "";
-
+		String symbolText = (symbolMetadata != null) ? symbolMetadata.getSymbol().toString() : "";
 		symbolField = GridBagHelper.addTextRow(panel, Locale.getString("STOCK"), symbolText, layout, c, 8);
-
 		symbolField.addKeyListener(this);
+		if (symbolMetadata != null) symbolField.setEnabled(false);
 		symbolField.setToolTipText(Locale.getString("SYMBOL_FIELD_TOOLTIP"));
+		
+		String prefixText = (symbolMetadata != null) ? symbolMetadata.getPrefix() : "";
+		prefixField = GridBagHelper.addTextRow(panel, "prefix", prefixText, layout, c, 8);
+		prefixField.addKeyListener(this);
+		
+		String posfixText = (symbolMetadata != null) ? symbolMetadata.getPosfix() : "";
+		posfixField = GridBagHelper.addTextRow(panel, "posfix", posfixText, layout, c, 8);
+		posfixField.addKeyListener(this);
 
-		String nameText = (indexSymbol != null) ? indexSymbol.getName() : "";
-
+		SymbolType symbolType = (symbolMetadata != null) ? symbolMetadata.getType() : SymbolType.EQUITY;
+		Vector symbolTypes = new Vector();
+		symbolTypes.add(SymbolType.CRYPTO);
+		symbolTypes.add(SymbolType.EQUITY);
+		symbolTypes.add(SymbolType.INDEX);
+		typeCombo = GridBagHelper.addComboBox(panel, "type", symbolTypes, layout, c);
+		typeCombo.setSelectedItem(symbolType);
+		typeCombo.addKeyListener(this);
+		
+		String nameText = (symbolMetadata != null) ? symbolMetadata.getName() : "";
 		nameField = GridBagHelper.addTextRow(panel, Locale.getString("NAME"), nameText, layout, c, 8);
-
 		nameField.setToolTipText(Locale.getString("INDEX_NAME_TOOLTIP"));
+		nameField.addKeyListener(this);
+
+		boolean syncCheckValue = (symbolMetadata != null) ? symbolMetadata.syncIntraDay() : false;
+		syncIDCheck = GridBagHelper.addCheckBoxRow(panel, "sync intraday", syncCheckValue, layout, c);
+		syncIDCheck.addKeyListener(this);
 
 		helpButton = GridBagHelper.addHelpButtonRow(panel, Locale.getString("INDEX_SYMBOLS_TITLE"), layout, c);
-
 		helpButton.addActionListener(this);
 
 		return panel;
@@ -132,12 +158,12 @@ public class IndexEditorDialog extends JInternalFrame implements ActionListener,
 
 	private JPanel getButtonPanel() {
 		JPanel panel = new JPanel();
-		// panel.setLayout(new BorderLayout());
 
 		okButton = new JButton(Locale.getString("OK"));
-		cancelButton = new JButton(Locale.getString("CANCEL"));
 		okButton.addActionListener(this);
 		okButton.setEnabled(false);
+
+		cancelButton = new JButton(Locale.getString("CANCEL"));
 		cancelButton.addActionListener(this);
 
 		panel.add(okButton);
@@ -149,7 +175,14 @@ public class IndexEditorDialog extends JInternalFrame implements ActionListener,
 	public void actionPerformed(ActionEvent e) {
 		boolean closeDialog = false;
 		if (e.getSource() == okButton) {
-			indexSymbol = new SymbolMetadata(symbolField.getText(), nameField.getText(), true);
+			
+			symbolMetadata = new SymbolMetadata(
+					symbolField.getText(), 
+					prefixField.getText(), 
+					posfixField.getText(),
+					(SymbolType)typeCombo.getSelectedItem(), 
+					nameField.getText(), 
+					syncIDCheck.isSelected());
 
 			okClicked = true;
 			closeDialog = true;

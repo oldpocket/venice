@@ -47,7 +47,6 @@ import javax.swing.JTable;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
-import nz.org.venice.quote.IQuoteSource;
 import nz.org.venice.quote.SymbolMetadata;
 import nz.org.venice.ui.AbstractTableModel;
 import nz.org.venice.ui.IndexEditorDialog;
@@ -69,9 +68,20 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 	private JButton editButton;
 
 	private static final int SYMBOL_COLUMN = 0;
-	private static final int NAME_COLUMN = 1;
+	private static final int PREFIX_COLUMN = 1;
+	private static final int POSFIX_COLUMN = 2;
+	private static final int TYPE_COLUMN = 3;
+	private static final int NAME_COLUMN = 4;
+	private static final int SYNC_ID_COLUMN = 5;
 
-	final String[] names = { Locale.getString("STOCK"), Locale.getString("NAME") };
+	final String[] names = { 
+			Locale.getString("STOCK"),
+			"prefix",
+			"posfix",
+			"type",
+			Locale.getString("NAME"),
+			"sync_id"
+			};
 
 	public IndexPreferencesPage(JDesktopPane desktop) {
 		this.desktop = desktop;
@@ -142,13 +152,6 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 
 		}
 
-		/*
-		 * SymbolMetadata is1 = new SymbolMetadata("XAO", "AU", true); SymbolMetadata
-		 * is2 = new SymbolMetadata("XAB", "AU", true); SymbolMetadata is3 = new
-		 * SymbolMetadata("XAC", "AU", true); indexSymbols = new java.util.ArrayList();
-		 * indexSymbols.add(is1); indexSymbols.add(is2); indexSymbols.add(is3);
-		 */
-
 		// Define the table model
 
 		tableModel = new AbstractTableModel() {
@@ -162,7 +165,7 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 			}
 
 			public boolean isCellEditable(int row, int col) {
-				return false;
+				return true;
 			}
 
 			public String getColumnName(int column) {
@@ -177,10 +180,17 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 				SymbolMetadata index = (SymbolMetadata) indexSymbols.get(row);
 				switch (col) {
 				case SYMBOL_COLUMN:
-					return index.getSymbol().toString();
-
+					return index.getSymbol();
+				case PREFIX_COLUMN:
+					return index.getPrefix();
+				case POSFIX_COLUMN:
+					return index.getPosfix();
+				case TYPE_COLUMN:
+					return index.getType().name();
 				case NAME_COLUMN:
 					return index.getName();
+				case SYNC_ID_COLUMN:
+					return index.syncIntraDay();
 
 				default:
 					assert false;
