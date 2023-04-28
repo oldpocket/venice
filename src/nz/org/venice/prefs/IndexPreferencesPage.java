@@ -145,9 +145,9 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 	 */
 	private JTable getIndexTable() {
 		// Set up the data
-		indexSymbols = new ArrayList();
+		//indexSymbols = new ArrayList();
 		try {
-			indexSymbols = PreferencesManager.getSymbolMetadata();
+			indexSymbols = PreferencesManager.getSymbolsMetadata();
 		} catch (PreferencesException e) {
 
 		}

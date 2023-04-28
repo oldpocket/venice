@@ -1,11 +1,15 @@
 Changes for Venice, 0.8 beta ??/??/??
 =========================================
+
+* Smalls refactor in classe names and packages organization
+* Added MariaDB support
+* New symbol metadata table to store the type of symbol and pre/pos fix values
 * A new generic web-service importer, in place of the Yahoo importer that don?t work anymore (Yahoo removed the API support)
 * Removed external libraries not being used, or changed for native solutions
 * Libraries still in use were updated to the last version
-* Removed weekend constraings, so we can work with crypto-currencies that work 24x7.
+* Removed weekend constraints, so we can work with crypto-currencies that work 24x7.
 * Fixed bugs (or not-updated code regarding Java and others updated libraries).
-* Overall code identation and remove of non used import statements.
+* Overall code indentation and remove of non used import statements.
 
 Changes for Venice, 0.752 beta 26/December/2018
 ===============================================

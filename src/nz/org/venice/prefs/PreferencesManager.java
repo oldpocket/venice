@@ -57,6 +57,8 @@ import nz.org.venice.table.WatchScreenParserException;
 import nz.org.venice.table.WatchScreenReader;
 import nz.org.venice.table.WatchScreenWriter;
 import nz.org.venice.util.Currency;
+import nz.org.venice.util.DatabaseAccessManager;
+import nz.org.venice.util.DatabaseManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
 import nz.org.venice.util.TradingDate;
@@ -225,8 +227,8 @@ public class PreferencesManager {
 	}
 
 	/**
-	 * Set that the user has been shown the GPL and has accepted it. The user will
-	 * not be bothered again until the next version.
+	 * Set that the user has been shown the GPL and has accepted it. The user
+	 * will not be bothered again until the next version.
 	 */
 	public static void putHasGPLAcceptance() {
 		Preferences node = getUserNode("/license");
@@ -273,7 +275,8 @@ public class PreferencesManager {
 		try {
 			String[] keys = prefs.keys();
 			for (int i = 0; i < keys.length; i++)
-				storedExpressions.add(new StoredExpression(keys[i], prefs.get(keys[i], "")));
+				storedExpressions.add(new StoredExpression(keys[i], 
+						prefs.get(keys[i], "")));
 		} catch (BackingStoreException e) {
 			// ignore
 		}
@@ -362,40 +365,56 @@ public class PreferencesManager {
 		}
 	}
 
-	public static List getSymbolMetadata() throws PreferencesException {
-		File symbolMetadataFile = new File(getSymbolMetadataHome(), "symbolMetadata.xml");
+	public static List<SymbolMetadata> getSymbolsMetadata() 
+			throws PreferencesException {
 
-		List symbolMetadata = null;
+		List<SymbolMetadata> symbolMetadata = null;
 
+		PreferencesManager.DatabasePreferences prefs = PreferencesManager.getDatabaseSettings();
+		String password = DatabaseAccessManager.getInstance().getPassword();
+		DatabaseManager dbm = new DatabaseManager(prefs.software, prefs.driver, 
+				prefs.host, prefs.port, prefs.database, prefs.username, password);
+
+		if (!dbm.getConnection()) {
+			return new ArrayList();
+		}
+		
+		final String queryLabel = "selectAllMetadata";
+		List queries = dbm.getQueries(queryLabel);
+		
 		try {
-			FileInputStream inputStream = new FileInputStream(symbolMetadataFile);
-			symbolMetadata = SymbolMetadataReader.read(inputStream);
-		} catch (IOException e) {
-			throw new PreferencesException(e.getMessage());
-		} catch (SecurityException e) {
+			symbolMetadata = dbm.executeQueryTransaction(queryLabel, queries);
+		} catch (Exception e) {
 			throw new PreferencesException(e.getMessage());
 		}
 		return symbolMetadata;
 	}
 
-	public static void putSymbolMetadata(List indexSymbols) throws PreferencesException {
+	public static void putSymbolMetadata(List<Symbol> indexSymbols) 
+			throws PreferencesException {
 
 		try {
-			File symbolMetadataFile = new File(getSymbolMetadataHome(), "symbolMetadata.xml");
-			FileOutputStream outputStream = new FileOutputStream(symbolMetadataFile);
-			SymbolMetadataWriter.write(indexSymbols, outputStream);
-			outputStream.close();
-		} catch (IOException e) {
+			// ToDo: atualizar no banco
+		} catch (Exception e) {
 			throw new PreferencesException(e.getMessage());
-		} catch (SecurityException e) {
-			throw new PreferencesException(e.getMessage());
+		}
+	}
+	
+	public static void deleteSymbolMetada(Symbol symbol) 
+			throws PreferencesException {
+
+		try {
+			// ToDo: remover no banco
+		} catch (Exception e) {
+			throw new PreferencesException(e.getMessage());		
 		}
 	}
 
 	public static boolean isMarketIndex(Symbol symbol) {
+		
 		try {
-			List symbolMetadata = getSymbolMetadata();
-			Iterator iterator = symbolMetadata.iterator();
+			List<SymbolMetadata> symbolMetadata = getSymbolsMetadata();
+			Iterator<SymbolMetadata> iterator = symbolMetadata.iterator();
 			while (iterator.hasNext()) {
 				SymbolMetadata data = (SymbolMetadata) iterator.next();
 				if (data.getSymbol().equals(symbol) && data.isIndex()) {

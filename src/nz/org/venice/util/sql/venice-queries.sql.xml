@@ -200,8 +200,7 @@ Place, Suite 330, Boston, MA  02111-1307  USA
 					NULL DEFAULT 0, PRIMARY KEY (symbol)); </query>
 			</transaction>
 			<transaction name='selectAllMetadata'>
-				<query>SELECT symbol, prefix, posfix, type, name, sync_intra_day 
-						FROM shares_metadata</query>
+				<query>SELECT symbol, prefix, posfix, type, name, sync_intra_day FROM shares_metadata</query>
 			</transaction>
 			<transaction name='selectMetadataForSymbol'>
 				<query>SELECT symbol, prefix, posfix, type, name, sync_intra_day 
