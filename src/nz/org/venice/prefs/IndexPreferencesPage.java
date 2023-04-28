@@ -34,7 +34,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -47,10 +49,12 @@ import javax.swing.JTable;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
+import nz.org.venice.alert.Alert;
 import nz.org.venice.quote.SymbolMetadata;
 import nz.org.venice.ui.AbstractTableModel;
 import nz.org.venice.ui.IndexEditorDialog;
 import nz.org.venice.util.Locale;
+import nz.org.venice.util.ObjectMapper;
 
 public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 
@@ -145,7 +149,6 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 	 */
 	private JTable getIndexTable() {
 		// Set up the data
-		//indexSymbols = new ArrayList();
 		try {
 			indexSymbols = PreferencesManager.getSymbolsMetadata();
 		} catch (PreferencesException e) {
@@ -175,7 +178,7 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 			public Class getColumnClass(int c) {
 				return getValueAt(0, c).getClass();
 			}
-
+			
 			public Object getValueAt(int row, int col) {
 				SymbolMetadata index = (SymbolMetadata) indexSymbols.get(row);
 				switch (col) {
