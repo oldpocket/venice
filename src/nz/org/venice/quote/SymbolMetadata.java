@@ -37,18 +37,33 @@ package nz.org.venice.quote;
 public class SymbolMetadata {
 	
 	public enum SymbolType {
-		EQUITY,
-		CRYPTO,
-		INDEX;
+		EQUITY("equity"),
+		CRYPTO("crypto"),
+		INDEX("index");
+		
+		private String type;
+		
+		SymbolType(String type) {
+			this.type = type;
+		}
+		
+		public String getType() {
+			return this.type;
+		}
 	}
 
-	private final Symbol symbol;
-	private final String prefix;
-	private final String posfix;
-	private final SymbolType type;
-	private final String name;
-	private final boolean sync_intra_day;
+	//private Symbol symbolObj;
+	private String symbol;
+	private String prefix;
+	private String posfix;
+	private SymbolType type;
+	private String name;
+	private Boolean sync_intra_day;
 
+	public SymbolMetadata() {
+		
+	}
+	
 	/**
 	 * Construct a new index definition.
 	 * 
@@ -61,14 +76,15 @@ public class SymbolMetadata {
 	 */
 	public SymbolMetadata(Symbol symbol, String prefix, String posfix, 
 			SymbolType type, String name, boolean sync_id) {
-		this.symbol = symbol;
+		//this.symbolObj = symbol;
+		this.symbol = this.symbol.toString();
 		this.prefix = prefix;
 		this.posfix = posfix;
 		this.type = type;
 		this.name = name;
 		this.sync_intra_day = sync_id;
 	}
-
+	
 	/**
 	 * Construct a new index definition.
 	 * 
@@ -82,16 +98,7 @@ public class SymbolMetadata {
 	public SymbolMetadata(String symbolString, String prefix, String posfix, 
 			SymbolType type, String name, boolean sync_id) {
 		
-		Symbol newSymbol = null;
-		try {
-			newSymbol = Symbol.find(symbolString);
-		} catch (SymbolFormatException sfe) {
-
-		} finally {
-
-		}
-		
-		this.symbol = newSymbol;
+		this.symbol = symbolString;
 		this.prefix = prefix;
 		this.posfix = posfix;
 		this.type = type;
@@ -124,7 +131,15 @@ public class SymbolMetadata {
 	 * @return the symbol
 	 */
 	public Symbol getSymbol() {
-		return symbol;
+		Symbol symbolObj = null;
+		try {
+			symbolObj = Symbol.find(symbol);
+		} catch (SymbolFormatException sfe) {
+
+		} finally {
+
+		}
+		return symbolObj;
 	}
 	
 	/**

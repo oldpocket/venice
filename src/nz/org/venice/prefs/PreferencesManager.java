@@ -25,7 +25,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -50,6 +55,7 @@ import nz.org.venice.prefs.settings.ModuleSettingsParserException;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.SymbolFormatException;
 import nz.org.venice.quote.SymbolMetadata;
+import nz.org.venice.quote.SymbolMetadata.SymbolType;
 import nz.org.venice.quote.SymbolMetadataReader;
 import nz.org.venice.quote.SymbolMetadataWriter;
 import nz.org.venice.table.WatchScreen;
@@ -61,6 +67,7 @@ import nz.org.venice.util.DatabaseAccessManager;
 import nz.org.venice.util.DatabaseManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
+import nz.org.venice.util.ResultSetMapper;
 import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.TradingDateFormatException;
 import nz.org.venice.util.TradingTime;
@@ -364,11 +371,11 @@ public class PreferencesManager {
 			// ignore
 		}
 	}
-
+	
 	public static List<SymbolMetadata> getSymbolsMetadata() 
 			throws PreferencesException {
 
-		List<SymbolMetadata> symbolMetadata = null;
+		List<SymbolMetadata> symbolMetadata = new ArrayList<>();
 
 		PreferencesManager.DatabasePreferences prefs = PreferencesManager.getDatabaseSettings();
 		String password = DatabaseAccessManager.getInstance().getPassword();
@@ -376,14 +383,21 @@ public class PreferencesManager {
 				prefs.host, prefs.port, prefs.database, prefs.username, password);
 
 		if (!dbm.getConnection()) {
-			return new ArrayList();
+			return new ArrayList<>();
 		}
 		
 		final String queryLabel = "selectAllMetadata";
-		List queries = dbm.getQueries(queryLabel);
+		List<String> queries = dbm.getQueries(queryLabel);
 		
 		try {
-			symbolMetadata = dbm.executeQueryTransaction(queryLabel, queries);
+			List results = dbm.executeQueryTransaction(queryLabel, queries);
+			
+			Iterator<ResultSet> iterator = results.iterator();
+			while (iterator.hasNext()) {
+				ResultSet RS = (ResultSet) iterator.next();
+				List <SymbolMetadata> sm = ResultSetMapper.convertSQLResultSetToObject(RS, SymbolMetadata.class);
+				symbolMetadata.addAll(sm);
+			}
 		} catch (Exception e) {
 			throw new PreferencesException(e.getMessage());
 		}

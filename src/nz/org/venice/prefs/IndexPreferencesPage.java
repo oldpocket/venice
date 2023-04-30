@@ -54,7 +54,6 @@ import nz.org.venice.quote.SymbolMetadata;
 import nz.org.venice.ui.AbstractTableModel;
 import nz.org.venice.ui.IndexEditorDialog;
 import nz.org.venice.util.Locale;
-import nz.org.venice.util.ObjectMapper;
 
 public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 
@@ -176,6 +175,9 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 			}
 
 			public Class getColumnClass(int c) {
+				if (getValueAt(0, c) == null) {
+					System.console().printf("texto");
+				}
 				return getValueAt(0, c).getClass();
 			}
 			
@@ -189,7 +191,7 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 				case POSFIX_COLUMN:
 					return index.getPosfix();
 				case TYPE_COLUMN:
-					return index.getType().name();
+					return index.getType();
 				case NAME_COLUMN:
 					return index.getName();
 				case SYNC_ID_COLUMN:
