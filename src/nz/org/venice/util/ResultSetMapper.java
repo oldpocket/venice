@@ -39,30 +39,38 @@ public class ResultSetMapper {
                 
                 try {
                     String value = resultSet.getString(name);
-                    Class type = field.getType();
-                    
-                    if (type == Boolean.class) {
-                    	Boolean b = !value.equals("0");
-                    	field.set(dto, b);
-                    } else if (value == null){
+                    if (value == null) {
                     	field.set(dto, null);
                     } else if(field.getType().isEnum()) {
                     	field.set(dto, Enum.valueOf((Class<Enum>) field.getType(), value.toUpperCase()));
                     } else {
-                    	//field.set(dto, field.getType().getConstructor(String.class).newInstance(value));
-                    	field.set(dto, field.getType().getConstructor(field.getType()).newInstance(value));
+                       	field.set(dto, convertInstanceOfObject(value, field.getType()));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
-
             list.add(dto);
-
         }
         return list;
     }
-
 	
+    private static <T> T convertInstanceOfObject(Object o, Class<T> clazz) {
+        try {
+        	if (clazz == Boolean.class)
+        		return clazz.cast(convertToBoolean(o.toString()));
+            return clazz.cast(o);
+        } catch(ClassCastException e) {
+            return null;
+        }
+    }
+    
+    private static boolean convertToBoolean(String value) {
+        boolean returnValue = false;
+        if ("1".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value) || 
+            "true".equalsIgnoreCase(value) || "on".equalsIgnoreCase(value))
+            returnValue = true;
+        return returnValue;
+    }
+    
 }

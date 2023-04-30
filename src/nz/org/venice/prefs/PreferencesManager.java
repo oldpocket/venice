@@ -375,7 +375,7 @@ public class PreferencesManager {
 	public static List<SymbolMetadata> getSymbolsMetadata() 
 			throws PreferencesException {
 
-		List<SymbolMetadata> symbolMetadata = new ArrayList<>();
+		List<SymbolMetadata> symbolsMetadata = new ArrayList<>();
 
 		PreferencesManager.DatabasePreferences prefs = PreferencesManager.getDatabaseSettings();
 		String password = DatabaseAccessManager.getInstance().getPassword();
@@ -396,12 +396,12 @@ public class PreferencesManager {
 			while (iterator.hasNext()) {
 				ResultSet RS = (ResultSet) iterator.next();
 				List <SymbolMetadata> sm = ResultSetMapper.convertSQLResultSetToObject(RS, SymbolMetadata.class);
-				symbolMetadata.addAll(sm);
+				symbolsMetadata.addAll(sm);
 			}
 		} catch (Exception e) {
 			throw new PreferencesException(e.getMessage());
 		}
-		return symbolMetadata;
+		return symbolsMetadata;
 	}
 
 	public static void putSymbolMetadata(List<Symbol> indexSymbols) 
