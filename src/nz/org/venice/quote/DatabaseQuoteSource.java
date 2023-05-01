@@ -355,7 +355,7 @@ public class DatabaseQuoteSource implements IQuoteSource {
 		// 1. Create select line
 		//
 
-		String queryString = "SELECT * FROM " + DatabaseManager.SHARE_TABLE_NAME + " WHERE ";
+		String queryString = "SELECT * FROM " + DatabaseManager.SHARE_TABLE_NAME + ", " + DatabaseManager.SHARES_METADATA_TABLE_NAME + " WHERE ";
 
 		//
 		// 2. Filter select by symbols we are looking for
@@ -390,21 +390,11 @@ public class DatabaseQuoteSource implements IQuoteSource {
 		} else if (quoteRange.getType() == EODQuoteRange.ALL_SYMBOLS) {
 			// nothing to do
 		} else if (quoteRange.getType() == EODQuoteRange.ALL_ORDINARIES) {
-			/*
-			 * ToDo: check against the Market Index configuration and return what is not
-			 * part of it. filterString = filterString.concat("LENGTH(" +
-			 * DatabaseManager.SYMBOL_FIELD + ") = 3 AND " +
-			 * manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " != 'X' ");
-			 */
+			filterString = filterString.concat(" shares.symbol = shares_metadata.symbol AND shares_metadata.type != 'INDEX' ");			 
+
 		} else {
 			assert quoteRange.getType() == EODQuoteRange.MARKET_INDICES;
-
-			/*
-			 * ToDo: need to check against the Market Index configuration and return only
-			 * this list filterString = filterString.concat("LENGTH(" +
-			 * DatabaseManager.SYMBOL_FIELD + ") = 3 AND " +
-			 * manager.left(DatabaseManager.SYMBOL_FIELD, 1) + " = 'X' ");
-			 */
+			filterString = filterString.concat(" shares.symbol = shares_metadata.symbol AND shares_metadata.type = 'INDEX' ");
 		}
 
 		//

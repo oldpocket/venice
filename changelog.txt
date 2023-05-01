@@ -1,6 +1,7 @@
 Changes for Venice, 0.8 beta ??/??/??
 =========================================
 
+* Removed constraints regarding AUX stock market, now the solution is totaly agnostic
 * Smalls refactor in classe names and packages organization
 * Added MariaDB support
 * New symbol metadata table to store the type of symbol and pre/pos fix values

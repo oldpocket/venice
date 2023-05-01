@@ -39,7 +39,7 @@ The interface would allow storage all types of Venice objects, including
 price data, equations, alerts, macros, preferences, index definitions etc.
 
 
-2. Be less ASX centric.
+[DONE] 2. Be less ASX centric.
 
 We may deprecate all ordinaries table entirely, or place it under a
 indeces menu.
