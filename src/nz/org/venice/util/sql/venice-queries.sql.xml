@@ -178,16 +178,16 @@ Place, Suite 330, Boston, MA  02111-1307  USA
 		</method>
 		<method name='getAdvanceDeclineDateRange'>
 			<transaction name='getAdvanceDecline'>
-				<query> SELECT COUNT(*), date FROM <parameter name='share_table' />
-					WHERE date &gt;= '<parameter name='firstDate' />' AND date
-					&lt;= '<parameter name='lastDate' />' AND close &gt; open
-					AND <parameter name='symbol_first_char' /> != '^' GROUP BY
-					date ORDER BY date ASC; </query>
-				<query> SELECT COUNT(*), date FROM <parameter name='share_table' />
-					WHERE date &gt;= '<parameter name='firstDate' />' AND date
-					&lt;= '<parameter name='lastDate' />' AND close &lt; open
-					AND <parameter name='symbol_first_char' /> != '^' GROUP BY
-					date ORDER BY date ASC; </query>
+				<query> SELECT COUNT(*), s.date FROM <parameter name='share_table' /> s, <parameter name='share_metadata_table' /> sm 
+					WHERE s.date &gt;= '<parameter name='firstDate' />' AND s.date
+					&lt;= '<parameter name='lastDate' />' AND s.close &gt; s.open
+					AND sm.type = 'INDEX'  
+					GROUP BY s.date ORDER BY s.date ASC; </query>
+				<query> SELECT COUNT(*), s.date FROM <parameter name='share_table' /> s, <parameter name='share_metadata_table' /> sm 
+					WHERE s.date &gt;= '<parameter name='firstDate' />' AND s.date
+					&lt;= '<parameter name='lastDate' />' AND s.close &lt; s.open
+					AND sm.type = 'INDEX'   
+					GROUP BY s.date ORDER BY s.date ASC; </query>
 			</transaction>
 		</method>
 		<method name='sharesMetadataOperations'>

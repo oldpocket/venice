@@ -663,6 +663,7 @@ public class DatabaseQuoteSource implements IQuoteSource {
 		while (queryIterator.hasNext()) {
 			String query = (String) queryIterator.next();
 			query = manager.replaceParameter(query, "share_table", DatabaseManager.SHARE_TABLE_NAME);
+			query = manager.replaceParameter(query, "share_metadata_table", DatabaseManager.SHARES_METADATA_TABLE_NAME);
 			query = manager.replaceParameter(query, "firstDate", manager.toSQLDateString(firstDate));
 			query = manager.replaceParameter(query, "lastDate", manager.toSQLDateString(lastDate));
 
