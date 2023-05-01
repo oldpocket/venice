@@ -203,7 +203,8 @@ Place, Suite 330, Boston, MA  02111-1307  USA
 				<query>SELECT symbol, prefix, posfix, type, name, sync_intra_day FROM shares_metadata</query>
 			</transaction>
 			<transaction name='selectMetadataForSymbol'>
-				<query>SELECT symbol, prefix, posfix, type, name, sync_intra_day FROM shares_metadata WHERE symbol = '<parameter name='symbol' />'</query>
+				<query>SELECT symbol, prefix, posfix, type, name, sync_intra_day FROM shares_metadata 
+					WHERE symbol = '<parameter name='symbol' />'</query>
 			</transaction>
 			<transaction name='insertShareMetadata'>
 				<query>INSERT INTO shares_metadata (symbol, prefix, posfix, type, name, sync_intra_day) 

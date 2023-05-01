@@ -136,7 +136,7 @@ public class PreferencesModule extends JPanel implements IModule, ActionListener
 		addPage(new MacrosPage(desktop));
 		addPage(new ProxyPage(desktop));
 		addPage(new QuoteSourcePage(desktop));
-		addPage(new IndexPreferencesPage(desktop));
+		addPage(new SymbolMetadataPreferencesPage(desktop));
 		addPage(new AlertDestinationPage(desktop));
 		addPage(new TuningPage(desktop));
 		addPage(new UserInterfacePage(desktop));

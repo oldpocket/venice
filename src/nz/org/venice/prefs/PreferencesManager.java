@@ -25,12 +25,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,34 +39,21 @@ import java.util.prefs.Preferences;
 import nz.org.venice.macro.StoredMacro;
 import nz.org.venice.main.Main;
 import nz.org.venice.main.ModuleFrame;
-import nz.org.venice.portfolio.IAccount;
-import nz.org.venice.portfolio.CashAccount;
 import nz.org.venice.portfolio.Portfolio;
 import nz.org.venice.portfolio.PortfolioParserException;
 import nz.org.venice.portfolio.PortfolioReader;
 import nz.org.venice.portfolio.PortfolioWriter;
-import nz.org.venice.portfolio.ShareAccount;
-import nz.org.venice.portfolio.Transaction;
 import nz.org.venice.prefs.settings.ModuleFrameSettingsWriter;
 import nz.org.venice.prefs.settings.ModuleSettingsParserException;
 import nz.org.venice.quote.Symbol;
-import nz.org.venice.quote.SymbolFormatException;
 import nz.org.venice.quote.SymbolMetadata;
-import nz.org.venice.quote.SymbolMetadata.SymbolType;
-import nz.org.venice.quote.SymbolMetadataReader;
-import nz.org.venice.quote.SymbolMetadataWriter;
 import nz.org.venice.table.WatchScreen;
 import nz.org.venice.table.WatchScreenParserException;
 import nz.org.venice.table.WatchScreenReader;
 import nz.org.venice.table.WatchScreenWriter;
-import nz.org.venice.util.Currency;
-import nz.org.venice.util.DatabaseAccessManager;
 import nz.org.venice.util.DatabaseManager;
 import nz.org.venice.util.Locale;
-import nz.org.venice.util.Money;
 import nz.org.venice.util.DatabaseHelper;
-import nz.org.venice.util.TradingDate;
-import nz.org.venice.util.TradingDateFormatException;
 import nz.org.venice.util.TradingTime;
 import nz.org.venice.util.TradingTimeFormatException;
 
@@ -321,7 +305,6 @@ public class PreferencesManager {
 	 */
 	public static synchronized List getStoredMacros() {
 		List stored_macros = new ArrayList();
-		// Preferences prefs = getUserNode("/macros/info");
 
 		String dirname = PreferencesManager.getMacroHome().getAbsolutePath();
 		if (dirname == null)
@@ -410,10 +393,10 @@ public class PreferencesManager {
 	/**
 	 * Insert or update (if already exist) a Metadata for a symbol
 	 *
-	 * @param indexSymbol Metadata for a given symbol
+	 * @param symbolMetadata Metadata for a given symbol
 	 * @see nz.org.venice.quotes.SymbolMetadata 
 	 */
-	public static void putSymbolMetadata(SymbolMetadata indexSymbol) 
+	public static void putSymbolMetadata(SymbolMetadata symbolMetadata) 
 			throws PreferencesException {
 
 		DatabaseManager dbm = DatabaseHelper.getDatabaseManager();
@@ -429,12 +412,12 @@ public class PreferencesManager {
 		Iterator iterator = queries.iterator();
 		while (iterator.hasNext()) {
 			String query = (String) iterator.next();
-			query = dbm.replaceParameter(query, "symbol", indexSymbol.getSymbol().toString());
-			query = dbm.replaceParameter(query, "prefix", indexSymbol.getPrefix());
-			query = dbm.replaceParameter(query, "posfix", indexSymbol.getPosfix());
-			query = dbm.replaceParameter(query, "type", indexSymbol.getType().name());
-			query = dbm.replaceParameter(query, "name", indexSymbol.getName());
-			query = dbm.replaceParameter(query, "sync_intra_day", indexSymbol.syncIntraDay() ? "1" : "0" );
+			query = dbm.replaceParameter(query, "symbol", symbolMetadata.getSymbol().toString());
+			query = dbm.replaceParameter(query, "prefix", symbolMetadata.getPrefix());
+			query = dbm.replaceParameter(query, "posfix", symbolMetadata.getPosfix());
+			query = dbm.replaceParameter(query, "type", symbolMetadata.getType().name());
+			query = dbm.replaceParameter(query, "name", symbolMetadata.getName());
+			query = dbm.replaceParameter(query, "sync_intra_day", symbolMetadata.syncIntraDay() ? "1" : "0" );
 			
 			newQueryList.add(query);
 		}
@@ -455,10 +438,10 @@ public class PreferencesManager {
 	/**
 	 * Delete a Metadata for a symbol
 	 *
-	 * @param indexSymbol Metadata for a given symbol
+	 * @param symbolMetadata Metadata for a given symbol
 	 * @see nz.org.venice.quotes.SymbolMetadata 
 	 */
-	public static void deleteSymbolMetada(SymbolMetadata symbol) 
+	public static void deleteSymbolMetada(SymbolMetadata symbolMetadata) 
 			throws PreferencesException {
 
 		DatabaseManager dbm = DatabaseHelper.getDatabaseManager();
@@ -474,7 +457,7 @@ public class PreferencesManager {
 		Iterator iterator = queries.iterator();
 		while (iterator.hasNext()) {
 			String query = (String) iterator.next();
-			query = dbm.replaceParameter(query, "symbol", symbol.getSymbol().toString());
+			query = dbm.replaceParameter(query, "symbol", symbolMetadata.getSymbol().toString());
 			newQueryList.add(query);
 		}
 		
@@ -706,55 +689,10 @@ public class PreferencesManager {
 			}
 		}
 
-		// Now retrieve all the watch screens stored in Java preferences (up to 0.7b)
-		try {
-			Preferences p = getUserNode("/watchscreens");
-			String preferenceWatchScreenNames[] = p.childrenNames();
-
-			for (int i = 0; i < preferenceWatchScreenNames.length; i++) {
-				String watchScreenName = preferenceWatchScreenNames[i];
-				watchScreenNames.add(watchScreenName);
-			}
-		} catch (BackingStoreException e) {
-			// don't care
-		}
-
 		// Make sure list is in alphabetical order
 		Collections.sort(watchScreenNames);
 
 		return watchScreenNames;
-	}
-
-	/**
-	 * Read the watch screen with the given name from the preferences. Venice stores
-	 * watch screens in preferences up to 0.7.
-	 *
-	 * @param name the name of the watch screen to retrieve.
-	 * @return the watch screen.
-	 * @exception PreferencesException if there was an error loading the watch
-	 *                                 screen.
-	 */
-	private static WatchScreen getWatchScreenFromPreferences(String name) throws PreferencesException {
-
-		WatchScreen watchScreen = new WatchScreen(name);
-
-		Preferences p = getUserNode("/watchscreens/" + name);
-
-		try {
-			// Load symbols
-			String[] symbols = p.node("symbols").childrenNames();
-
-			for (int i = 0; i < symbols.length; i++)
-				try {
-					watchScreen.addSymbol(Symbol.find(symbols[i]));
-				} catch (SymbolFormatException e) {
-					assert false;
-				}
-		} catch (BackingStoreException e) {
-			throw new PreferencesException(e.getMessage());
-		}
-
-		return watchScreen;
 	}
 
 	/**
@@ -796,9 +734,8 @@ public class PreferencesManager {
 		if (watchScreenFile.exists())
 			return getWatchScreenFromFile(watchScreenFile);
 
-		// Load the watchScreen from Java preferences (up to 0.7)
 		else
-			return getWatchScreenFromPreferences(watchScreenName);
+			return null;
 	}
 
 	/**
@@ -820,14 +757,7 @@ public class PreferencesManager {
 		} catch (SecurityException e) {
 			throw new PreferencesException(e.getMessage());
 		}
-
-		// Clear old watch screen from preferences if present (up to 0.7).
-		try {
-			Preferences p = getUserNode("/watchscreens/" + watchScreen.getName());
-			p.removeNode();
-		} catch (BackingStoreException e) {
-			throw new PreferencesException(e.getMessage());
-		}
+	
 	}
 
 	/**
@@ -839,14 +769,6 @@ public class PreferencesManager {
 		// Delete the watch screen from ~/Venice/WatchScreen/ (0.8 and up)
 		File watchScreenFile = new File(getWatchScreenHome(), name.concat(".xml"));
 		watchScreenFile.delete();
-
-		// Delete the watch screen from Java preferences (up to 0.7)
-		try {
-			Preferences p = getUserNode("/watchscreens/" + name);
-			p.removeNode();
-		} catch (BackingStoreException e) {
-			// don't care
-		}
 	}
 
 	/**
@@ -876,19 +798,6 @@ public class PreferencesManager {
 			}
 		}
 
-		// Now retrieve all the portfolios stored in Java preferences (up to 0.6b)
-		try {
-			Preferences p = getUserNode("/portfolio");
-			String[] preferencePortfolioNames = p.childrenNames();
-
-			for (int i = 0; i < preferencePortfolioNames.length; i++) {
-				String portfolioName = preferencePortfolioNames[i];
-				portfolioNames.add(portfolioName);
-			}
-		} catch (BackingStoreException e) {
-			// don't care
-		}
-
 		// Make sure list is in alphabetical order
 		Collections.sort(portfolioNames);
 
@@ -904,14 +813,7 @@ public class PreferencesManager {
 		// Delete the portfolio from ~/Venice/Portfolio/ (0.7b and up)
 		File portfolioFile = new File(getPortfolioHome(), name.concat(".xml"));
 		portfolioFile.delete();
-
-		// Delete the portfolio from Java preferences (up to 0.6b)
-		try {
-			Preferences p = getUserNode("/portfolio/" + name);
-			p.removeNode();
-		} catch (BackingStoreException e) {
-			// don't care
-		}
+	
 	}
 
 	/**
@@ -938,118 +840,6 @@ public class PreferencesManager {
 	}
 
 	/**
-	 * Read the portfolio with the given name from the preferences. Venice stores
-	 * portfolios in preferences up to 0.6b.
-	 *
-	 * @param name the name of the portfolio to retrieve.
-	 * @return the Portfolio.
-	 * @exception PreferencesException if there was an error loading the portfolio.
-	 */
-	private static Portfolio getPortfolioFromPreferences(String name) throws PreferencesException {
-		// Venice 0.6b did not support multiple currencies. So just default
-		// to the user's default currency.
-		Portfolio portfolio = new Portfolio(name, Currency.getDefaultCurrency());
-
-		Preferences p = getUserNode("/portfolio/" + name);
-
-		try {
-			// Load accounts
-			String[] accountNames = p.node("accounts").childrenNames();
-
-			for (int i = 0; i < accountNames.length; i++) {
-				Preferences accountPrefs = p.node("accounts").node(accountNames[i]);
-				IAccount account;
-
-				String accountType = accountPrefs.get("type", "share");
-				if (accountType.equals("share")) {
-					account = new ShareAccount(accountNames[i], Currency.getDefaultCurrency());
-				} else {
-					account = new CashAccount(accountNames[i], Currency.getDefaultCurrency());
-				}
-
-				portfolio.addAccount(account);
-			}
-
-			// Load transactions
-			List transactions = new ArrayList();
-
-			String[] transactionNumbers = p.node("transactions").childrenNames();
-
-			for (int i = 0; i < transactionNumbers.length; i++) {
-				Preferences transactionPrefs = p.node("transactions").node(transactionNumbers[i]);
-
-				int type = getTransactionType(transactionPrefs.get("type", ""));
-
-				TradingDate date = null;
-
-				try {
-					date = new TradingDate(transactionPrefs.get("date", "01/01/2000"), TradingDate.BRITISH);
-				} catch (TradingDateFormatException e) {
-					throw new PreferencesException(e.getMessage());
-				}
-
-				Money amount = new Money(Currency.getDefaultCurrency(), transactionPrefs.getDouble("amount", 0.0D));
-				Symbol symbol = null;
-				int shares = transactionPrefs.getInt("shares", 0);
-				Money tradeCost = new Money(Currency.getDefaultCurrency(),
-						transactionPrefs.getDouble("trade_cost", 0.0D));
-
-				try {
-					String symbolString = transactionPrefs.get("symbol", "");
-
-					if (symbolString.length() > 0)
-						symbol = Symbol.find(transactionPrefs.get("symbol", ""));
-				} catch (SymbolFormatException e) {
-					throw new PreferencesException(e.getMessage());
-				}
-
-				String cashAccountName = transactionPrefs.get("cash_account", "");
-				String cashAccountName2 = transactionPrefs.get("cash_account2", "");
-				String shareAccountName = transactionPrefs.get("share_account", "");
-
-				CashAccount cashAccount = null;
-				CashAccount cashAccount2 = null;
-				ShareAccount shareAccount = null;
-
-				try {
-					cashAccount = (CashAccount) portfolio.findAccountByName(cashAccountName);
-				} catch (ClassCastException e) {
-					throw new PreferencesException(Locale.getString("EXPECTING_CASH_ACCOUNT", cashAccountName));
-				}
-
-				try {
-					cashAccount2 = (CashAccount) portfolio.findAccountByName(cashAccountName2);
-				} catch (ClassCastException e) {
-					throw new PreferencesException(Locale.getString("EXPECTING_CASH_ACCOUNT", cashAccountName2));
-				}
-
-				try {
-					shareAccount = (ShareAccount) portfolio.findAccountByName(shareAccountName);
-				} catch (ClassCastException e) {
-					throw new PreferencesException(Locale.getString("EXPECTING_SHARE_ACCOUNT", shareAccountName));
-				}
-
-				// Skip transactions which have an account. There seems to have been
-				// an old bug which created duplication transactions with no account.
-				if (cashAccount != null || cashAccount2 != null || shareAccount != null) {
-					// Build transaction and add it to the portfolio
-					Transaction transaction = new Transaction(type, date, amount, symbol, shares, tradeCost,
-							cashAccount, cashAccount2, shareAccount);
-
-					transactions.add(transaction);
-				}
-			}
-
-			portfolio.addTransactions(transactions);
-
-		} catch (BackingStoreException e) {
-			throw new PreferencesException(e.getMessage());
-		}
-
-		return portfolio;
-	}
-
-	/**
 	 * Load the portfolio with the given name.
 	 *
 	 * @param portfolioName the name of the portfolio to load.
@@ -1063,49 +853,14 @@ public class PreferencesManager {
 		if (portfolioFile.exists())
 			return getPortfolioFromFile(portfolioFile);
 
-		// Load the portfolio from Java preferences (up to 0.6b)
 		else
-			return getPortfolioFromPreferences(portfolioName);
-	}
-
-	// Venice 0.1 & 0.2 did not have i8ln support so they saved the
-	// transactions by name. But this does not work if the transaction
-	// names can change! But I also want 0.3 to be backward compatible
-	// with 0.2. So this routine will understand both transaction name
-	// and transaction number.
-	private static int getTransactionType(String transactionType) {
-		// Venice 0.3+ saves transactions by numbers.
-		try {
-			return Integer.parseInt(transactionType);
-		} catch (NumberFormatException e) {
-			// not a number
-		}
-
-		// Otherwise compare with all the old transaction names
-		if (transactionType.equals("Accumulate"))
-			return Transaction.ACCUMULATE;
-		else if (transactionType.equals("Reduce"))
-			return Transaction.REDUCE;
-		else if (transactionType.equals("Deposit"))
-			return Transaction.DEPOSIT;
-		else if (transactionType.equals("Fee"))
-			return Transaction.FEE;
-		else if (transactionType.equals("Interest"))
-			return Transaction.INTEREST;
-		else if (transactionType.equals("Withdrawal"))
-			return Transaction.WITHDRAWAL;
-		else if (transactionType.equals("Dividend"))
-			return Transaction.DIVIDEND;
-		else if (transactionType.equals("Dividend DRP"))
-			return Transaction.DIVIDEND_DRP;
-		else
-			return Transaction.TRANSFER;
+			return null;
 	}
 
 	/**
-	 * Return the directroy which contains Venice's HSQLDB database.
+	 * Return the directory which contains Venice's HSQLDB database.
 	 *
-	 * @return Database directroy.
+	 * @return Database directory.
 	 */
 	private static File getDatabaseHome() {
 		File veniceHome = getVeniceHome();
@@ -1116,9 +871,9 @@ public class PreferencesManager {
 	}
 
 	/**
-	 * Return the directroy which contains Venice's macros.
+	 * Return the directory which contains Venice's macros.
 	 *
-	 * @return Macro directroy.
+	 * @return Macro directory.
 	 */
 	public static File getMacroHome() {
 		File veniceHome = getVeniceHome();
@@ -1480,7 +1235,7 @@ public class PreferencesManager {
 	public static void putDefaultChartScrollToEnd(boolean isSelected) {
 
 		Preferences prefs = getUserNode("/default_chart_defaults");
-		prefs.put("scroll_to_end", new Boolean(isSelected).toString());
+		prefs.put("scroll_to_end", String.valueOf(isSelected));
 	}
 
 	/**
@@ -1491,7 +1246,7 @@ public class PreferencesManager {
 	public static void putDefaultTableScrollToEnd(boolean isSelected) {
 
 		Preferences prefs = getUserNode("/default_table_defaults");
-		prefs.put("scroll_to_end", new Boolean(isSelected).toString());
+		prefs.put("scroll_to_end", String.valueOf(isSelected));
 	}
 
 	/**

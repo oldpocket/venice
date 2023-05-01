@@ -27,7 +27,7 @@
  * @author mhummel
  * @see Symbol
  * @see IQuoteSource
- * @see IndexPreferencesPage
+ * @see SymbolMetadataPreferencesPage
  */
 
 package nz.org.venice.quote;

@@ -17,15 +17,12 @@
  */
 
 /**
- * Provides a preferences page for users to define which symbols are indexes.
- * For example, DAX, XAO etc
+ * Provides a preferences page for users to define symbols metadata.
+ * For example, pre/posfix values, type (equity, index, etc).
  *
  * @author mhummel
  * @see IQuoteSource 
  */
-
-//In time when we unify the datastore we can then provide the option to store
-//this data elsewhere.
 
 package nz.org.venice.prefs;
 
@@ -34,9 +31,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -49,22 +43,21 @@ import javax.swing.JTable;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
-import nz.org.venice.alert.Alert;
 import nz.org.venice.quote.SymbolMetadata;
 import nz.org.venice.ui.AbstractTableModel;
-import nz.org.venice.ui.IndexEditorDialog;
+import nz.org.venice.ui.MetadataEditorDialog;
 import nz.org.venice.util.Locale;
 
-public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
+public class SymbolMetadataPreferencesPage extends JPanel implements IPreferencesPage {
 
-	private JDesktopPane desktop;
-	private JTable indexTable = null;
+	private static final long serialVersionUID = 1L;
+	private JTable symbolsMetadataTable = null;
 	private AbstractTableModel tableModel = null;
 	private int selectedRow = -1;
 
-	private IndexEditorDialog editDialog;
+	private MetadataEditorDialog editDialog;
 
-	private List<SymbolMetadata> indexSymbols;
+	private List<SymbolMetadata> symbolsMetadata;
 
 	private JButton addButton;
 	private JButton deleteButton;
@@ -86,8 +79,7 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 			Locale.getString("SYNC_INTRA_DAY"),
 			};
 
-	public IndexPreferencesPage(JDesktopPane desktop) {
-		this.desktop = desktop;
+	public SymbolMetadataPreferencesPage(JDesktopPane desktop) {
 		initialize();
 	}
 
@@ -97,14 +89,13 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 
 	public void save() {
 		// try {
-		//	PreferencesManager.putSymbolMetadata(indexSymbols);
-		//} catch (PreferencesException e) {
-
+		// 	  PreferencesManager.putSymbolMetadata(indexSymbols);
+		// } catch (PreferencesException e) {
 		// }
 	}
 
 	public String getTitle() {
-		return Locale.getString("INDEX_SYMBOLS_TITLE");
+		return Locale.getString("SYMBOLS_METADATA_TITLE");
 	}
 
 	/**
@@ -137,7 +128,7 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
-		JScrollPane jScrollPane = new JScrollPane(getIndexTable());
+		JScrollPane jScrollPane = new JScrollPane(getMetadataTable());
 		return jScrollPane;
 	}
 
@@ -146,10 +137,10 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 	 * 
 	 * @return javax.swing.JTable
 	 */
-	private JTable getIndexTable() {
+	private JTable getMetadataTable() {
 		// Set up the data
 		try {
-			indexSymbols = PreferencesManager.getSymbolsMetadata();
+			symbolsMetadata = PreferencesManager.getSymbolsMetadata();
 		} catch (PreferencesException e) {
 
 		}
@@ -163,7 +154,7 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 			}
 
 			public int getRowCount() {
-				return indexSymbols.size();
+				return symbolsMetadata.size();
 			}
 
 			public boolean isCellEditable(int row, int col) {
@@ -179,20 +170,20 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 			}
 			
 			public Object getValueAt(int row, int col) {
-				SymbolMetadata index = (SymbolMetadata) indexSymbols.get(row);
+				SymbolMetadata sm = (SymbolMetadata) symbolsMetadata.get(row);
 				switch (col) {
 				case SYMBOL_COLUMN:
-					return index.getSymbol();
+					return sm.getSymbol();
 				case PREFIX_COLUMN:
-					return index.getPrefix();
+					return sm.getPrefix();
 				case POSFIX_COLUMN:
-					return index.getPosfix();
+					return sm.getPosfix();
 				case TYPE_COLUMN:
-					return index.getType();
+					return sm.getType();
 				case NAME_COLUMN:
-					return index.getName();
+					return sm.getName();
 				case SYNC_ID_COLUMN:
-					return index.syncIntraDay();
+					return sm.syncIntraDay();
 
 				default:
 					assert false;
@@ -204,10 +195,10 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 
 		;
 
-		indexTable = new JTable(tableModel);
-		indexTable.addMouseListener(new MouseListener() {
+		symbolsMetadataTable = new JTable(tableModel);
+		symbolsMetadataTable.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent e) {
-				selectedRow = indexTable.getSelectedRow();
+				selectedRow = symbolsMetadataTable.getSelectedRow();
 				if (selectedRow != -1) {
 					deleteButton.setEnabled(true);
 					editButton.setEnabled(true);
@@ -230,7 +221,7 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 			}
 		});
 
-		return indexTable;
+		return symbolsMetadataTable;
 	}
 
 	/**
@@ -255,8 +246,8 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 		editButton = new JButton();
 		editButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				selectedRow = indexTable.getSelectedRow();
-				editIndex();
+				selectedRow = symbolsMetadataTable.getSelectedRow();
+				editSymbolMetadata();
 			}
 		});
 		editButton.setText(Locale.getString("EDIT"));
@@ -275,7 +266,7 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				selectedRow = -1;
-				editIndex();
+				editSymbolMetadata();
 			}
 		});
 		addButton.setText(Locale.getString("ADD"));
@@ -296,18 +287,18 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 				if (selectedRow == -1) {
 					return;
 				}
-				SymbolMetadata index = (SymbolMetadata) indexSymbols.get(selectedRow);
+				SymbolMetadata sm = (SymbolMetadata) symbolsMetadata.get(selectedRow);
 
 				int response = JOptionPane.showInternalConfirmDialog(deleteButton,
-						Locale.getString("SURE_DELETE_SYMBOL", index.getSymbol().toString()),
-						Locale.getString("DELETE_INDEX_TITLE"),
+						Locale.getString("SURE_DELETE_SYMBOL", sm.getSymbol().toString()),
+						Locale.getString("DELETE_METADATA_TITLE"),
 
 						JOptionPane.YES_NO_OPTION);
 
 				if (response == JOptionPane.YES_OPTION) {
-					indexSymbols.remove(selectedRow);
+					symbolsMetadata.remove(selectedRow);
 					try {
-						PreferencesManager.deleteSymbolMetada(index);
+						PreferencesManager.deleteSymbolMetada(sm);
 					} catch (PreferencesException prefsException) {
 
 					}
@@ -322,24 +313,24 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 		return deleteButton;
 	}
 
-	private void editIndex() {
-		editDialog = (selectedRow != -1) ? new IndexEditorDialog((SymbolMetadata) indexSymbols.get(selectedRow))
-				: new IndexEditorDialog();
+	private void editSymbolMetadata() {
+		editDialog = (selectedRow != -1) ? new MetadataEditorDialog((SymbolMetadata) symbolsMetadata.get(selectedRow))
+				: new MetadataEditorDialog();
 
 		editDialog.addInternalFrameListener(new InternalFrameListener() {
 			public void internalFrameClosed(InternalFrameEvent ife) {
 				if (editDialog.okClicked()) {
-					SymbolMetadata newIndex = editDialog.getIndexSymbol();
+					SymbolMetadata new_sm = editDialog.getSymbolMetadata();
 
 					if (selectedRow != -1) {
-						indexSymbols.remove(selectedRow);
-						indexSymbols.add(newIndex);
+						symbolsMetadata.remove(selectedRow);
+						symbolsMetadata.add(new_sm);
 					} else {
-						indexSymbols.add(newIndex);
+						symbolsMetadata.add(new_sm);
 					}
 					tableModel.fireTableDataChanged();
 					try {
-						PreferencesManager.putSymbolMetadata(newIndex);
+						PreferencesManager.putSymbolMetadata(new_sm);
 					} catch (PreferencesException e) {
 
 					}

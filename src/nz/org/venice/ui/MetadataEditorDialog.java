@@ -17,7 +17,7 @@
 */
 
 /**
- * Edit dialog for setting Symbol Metadata such as Indeces etc.
+ * Edit dialog for setting Symbol Metadata such as Indexes etc.
  * 
  * @author Mark Hummel
  */
@@ -45,16 +45,15 @@ import nz.org.venice.quote.SymbolMetadata;
 import nz.org.venice.quote.SymbolMetadata.SymbolType;
 import nz.org.venice.util.Locale;
 
-public class IndexEditorDialog extends JInternalFrame implements ActionListener, KeyListener {
+public class MetadataEditorDialog extends JInternalFrame implements ActionListener, KeyListener {
+	private static final long serialVersionUID = 1L;
 	private boolean okClicked = false;
-	private boolean wasCancelled = false;
-
 	private SymbolMetadata symbolMetadata = null;
 
 	private JTextField symbolField;
 	private JTextField prefixField;
 	private JTextField posfixField;
-	private JComboBox typeCombo; 
+	private JComboBox<?> typeCombo; 
 	private JTextField nameField;
 	private JCheckBox syncIDCheck;
 
@@ -62,12 +61,12 @@ public class IndexEditorDialog extends JInternalFrame implements ActionListener,
 	private JButton cancelButton;
 	private JButton helpButton;
 
-	public IndexEditorDialog() {
+	public MetadataEditorDialog() {
 		super();
 		initialise();
 	}
 
-	public IndexEditorDialog(SymbolMetadata symbolMetadataEdit) {
+	public MetadataEditorDialog(SymbolMetadata symbolMetadataEdit) {
 		super();
 
 		symbolMetadata = symbolMetadataEdit;
@@ -79,7 +78,7 @@ public class IndexEditorDialog extends JInternalFrame implements ActionListener,
 		return okClicked;
 	}
 
-	public SymbolMetadata getIndexSymbol() {
+	public SymbolMetadata getSymbolMetadata() {
 		assert okClicked == true;
 		return symbolMetadata;
 	}
@@ -89,7 +88,7 @@ public class IndexEditorDialog extends JInternalFrame implements ActionListener,
 		setMaximizable(false);
 		setResizable(true);
 		setClosable(true);
-		setTitle(Locale.getString("EDIT_INDEX"));
+		setTitle(Locale.getString("EDIT_METADATA"));
 
 		this.setContentPane(getPanel());
 
@@ -125,32 +124,48 @@ public class IndexEditorDialog extends JInternalFrame implements ActionListener,
 		symbolField.setToolTipText(Locale.getString("SYMBOL_FIELD_TOOLTIP"));
 		
 		String prefixText = (symbolMetadata != null) ? symbolMetadata.getPrefix() : "";
-		prefixField = GridBagHelper.addTextRow(panel, "prefix", prefixText, layout, c, 8);
+		prefixField = GridBagHelper.addTextRow(panel, Locale.getString("PREFIX"), prefixText, layout, c, 8);
 		prefixField.addKeyListener(this);
 		
 		String posfixText = (symbolMetadata != null) ? symbolMetadata.getPosfix() : "";
-		posfixField = GridBagHelper.addTextRow(panel, "posfix", posfixText, layout, c, 8);
+		posfixField = GridBagHelper.addTextRow(panel, Locale.getString("POSFIX"), posfixText, layout, c, 8);
 		posfixField.addKeyListener(this);
 
 		SymbolType symbolType = (symbolMetadata != null) ? symbolMetadata.getType() : SymbolType.EQUITY;
-		Vector symbolTypes = new Vector();
+		Vector<SymbolType> symbolTypes = new Vector<SymbolType>();
 		symbolTypes.add(SymbolType.CRYPTO);
 		symbolTypes.add(SymbolType.EQUITY);
 		symbolTypes.add(SymbolType.INDEX);
-		typeCombo = GridBagHelper.addComboBox(panel, "type", symbolTypes, layout, c);
+		typeCombo = GridBagHelper.addComboBox(panel, Locale.getString("TYPE"), symbolTypes, layout, c);
 		typeCombo.setSelectedItem(symbolType);
-		typeCombo.addKeyListener(this);
+		typeCombo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (checkRequiredFieldsEntered()) {
+					okButton.setEnabled(true);
+				} else {
+					okButton.setEnabled(false);
+				}
+			}
+		});
 		
 		String nameText = (symbolMetadata != null) ? symbolMetadata.getName() : "";
 		nameField = GridBagHelper.addTextRow(panel, Locale.getString("NAME"), nameText, layout, c, 8);
-		nameField.setToolTipText(Locale.getString("INDEX_NAME_TOOLTIP"));
+		nameField.setToolTipText(Locale.getString("METADATA_NAME_TOOLTIP"));
 		nameField.addKeyListener(this);
 
 		boolean syncCheckValue = (symbolMetadata != null) ? symbolMetadata.syncIntraDay() : false;
-		syncIDCheck = GridBagHelper.addCheckBoxRow(panel, "sync intraday", syncCheckValue, layout, c);
-		syncIDCheck.addKeyListener(this);
+		syncIDCheck = GridBagHelper.addCheckBoxRow(panel, Locale.getString("SYNC_INTRA_DAY"), syncCheckValue, layout, c);
+		syncIDCheck.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (checkRequiredFieldsEntered()) {
+					okButton.setEnabled(true);
+				} else {
+					okButton.setEnabled(false);
+				}
+			}
+		});
 
-		helpButton = GridBagHelper.addHelpButtonRow(panel, Locale.getString("INDEX_SYMBOLS_TITLE"), layout, c);
+		helpButton = GridBagHelper.addHelpButtonRow(panel, Locale.getString("METADATA_SYMBOLS_TITLE"), layout, c);
 		helpButton.addActionListener(this);
 
 		return panel;
@@ -190,7 +205,7 @@ public class IndexEditorDialog extends JInternalFrame implements ActionListener,
 		} else if (e.getSource() == cancelButton) {
 			closeDialog = true;
 		} else if (e.getSource() == helpButton) {
-			CommandManager.getInstance().openHelp("Index Definition");
+			CommandManager.getInstance().openHelp("Metadata Definition");
 		} else {
 
 		}
