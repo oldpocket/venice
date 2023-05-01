@@ -211,6 +211,23 @@ Place, Suite 330, Boston, MA  02111-1307  USA
 						'<parameter name='posfix' />',  '<parameter name='type' />', 
 						'<parameter name='name' />', <parameter name='sync_intra_day' />);</query>
 			</transaction>
+			<transaction name='insertUpdateShareMetadata'>
+				<query>INSERT INTO shares_metadata (symbol, prefix, posfix, type, name, sync_intra_day) 
+						VALUES (
+						'<parameter name='symbol' />',  
+						'<parameter name='prefix' />', 
+						'<parameter name='posfix' />',  
+						'<parameter name='type' />', 
+						'<parameter name='name' />',
+						'<parameter name='sync_intra_day' />'
+						)
+						ON DUPLICATE KEY UPDATE
+						prefix = '<parameter name='prefix' />', 
+						posfix = '<parameter name='posfix' />',  
+						type = '<parameter name='type' />', 
+						name = '<parameter name='name' />',
+						sync_intra_day = '<parameter name='sync_intra_day' />';</query>
+			</transaction>
 			<transaction name='updateShareMetadata'>
 				<query>UPDATE shares_metadata SET prefix = '<parameter name='prefix' />',
 				  posfix = '<parameter name='posfix' />', type = '<parameter name='type' />',

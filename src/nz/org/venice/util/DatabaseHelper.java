@@ -8,11 +8,35 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import nz.org.venice.quote.Symbol;
-import nz.org.venice.quote.SymbolFormatException;
-import nz.org.venice.quote.SymbolMetadata.SymbolType;
+import nz.org.venice.prefs.PreferencesManager;
 
-public class ResultSetMapper {
+public class DatabaseHelper {
+	
+	public static DatabaseManager getDatabaseManager() {
+		DatabaseManager dbm = null;
+		
+		if (PreferencesManager.getQuoteSource() == PreferencesManager.INTERNAL) {
+			
+			String fileName = PreferencesManager.getInternalFileName();
+			dbm = new DatabaseManager(fileName);
+		}
+
+		if (PreferencesManager.getQuoteSource() == PreferencesManager.DATABASE) {
+		
+			PreferencesManager.DatabasePreferences prefs = PreferencesManager.getDatabaseSettings();
+			String password = DatabaseAccessManager.getInstance().getPassword();
+			
+			dbm = new DatabaseManager(
+					prefs.software, 
+					prefs.driver, 
+					prefs.host, 
+					prefs.port, 
+					prefs.database, 
+					prefs.username, 
+					password);
+		}
+		return dbm;
+	}
 
 	/**
      * Method help to convert SQL request data to your custom DTO Java class object.   
@@ -22,7 +46,13 @@ public class ResultSetMapper {
      * @param clazz - Your DTO Class for mapping
      * @return <T> List <T> - List of converted DTO java class objects
      */
-    public static <T> List <T> convertSQLResultSetToObject(ResultSet resultSet, Class<T> clazz) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public static <T> List <T> convertSQLResultSetToObject(ResultSet resultSet, Class<T> clazz) 
+    	throws 
+    		SQLException, 
+    		NoSuchMethodException,
+    		InvocationTargetException, 
+    		InstantiationException, 
+    		IllegalAccessException {
 
         List<Field> fields = Arrays.asList(clazz.getDeclaredFields());
         for(Field field: fields) {

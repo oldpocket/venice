@@ -52,7 +52,6 @@ public class SymbolMetadata {
 		}
 	}
 
-	//private Symbol symbolObj;
 	private String symbol;
 	private String prefix;
 	private String posfix;

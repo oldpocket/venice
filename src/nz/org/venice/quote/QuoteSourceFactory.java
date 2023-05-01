@@ -24,6 +24,7 @@ import java.util.List;
 
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.util.DatabaseAccessManager;
+import nz.org.venice.util.DatabaseHelper;
 import nz.org.venice.util.DatabaseManager;
 
 /**
@@ -43,10 +44,8 @@ public class QuoteSourceFactory {
 	 * @return the database quote source
 	 */
 	public static DatabaseQuoteSource createInternalQuoteSource() {
-		String fileName = PreferencesManager.getInternalFileName();
-		DatabaseManager dbm = new DatabaseManager(fileName);
 
-		return new DatabaseQuoteSource(dbm);
+		return new DatabaseQuoteSource(DatabaseHelper.getDatabaseManager());
 	}
 
 	/**
@@ -98,13 +97,7 @@ public class QuoteSourceFactory {
 	 * @return the database quote source
 	 */
 	public static DatabaseQuoteSource createDatabaseQuoteSource() {
-
-		PreferencesManager.DatabasePreferences prefs = PreferencesManager.getDatabaseSettings();
-		String password = DatabaseAccessManager.getInstance().getPassword();
-
-		DatabaseManager dbm = new DatabaseManager(prefs.software, prefs.driver, prefs.host, prefs.port, prefs.database,
-				prefs.username, password);
-
-		return new DatabaseQuoteSource(dbm);
+		
+		return new DatabaseQuoteSource(DatabaseHelper.getDatabaseManager());
 	}
 }

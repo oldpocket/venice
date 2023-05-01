@@ -67,7 +67,7 @@ import nz.org.venice.util.DatabaseAccessManager;
 import nz.org.venice.util.DatabaseManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Money;
-import nz.org.venice.util.ResultSetMapper;
+import nz.org.venice.util.DatabaseHelper;
 import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.TradingDateFormatException;
 import nz.org.venice.util.TradingTime;
@@ -372,15 +372,18 @@ public class PreferencesManager {
 		}
 	}
 	
+	/**
+	 * Get the list of Symbols Metadata saved in the database
+	 *
+	 * @return List of SymbolMetadata
+	 * @see nz.org.venice.quotes.SymbolMetadata 
+	 */
 	public static List<SymbolMetadata> getSymbolsMetadata() 
 			throws PreferencesException {
 
 		List<SymbolMetadata> symbolsMetadata = new ArrayList<>();
 
-		PreferencesManager.DatabasePreferences prefs = PreferencesManager.getDatabaseSettings();
-		String password = DatabaseAccessManager.getInstance().getPassword();
-		DatabaseManager dbm = new DatabaseManager(prefs.software, prefs.driver, 
-				prefs.host, prefs.port, prefs.database, prefs.username, password);
+		DatabaseManager dbm = DatabaseHelper.getDatabaseManager();
 
 		if (!dbm.getConnection()) {
 			return new ArrayList<>();
@@ -395,7 +398,7 @@ public class PreferencesManager {
 			Iterator<ResultSet> iterator = results.iterator();
 			while (iterator.hasNext()) {
 				ResultSet RS = (ResultSet) iterator.next();
-				List <SymbolMetadata> sm = ResultSetMapper.convertSQLResultSetToObject(RS, SymbolMetadata.class);
+				List <SymbolMetadata> sm = DatabaseHelper.convertSQLResultSetToObject(RS, SymbolMetadata.class);
 				symbolsMetadata.addAll(sm);
 			}
 		} catch (Exception e) {
@@ -404,26 +407,97 @@ public class PreferencesManager {
 		return symbolsMetadata;
 	}
 
-	public static void putSymbolMetadata(List<Symbol> indexSymbols) 
+	/**
+	 * Insert or update (if already exist) a Metadata for a symbol
+	 *
+	 * @param indexSymbol Metadata for a given symbol
+	 * @see nz.org.venice.quotes.SymbolMetadata 
+	 */
+	public static void putSymbolMetadata(SymbolMetadata indexSymbol) 
 			throws PreferencesException {
 
+		DatabaseManager dbm = DatabaseHelper.getDatabaseManager();
+		
+		if (!dbm.getConnection()) {
+			return;
+		}
+		
+		final String queryLabel = "insertUpdateShareMetadata";
+		List<String> queries = dbm.getQueries(queryLabel);
+		ArrayList<String> newQueryList = new ArrayList<String>();
+		
+		Iterator iterator = queries.iterator();
+		while (iterator.hasNext()) {
+			String query = (String) iterator.next();
+			query = dbm.replaceParameter(query, "symbol", indexSymbol.getSymbol().toString());
+			query = dbm.replaceParameter(query, "prefix", indexSymbol.getPrefix());
+			query = dbm.replaceParameter(query, "posfix", indexSymbol.getPosfix());
+			query = dbm.replaceParameter(query, "type", indexSymbol.getType().name());
+			query = dbm.replaceParameter(query, "name", indexSymbol.getName());
+			query = dbm.replaceParameter(query, "sync_intra_day", indexSymbol.syncIntraDay() ? "1" : "0" );
+			
+			newQueryList.add(query);
+		}
+		
 		try {
-			// ToDo: atualizar no banco
+			dbm.executeUpdateTransaction(queryLabel, newQueryList);
 		} catch (Exception e) {
 			throw new PreferencesException(e.getMessage());
-		}
+		} finally {
+			try {
+				dbm.queryCleanup(queryLabel);
+			} catch (SQLException e) {
+
+			}
+		} 
 	}
 	
-	public static void deleteSymbolMetada(Symbol symbol) 
+	/**
+	 * Delete a Metadata for a symbol
+	 *
+	 * @param indexSymbol Metadata for a given symbol
+	 * @see nz.org.venice.quotes.SymbolMetadata 
+	 */
+	public static void deleteSymbolMetada(SymbolMetadata symbol) 
 			throws PreferencesException {
 
-		try {
-			// ToDo: remover no banco
-		} catch (Exception e) {
-			throw new PreferencesException(e.getMessage());		
+		DatabaseManager dbm = DatabaseHelper.getDatabaseManager();
+		
+		if (!dbm.getConnection()) {
+			return;
 		}
+		
+		final String queryLabel = "deleteShareMetada";
+		List<String> queries = dbm.getQueries(queryLabel);
+		ArrayList<String> newQueryList = new ArrayList<String>();
+		
+		Iterator iterator = queries.iterator();
+		while (iterator.hasNext()) {
+			String query = (String) iterator.next();
+			query = dbm.replaceParameter(query, "symbol", symbol.getSymbol().toString());
+			newQueryList.add(query);
+		}
+		
+		try {
+			dbm.executeUpdateTransaction(queryLabel, newQueryList);
+		} catch (Exception e) {
+			throw new PreferencesException(e.getMessage());
+		} finally {
+			try {
+				dbm.queryCleanup(queryLabel);
+			} catch (SQLException e) {
+
+			}
+		} 
 	}
 
+	/**
+	 * Check if a given symbol is Market Index or not
+	 *
+	 * @param symbol The symbol to be checked
+	 * @return true if is market index, false otherwise
+	 * @see nz.org.venice.quotes.SymbolMetadata 
+	 */
 	public static boolean isMarketIndex(Symbol symbol) {
 		
 		try {
@@ -1078,20 +1152,6 @@ public class PreferencesManager {
 		if (!watchScreenHome.exists())
 			watchScreenHome.mkdir();
 		return watchScreenHome;
-	}
-
-	/**
-	 * Return the directory which contains Venice's Symbol metadata. Directory will
-	 * be created if it does not already exist.
-	 *
-	 * @return SymbolMetaata directroy.
-	 */
-	private static File getSymbolMetadataHome() {
-		File veniceHome = getVeniceHome();
-		File symbolMetadataHome = new File(veniceHome, "SymbolMetadata");
-		if (!symbolMetadataHome.exists())
-			symbolMetadataHome.mkdir();
-		return symbolMetadataHome;
 	}
 
 	/**

@@ -51,13 +51,8 @@ public class AlertFactory {
 	 * @return the database alert reader
 	 */
 	public static DatabaseAlertReader createDatabaseAlertReader() {
-		PreferencesManager.DatabasePreferences prefs = PreferencesManager.getDatabaseSettings();
 
-		String password = DatabaseAccessManager.getInstance().getPassword();
-
-		DatabaseManager dbm = new DatabaseManager(prefs.software, prefs.driver, prefs.host, prefs.port, prefs.database,
-				prefs.username, password);
-		return new DatabaseAlertReader(dbm);
+		return new DatabaseAlertReader();
 	}
 
 	/**
@@ -77,13 +72,8 @@ public class AlertFactory {
 	 * @return the database alert writer
 	 */
 	public static DatabaseAlertWriter createDatabaseAlertWriter() {
-		PreferencesManager.DatabasePreferences prefs = PreferencesManager.getDatabaseSettings();
 
-		String password = DatabaseAccessManager.getInstance().getPassword();
-		DatabaseManager dbm = new DatabaseManager(prefs.software, prefs.driver, prefs.host, prefs.port, prefs.database,
-				prefs.username, password);
-
-		return new DatabaseAlertWriter(dbm);
+		return new DatabaseAlertWriter();
 	}
 
 	public static Alert newAlert(Symbol symbol, TradingDate startDate, TradingDate endDate, String target,

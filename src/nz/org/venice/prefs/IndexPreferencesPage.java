@@ -64,7 +64,7 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 
 	private IndexEditorDialog editDialog;
 
-	private List indexSymbols;
+	private List<SymbolMetadata> indexSymbols;
 
 	private JButton addButton;
 	private JButton deleteButton;
@@ -79,11 +79,11 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 
 	final String[] names = { 
 			Locale.getString("STOCK"),
-			"prefix",
-			"posfix",
-			"type",
+			Locale.getString("PREFIX"),
+			Locale.getString("POSFIX"),
+			Locale.getString("TYPE"),
 			Locale.getString("NAME"),
-			"sync_id"
+			Locale.getString("SYNC_INTRA_DAY"),
 			};
 
 	public IndexPreferencesPage(JDesktopPane desktop) {
@@ -96,11 +96,11 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 	}
 
 	public void save() {
-		try {
-			PreferencesManager.putSymbolMetadata(indexSymbols);
-		} catch (PreferencesException e) {
+		// try {
+		//	PreferencesManager.putSymbolMetadata(indexSymbols);
+		//} catch (PreferencesException e) {
 
-		}
+		// }
 	}
 
 	public String getTitle() {
@@ -175,9 +175,6 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 			}
 
 			public Class getColumnClass(int c) {
-				if (getValueAt(0, c) == null) {
-					System.console().printf("texto");
-				}
 				return getValueAt(0, c).getClass();
 			}
 			
@@ -310,7 +307,7 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 				if (response == JOptionPane.YES_OPTION) {
 					indexSymbols.remove(selectedRow);
 					try {
-						PreferencesManager.putSymbolMetadata(indexSymbols);
+						PreferencesManager.deleteSymbolMetada(index);
 					} catch (PreferencesException prefsException) {
 
 					}
@@ -342,7 +339,7 @@ public class IndexPreferencesPage extends JPanel implements IPreferencesPage {
 					}
 					tableModel.fireTableDataChanged();
 					try {
-						PreferencesManager.putSymbolMetadata(indexSymbols);
+						PreferencesManager.putSymbolMetadata(newIndex);
 					} catch (PreferencesException e) {
 
 					}

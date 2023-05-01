@@ -26,6 +26,7 @@ import java.util.List;
 
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.ui.DesktopManager;
+import nz.org.venice.util.DatabaseHelper;
 import nz.org.venice.util.DatabaseManager;
 import nz.org.venice.util.Locale;
 
@@ -42,8 +43,8 @@ public class DatabaseAlertWriter implements IAlertWriter {
 
 	private DatabaseManager manager;
 
-	public DatabaseAlertWriter(DatabaseManager manager) {
-		this.manager = manager;
+	public DatabaseAlertWriter() {
+		this.manager = DatabaseHelper.getDatabaseManager();
 	}
 
 	public void set(OHLCVAlert alert) {

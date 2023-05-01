@@ -29,6 +29,7 @@ import java.util.Set;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.SymbolFormatException;
 import nz.org.venice.ui.DesktopManager;
+import nz.org.venice.util.DatabaseHelper;
 import nz.org.venice.util.DatabaseManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
@@ -46,8 +47,8 @@ public class DatabaseAlertReader implements IAlertReader {
 	private DatabaseManager manager;
 	private HashMap alertMap; // When the alerts are read, cache the uuids
 
-	public DatabaseAlertReader(DatabaseManager manager) {
-		this.manager = manager;
+	public DatabaseAlertReader() {
+		this.manager = DatabaseHelper.getDatabaseManager();
 		alertMap = new HashMap();
 
 	}
