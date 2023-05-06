@@ -1,8 +1,8 @@
-Merchant of Venice, 0.8 jun / 2022
+Merchant of Venice, 0.8beta may / 2023
 =========================================
 
 Copyright (C) 2003-19, Andrew Leppard (andrew venice org nz)  
-This fork is being maintained by Fabio Godoy (fabio dot godoy at oldpocket dot com)
+This fork is being maintained by Fabio Godoy (fabio dot godoy at me dot com) since 2021
 
 See COPYING.txt for license terms.
 
@@ -80,21 +80,21 @@ Or by creating a jar (ant jar) and then running Venice as described above.
 
 The build file (build.xml) provides other functions for developers (some of these will only work from source checked out from Github):
 
-**api**     Generate a javadoc API of the code  
-**app**     Generate a Mac OS X Venice application  
-**backup**  Pulls a backup copy of the git tree from Github and stores it in the backup directory  
-**clean**   Removes all built and temporary files  
-**doc**     Builds the documentation  
-**jar**     Create a java archive file for Venice  
-**locale**  Check locale files for consistency  
-**release** Packages Venice into a file ready for release  
-**test**    Runs the automated test suite  
-**web**     Packages the web files ready for deployment (Not included in the source release).
+* **api**     Generate a javadoc API of the code  
+* **app**     Generate a Mac OS X Venice application  
+* **backup**  (Not Working) Pulls a backup copy of the git tree from Github and stores it in the backup directory  
+* **clean**   Removes all built and temporary files  
+* **doc**     Builds the documentation  
+* **jar**     Create a java archive file for Venice  
+* **locale**  Check locale files for consistency  
+* **release** Packages Venice into a file ready for release  
+* **test**    Runs the automated test suite  
+* **web**     Packages the web files ready for deployment (Not included in the source release).
 
 6) Licenses
 
 * Venice is Copyright (C) 2003-2012, Andrew Leppard.  
-* Venice fork is Copyright (C) 2021-2022, Fabio Godoy.  
+* Venice fork is Copyright (C) 2021-current, Fabio Godoy.  
 * HSQLDB is Copyright (C) 1995-2000, The Hypersonic SQL Group.  
 * Joone is Copyright (C) 2004, Paolo Marrone and the Joone team.  
 * Jython is Copyright (C) 2000, Jython Developers.  

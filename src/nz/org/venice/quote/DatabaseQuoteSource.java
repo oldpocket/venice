@@ -369,11 +369,11 @@ public class DatabaseQuoteSource implements IQuoteSource {
 			if (symbols.size() == 1) {
 				Symbol symbol = (Symbol) symbols.get(0);
 
-				filterString = filterString.concat(DatabaseManager.SYMBOL_FIELD + " = '" + symbol + "' ");
+				filterString = filterString.concat("shares." + DatabaseManager.SYMBOL_FIELD + " = '" + symbol + "' ");
 			} else {
 				assert symbols.size() > 1;
 
-				filterString = filterString.concat(DatabaseManager.SYMBOL_FIELD + " IN (");
+				filterString = filterString.concat(" shares." + DatabaseManager.SYMBOL_FIELD + " IN (");
 				Iterator iterator = symbols.iterator();
 
 				while (iterator.hasNext()) {
@@ -412,7 +412,7 @@ public class DatabaseQuoteSource implements IQuoteSource {
 				filterString = filterString.concat("AND ");
 
 			filterString = filterString.concat(
-					DatabaseManager.DATE_FIELD + " = '" + manager.toSQLDateString(quoteRange.getFirstDate()) + "' ");
+					"shares." + DatabaseManager.DATE_FIELD + " = '" + manager.toSQLDateString(quoteRange.getFirstDate()) + "' ");
 		}
 
 		// Otherwise check within a range of dates
@@ -420,8 +420,8 @@ public class DatabaseQuoteSource implements IQuoteSource {
 			if (filterString.length() > 0)
 				filterString = filterString.concat("AND ");
 
-			filterString = filterString.concat(DatabaseManager.DATE_FIELD + " >= '"
-					+ manager.toSQLDateString(quoteRange.getFirstDate()) + "' AND " + DatabaseManager.DATE_FIELD
+			filterString = filterString.concat("shares." + DatabaseManager.DATE_FIELD + " >= '"
+					+ manager.toSQLDateString(quoteRange.getFirstDate()) + "' AND " + "shares." + DatabaseManager.DATE_FIELD
 					+ " <= '" + manager.toSQLDateString(quoteRange.getLastDate()) + "' ");
 		}
 

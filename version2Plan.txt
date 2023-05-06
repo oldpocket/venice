@@ -22,10 +22,14 @@ successively refactored until it has the features/structure we want.
 
 Scope
 
-This document isn't intended doesn't prevent any of these tasks being
+This document isn't intended / doesn't prevent any of these tasks being
 implemented in version 1. It is merely for developer guidance, allowing a
 developer to avoid spending hours on minor bugs when it may be fixed as part of
 a larger piece of work.
+
+Legend (by fabiogodoy):
+[DONE] Already done in the fork
+[ToBeRemoved] I don´t agree/see necessary the feature/fix
 
 Tasks
 
@@ -48,7 +52,7 @@ indeces menu.
 
 Deferred Bugs/Features
 
-1. Ordinary are not filtered correctly #1528817
+[DONE] 1. Ordinary are not filtered correctly #1528817
 This problem arises out of the interaction between the quote cache and the
 table. The quote cache doesn't care about the "flavour" of a symbol, and the
 table display can only filter based on an equation. The bug is not severe enough
@@ -56,7 +60,7 @@ to warrant reworking large sections of both the quote and table code at this
 time.
 
 
-2. add (sic) a criteria for selectin (sic) symbols #1528799
+[DONE] 2. add (sic) a criteria for selectin (sic) symbols #1528799
 This feature involves adding a "type" to a symbol. One difficulty is that
 imported quotes don't have this data, and backward compatability must be
 maintained.
@@ -66,11 +70,11 @@ Future Features for either Version 1 or 2
 
 - Database
   - When the cache expiry is triggered, preload most used symbols.
-  - Use of primary and sekundary currencies
+  - Use of primary and secundary currencies
     - The primary currency should be used for the value of your portfolio.
     - Calculation of currency exchange rates.
   - Database for all known instruments
-  - New data modell with timestamps and market deepness
+  - New data model with timestamps and market deepness
 
 - Use of resources
   - Reduce the memory footprint of PointAndFigure charts.
@@ -79,7 +83,7 @@ Future Features for either Version 1 or 2
   - Allow String variables to be declared in the Gondola language.
   - Use of Gondola for writing indicators instead of indicators being hardcoded
     in Java.
-  - Support for coding in CTL and MT4, EasyLanguage etc.
+[ToBeRemoved]  - Support for coding in CTL and MT4, EasyLanguage etc.
 
 - Trading
   - Support for splits, ex/cum dividend trading.
@@ -93,9 +97,9 @@ Future Features for either Version 1 or 2
     the signal is 75 ('buy'), if the chart crosses downwards the signal is
     returns 25 ('sell'). Allow the user to define the worth of a signal.
   - Many many more indicators.
-  - Speedtrader.
-  - Trading from charts.
-  - One click trading.
+[ToBeRemoved]  - Speedtrader.
+[ToBeRemoved]  - Trading from charts.
+[ToBeRemoved]  - One click trading.
   - Routines for money management
     - Calclate the 'free' money of a portfolio.
 
@@ -121,7 +125,7 @@ Future Features for either Version 1 or 2
   - Add more unit tests.
 
 - User Interface, usability and i18n
-  - Change of the Layout (Metal, Windows, CDE).
+[ToBeRemoved]  - Change of the Layout (Metal, Windows, CDE).
   - Predefined and definable workspaces (with more than one monitor).
   - No need to restart after changing the language.
   - Import/Export of paper trade settings. See feature request #3519382
@@ -148,3 +152,4 @@ Future Features for either Version 1 or 2
 authors:
 mhummel
 bromc
+fabiogodoy
