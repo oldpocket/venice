@@ -46,10 +46,10 @@ in Venice. For charting see <link to="Graphs">Graphs</link>.
 </para>
 </help>
 
-<text>Merchant of Venice, 0.75 beta / 01/May/2012
+<text>Merchant of Venice, 0.752 beta / 26/Dec/2018
 ===========================================
 
-Copyright (C) 2003-12, Andrew Leppard (aleppard picknowl com au)
+Copyright (C) 2003-19, Andrew Leppard (aleppard picknowl com au)
 See COPYING.txt for license terms.
 
 </text>
@@ -664,7 +664,7 @@ If you switch to the Point and Figure graph while zoomed in on an area which doe
  </section>
 
  <section name="Adjusting the chart for Splits and Dividends">
-   <para>If your data source doesn't automatically adjust your data for dividends or splits, you may wish to display the chart as if no split or dividend occurred. Or alternatively, you can display the chart as if the split happnened when the stock listed. You would want to do because indicators may be misleading Gondola rules may trigger unexpectedly. </para>
+   <para>If your data source doesn't automatically adjust your data for dividends or splits, you may wish to display the chart as if no split or dividend occurred. Or alternatively, you can display the chart as if the split happnened when the stock listed. You would do this because indicators or Gondola rules may be unexpectedly trigged after the ex dividend date. Technical indicators may mislead after such a change, especially when in the absence of a dividend, no change in the indicator would be seen. </para>
 
    <para>To adjust the chart for a split or a dividend, select the 'Adjust Chart for Split/Dividend' menu item, which can be found in the chart window, under the menu of the stock being graphed. </para>
 
@@ -1255,6 +1255,14 @@ similarly for <code>open</code>, <code>high</code> and <code>low</code>.</para>
 <para>Returns the current month, which will be 8, if it is August.</para>
 </section>
 
+<section name="offsetExists">
+<para>The offsetExists function returns true if data is available for the given offset, false otherwise. Use this function to test if an offset exists for a symbol to avoid inaccurate results as a result of missing data.</para>
+<para><code>offsetExists(OFFSET)</code></para>
+<para>Example:</para>
+<para>offsetExists(-300)</para>
+<para>Returns true if there 300 days worth of historical data for the given symbol.</para>
+</section>
+
 <section name="On Balance Volume">
 <para>The OBV is the sum of volumes in the period, counted as positive if close is greater than open or
 as negative if open is greater then close.</para>
@@ -1287,10 +1295,14 @@ Where INITIAL_VALUE is the initial value which counting from</para>
 
 <section name="Relative Strength Index">
 <para>This function calculates the Relative Strength Index (RSI) of the current stock.</para>
-<para><code>rsi([PERIOD[, START_OFFSET]])</code></para>
-<para>Where PERIOD is the period to apply the RSI.
-Where START_OFFSET is the most recent date to calculate, 0 means the current
-trading date, -1 means the previous trading date, etc.</para>
+<para><code>rsi([PERIOD[, START_OFFSET, [SMOOTHING]]])</code></para>
+<para>Where
+  <list>
+    <item><para> PERIOD is the period to apply the RSI;</para></item>
+    <item><para>START_OFFSET is the most recent date to calculate, 0 means the current trading date, -1 means the previous trading date, etc;</para></item>
+    <item><para>SMOOTHING is a flag which uses the averages of the previous chunk to calculate a smoothed RSI.</para></item>
+  </list>
+</para>
 <para>Example:</para>
 <para><code>rsi()</code></para>
 <para>Returns the RSI of the current stock.</para>

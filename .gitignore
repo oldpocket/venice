@@ -1,3 +1,5 @@
+doc
+venice
 api
 backup
 release
@@ -10,3 +12,4 @@ venice.jar
 Venice.app
 .DS_Store
 lib/cachedir
+/.metadata/

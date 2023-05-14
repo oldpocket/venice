@@ -1,9 +1,9 @@
 <!-- Venice Build File -->
-<project name="Venice" default="run" basedir=".">
+<project name="venice" default="run" basedir=".">
 
   <!-- Current version we are working towards -->
   <property name="VERSION" value="0.751beta"/>
-
+	
   <!-- Paths -->
   <property name="api" value="${basedir}/api"/>
   <property name="backup" value="${basedir}/backup"/>
@@ -19,6 +19,8 @@
   <property name="test" value="${basedir}/test"/>
   <property name="web" value="${basedir}/web"/>  
 
+  <property name="build.sysclasspath" value="last"/>
+	
   <!-- Static webpage replaced with generated html to make releases 
     easier. (Easier to modify credits, news, changes etc. ) 
     Replace generated/html with static to use the old static pages.    
@@ -28,14 +30,10 @@
   <!-- Libraries -->
   <property name="lib.hsql" value="${lib}/hsqldb.jar"/>
   <property name="lib.joone" value="${lib}/joone-engine.jar"/>
-  <property name="lib.jython" value="${lib}/jython.jar"/>
-  <property name="lib.mysql" value="${lib}/mysql-connector-java-3.1.12-bin.jar"/>
-  <property name="lib.postgresql" value="${opt_lib}/postgresql.jar"/>
-  <property name="lib.xml" value="${lib}/xstream-1.3.jar"/>
   <property name="lib.junit" value="${lib}/junit.jar"/>
-  <property name="lib.uuid" value="${lib}/jug-lgpl-2.0.0.jar"/>
-
-
+  <property name="lib.jython" value="${lib}/jython-standalone-2.7.2.jar"/>
+  <property name="lib.mariadb" value="${lib}/mariadb-java-client-3.0.7.jar"/>
+  <property name="lib.mysql" value="${lib}/mysql-connector-java-5.1.49-bin.jar"/>
 
   <!-- Online help -->
   <property name="help" value="${classes}/nz/org/venice/help/doc"/>
@@ -46,7 +44,7 @@
   <target name="api">
     <javadoc packagenames="nz.org.venice.*"
              sourcepath="${src}"
-	     source="1.4"
+	     	 source="8"
              destdir="${api}"
              additionalparam="-breakiterator"
 	     windowtitle="Venice ${VERSION}">
@@ -57,12 +55,12 @@
         <pathelement path="${java.class.path}"/>
         <pathelement path="${src}"/>
         <pathelement path="${lib.hsql}"/>
-        <pathelement path="${lib.mysql}"/>
-	<pathelement path="${lib.postgresql}"/>
         <pathelement path="${lib.joone}"/>
-        <pathelement path="${lib.jython}"/>
-        <pathelement path="${lib.xml}"/>
-	<pathelement path="${lib.uuid}"/>
+        <pathelement path="${lib.junit}"/>        
+        <pathelement path="${lib.jython}"/>        
+	    <pathelement path="${lib.mariadb}"/>
+        <pathelement path="${lib.mysql}"/>
+
       </classpath>
   </javadoc>
   </target>
@@ -81,22 +79,21 @@
   <target name="build">
     <mkdir dir="${classes}"/>
     <javac srcdir="${src}"
-	   destdir="${classes}"
-	   debug="on"
-  	   optimize="on"
-	   source="1.6"
-	   includes="**/*.java"
-           excludes="nz/org/venice/tools/*">
+	    destdir="${classes}"
+	    debug="on"
+  	    optimize="on"
+	    source="8"
+	    includes="**/*.java"
+        excludes="nz/org/venice/tools/*">
       <classpath>
         <pathelement path="${java.class.path}"/>
         <pathelement path="${classes}"/>
         <pathelement path="${lib.hsql}"/>
-        <pathelement path="${lib.mysql}"/>
-	<pathelement path="${lib.postgresql}"/>
         <pathelement path="${lib.joone}"/>
-        <pathelement path="${lib.jython}"/>
-        <pathelement path="${lib.xml}"/>
-	<pathelement path="${lib.uuid}"/>
+        <pathelement path="${lib.junit}"/>        
+        <pathelement path="${lib.jython}"/>        
+	    <pathelement path="${lib.mariadb}"/>
+        <pathelement path="${lib.mysql}"/>
       </classpath>
     </javac>
 
@@ -209,15 +206,13 @@
                includes="**/*.gif, **/*.png"/>
     </copy>
 
-    <!-- Fixme: 'ant doc' does not copy images to ${web} for the
-	 online and local HTML versions of the manual. 
-         Fixme: There are absolute paths in online and local HTML
-         version of the manual, see comment in HelpModule.java,
-	 createEditorPane() for details.
+    <!-- Fixme: 'ant doc' does not copy images to ${web} for the online and local HTML versions of the manual. 
+         Fixme: There are absolute paths in online and local HTML version of the manual, see comment in HelpModule.java,
+	 		createEditorPane() for details.-->
     <copy todir="${web}/images" overwrite="y">
       <fileset dir="${doc}/images"
                includes="**/*.gif, **/*.png"/>
-    </copy> -->
+    </copy> 
   </target>
 
   <!-- Generate a jar -->
@@ -252,22 +247,16 @@
       </patternset>
     </unjar>
 
-    <unjar src="${lib.xml}" dest="${temp}">
+    <unjar src="${lib.mariadb}" dest="${temp}">
       <patternset>
         <include name="com/**"/>
-      </patternset>
-    </unjar>
-       
-    <unjar src="${lib.uuid}" dest="${temp}">
-      <patternset>
-	<include name="org/**"/>
       </patternset>
     </unjar>
 
     <copy todir="${temp}">
       <fileset dir="${classes}"
                includes="**/*.class, **/*.gif, **/*.png,
-			 **/*.sql.xml,
+						 **/*.sql.xml,
                          nz/org/venice/help/doc/*.html,
                          **/*.properties,
                          nz/org/venice/help/doc/index.xml,
@@ -277,8 +266,7 @@
 
     <jar jarfile="venice.jar"
          basedir="${temp}"
-	 manifest="${src}/MANIFEST.MF"/>
-
+	 	 manifest="${src}/MANIFEST.MF"/>
     <delete dir="${temp}"/>
   </target>
 
@@ -309,9 +297,9 @@
     
     <!-- Make sure locale tool is compiled -->
     <javac srcdir="${src}"
-	   destdir="${classes}"
+	   	   destdir="${classes}"
            debug="on"
-           source="1.4"
+           source="8"
            includes="nz/org/venice/tools/Locale.java"/>
     
     <!-- Compare each locale file to the english locale -->
@@ -510,10 +498,8 @@
         <pathelement path="${lib.hsql}"/>
         <pathelement path="${lib.joone}"/>
         <pathelement path="${lib.mysql}"/>
-	<pathelement path="${lib.postgresql}"/>
+		<pathelement path="${lib.mariadb}"/>
         <pathelement path="${lib.jython}"/>
-        <pathelement path="${lib.xml}"/>	
-	<pathelement path="${lib.uuid}"/>
       </classpath>
     </java>
   </target>
@@ -526,7 +512,7 @@
     <javac srcdir="${test}"
 	   debug="on"
   	   optimize="on"
-	   source="1.4"
+	   source="8"
 	   includes="**/*.java">
       <classpath>
         <pathelement path="${java.class.path}"/>
@@ -536,10 +522,8 @@
         <pathelement path="${lib.hsql}"/>
         <pathelement path="${lib.joone}"/>
         <pathelement path="${lib.mysql}"/>
-	<pathelement path="${lib.postgresql}"/>
+		<pathelement path="${lib.mariadb}"/>
         <pathelement path="${lib.jython}"/>
-        <pathelement path="${lib.xml}"/>	
-	<pathelement path="${lib.uuid}"/>
       </classpath>
     </javac>
 
@@ -551,14 +535,12 @@
         <pathelement path="${java.class.path}"/>
         <pathelement path="${classes}"/>
         <pathelement path="${test}"/>
-	<pathelement path="${lib.junit}"/>
+		<pathelement path="${lib.junit}"/>
         <pathelement path="${lib.hsql}"/>
         <pathelement path="${lib.joone}"/>
         <pathelement path="${lib.mysql}"/>
-	<pathelement path="${lib.postgresql}"/>
+		<pathelement path="${lib.mariadb}"/>
         <pathelement path="${lib.jython}"/>
-        <pathelement path="${lib.xml}"/>
-	<pathelement path="${lib.uuid}"/>
       </classpath>
       <formatter type="plain"/>
       <batchtest todir="${report}">
