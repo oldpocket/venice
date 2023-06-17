@@ -134,7 +134,6 @@ public class SymbolMetadata {
 		try {
 			symbolObj = Symbol.find(symbol);
 		} catch (SymbolFormatException sfe) {
-
 		} finally {
 
 		}

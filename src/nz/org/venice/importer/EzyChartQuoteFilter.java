@@ -25,6 +25,7 @@ import nz.org.venice.quote.IFileEODQuoteImport;
 import nz.org.venice.quote.QuoteFormatException;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.SymbolFormatException;
+import nz.org.venice.quote.SymbolNotFoundException;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Report;
 import nz.org.venice.util.TradingDate;

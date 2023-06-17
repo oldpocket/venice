@@ -22,7 +22,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import nz.org.venice.prefs.PreferencesException;
+import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.quote.Symbol;
+import nz.org.venice.quote.SymbolMetadata;
+import nz.org.venice.quote.SymbolNotFoundException;
+import nz.org.venice.util.Locale;
 
 /**
  * Representation of a watch screen. A watch screen contains a list of stock
@@ -80,19 +85,43 @@ public class WatchScreen {
 	 *
 	 * @param symbol the symbol to add.
 	 */
-	public void addSymbol(Symbol symbol) {
-		if (!symbols.contains(symbol))
-			symbols.add(symbol);
+	public void addSymbol(Symbol symbol) throws SymbolNotFoundException {
+		
+		
+		List<SymbolMetadata> sml;
+		try {
+			// get the list of symbols that have sync on
+			sml = PreferencesManager.getSymbolsMetadata(true);
+			// if symbol is not already in the list, let's try to add it
+			if (!symbols.contains(symbol)) {
+				// checking if we have a metadata for this symbol
+				boolean sm = sml.stream().anyMatch(o -> symbol.equals(o.getSymbol()));
+				// no metadata, let's throw an exception
+				if (!sm) {
+					throw new SymbolNotFoundException(symbol.toString() + Locale.getString("METADATA_NOT_FOUND_OR_NOT_SYNC"));
+				}
+				// we have symbol metadata, let's add it to the list 
+				symbols.add(symbol);
+			}
+		} catch (PreferencesException e) {
+			// some issue trying to recover symbol metadata
+			e.printStackTrace();
+		}
+
 	}
+	
+	
 
 	/**
 	 * Add a list of symbols to this watch screen.
 	 *
 	 * @param symbols the list of symbols to add.
+	 * @deprecated use {@link #addSymbol()} instead.  
 	 */
-	public void addSymbols(List symbols) {
-		for (Iterator iterator = symbols.iterator(); iterator.hasNext();)
-			addSymbol((Symbol) iterator.next());
+	@Deprecated
+	public void addSymbols(List<Symbol> symbols) throws SymbolNotFoundException {
+		for (Iterator<Symbol> iterator = symbols.iterator(); iterator.hasNext();)
+			addSymbol(iterator.next());
 	}
 
 	/**

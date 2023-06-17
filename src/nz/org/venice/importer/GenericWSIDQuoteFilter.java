@@ -23,6 +23,7 @@ import nz.org.venice.quote.IIDQuoteFilter;
 import nz.org.venice.quote.QuoteFormatException;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.SymbolFormatException;
+import nz.org.venice.quote.SymbolNotFoundException;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.TradingDateFormatException;

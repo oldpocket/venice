@@ -46,6 +46,7 @@ import nz.org.venice.portfolio.PortfolioWriter;
 import nz.org.venice.prefs.settings.ModuleFrameSettingsWriter;
 import nz.org.venice.prefs.settings.ModuleSettingsParserException;
 import nz.org.venice.quote.Symbol;
+import nz.org.venice.quote.SymbolFormatException;
 import nz.org.venice.quote.SymbolMetadata;
 import nz.org.venice.table.WatchScreen;
 import nz.org.venice.table.WatchScreenParserException;
@@ -167,10 +168,7 @@ public class PreferencesManager {
 		public boolean isEnabled;
 
 		/** Symbols to automatically sync. */
-		public String symbols;
-
-		/** Optional suffix to append (e.g. ".AX") */
-		public String suffix;
+		public List<SymbolMetadata>symbolsMetadata;
 
 		/** Time exchange opens. */
 		public TradingTime openTime;
@@ -354,14 +352,27 @@ public class PreferencesManager {
 			// ignore
 		}
 	}
-	
+
 	/**
-	 * Get the list of Symbols Metadata saved in the database
+	 * Get the list of all Symbols Metadata saved in the database
 	 *
 	 * @return List of SymbolMetadata
 	 * @see nz.org.venice.quotes.SymbolMetadata 
 	 */
 	public static List<SymbolMetadata> getSymbolsMetadata() 
+			throws PreferencesException {
+		
+			return getSymbolsMetadata(false);
+	}
+	
+	/**
+	 * Get the list of Symbols Metadata saved in the database
+	 *
+	 * @param syncOnly when true returns only the metadata marked as sync == true
+	 * @return List of SymbolMetadata
+	 * @see nz.org.venice.quotes.SymbolMetadata 
+	 */
+	public static List<SymbolMetadata> getSymbolsMetadata(Boolean syncOnly)
 			throws PreferencesException {
 
 		List<SymbolMetadata> symbolsMetadata = new ArrayList<>();
@@ -387,6 +398,17 @@ public class PreferencesManager {
 		} catch (Exception e) {
 			throw new PreferencesException(e.getMessage());
 		}
+		
+		// If we need to return only sync metadata, let's remove the others
+		if (syncOnly) {
+			List<SymbolMetadata> symbolsSyncMetadata = new ArrayList<>();
+			
+			for (SymbolMetadata m : symbolsMetadata)
+				if (m.syncIntraDay()) symbolsSyncMetadata.add(m);
+
+			return symbolsSyncMetadata;
+		}
+		
 		return symbolsMetadata;
 	}
 
@@ -1390,8 +1412,11 @@ public class PreferencesManager {
 		IDQuoteSyncPreferences idQuoteSyncPreferences = preferencesManager.new IDQuoteSyncPreferences();
 
 		idQuoteSyncPreferences.isEnabled = prefs.getBoolean("isEnabled", false);
-		idQuoteSyncPreferences.symbols = prefs.get("symbols", "");
-		idQuoteSyncPreferences.suffix = prefs.get("suffix", "");
+		try {
+			idQuoteSyncPreferences.symbolsMetadata = getSymbolsMetadata(true);
+		} catch (PreferencesException e) {
+			idQuoteSyncPreferences.symbolsMetadata = null;
+		}
 
 		try {
 			idQuoteSyncPreferences.openTime = new TradingTime(prefs.get("openTime", "9:00:00"));
@@ -1415,8 +1440,6 @@ public class PreferencesManager {
 	public static void putIDQuoteSyncPreferences(IDQuoteSyncPreferences idQuoteSyncPreferences) {
 		Preferences prefs = getUserNode("/id_quote_sync");
 		prefs.putBoolean("isEnabled", idQuoteSyncPreferences.isEnabled);
-		prefs.put("symbols", idQuoteSyncPreferences.symbols);
-		prefs.put("suffix", idQuoteSyncPreferences.suffix);
 		prefs.put("openTime", idQuoteSyncPreferences.openTime.toString());
 		prefs.put("closeTime", idQuoteSyncPreferences.closeTime.toString());
 		prefs.putInt("period", idQuoteSyncPreferences.period);

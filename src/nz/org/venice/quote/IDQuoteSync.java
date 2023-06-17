@@ -30,7 +30,7 @@ import nz.org.venice.util.TradingDate;
 import nz.org.venice.util.TradingTime;
 
 /**
- * This class controls the periodic downloading, or synchronisation, of new
+ * This class controls the periodic downloading, or synchronization, of new
  * intra-day quotes. This class will only sync quotes if all the following
  * conditions are met:
  * <ul>
@@ -51,10 +51,7 @@ public class IDQuoteSync {
 	private class Sync extends TimerTask {
 
 		// List of symbols to download
-		private List symbols;
-
-		// Optional suffix to append to symbol, e.g. ".AX"
-		private String suffix;
+		private List<Symbol> symbols;
 
 		// Quote cache to store quotes
 		private IDQuoteCache quoteCache;
@@ -62,10 +59,9 @@ public class IDQuoteSync {
 		/**
 		 * Create a new object to periodically download intra-day quotes.
 		 */
-		public Sync(List symbols, String suffix) {
+		public Sync(List<Symbol> symbols) {
 			assert symbols.size() > 0;
 			this.symbols = symbols;
-			this.suffix = suffix;
 			quoteCache = IDQuoteCache.getInstance();
 		}
 
@@ -74,7 +70,7 @@ public class IDQuoteSync {
 		 */
 		public void run() {
 			try {
-				List quotes = GenericWSIDQuoteImport.importSymbols(symbols, suffix);
+				List<IQuote> quotes = GenericWSIDQuoteImport.importSymbols(symbols);
 
 				quoteCache.load(quotes);
 
@@ -125,7 +121,7 @@ public class IDQuoteSync {
 		private IDQuoteSync idQuoteSync;
 
 		/**
-		 * Createa new object to stop the automatic quote sync.
+		 * Create a new object to stop the automatic quote sync.
 		 *
 		 * @param idQuoteSync the quote sync module.
 		 */
@@ -141,7 +137,7 @@ public class IDQuoteSync {
 		}
 	}
 
-	/** The default time period inbetween quote downloads. */
+	/** The default time period in between quote downloads. */
 	public final static int DEFAULT_PERIOD = 60;
 
 	/** The default start time. */
@@ -158,7 +154,7 @@ public class IDQuoteSync {
 	private static IDQuoteSync instance = null;
 
 	// List of symbols to import
-	private List symbols;
+	private List<Symbol> symbols;
 
 	// Optional suffix to append to symbol, e.g. ".AX"
 	private String suffix;
@@ -183,10 +179,10 @@ public class IDQuoteSync {
 	private TradingTime stopTime;
 
 	/**
-	 * Create a new intra-day quote synchoronisation object.
+	 * Create a new intra-day quote synchronization object.
 	 */
 	private IDQuoteSync() {
-		symbols = new ArrayList();
+		symbols = new ArrayList<Symbol>();
 		isEnabled = false;
 		period = DEFAULT_PERIOD;
 		syncTimer = null;
@@ -198,7 +194,7 @@ public class IDQuoteSync {
 
 	/**
 	 * Create or return the singleton instance of the intra-day quote
-	 * synchronisation object.
+	 * synchronization object.
 	 *
 	 * @return singleton instance of this class
 	 */
@@ -252,7 +248,7 @@ public class IDQuoteSync {
 	 *
 	 * @return symbols list
 	 */
-	public List getSymbols(List symbols) {
+	public List<Symbol> getSymbols(List<Symbol> symbols) {
 		return symbols;
 	}
 
@@ -262,12 +258,12 @@ public class IDQuoteSync {
 	 *
 	 * @param symbols new symbols to download
 	 */
-	public void addSymbols(List symbols) {
+	public void addSymbols(List<Symbol> symbols) {
 		boolean isNewSymbol = false;
 
 		// Add the new unique symbols
-		for (Iterator iterator = symbols.iterator(); iterator.hasNext();) {
-			Symbol symbol = (Symbol) iterator.next();
+		for (Iterator<Symbol> iterator = symbols.iterator(); iterator.hasNext();) {
+			Symbol symbol = iterator.next();
 			if (!this.symbols.contains(symbol)) {
 				this.symbols.add(symbol);
 				isNewSymbol = true;
@@ -277,6 +273,22 @@ public class IDQuoteSync {
 		// Restart sync task so that it has the updated symbol list
 		if (isNewSymbol)
 			restartSyncTimer();
+	}
+	
+	/**
+	 * Add the a list of symbols from a Metadata list to the list of symbols for the intra-day quotes to
+	 * download. Used in the Main to automatically start pooling the symbols marked as sync on. 
+	 *
+	 * @param symbolsMetadata new symbols metadata to download
+	 */
+	public void addSymbolsFromMetadata(List<SymbolMetadata> symbolsMetadata) {
+		List<Symbol> symbols = new ArrayList<>();
+		// Collect the symbols from the SymbolMetadata list
+		for (Iterator<SymbolMetadata> iterator = symbolsMetadata.iterator(); iterator.hasNext();) {
+			SymbolMetadata symbolMetadata = iterator.next();
+			symbols.add(symbolMetadata.getSymbol());
+		}
+		addSymbols(symbols);
 	}
 
 	/**
@@ -346,7 +358,7 @@ public class IDQuoteSync {
 				&& !today.isWeekend()) {
 
 			syncTimer = new Timer();
-			syncTimer.scheduleAtFixedRate(new Sync(symbols, suffix), 0, period * TradingTime.MILLISECONDS_IN_SECOND);
+			syncTimer.scheduleAtFixedRate(new Sync(symbols), 0, period * TradingTime.MILLISECONDS_IN_SECOND);
 		}
 	}
 

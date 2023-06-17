@@ -35,6 +35,7 @@ import java.util.List;
 import nz.org.venice.prefs.PreferencesManager;
 import nz.org.venice.quote.IDQuote;
 import nz.org.venice.quote.IIDQuoteFilter;
+import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.ImportExportException;
 import nz.org.venice.quote.QuoteFormatException;
 import nz.org.venice.quote.Symbol;
@@ -55,7 +56,7 @@ public class GenericWSIDQuoteImport {
 	// Service.
 	private final static String URL_PATTERN = ("s=" + SYMBOLS);
 
-	private final static String GENERIC_WS_URL_PATTERN = ("http://aethiopicus.ddns.net:1414/~aethiopicus/yfinance/id_quotes?" + URL_PATTERN);
+	private final static String GENERIC_WS_URL_PATTERN = ("http://aethiopicus.ddns.net:1414/~aethiopicus/cgi-bin/hello.py?" + URL_PATTERN);
 
 	// This class is not instantiated.
 	private GenericWSIDQuoteImport() {
@@ -71,10 +72,10 @@ public class GenericWSIDQuoteImport {
 	 *                by the Generic Web Service.
 	 * @exception ImportExportException if there was an error retrieving the quotes
 	 */
-	public static List importSymbols(List symbols, String suffix) throws ImportExportException {
+	public static List<IQuote> importSymbols(List<Symbol> symbols) throws ImportExportException {
 
-		List quotes = new ArrayList();
-		String URLString = constructURL(symbols, suffix);
+		List<IQuote> quotes = new ArrayList<IQuote>();
+		String URLString = constructURL(symbols);
 		IIDQuoteFilter filter = new GenericWSIDQuoteFilter();
 
 		PreferencesManager.ProxyPreferences proxyPreferences = PreferencesManager.getProxySettings();
@@ -147,26 +148,15 @@ public class GenericWSIDQuoteImport {
 	 *                by the Generic Web Service.
 	 * @return URL string
 	 */
-	private static String constructURL(List symbols, String suffix) {
+	private static String constructURL(List<Symbol> symbols) {
 		String URLString = GENERIC_WS_URL_PATTERN;
 		String symbolStringList = "";
 
-		if (suffix == null)
-			suffix = "";
-
 		// Construct a plus separated list of symbols, e.g. IBM+MSFT+...
-		for (Iterator iterator = symbols.iterator(); iterator.hasNext();) {
-			Symbol symbol = (Symbol) iterator.next();
-			String symbolString = symbol.toString();
-
-			// Append symbol with optional suffix. If the user has not provided a full-stop,
-			// provide
-			// them with one.
-			if (suffix.length() > 0) {
-				if (!suffix.startsWith("."))
-					symbolString += ".";
-				symbolString += suffix;
-			}
+		for (Iterator<Symbol> iterator = symbols.iterator(); iterator.hasNext();) {
+			Symbol symbol = iterator.next();
+			
+			String symbolString = symbol.getMetaData().toString();
 
 			symbolStringList += symbolString;
 

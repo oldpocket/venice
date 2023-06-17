@@ -49,6 +49,7 @@ import nz.org.venice.quote.IDQuoteSync;
 import nz.org.venice.quote.QuoteSourceManager;
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.SymbolFormatException;
+import nz.org.venice.quote.SymbolMetadata;
 import nz.org.venice.ui.DesktopManager;
 import nz.org.venice.ui.GPLViewDialog;
 import nz.org.venice.ui.MainMenu;
@@ -251,17 +252,10 @@ public class Main extends JFrame {
 		// Start up intra-day quote sync
 		PreferencesManager.IDQuoteSyncPreferences idQuoteSyncPreferences = PreferencesManager
 				.getIDQuoteSyncPreferences();
+
+		List<SymbolMetadata> symbolsMetadata = idQuoteSyncPreferences.symbolsMetadata;
+		IDQuoteSync.getInstance().addSymbolsFromMetadata(symbolsMetadata);
 		IDQuoteSync.getInstance().setPeriod(idQuoteSyncPreferences.period);
-
-		try {
-			List symbols = new ArrayList(Symbol.toSortedSet(idQuoteSyncPreferences.symbols, false));
-
-			IDQuoteSync.getInstance().addSymbols(symbols);
-			IDQuoteSync.getInstance().setSuffix(idQuoteSyncPreferences.suffix);
-		} catch (SymbolFormatException e) {
-			// Ignore error in preferences
-		}
-
 		IDQuoteSync.getInstance().setTimeRange(idQuoteSyncPreferences.openTime, idQuoteSyncPreferences.closeTime);
 		IDQuoteSync.getInstance().setEnabled(idQuoteSyncPreferences.isEnabled);
 

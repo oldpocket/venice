@@ -34,6 +34,7 @@ import org.xml.sax.SAXException;
 
 import nz.org.venice.quote.Symbol;
 import nz.org.venice.quote.SymbolFormatException;
+import nz.org.venice.quote.SymbolNotFoundException;
 import nz.org.venice.util.Locale;
 
 /**
@@ -128,6 +129,8 @@ public class WatchScreenReader {
 				watchScreen.addSymbol(symbol);
 			} catch (SymbolFormatException e) {
 				throw new WatchScreenParserException(e.getMessage());
+			} catch (SymbolNotFoundException e) {
+				
 			}
 		}
 	}

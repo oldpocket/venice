@@ -56,6 +56,7 @@ import nz.org.venice.quote.IQuote;
 import nz.org.venice.quote.QuoteEvent;
 import nz.org.venice.quote.IQuoteListener;
 import nz.org.venice.quote.Symbol;
+import nz.org.venice.quote.SymbolNotFoundException;
 import nz.org.venice.ui.AbstractTable;
 import nz.org.venice.ui.Column;
 import nz.org.venice.ui.DesktopManager;
@@ -506,12 +507,21 @@ public class WatchScreenModule extends AbstractTable implements IModule, ActionL
 		// hold up the dispatch thread. See O'Reilley Swing pg 1138-9.
 		Thread thread = new Thread() {
 			public void run() {
-				Set symbols = SymbolListDialog.getSymbols(DesktopManager.getDesktop(), Locale.getString("ADD_SYMBOLS"));
+				Set<Symbol> symbols = SymbolListDialog.getSymbols(DesktopManager.getDesktop(), Locale.getString("ADD_SYMBOLS"));
 				if (symbols != null) {
 					// Add symbols to watch screen, quote sync and table
-					List symbolList = new ArrayList(symbols);
-
-					watchScreen.addSymbols(symbolList);
+					List<Symbol> symbolList = new ArrayList<Symbol>();
+					
+					for (Iterator<Symbol> iterator = symbols.iterator(); iterator.hasNext();) {
+						try {
+							Symbol s = iterator.next();
+							watchScreen.addSymbol(s);
+							symbolList.add(s);
+						} catch (SymbolNotFoundException e) {
+							DesktopManager.showErrorMessage("Not marked to sync", e.getMessage());
+						}
+					}
+					
 					IDQuoteSync.getInstance().addSymbols(symbolList);
 					model.setQuotes(getQuotes());
 				}

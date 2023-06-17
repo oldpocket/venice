@@ -65,17 +65,12 @@ public class IDQuoteSyncModule extends JPanel implements IModule {
 	// Widgets
 	private JCheckBox isEnabledCheckBox;
 	private JComboBox sourceComboBox;
-	private JTextField symbolListTextField;
-	private JTextField suffixTextField;
 	private JTextField openTimeTextField;
 	private JTextField closeTimeTextField;
 	private JTextField periodTextField;
 
 	// Parsed widget data
 	private boolean isEnabled;
-	private String symbolListText;
-	private List symbolList;
-	private String suffix;
 	private TradingTime openTime;
 	private TradingTime closeTime;
 	private int period;
@@ -142,16 +137,6 @@ public class IDQuoteSyncModule extends JPanel implements IModule {
 		gridbag.setConstraints(sourceComboBox, c);
 		titledPanel.add(sourceComboBox);
 
-		symbolListTextField = GridBagHelper.addTextRow(titledPanel, Locale.getString("SYMBOLS"), prefs.symbols, gridbag,
-				c, 11);
-
-		symbolListTextField.setToolTipText(Locale.getString("SYMBOL_FIELD_TOOLTIP"));
-
-		suffixTextField = GridBagHelper.addTextRow(titledPanel, Locale.getString("ADD_SUFFIX"), prefs.suffix, gridbag,
-				c, 11);
-
-		suffixTextField.setToolTipText(Locale.getString("SUFFIX_FIELD_TOOLTIP"));
-
 		openTimeTextField = GridBagHelper.addTextRow(titledPanel, Locale.getString("OPEN_TIME"),
 				prefs.openTime.toString(), gridbag, c, 11);
 
@@ -206,8 +191,6 @@ public class IDQuoteSyncModule extends JPanel implements IModule {
 		boolean isEnabled = isEnabledCheckBox.isSelected();
 
 		sourceComboBox.setEnabled(isEnabled);
-		symbolListTextField.setEnabled(isEnabled);
-		suffixTextField.setEnabled(isEnabled);
 		openTimeTextField.setEnabled(isEnabled);
 		closeTimeTextField.setEnabled(isEnabled);
 		periodTextField.setEnabled(isEnabled);
@@ -240,19 +223,6 @@ public class IDQuoteSyncModule extends JPanel implements IModule {
 	private boolean parse() {
 		isEnabled = isEnabledCheckBox.isSelected();
 
-		// Parse symbol list
-		symbolListText = symbolListTextField.getText();
-
-		try {
-			// Don't check that the symbols exist before sync. After all,
-			// they might not at first sync.
-			symbolList = new ArrayList(Symbol.toSortedSet(symbolListText, false));
-		} catch (SymbolFormatException e) {
-			JOptionPane.showInternalMessageDialog(desktop, e.getMessage(), Locale.getString("INVALID_SYMBOL_LIST"),
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-
 		// Parse exchange opening and closing times
 		try {
 			openTime = new TradingTime(openTimeTextField.getText());
@@ -273,8 +243,6 @@ public class IDQuoteSyncModule extends JPanel implements IModule {
 			return false;
 		}
 
-		suffix = suffixTextField.getText().trim();
-
 		return true;
 	}
 
@@ -283,8 +251,6 @@ public class IDQuoteSyncModule extends JPanel implements IModule {
 	 */
 	private void saveConfiguration() {
 		prefs.isEnabled = isEnabled;
-		prefs.symbols = symbolListText;
-		prefs.suffix = suffix;
 		prefs.openTime = openTime;
 		prefs.closeTime = closeTime;
 		prefs.period = period;
@@ -297,8 +263,6 @@ public class IDQuoteSyncModule extends JPanel implements IModule {
 	 */
 	private void activateConfiguration() {
 		IDQuoteSync.getInstance().setPeriod(period);
-		IDQuoteSync.getInstance().addSymbols(symbolList);
-		IDQuoteSync.getInstance().setSuffix(suffix);
 		IDQuoteSync.getInstance().setTimeRange(openTime, closeTime);
 		IDQuoteSync.getInstance().setEnabled(isEnabled);
 	}

@@ -18,11 +18,20 @@
 
 package nz.org.venice.quote;
 
+import java.lang.reflect.InvocationTargetException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
+import nz.org.venice.prefs.PreferencesException;
+import nz.org.venice.util.DatabaseHelper;
+import nz.org.venice.util.DatabaseManager;
 import nz.org.venice.util.Locale;
 
 /**
@@ -52,6 +61,8 @@ import nz.org.venice.util.Locale;
 public class Symbol implements Cloneable, Comparable {
 
 	private String symbol;
+	
+	private SymbolMetadata metaData;
 
 	/** The minimum valid length for a symbol */
 	public final static int MINIMUM_SYMBOL_LENGTH = 1;
@@ -66,7 +77,7 @@ public class Symbol implements Cloneable, Comparable {
 	 * Create a new symbol from the given string.
 	 *
 	 * @param string a string containing a single symbol
-	 * @exception SymbolFormatException if the string doesn't contain a valid quote
+	 * @exception SymbolFormatException if the string doesn't contain a valid quote 
 	 */
 	private Symbol(String string) throws SymbolFormatException {
 
@@ -83,6 +94,39 @@ public class Symbol implements Cloneable, Comparable {
 					&& letter != ':')
 				throw new SymbolFormatException(Locale.getString("INVALID_SYMBOL", string));
 		}
+		
+		// Get symbol metadata inside the database
+		DatabaseManager dbm = DatabaseHelper.getDatabaseManager();
+		if (!dbm.getConnection()) {
+			return;
+		}
+		
+		final String queryLabel = "selectMetadataForSymbol";
+		List<String> queries = dbm.getQueries(queryLabel);
+		ArrayList<String> newQueryList = new ArrayList<String>();
+		
+		Iterator iterator = queries.iterator();
+		while (iterator.hasNext()) {
+			String query = (String) iterator.next();
+			query = dbm.replaceParameter(query, "symbol", string);
+			newQueryList.add(query);
+		}
+		
+		try {
+			List<ResultSet> results = dbm.executeQueryTransaction(queryLabel, newQueryList);
+			List<SymbolMetadata >metaDataList = DatabaseHelper.convertSQLResultSetToObject(results.get(0), SymbolMetadata.class);
+			metaData = metaDataList.get(0);
+			
+		} catch (Exception e) {
+			metaData = null;
+		} finally {
+			try {
+				dbm.queryCleanup(queryLabel);
+			} catch (SQLException e) {
+
+			}
+		} 
+		
 
 		symbol = string;
 	}
@@ -252,5 +296,14 @@ public class Symbol implements Cloneable, Comparable {
 	 */
 	public String toString() {
 		return symbol;
+	}
+	
+	/**
+	 * Returns the symbol metadata information
+	 *
+	 * @return the symbol metadata
+	 */
+	public SymbolMetadata getMetaData() {
+		return metaData;
 	}
 }
