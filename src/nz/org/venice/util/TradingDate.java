@@ -491,10 +491,10 @@ public class TradingDate implements Cloneable, Comparable {
 		for (int i = 0; i < days; i++) {
 
 			// Take 1 day or more to skip weekends as necessary
-			// do {
-			date.add(Calendar.DAY_OF_WEEK, -1);
-			// } while(date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||
-			// date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY);
+			do {
+				date.add(Calendar.DAY_OF_WEEK, -1);
+			} while(date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||
+					date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY);
 		}
 
 		// Create new date
@@ -515,10 +515,10 @@ public class TradingDate implements Cloneable, Comparable {
 		for (int i = 0; i < days; i++) {
 
 			// Add 1 day or more to skip weekends as necessary
-			// do {
-			date.add(Calendar.DAY_OF_WEEK, 1);
-			// } while(date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||
-			// date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY);
+			do {
+				date.add(Calendar.DAY_OF_WEEK, 1);
+			} while(date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||
+					date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY);
 		}
 
 		// Create new date
@@ -532,11 +532,10 @@ public class TradingDate implements Cloneable, Comparable {
 	 */
 	public boolean isWeekend() {
 		Calendar date = this.toCalendar();
-		/*
-		 * return(date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||
-		 * date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY);
-		 */
-		return false;
+		
+		return(date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||
+				date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY);
+		
 	}
 
 	/**
@@ -586,7 +585,9 @@ public class TradingDate implements Cloneable, Comparable {
 				tradingDate = (forwardDirection) ? tradingDate.next(1) : tradingDate.previous(1);
 			}
 		}
-		return tradingDate;
+		return date;
+		// isWeekend does not make sense when considering crypto
+		// return tradingDate;
 	}
 
 	/**

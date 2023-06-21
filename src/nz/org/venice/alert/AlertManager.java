@@ -223,10 +223,14 @@ public class AlertManager {
 		TradingDate latest = (TradingDate) startDate.clone();
 
 		while (latest.compareTo(endDate) > 0) {
+			// Was used when crypto was not being considered. As crypto trade everyday, the if was removed.
+			// The code is here for reference in case someone find it useful or other way considering also crypto.
+			/*
 			if (latest.isWeekend()) {
 				latest = latest.previous(1);
 				continue;
 			}
+			*/
 			try {
 				double quote = getQuote(symbol, quoteType, quoteBundle, latest);
 

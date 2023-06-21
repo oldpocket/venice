@@ -354,8 +354,7 @@ public class IDQuoteSync {
 		// * There are no symbols to download OR
 		// * We are not between the start/end times OR
 		// * Today is on a weekend.
-		if (isEnabled && syncTimer == null && symbols.size() > 0 && (!now.before(startTime) && !now.after(stopTime))
-				&& !today.isWeekend()) {
+		if (isEnabled && syncTimer == null && symbols.size() > 0 && (!now.before(startTime) && !now.after(stopTime))) {
 
 			syncTimer = new Timer();
 			syncTimer.scheduleAtFixedRate(new Sync(symbols), 0, period * TradingTime.MILLISECONDS_IN_SECOND);
