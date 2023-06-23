@@ -123,7 +123,7 @@ Place, Suite 330, Boston, MA  02111-1307  USA
 					'<parameter name='host' />', '<parameter name='username' />',
 					'<parameter name='symbol' />', true, '<parameter
 						name='dateSet' />' ); </query>
-				<query> INSERT INTO alert_GONDOLA_TARGETS values ( '<parameter
+				<query> INSERT INTO alert_Gondola_targets values ( '<parameter
 						name='id' />', '<parameter name='target' />', ); </query>
 				<query> INSERT INTO alert_start_dates values ( '<parameter
 						name='id' />', '<parameter name='start_date' />' ); </query>
@@ -147,7 +147,7 @@ Place, Suite 330, Boston, MA  02111-1307  USA
 					'<parameter name='host' />', '<parameter name='username' />',
 					'<parameter name='symbol' />', true, '<parameter
 						name='dateSet' />' ); </query>
-				<query> INSERT INTO alert_GONDOLA_TARGETS values ( '<parameter
+				<query> INSERT INTO alert_Gondola_targets values ( '<parameter
 						name='id' />', '<parameter name='target' />' ); </query>
 				<query> INSERT INTO alert_start_dates values ( '<parameter
 						name='id' />', '<parameter name='start_date' />' ); </query>
@@ -159,7 +159,7 @@ Place, Suite 330, Boston, MA  02111-1307  USA
 						name='symbol' />'; </query>
 				<query> DELETE FROM alert_OHLCV_targets WHERE alert_id = '<parameter
 						name='id' />'; </query>
-				<query> DELETE FROM alert_GONDOLA_targets WHERE alert_id = '<parameter
+				<query> DELETE FROM alert_Gondola_targets WHERE alert_id = '<parameter
 						name='id' />'; </query>
 				<query> DELETE FROM alert_start_dates WHERE alert_id = '<parameter
 						name='id' />' AND start_date = '<parameter

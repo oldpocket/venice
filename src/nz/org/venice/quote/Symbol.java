@@ -94,7 +94,14 @@ public class Symbol implements Cloneable, Comparable {
 					&& letter != ':')
 				throw new SymbolFormatException(Locale.getString("INVALID_SYMBOL", string));
 		}
+
+		symbol = string;
 		
+		// Populate symbol metadata from database
+		getSymbolMetadata();
+	}
+
+	private void getSymbolMetadata() {
 		// Get symbol metadata inside the database
 		DatabaseManager dbm = DatabaseHelper.getDatabaseManager();
 		if (!dbm.getConnection()) {
@@ -108,7 +115,7 @@ public class Symbol implements Cloneable, Comparable {
 		Iterator iterator = queries.iterator();
 		while (iterator.hasNext()) {
 			String query = (String) iterator.next();
-			query = dbm.replaceParameter(query, "symbol", string);
+			query = dbm.replaceParameter(query, "symbol", symbol);
 			newQueryList.add(query);
 		}
 		
@@ -126,11 +133,8 @@ public class Symbol implements Cloneable, Comparable {
 
 			}
 		} 
-		
-
-		symbol = string;
 	}
-
+	
 	/**
 	 * Return the canonical symbol instance of the given symbol string.
 	 *
@@ -304,6 +308,8 @@ public class Symbol implements Cloneable, Comparable {
 	 * @return the symbol metadata
 	 */
 	public SymbolMetadata getMetaData() {
+		// If metadata is null for some reason, let's try again
+		if (metaData == null) getSymbolMetadata();
 		return metaData;
 	}
 }
