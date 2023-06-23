@@ -60,6 +60,7 @@ import nz.org.venice.ui.GridBagHelper;
 import nz.org.venice.ui.IProgressDialog;
 import nz.org.venice.ui.ProgressDialogManager;
 import nz.org.venice.ui.TextViewDialog;
+import nz.org.venice.util.DatabaseManager;
 import nz.org.venice.util.Locale;
 import nz.org.venice.util.Report;
 import nz.org.venice.util.TradingDate;
@@ -86,8 +87,6 @@ public class ImportQuoteModule extends JPanel implements IModule {
 	private JComboBox formatComboBox;
 	private JRadioButton fromInternet;
 	private JComboBox webSiteComboBox;
-	private JLabel prefixOrSuffixLabel;
-	private JTextField prefixOrSuffixTextField;
 	private JTextField symbolList;
 	private JTextField startDateTextField;
 	private JTextField endDateTextField;
@@ -95,7 +94,6 @@ public class ImportQuoteModule extends JPanel implements IModule {
 	// Parsed fields for internet import
 	private TradingDate startDate;
 	private TradingDate endDate;
-	private String prefixOrSuffix;
 	private List symbols;
 	private ISettings settings;
 
@@ -195,20 +193,8 @@ public class ImportQuoteModule extends JPanel implements IModule {
 
 			symbolList.setToolTipText(Locale.getString("SYMBOL_FIELD_TOOLTIP"));
 
-			c.gridx = 1;
-			prefixOrSuffixLabel = new JLabel(Locale.getString("ADD_PREFIX"));
-			c.gridwidth = 1;
-			gridbag.setConstraints(prefixOrSuffixLabel, c);
-			titledPanel.add(prefixOrSuffixLabel);
-
-			prefixOrSuffixTextField = new JTextField(p.get("prefixOrSuffix", ""), 11);
-
-			prefixOrSuffixTextField.setToolTipText(Locale.getString("SUFFIX_FIELD_TOOLTIP"));
-
 			if (c.gridx != -1) c.gridx++;
 			c.gridwidth = GridBagConstraints.REMAINDER;
-			gridbag.setConstraints(prefixOrSuffixTextField, c);
-			titledPanel.add(prefixOrSuffixTextField);
 
 			c.gridx = 1;
 			TradingDate today = new TradingDate();
@@ -295,19 +281,6 @@ public class ImportQuoteModule extends JPanel implements IModule {
 
 		// Symbols are only applicable if importing from Yahoo or Google.
 		symbolList.setEnabled(fromInternet.isSelected() && (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE));
-
-		// Prefix or suffix is only applicable if importing from Yahoo or Google.
-		boolean prefixOrSuffixEnabled = (fromInternet.isSelected() && (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE));
-
-		prefixOrSuffixTextField.setEnabled(prefixOrSuffixEnabled);
-		if (prefixOrSuffixEnabled) {
-			// If we are downloading from Google it's a prefix, e.g. "ASX:".
-			// If we are downloading from Yahoo then it's a suffix, e.g. ".AX".
-			if (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE)
-				prefixOrSuffixLabel.setText(Locale.getString("ADD_SUFFIX"));
-			else
-				prefixOrSuffixLabel.setText(Locale.getString("ADD_PREFIX"));
-		}
 	}
 
 	/**
@@ -354,7 +327,6 @@ public class ImportQuoteModule extends JPanel implements IModule {
 		p.put("fileFilter", (String) formatComboBox.getSelectedItem());
 
 		if (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE) p.put("webSite", "generic_ws");
-		p.put("prefixOrSuffix", prefixOrSuffixTextField.getText());
 	}
 
 	/**
@@ -468,145 +440,72 @@ public class ImportQuoteModule extends JPanel implements IModule {
 
 		return false;
 	}
-
+	
 	/**
 	 * Import quotes from the internet.
 	 */
 	private void importQuotesFromInternet() {
 		if (parseInternetFields()) {
-			if (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE)
-				importQuotesFromYahoo();
-			else
-				importQuotesFromFloat();
-		}
-	}
-
-	/**
-	 * Import quotes from finance.yahoo.com.
-	 */
-	private void importQuotesFromYahoo() {
-		Report report = new Report();
-		int quotesImported = 0;
-
-		// Get database to import to
-		DatabaseQuoteSource database = getDatabaseSource();
-
-		// Tell frame we want to close
-		propertySupport.firePropertyChange(ModuleFrame.WINDOW_CLOSE_PROPERTY, 0, 1);
-
-		// Set up proxy support
-		ProxyPage.setupNetworking();
-
-		// Get optional suffix
-		String suffix = prefixOrSuffix;
-
-		// Now set up progress dialog to display the symbol by symbol progress
-		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
-		progress.setIndeterminate(false);
-		progress.setMaximum(symbols.size());
-		progress.setProgress(0);
-		progress.setMaster(true);
-		progress.show(Locale.getString("IMPORTING"));
-
-		// Import a symbol at a time
-		try {
-			for (Iterator iterator = symbols.iterator(); iterator.hasNext();) {
-
-				Symbol symbol = (Symbol) iterator.next();
-
-				// Update progress dialog
-				progress.setNote(Locale.getString("IMPORTING_SYMBOL", symbol.toString()));
-
-				// Load quotes from internet
-				List quotes = GenericWSEODQuoteImport.importSymbol(report, symbol, suffix, startDate, endDate);
-
-				// Import into database
-				if (quotes.size() > 0) {
-
-					// remove the symbol argument
-					int symbolQuotesImported = database.importQuotes(quotes);
-					report.addMessage(Locale.getString("YAHOO_DISPLAY_URL") + ":" + symbol + ": "
-							+ Locale.getString("IMPORTED_QUOTES", symbolQuotesImported));
-					quotesImported += symbolQuotesImported;
+			Report report = new Report();
+			int quotesImported = 0;
+	
+			// Get database to import to
+			DatabaseQuoteSource database = getDatabaseSource();
+	
+			// Tell frame we want to close
+			propertySupport.firePropertyChange(ModuleFrame.WINDOW_CLOSE_PROPERTY, 0, 1);
+	
+			// Set up proxy support
+			ProxyPage.setupNetworking();
+	
+			// Now set up progress dialog to display the symbol by symbol progress
+			IProgressDialog progress = ProgressDialogManager.getProgressDialog();
+			progress.setIndeterminate(false);
+			progress.setMaximum(symbols.size());
+			progress.setProgress(0);
+			progress.setMaster(true);
+			progress.show(Locale.getString("IMPORTING"));
+	
+			// Import a symbol at a time
+			try {
+				for (Iterator iterator = symbols.iterator(); iterator.hasNext();) {
+	
+					Symbol symbol = (Symbol) iterator.next();
+	
+					// Update progress dialog
+					progress.setNote(Locale.getString("IMPORTING_SYMBOL", symbol.toString()));
+	
+					// Load quotes from internet
+					List quotes = GenericWSEODQuoteImport.importSymbol(report, symbol, startDate, endDate);
+	
+					// Import into database
+					if (quotes.size() > 0) {
+	
+						// remove the symbol argument
+						int symbolQuotesImported = database.importQuotes(quotes);
+						report.addMessage(webSiteComboBox.toString() + ":" + symbol + ": "
+								+ Locale.getString("IMPORTED_QUOTES", symbolQuotesImported));
+						quotesImported += symbolQuotesImported;
+					}
+	
+					// Stop if the user hit cancel
+					if (Thread.currentThread().isInterrupted())
+						break;
+	
+					progress.increment();
 				}
-
-				// Stop if the user hit cancel
-				if (Thread.currentThread().isInterrupted())
-					break;
-
-				progress.increment();
 			}
-		}
-
-		catch (ImportExportException e) {
-			DesktopManager.showErrorMessage(e.getMessage());
-		}
-
-		QuoteSourceManager.flush();
-		ProgressDialogManager.closeProgressDialog(progress);
-		displayReport(report, quotesImported);
-	}
-
-	/**
-	 * Import quotes from float.com.au.
-	 */
-	private void importQuotesFromFloat() {
-		Report report = new Report();
-		int quotesImported = 0;
-
-		// Get database to import to
-		DatabaseQuoteSource database = getDatabaseSource();
-		List dates = TradingDate.dateRangeToList(startDate, endDate);
-
-		// Tell frame we want to close
-		propertySupport.firePropertyChange(ModuleFrame.WINDOW_CLOSE_PROPERTY, 0, 1);
-
-		// Set up proxy support
-		ProxyPage.setupNetworking();
-
-		// Now set up progress dialog to display the symbol by symbol progress
-		IProgressDialog progress = ProgressDialogManager.getProgressDialog();
-		progress.setIndeterminate(false);
-		progress.setMaximum(dates.size());
-		progress.setProgress(0);
-		progress.setMaster(true);
-		progress.show(Locale.getString("IMPORTING"));
-
-		// Import a date at a time
-		try {
-			for (Iterator iterator = dates.iterator(); iterator.hasNext();) {
-
-				TradingDate date = (TradingDate) iterator.next();
-
-				// Update progress dialog
-				progress.setNote(Locale.getString("IMPORTING_DATE", date.toString()));
-
-				// Load quotes from internet
-				List quotes = FloatEODQuoteImport.importDate(report, date);
-
-				// Import into database
-				int dateQuotesImported = database.importQuotes(quotes);
-				report.addMessage(Locale.getString("FLOAT_DISPLAY_URL") + ":" + date + ": "
-						+ Locale.getString("IMPORTED_QUOTES", dateQuotesImported));
-				quotesImported += dateQuotesImported;
-
-				// Stop if the user hit cancel
-				if (Thread.currentThread().isInterrupted())
-					break;
-
-				progress.increment();
+	
+			catch (ImportExportException e) {
+				DesktopManager.showErrorMessage(e.getMessage());
 			}
+	
+			QuoteSourceManager.flush();
+			ProgressDialogManager.closeProgressDialog(progress);
+			displayReport(report, quotesImported);
 		}
-
-		catch (ImportExportException e) {
-			DesktopManager.showErrorMessage(e.getMessage());
-		}
-
-		QuoteSourceManager.flush();
-		ProgressDialogManager.closeProgressDialog(progress);
-		displayReport(report, quotesImported);
 	}
-
+ 
 	/**
 	 * Parse all the fields for internet import.
 	 *
@@ -614,13 +513,12 @@ public class ImportQuoteModule extends JPanel implements IModule {
 	 *         <code>false</code> otherwise
 	 */
 	private boolean parseInternetFields() {
-		// Parse symbol list and validate if we are downloading from Google or Yahoo.
-		// If we are downloading from float.com.au then we ignore this field.
+		// Parse symbol list and validate if we are downloading from internet sources as Google or Yahoo.
 		if (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE) {
 			try {
-				// Don't check that the symbols exist before import. After all
-				// they won't at the first import.
-				symbols = new ArrayList(Symbol.toSortedSet(symbolList.getText(), false));
+				// Parse symbols and check each symbol against metadata table
+				symbols = new ArrayList(Symbol.toSortedSet(symbolList.getText(), true));
+				
 			} catch (SymbolFormatException e) {
 				JOptionPane.showInternalMessageDialog(desktop, e.getMessage(), Locale.getString("INVALID_SYMBOL_LIST"),
 						JOptionPane.ERROR_MESSAGE);
@@ -632,8 +530,6 @@ public class ImportQuoteModule extends JPanel implements IModule {
 						Locale.getString("INVALID_SYMBOL_LIST"), JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-
-			prefixOrSuffix = prefixOrSuffixTextField.getText().trim();
 
 		}
 

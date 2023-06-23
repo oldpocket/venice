@@ -93,7 +93,7 @@ public class GenericWSEODQuoteImport {
 	 * @return list of quotes
 	 * @exception ImportExportException if there was an error retrieving the quotes
 	 */
-	public static List importSymbol(Report report, Symbol symbol, String suffix, TradingDate startDate,
+	public static List importSymbol(Report report, Symbol symbol, TradingDate startDate,
 			TradingDate endDate) throws ImportExportException {
 
 		List result = new ArrayList();
@@ -109,7 +109,7 @@ public class GenericWSEODQuoteImport {
 				retrievalStartDate = startDate;
 			}
 			// retrieve quotes and add to result
-			List quotes = retrieveQuotes(report, symbol, suffix, retrievalStartDate, retrievalEndDate);
+			List quotes = retrieveQuotes(report, symbol, retrievalStartDate, retrievalEndDate);
 			result.addAll(quotes);
 
 			// determine endDate for next retrieval
@@ -137,11 +137,11 @@ public class GenericWSEODQuoteImport {
 	 * @return list of quotes
 	 * @exception ImportExportException if there was an error retrieving the quotes
 	 */
-	private static List retrieveQuotes(Report report, Symbol symbol, String suffix, TradingDate startDate,
+	private static List retrieveQuotes(Report report, Symbol symbol, TradingDate startDate,
 			TradingDate endDate) throws ImportExportException {
 
 		List quotes = new ArrayList();
-		String URLString = constructURL(symbol, suffix, startDate, endDate);
+		String URLString = constructURL(symbol, startDate, endDate);
 		IEODQuoteFilter filter = new GenericWSEODQuoteFilter(symbol);
 
 		PreferencesManager.ProxyPreferences proxyPreferences = PreferencesManager.getProxySettings();
@@ -218,19 +218,10 @@ public class GenericWSEODQuoteImport {
 	 * @param end    the end date to retrieve
 	 * @return URL string
 	 */
-	private static String constructURL(Symbol symbol, String suffix, TradingDate start, TradingDate end) {
+	private static String constructURL(Symbol symbol, TradingDate start, TradingDate end) {
 		String URLString = GENERIC_WS_URL_PATTERN;
-		String symbolString = symbol.toString();
-
-		// Append symbol with optional suffix. If the user has not provided a full-stop,
-		// provide
-		// them with one.
-		if (suffix.length() > 0) {
-			if (!suffix.startsWith("."))
-				symbolString += ".";
-			symbolString += suffix;
-		}
-
+		String symbolString = symbol.getMetaData().toString();
+	
 		URLString = Find.replace(URLString, SYMBOL, symbolString);
 
 		URLString = Find.replace(URLString, START_DAY, Integer.toString(start.getDay()));
