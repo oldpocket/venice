@@ -1350,7 +1350,11 @@ public class ChartModule extends JPanel implements IModule, MouseListener, Mouse
 			settings.setDrawnElements(chart.getChartDrawingModel());
 			settings.setOrientation(chart.getOrientation());
 
-			settings.setTimelineBarPosition(timelineHandler.getBarValue());
+			try {
+				settings.setTimelineBarPosition(timelineHandler.getBarValue());
+			} catch (Exception e) {
+				
+			}
 
 		}
 	}

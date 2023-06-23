@@ -658,11 +658,6 @@ public class DatabaseManager {
 	 * @return the SQL clause
 	 */
 	public String buildSymbolPresentQuery(Symbol symbol) {
-		if (software == HSQLDB_SOFTWARE)
-			return new String(
-					"SELECT TOP 1 " + DatabaseManager.SYMBOL_FIELD + " FROM " + DatabaseManager.SHARES_METADATA_TABLE_NAME
-							+ " WHERE " + DatabaseManager.SYMBOL_FIELD + " = '" + symbol + "' ");
-		else
 			return new String("SELECT " + DatabaseManager.SYMBOL_FIELD + " FROM " + DatabaseManager.SHARES_METADATA_TABLE_NAME
 					+ " WHERE " + DatabaseManager.SYMBOL_FIELD + " = '" + symbol + "' LIMIT 1");
 	}
@@ -675,10 +670,6 @@ public class DatabaseManager {
 	 * @return the SQL clause
 	 */
 	public String buildDatePresentQuery(TradingDate date) {
-		if (software == HSQLDB_SOFTWARE)
-			return new String("SELECT TOP 1 " + DatabaseManager.DATE_FIELD + " FROM " + DatabaseManager.SHARE_TABLE_NAME
-					+ " WHERE " + DatabaseManager.DATE_FIELD + " = '" + toSQLDateString(date) + "' ");
-		else
 			return new String("SELECT " + DatabaseManager.DATE_FIELD + " FROM " + DatabaseManager.SHARE_TABLE_NAME
 					+ " WHERE " + DatabaseManager.DATE_FIELD + " = '" + toSQLDateString(date) + "' LIMIT 1");
 	}
