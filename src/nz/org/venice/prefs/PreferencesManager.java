@@ -379,7 +379,7 @@ public class PreferencesManager {
 
 		DatabaseManager dbm = DatabaseHelper.getDatabaseManager();
 
-		if (!dbm.getConnection()) {
+		if (dbm == null || !dbm.getConnection()) {
 			return new ArrayList<>();
 		}
 		
