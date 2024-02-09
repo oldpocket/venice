@@ -258,7 +258,7 @@ public class DatabaseManager {
 
 			// Set up the conection
 			if (mode == INTERNAL && software.equals(HSQLDB_SOFTWARE))
-				connectionURL = new String("jdbc:hsqldb:file:/" + fileName);
+				connectionURL = new String("jdbc:hsqldb:file:/" + fileName + ";sql.syntax_mys=true");
 			else {
 				connectionURL = new String("jdbc:" + software + "://" + host + ":" + port + "/" + database);
 				if (username != null)

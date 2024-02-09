@@ -84,14 +84,14 @@ Place, Suite 330, Boston, MA  02111-1307  USA
 			<transaction name='getAllAlerts'>
 				<query>
 					SELECT venice_alerts.id, host, username, symbol, start_date,
-					'no enddate', target, boundType, field, enabled, date_set
+					null, cast(target as char(15)), boundType, field, enabled, date_set
 					FROM
 					venice_alerts,alert_OHLCV_targets, alert_start_dates WHERE
 					venice_alerts.id = alert_OHLCV_targets.alert_id AND
 					venice_alerts.id = alert_start_dates.alert_id 
 						UNION
 					SELECT venice_alerts.id, host, username, symbol, start_date,
-					'no enddate', expression, 'no bound', 'no field', enabled, date_set
+					null, expression, 'no bound', 'no field', enabled, date_set
 					FROM
 					venice_alerts,alert_Gondola_targets,alert_start_dates WHERE
 					venice_alerts.id = alert_Gondola_targets.alert_id AND

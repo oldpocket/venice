@@ -131,7 +131,7 @@ public class Main extends JFrame {
 		System.out.println(
 				Locale.getString("COPYRIGHT", COPYRIGHT_DATE_RANGE) + ", " + "Andrew Leppard (andrew venice org nz)");
 		System.out.println(Locale.getString("COPYRIGHT", COPYRIGHT_DATE_NEW_RANGE) + ", "
-				+ "Fabio Godoy (fabio.godoy at oldpocket com)");
+				+ "Fabio Godoy (fabio.godoy at me dot com)");
 		System.out.println(Locale.getString("SEE_LICENSE"));
 
 		displayPreferences = PreferencesManager.getDisplaySettings();

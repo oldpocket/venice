@@ -49,6 +49,7 @@ import javax.swing.border.TitledBorder;
 
 import nz.org.venice.importer.FloatEODQuoteImport;
 import nz.org.venice.importer.GenericWSEODQuoteImport;
+import nz.org.venice.importer.YahooEODQuoteImport;
 import nz.org.venice.main.CommandManager;
 import nz.org.venice.main.IModule;
 import nz.org.venice.main.ModuleFrame;
@@ -103,6 +104,7 @@ public class ImportQuoteModule extends JPanel implements IModule {
 
 	// Web site combo box entry indeces.
 	private final static int GENERIC_WEBSERVICE = 0;
+	private final static int YAHOO_IMPORTER = 1;
 
 	/**
 	 * Create a new import quote module.
@@ -178,8 +180,10 @@ public class ImportQuoteModule extends JPanel implements IModule {
 
 			webSiteComboBox = new JComboBox();
 			webSiteComboBox.addItem(Locale.getString("GENERIC_WEBSERVICE"));
+			webSiteComboBox.addItem(Locale.getString("YAHOO_IMPORTER"));
 
 			if (webSite.equals("generic_ws")) webSiteComboBox.setSelectedIndex(GENERIC_WEBSERVICE);
+			if (webSite.equals("yahoo_importer")) webSiteComboBox.setSelectedIndex(YAHOO_IMPORTER);
 
 			webSiteComboBox.setToolTipText(Locale.getString("INTERNET_IMPORT_QUOTE_TOOLTIP"));
 
@@ -280,7 +284,9 @@ public class ImportQuoteModule extends JPanel implements IModule {
 		endDateTextField.setEnabled(fromInternet.isSelected());
 
 		// Symbols are only applicable if importing from Yahoo or Google.
-		symbolList.setEnabled(fromInternet.isSelected() && (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE));
+		symbolList.setEnabled(fromInternet.isSelected() && 
+					(webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE || webSiteComboBox.getSelectedIndex() == YAHOO_IMPORTER)
+				);
 	}
 
 	/**
@@ -327,6 +333,7 @@ public class ImportQuoteModule extends JPanel implements IModule {
 		p.put("fileFilter", (String) formatComboBox.getSelectedItem());
 
 		if (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE) p.put("webSite", "generic_ws");
+		if (webSiteComboBox.getSelectedIndex() == YAHOO_IMPORTER) p.put("webSite", "yahoo_importer");
 	}
 
 	/**
@@ -476,7 +483,14 @@ public class ImportQuoteModule extends JPanel implements IModule {
 					progress.setNote(Locale.getString("IMPORTING_SYMBOL", symbol.toString()));
 	
 					// Load quotes from internet
-					List quotes = GenericWSEODQuoteImport.importSymbol(report, symbol, startDate, endDate);
+					
+					List quotes;
+					if (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE) {
+						quotes = GenericWSEODQuoteImport.importSymbol(report, symbol, startDate, endDate);
+					} else {
+						quotes = YahooEODQuoteImport.importSymbol(report, symbol, startDate, endDate);
+					}
+					
 	
 					// Import into database
 					if (quotes.size() > 0) {
@@ -514,7 +528,8 @@ public class ImportQuoteModule extends JPanel implements IModule {
 	 */
 	private boolean parseInternetFields() {
 		// Parse symbol list and validate if we are downloading from internet sources as Google or Yahoo.
-		if (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE) {
+		if (webSiteComboBox.getSelectedIndex() == GENERIC_WEBSERVICE ||
+				webSiteComboBox.getSelectedIndex() == YAHOO_IMPORTER) {
 			try {
 				// Parse symbols and check each symbol against metadata table
 				symbols = new ArrayList(Symbol.toSortedSet(symbolList.getText(), true));

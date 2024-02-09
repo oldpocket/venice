@@ -1,4 +1,4 @@
-Merchant of Venice, 0.8beta may / 2023
+Merchant of Venice, 0.8beta - wip
 =========================================
 
 Copyright (C) 2003-19, Andrew Leppard (andrew venice org nz)  
@@ -34,7 +34,7 @@ Or in Windows by clicking on the "venice.jar" file. Or in Mac OS X by clicking o
 
 Venice contains the following technologies
 
-> **HSQLDB V1.8.0.4**           from http://hsqldb.sourceforge.net  
+> **HSQLDB V2.7.2**           from http://hsqldb.sourceforge.net  
 > **Jython V2.1**               from http://www.jython.org  
 > **MySQL Connector/J V5.1.49** from http://www.mysql.com  
 > **Joone V1.2.1**              from http://www.jooneworld.com  
@@ -50,7 +50,7 @@ If you have any ideas for enhancements, please document them also via the GitHub
 
     https://github.com/oldpocket/venice/issues
 
-Or if you have any comments, please don't hesitate to email me, Fabio Godoy (fabio.godoy at oldpocket com).
+Or if you have any comments, please don't hesitate to email me, Fabio Godoy (fabio dot godoy at me dot com).
 
 5) Building
 

@@ -131,8 +131,9 @@ public class IDQuoteSyncModule extends JPanel implements IModule {
 
 		sourceComboBox = new JComboBox();
 		sourceComboBox.addItem(Locale.getString("GENERIC_WEBSERVICE"));
+		sourceComboBox.addItem(Locale.getString("YAHOO_IMPORTER"));
 		sourceComboBox.setToolTipText(Locale.getString("IDQUOTE_SOURCE_TOOLTIP"));
-
+		
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		gridbag.setConstraints(sourceComboBox, c);
 		titledPanel.add(sourceComboBox);
